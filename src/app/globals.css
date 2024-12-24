@@ -94,3 +94,16 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* global.css */
+.mobile-icon path {
+  stroke: white;
+  opacity: 0.3;
+}
+
+@media (max-width: 640px) {
+  .mobile-icon path {
+    stroke: black;
+    opacity: 1;
+  }
+}
