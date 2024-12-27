@@ -8,9 +8,7 @@ const Banner = () => {
     const handleInputChange = (e) => {
         const value = e.target.value;
 
-        // فقط اعداد را بپذیرید
         if (/^\d*$/.test(value)) {
-            // اجازه ندهید "09" پاک شود و طول ورودی را به 11 کاراکتر محدود کنید
             if (value.startsWith('09') && value.length <= 11) {
                 setInputValue(value);
             }
@@ -57,7 +55,7 @@ const Banner = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="relative w-full pb-[80%] mt-10 lg:mt-0">
+                    <div className="relative w-full pb-[85%] mt-10 lg:mt-0">
                         <Image src="/images/Pic.svg" layout="fill" objectFit="cover" alt="banner" />
                     </div>
                 </div>

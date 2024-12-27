@@ -106,4 +106,18 @@ export const BarsIcon = () => {
         </svg>
     );
 };
+export const LeftAngleIcon = () => {
+    return (
+        <svg width="11" height="20" viewBox="0 0 11 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.850098 18.825L9.6501 9.99999L0.850098 1.17499" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+};
+export const RightAngleIcon = () => {
+    return (
+        <svg width="11" height="20" viewBox="0 0 11 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.1499 18.825L1.3499 9.99999L10.1499 1.17499" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+};
 
