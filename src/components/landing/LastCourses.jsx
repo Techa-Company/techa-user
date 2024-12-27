@@ -28,7 +28,7 @@ const LastCourses = () => {
         <div className="mt-20 md:mt-60">
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="flex flex-col md:flex-row md:justify-between items-center">
-                    <div className="text-[#042A1B] text-center">
+                    <div className="text-[#042A1B] text-center md:text-start">
                         <h1 className="font-extrabold text-4xl tracking-tighter">
                             معرفی <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">دوره ها</span>
                         </h1>
