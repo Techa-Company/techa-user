@@ -1,0 +1,26 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+
+const Internship = () => {
+    return (
+        <div className="mt-28 bg-[#F1FFF9] py-10">
+            <div className="container mx-auto px-5 xl:px-20">
+                <div className="grid lg:grid-cols-2 gap-10 items-center">
+                    <div className='text-[#042A1B]'>
+                        <h1 className='text-4xl font-extrabold tracking-tighter'>کارآموزی پروژه محور</h1>
+                        <p className='text-[17px] text-justify font-normal leading-8 my-4'>
+                            کسب مهارتها و کسب تجربه و غنی کردن رزومه یکی از مسائل مهم برای ورود به بازار کار است، در بستر پلتفرم قائم می توانید بعد از کسب مهارت تسکهای واقعی دریافت کرده و کسب در آمد کنید
+                        </p>
+                        <Link className='bg-[#7AE36A] px-5 py-2 rounded-full font-semibold tracking-tighter mt-2 inline-block hover:text-white transition-all duration-300' href="">عضویت در دوره‌ها</Link>
+                    </div>
+                    <div className="relative w-full pb-[60%] mt-10 lg:mt-0">
+                        <Image src="/images/Internship.png" layout="fill" objectFit="cover" alt="banner" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Internship;
