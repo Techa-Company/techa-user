@@ -110,3 +110,17 @@ body {
     opacity: 1;
   }
 }
+
+code {
+  direction: ltr;
+  width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap; /* اضافه کردن این خط */
+  word-wrap: break-word; /* اضافه کردن این خط */
+}
+
+pre {
+  overflow-x: auto; /* اضافه کردن این خط */
+  white-space: pre-wrap; /* اضافه کردن این خط */
+  word-wrap: break-word; /* اضافه کردن این خط */
+}
