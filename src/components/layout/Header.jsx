@@ -3,11 +3,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { AboutIcon, AboutLightIcon, BarsIcon, CircleXIcon, ContactIcon, ContactLightIcon, ContactUSIcon, CourseIcon, CourseLightIcon, HomeIcon, HomeLightIcon, XIcon } from '../Icons/Icons';
-
+import { usePathname } from 'next/navigation'
 const Header = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const pathname = usePathname()
 
     useEffect(() => {
         const handleResize = () => {
@@ -50,14 +51,14 @@ const Header = () => {
     return (
         <>
             <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 ${isMenuOpen ? 'block' : 'hidden'}`}></div>
-            <header className={`fixed w-full z-40 transition-all duration-150 bg-[#042A1B] ${scrolled ? 'shadow-2xl py-5' : 'py-10'}`}>
+            <header className={`fixed w-full z-40 transition-all duration-200 ${pathname === "/" ? "" : "bg-[#042A1B]"} ${scrolled ? 'shadow-2xl bg-[#042A1B] py-3' : 'py-5'}`}>
                 <div className='container mx-auto px-5 xl:px-20'>
                     <nav className='flex justify-between items-center'>
                         <div className='flex items-center'>
                             <div className='lg:border-l border-[#FFFFFF33] pl-8'>
                                 <Image src="/images/logo-light.svg" width={200} height={100} alt='logo' priority />
                             </div>
-                            <div className={`pt-14 lg:pt-0 px-5 lg:px-0 fixed w-64 lg:w-auto ${isMenuOpen ? '-right-0' : '-right-64'} bottom-0 top-0 z-50 bg-[#042A1B] border-8 border-r-0 rounded-2xl rounded-r-none border-[#7AE36A] lg:border-0 lg:static transition-all duration-300 menu-container`}>
+                            <div className={`pt-14 lg:pt-0 px-5 lg:px-0 fixed w-64 lg:w-auto ${isMenuOpen ? '-right-0' : '-right-64'} bottom-0 top-0 z-50 bg-[#042A1B] lg:bg-transparent border-8 border-r-0 rounded-2xl rounded-r-none border-[#7AE36A] lg:border-0 lg:static transition-all duration-300 menu-container`}>
                                 {/* <span className='absolute top-5 left-5 lg:hidden' onClick={() => setIsMenuOpen(false)}>
                                     <CircleXIcon />
                                 </span> */}
@@ -67,13 +68,13 @@ const Header = () => {
                                         <span>
                                             {!isMobile ? <HomeLightIcon /> : <HomeIcon />}
                                         </span>
-                                        <Link className='font-normal text-sm text-white' href="">صفحه اصلی</Link>
+                                        <Link className='font-normal text-sm text-white' href="/">صفحه اصلی</Link>
                                     </li>
                                     <li className='flex items-center gap-2'>
                                         <span >
                                             {!isMobile ? <CourseLightIcon /> : <CourseIcon />}
                                         </span>
-                                        <Link className='font-normal text-sm text-white' href="">دوره های ما</Link>
+                                        <Link className='font-normal text-sm text-white' href="/courses">دوره های ما</Link>
                                     </li>
                                     <li className='flex items-center gap-2'>
                                         <span >

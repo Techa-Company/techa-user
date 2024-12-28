@@ -13,7 +13,6 @@ export default function Home() {
       <CourseBenefits />
       <Internship />
       <SampleEditor />
-      <Footer />
     </div>
   );
 }

@@ -43,8 +43,11 @@ const LastCourses = () => {
                         </span>
                     </div>
                 </div>
-                <div className='mt-10'>
+                <div >
                     <Swiper
+                        style={{
+                            padding: '50px 0px',
+                        }}
                         slidesPerView={1}
                         spaceBetween={50}
                         autoplay={{
