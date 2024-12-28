@@ -57,7 +57,7 @@ export default Counter;`;
             />
         },
         {
-            id: 1, title: "SQl", content: <CopyBlock
+            id: 1, title: "SQL", content: <CopyBlock
                 language="jsx"
                 customStyle={{
                     borderRadius: '10px',
