@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
       <div className="container px-5 xl:px-20 mx-auto">
         <div className="flex gap-14">
           <Sidebar />
-          <main >
+          <main className="w-full" >
             {children}
           </main>
         </div>
