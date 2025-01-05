@@ -121,3 +121,26 @@ export const RightAngleIcon = () => {
     );
 };
 
+export const BottomAngleIcon = () => {
+    return (
+        <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 1L6.88384 4.67453C6.39773 5.10849 5.60227 5.10849 5.11616 4.67453L1 1" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    );
+};
+
+export const CheckIcon = () => {
+    return (
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 6L5.99412 11L16 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    );
+};
+export const SmallCheckIcon = () => {
+    return (
+        <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 3.5L3.33059 6L8 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    );
+};
+

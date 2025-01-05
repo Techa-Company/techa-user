@@ -34,31 +34,31 @@ const Footer = () => {
                         <ul className='mt-4 text-white font-light text-[15px] leading-8 tracking-tighter'>
                             <li className='flex items-center gap-3'>
                                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" stroke-width="1.5" />
+                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" strokeWidth="1.5" />
                                 </svg>
                                 <Link href="">صفحه اصلی</Link>
                             </li>
                             <li className='flex items-center gap-3'>
                                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" stroke-width="1.5" />
+                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" strokeWidth="1.5" />
                                 </svg>
                                 <Link href="">دوره های ما</Link>
                             </li>
                             <li className='flex items-center gap-3'>
                                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" stroke-width="1.5" />
+                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" strokeWidth="1.5" />
                                 </svg>
                                 <Link href="">قوانین و مقررات</Link>
                             </li>
                             <li className='flex items-center gap-3'>
                                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" stroke-width="1.5" />
+                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" strokeWidth="1.5" />
                                 </svg>
                                 <Link href="">درباره ما</Link>
                             </li>
                             <li className='flex items-center gap-3'>
                                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" stroke-width="1.5" />
+                                    <circle cx="4" cy="4" r="3.25" stroke="#F6DC65" strokeWidth="1.5" />
                                 </svg>
                                 <Link href="">تماس با ما</Link>
                             </li>
