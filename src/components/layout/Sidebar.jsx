@@ -13,7 +13,7 @@ const Accordion = ({ title, subtitle, content, isOpen, onClick }) => {
                     </div>
                     <div>
                         <p className='text-[#042A1B] text-[15px] opacity-50 -mb-1'>{title}</p>
-                        <h3 className='text-[#0412A1B] text-[17px] tracking-tighter'>{subtitle}</h3>
+                        <h3 className='text-[#0412A1B] text-[17px] '>{subtitle}</h3>
                     </div>
                 </div>
                 <button>
@@ -47,7 +47,7 @@ const Sidebar = () => {
                                 <span className='w-6 h-6 flex justify-center items-center rounded-full bg-[#7AE36A]'>
                                     <SmallCheckIcon />
                                 </span>
-                                <p className='font-medium text-lg tracking-tighter'>متغیر ها</p>
+                                <p className='font-medium text-lg '>متغیر ها</p>
                             </div>
                             <span className='text-[#042A1B] opacity-50 font-light'>{minutes} دقیقه</span>
                         </Link>
@@ -62,7 +62,7 @@ const Sidebar = () => {
 
     return (
         <aside className='min-w-80'>
-            <h1 className="tracking-tighter font-bold text-[#042A1B] text-3xl">
+            <h1 className=" font-bold text-[#042A1B] text-3xl">
                 سرفصل ها
             </h1>
             <div className='mt-8'>

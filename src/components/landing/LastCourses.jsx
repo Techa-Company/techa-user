@@ -29,7 +29,7 @@ const LastCourses = () => {
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="flex flex-col md:flex-row md:justify-between items-center">
                     <div className="text-[#042A1B] text-center md:text-start">
-                        <h1 className="font-extrabold text-4xl tracking-tighter">
+                        <h1 className="font-extrabold text-4xl ">
                             معرفی <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">دوره ها</span>
                         </h1>
                         <p className="text-lg font-normal mt-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</p>
@@ -93,10 +93,10 @@ const LastCourses = () => {
                                                 لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است
                                             </p>
                                             <div className="grid grid-cols-2 gap-5 text-center mt-5">
-                                                <Link className="text-sm font-normal tracking-tighter bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff]" href="">
+                                                <Link className="text-sm font-normal  bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff]" href="">
                                                     مشاهده دوره
                                                 </Link>
-                                                <Link className="text-sm font-normal tracking-tighter bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff]" href="">
+                                                <Link className="text-sm font-normal  bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff]" href="">
                                                     اجرای بر خط
                                                 </Link>
                                             </div>

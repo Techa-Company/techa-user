@@ -86,7 +86,7 @@ export default Counter;`;
                     <div className='text-[#042A1B] w-full order-1'>
                         <div className="w-full">
                             <div className='flex flex-col sm:flex-row gap-5 justify-between items-center'>
-                                <h1 className='text-4xl font-extrabold tracking-tighter'>ادیتور برخط</h1>
+                                <h1 className='text-4xl font-extrabold '>ادیتور برخط</h1>
                                 <div className="flex space-x-1 bg-[#F6DC6533] p-1.5 rounded-full">
                                     {tabContent.map((tab, index) => (
                                         <button

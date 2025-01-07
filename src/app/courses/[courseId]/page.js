@@ -7,14 +7,14 @@ const Accordion = ({ title, content, isOpen, onClick }) => {
     return (
         <div className='border-b border-[#D0DDD1] py-5 cursor-pointer' onClick={onClick}>
             <div className='flex items-center justify-between'>
-                <p className='text-[17px] text-[#042A1B] tracking-tighter'>{title}</p>
+                <p className='text-[16px] font-normal text-[#042A1B] '>{title}</p>
                 <span className={`text-[#7AE36A] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                     <ChevronDown />
                 </span>
             </div>
             <div className={`overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-screen' : 'max-h-0'}`}>
                 <div className='mt-5 pr-5'>
-                    <p className='text-[16px] text-[#042A1B] tracking-tighter leading-8 text-justify'>{content}</p>
+                    <p className='text-[16px] font-medium text-[#042A1B]  leading-7 text-justify'>{content}</p>
                 </div>
             </div>
         </div>
@@ -74,7 +74,7 @@ export default function CourseDetail() {
     return (
         <div className=''>
             <div className='flex flex-col sm:flex-row gap-5 justify-between items-center'>
-                <h1 className="tracking-tighter font-extrabold text-[#042A1B] text-3xl">
+                <h1 className=" font-extrabold text-[#042A1B] text-3xl">
                     دوره آموزشی React
                 </h1>
                 <div className="flex space-x-1 bg-[#D0DDD140] p-1.5 rounded-full">
@@ -96,7 +96,7 @@ export default function CourseDetail() {
                         key={index}
                         className={`transition-opacity duration-300 ${activeTab === index ? 'block' : 'hidden'}`}
                     >
-                        <div className={`overflow-hidden text-[17.5px] text-[#042A1B] text-justify leading-8 tracking-tighter font-normal transition-all duration-500 relative ${showFullDescription ? 'max-h-screen' : 'max-h-40'}`}>
+                        <div className={`overflow-hidden text-[17.5px] text-[#042A1B] text-justify leading-7  font-normal transition-all duration-500 relative ${showFullDescription ? 'max-h-screen' : 'max-h-40'}`}>
                             <p>
                                 قبل از آموزش ری اکت ReactJS ابتدای کار به شما بگیم که تکنولوژی ری اکت برگ برنده برنامه نویسان در دنیای امروز هست اصلا اغراق نکردیم. یه غول به تمام معنا و دنیایی بی انتها از پروژه هایی که میشه با اون نوشت، اون هم خیلی سریع و راحت! تکنولوژی که دنیای وب رو دگرگون کرد و دستپخت شرکت فیسبوک هست که اینستاگرام رو هم با اون طراحی کرده
                             </p>
@@ -117,7 +117,7 @@ export default function CourseDetail() {
                             </p>
                             <span className={`absolute w-full bg-white h-8 bottom-0 opacity-70 ${!showFullDescription ? "block" : "hidden"}`}></span>
                         </div>
-                        <button onClick={toggleDescription} className="mt-2 flex items-center tracking-tighter font-semibold gap-2 text-[#7AE36A]">
+                        <button onClick={toggleDescription} className="mt-2 flex items-center  font-semibold gap-2 text-[#7AE36A]">
                             {showFullDescription ? 'مشاهده کمتر' : 'مشاهده بیشتر'}
                             <span className={`transition-transform duration-300 ${showFullDescription ? 'rotate-180' : ''}`}>
                                 <ChevronDown />
@@ -131,28 +131,28 @@ export default function CourseDetail() {
                     <span>
                         <ClockIcon />
                     </span>
-                    <p className="text-[#042A1B7F] text-[15px] mt-4 tracking-tighter">مدت زمان دوره</p>
+                    <p className="text-[#042A1B7F] text-[15px] mt-4 ">مدت زمان دوره</p>
                     <h4 className="text-[#042A1B] font-bold text-[17px]">98 ساعت</h4>
                 </div>
                 <div className="bg-[#D0DDD140] rounded-xl py-5 px-5">
                     <span>
                         <ClockIcon />
                     </span>
-                    <p className="text-[#042A1B7F] text-[15px] mt-4 tracking-tighter">آخرین بروزرسانی</p>
+                    <p className="text-[#042A1B7F] text-[15px] mt-4 ">آخرین بروزرسانی</p>
                     <h4 className="text-[#042A1B] font-bold text-[17px]">04 خرداد 1403</h4>
                 </div>
                 <div className="bg-[#D0DDD140] rounded-xl py-5 px-5">
                     <span>
                         <ClockIcon />
                     </span>
-                    <p className="text-[#042A1B7F] text-[15px] mt-4 tracking-tighter">پیش نیاز</p>
+                    <p className="text-[#042A1B7F] text-[15px] mt-4 ">پیش نیاز</p>
                     <h4 className="text-[#042A1B] font-bold text-[17px]">HTML & CSS & JS</h4>
                 </div>
                 <div className="bg-[#D0DDD140] rounded-xl py-5 px-5">
                     <span>
                         <ClockIcon />
                     </span>
-                    <p className="text-[#042A1B7F] text-[15px] mt-4 tracking-tighter">نوع مشاهده</p>
+                    <p className="text-[#042A1B7F] text-[15px] mt-4 ">نوع مشاهده</p>
                     <h4 className="text-[#042A1B] font-bold text-[17px]">دانلودی/آنلاین</h4>
                 </div>
             </div>
@@ -161,7 +161,7 @@ export default function CourseDetail() {
                     این دوره برای چه کسانی مناسب هست؟
                 </h1>
                 <div className="mt-3">
-                    <p className="text-[17.5px] text-[#042A1B] text-justify leading-8 tracking-tighter font-normal">
+                    <p className="text-[17.5px] text-[#042A1B] text-justify leading-7  font-normal">
                         دوره جامع ری اکت برای دو دسته از دانشجوها خیلی مفید و کاربردی هست.
                         دسته اول کسانی که آموزش جاوا اسکریپت رو تموم کردن و دنبال یک تکنولوژی مدرن و پولساز بر پایه جاوا اسکریپت هستن تا از زبانی که یاد گرفتن استفاده کنن.
                         دسته دوم کسانی که در حال حاضر در هر سطحی با ری اکت کار میکنن

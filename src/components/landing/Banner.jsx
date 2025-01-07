@@ -20,7 +20,7 @@ const Banner = () => {
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="grid lg:grid-cols-2 gap-5 items-center">
                     <div>
-                        <h1 className="text-[#042A1B] text-4xl font-extrabold bg-[#F6DC66] py-3 px-5 rounded-xl w-fit tracking-tighter">آموزش و توسعه آنلاین</h1>
+                        <h1 className="text-[#042A1B] text-4xl font-extrabold bg-[#F6DC66] py-3 px-5 rounded-xl w-fit ">آموزش و توسعه آنلاین</h1>
                         <div className="pr-3 font-semibold text-white text-lg sm:text-[26px] mt-7 leading-[50px] w-fit">
                             لذت آموزش و کدنویسی آنلاین در بستر وب <br />
                             بدون نیاز به نصب هیچگونه نرم افزار جانبی
