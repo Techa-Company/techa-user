@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { BottomAngleIcon, CheckIcon, SmallCheckIcon } from '../Icons/Icons';
+import { CheckIcon, SmallCheckIcon } from '../Icons/Icons';
 import Link from 'next/link';
 import { ChevronDown, PanelTopOpen } from 'lucide-react';
 
