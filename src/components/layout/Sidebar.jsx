@@ -1,27 +1,28 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BottomAngleIcon, CheckIcon, SmallCheckIcon } from '../Icons/Icons';
 import Link from 'next/link';
+import { ChevronDown, PanelTopOpen } from 'lucide-react';
 
 const Accordion = ({ title, subtitle, content, isOpen, onClick }) => {
     return (
-        <div className='border border-[#D0DDD1] rounded-2xl px-5 mb-5'>
+        <div className='border lg:border-[#D0DDD1] border-white rounded-2xl px-3 lg:px-5 mb-5'>
             <div className='flex items-center justify-between py-3 cursor-pointer' onClick={onClick}>
                 <div className='flex items-center gap-3'>
-                    <div className='w-11 h-11 flex justify-center items-center rounded-full bg-[#7AE36A]'>
+                    <div className='w-9 h-9 flex justify-center items-center rounded-full bg-[#7AE36A]'>
                         <CheckIcon />
                     </div>
                     <div>
-                        <p className='text-[#042A1B] text-[15px] opacity-50 -mb-1'>{title}</p>
-                        <h3 className='text-[#0412A1B] text-[17px] '>{subtitle}</h3>
+                        <p className='text-white lg:text-[#042A1B] text-sm opacity-50'>{title}</p>
+                        <h3 className='text-white lg:text-[#042A1B] text-[16px] font-medium'>{subtitle}</h3>
                     </div>
                 </div>
-                <button>
-                    <BottomAngleIcon />
+                <button className='text-[#7AE36A] lg:text-black'>
+                    <ChevronDown className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`} />
                 </button>
             </div>
             <div className={`overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-screen' : 'max-h-0'}`}>
-                <div className='py-5'>
+                <div className='py-5 text-white lg:text-[#042A1B]'>
                     {content}
                 </div>
             </div>
@@ -31,10 +32,31 @@ const Accordion = ({ title, subtitle, content, isOpen, onClick }) => {
 
 const Sidebar = () => {
     const [openAccordion, setOpenAccordion] = useState(0);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [topPosition, setTopPosition] = useState(72);
 
     const toggleAccordion = (index) => {
         setOpenAccordion(openAccordion === index ? -1 : index);
     };
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    const handleScroll = () => {
+        if (window.scrollY > 20) {
+            setTopPosition(56);
+        } else {
+            setTopPosition(72);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     const generateContent = (length) => (
         <ul className='flex flex-col gap-7'>
@@ -44,12 +66,12 @@ const Sidebar = () => {
                     <li className='relative' key={index}>
                         <Link className='flex items-center justify-between' href="">
                             <div className='flex items-center gap-3'>
-                                <span className='w-6 h-6 flex justify-center items-center rounded-full bg-[#7AE36A]'>
+                                <span className='w-5 h-5 flex justify-center items-center rounded-full bg-[#7AE36A]'>
                                     <SmallCheckIcon />
                                 </span>
                                 <p className='font-medium text-lg '>متغیر ها</p>
                             </div>
-                            <span className='text-[#042A1B] opacity-50 font-light'>{minutes} دقیقه</span>
+                            <span className='text-white lg:text-[#042A1B] opacity-50 font-light'>{minutes} دقیقه</span>
                         </Link>
                         {index !== length - 1 && (
                             <span className='absolute right-2.5 top-8 border-r-2 border-dashed h-5'></span>
@@ -61,8 +83,8 @@ const Sidebar = () => {
     );
 
     return (
-        <aside className='min-w-80'>
-            <h1 className=" font-bold text-[#042A1B] text-3xl">
+        <aside className={`min-w-80 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none top-[${topPosition}px] bottom-0 py-10 px-5 transition-all duration-200 ${isSidebarOpen ? '-right-0' : '-right-80'}`}>
+            <h1 className=" font-bold text-white lg:text-[#042A1B] text-3xl">
                 سرفصل ها
             </h1>
             <div className='mt-8'>
@@ -72,6 +94,9 @@ const Sidebar = () => {
                 <Accordion title="فصل سوم" subtitle="پروژه عملی" content={generateContent(6)} isOpen={openAccordion === 3} onClick={() => toggleAccordion(3)} />
                 <Accordion title="فصل سوم" subtitle="پروژه عملی" content={generateContent(3)} isOpen={openAccordion === 4} onClick={() => toggleAccordion(4)} />
                 <Accordion title="فصل سوم" subtitle="پروژه عملی" content={generateContent(2)} isOpen={openAccordion === 5} onClick={() => toggleAccordion(5)} />
+            </div>
+            <div className='w-9 h-9 lg:hidden absolute -left-9 top-16 flex justify-center items-center bg-[#042A1B] rounded-l-lg' onClick={toggleSidebar}>
+                <PanelTopOpen className={`transition-transform duration-200 ${isSidebarOpen ? "-rotate-90" : "rotate-90"} text-[#7AE36A]`} />
             </div>
         </aside>
     );
