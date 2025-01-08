@@ -93,7 +93,7 @@ const LastCourses = () => {
                                                 لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است
                                             </p>
                                             <div className="grid grid-cols-2 gap-5 text-center mt-5">
-                                                <Link className="text-sm font-normal  bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff]" href="">
+                                                <Link className="text-sm font-normal  bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff]" href={`/courses/${String(index + 1)}`}>
                                                     مشاهده دوره
                                                 </Link>
                                                 <Link className="text-sm font-normal  bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff]" href="">

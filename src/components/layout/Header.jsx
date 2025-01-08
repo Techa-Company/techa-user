@@ -68,25 +68,37 @@ const Header = () => {
                                         <span>
                                             {!isMobile ? <HomeLightIcon /> : <HomeIcon />}
                                         </span>
-                                        <Link className='font-normal text-sm text-white' href="/">صفحه اصلی</Link>
+                                        <Link
+                                            className='font-normal text-sm text-white'
+                                            onClick={() => setIsMenuOpen(false)}
+                                            href="/">صفحه اصلی</Link>
                                     </li>
                                     <li className='flex items-center gap-2'>
                                         <span >
                                             {!isMobile ? <CourseLightIcon /> : <CourseIcon />}
                                         </span>
-                                        <Link className='font-normal text-sm text-white' href="/courses">دوره های ما</Link>
+                                        <Link
+                                            className='font-normal text-sm text-white'
+                                            onClick={() => setIsMenuOpen(false)}
+                                            href="/courses">دوره های ما</Link>
                                     </li>
                                     <li className='flex items-center gap-2'>
                                         <span >
                                             {!isMobile ? <AboutLightIcon /> : <AboutIcon />}
                                         </span>
-                                        <Link className='font-normal text-sm text-white' href="">درباره ما</Link>
+                                        <Link
+                                            className='font-normal text-sm text-white'
+                                            onClick={() => setIsMenuOpen(false)}
+                                            href="/about-us">درباره ما</Link>
                                     </li>
                                     <li className='flex items-center gap-2'>
                                         <span >
                                             {!isMobile ? <ContactLightIcon /> : <ContactIcon />}
                                         </span>
-                                        <Link className='font-normal text-sm text-white' href="">تماس با ما</Link>
+                                        <Link
+                                            className='font-normal text-sm text-white'
+                                            onClick={() => setIsMenuOpen(false)}
+                                            href="/contact-us">تماس با ما</Link>
                                     </li>
                                 </ul>
                                 <div className='flex items-center gap-3 mt-10 justify-center lg:hidden'>
