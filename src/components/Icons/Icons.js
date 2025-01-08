@@ -148,8 +148,8 @@ export const SmallCheckIcon = () => {
 export const ClockIcon = () => {
     return (
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M26.5 14C26.5 20.9 20.9 26.5 14 26.5C7.1 26.5 1.5 20.9 1.5 14C1.5 7.1 7.1 1.5 14 1.5C20.9 1.5 26.5 7.1 26.5 14Z" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M18.6375 17.975L14.7625 15.6625C14.0875 15.2625 13.5375 14.2999 13.5375 13.5124V8.38745" stroke="#7AE36A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M26.5 14C26.5 20.9 20.9 26.5 14 26.5C7.1 26.5 1.5 20.9 1.5 14C1.5 7.1 7.1 1.5 14 1.5C20.9 1.5 26.5 7.1 26.5 14Z" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M18.6375 17.975L14.7625 15.6625C14.0875 15.2625 13.5375 14.2999 13.5375 13.5124V8.38745" stroke="#7AE36A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 };
@@ -157,10 +157,10 @@ export const ClockIcon = () => {
 export const CalenderIcon = () => {
     return (
         <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 1.5V5.25" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M17 1.5V5.25" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M1.375 10.3625H22.625" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M23.25 9.625V20.25C23.25 24 21.375 26.5 17 26.5H7C2.625 26.5 0.75 24 0.75 20.25V9.625C0.75 5.875 2.625 3.375 7 3.375H17C21.375 3.375 23.25 5.875 23.25 9.625Z" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M7 1.5V5.25" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M17 1.5V5.25" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M1.375 10.3625H22.625" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M23.25 9.625V20.25C23.25 24 21.375 26.5 17 26.5H7C2.625 26.5 0.75 24 0.75 20.25V9.625C0.75 5.875 2.625 3.375 7 3.375H17C21.375 3.375 23.25 5.875 23.25 9.625Z" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 };
@@ -168,11 +168,11 @@ export const CalenderIcon = () => {
 export const BagIcon = () => {
     return (
         <svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.00003 26.5H18C23.025 26.5 23.925 24.4875 24.1875 22.0375L25.125 12.0375C25.4625 8.9875 24.5875 6.5 19.25 6.5H6.75003C1.41253 6.5 0.537527 8.9875 0.875027 12.0375L1.81253 22.0375C2.07503 24.4875 2.97503 26.5 8.00003 26.5Z" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M8 6.5V5.5C8 3.2875 8 1.5 12 1.5H14C18 1.5 18 3.2875 18 5.5V6.5" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M15.5 15.25V16.5C15.5 16.5125 15.5 16.5125 15.5 16.525C15.5 17.8875 15.4875 19 13 19C10.525 19 10.5 17.9 10.5 16.5375V15.25C10.5 14 10.5 14 11.75 14H14.25C15.5 14 15.5 14 15.5 15.25Z" stroke="#7AE36A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M25.0625 12.75C22.175 14.85 18.875 16.1 15.5 16.525" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M1.27502 13.0875C4.08752 15.0125 7.26252 16.175 10.5 16.5375" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M8.00003 26.5H18C23.025 26.5 23.925 24.4875 24.1875 22.0375L25.125 12.0375C25.4625 8.9875 24.5875 6.5 19.25 6.5H6.75003C1.41253 6.5 0.537527 8.9875 0.875027 12.0375L1.81253 22.0375C2.07503 24.4875 2.97503 26.5 8.00003 26.5Z" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M8 6.5V5.5C8 3.2875 8 1.5 12 1.5H14C18 1.5 18 3.2875 18 5.5V6.5" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M15.5 15.25V16.5C15.5 16.5125 15.5 16.5125 15.5 16.525C15.5 17.8875 15.4875 19 13 19C10.525 19 10.5 17.9 10.5 16.5375V15.25C10.5 14 10.5 14 11.75 14H14.25C15.5 14 15.5 14 15.5 15.25Z" stroke="#7AE36A" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M25.0625 12.75C22.175 14.85 18.875 16.1 15.5 16.525" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M1.27502 13.0875C4.08752 15.0125 7.26252 16.175 10.5 16.5375" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 };
@@ -180,18 +180,18 @@ export const BagIcon = () => {
 export const VideoIcon = () => {
     return (
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M26.5 17.75V10.25C26.5 4 24 1.5 17.75 1.5H10.25C4 1.5 1.5 4 1.5 10.25V17.75C1.5 24 4 26.5 10.25 26.5H17.75C24 26.5 26.5 24 26.5 17.75Z" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M2.15002 7.88745H25.85" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M9.65002 1.63745V7.71245" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M18.35 1.63745V7.14995" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M11.1875 17.0625V15.5625C11.1875 13.6375 12.55 12.85 14.2125 13.8125L15.5125 14.5625L16.8125 15.3125C18.475 16.275 18.475 17.85 16.8125 18.8125L15.5125 19.5625L14.2125 20.3125C12.55 21.275 11.1875 20.4875 11.1875 18.5625V17.0625V17.0625Z" stroke="#7AE36A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M26.5 17.75V10.25C26.5 4 24 1.5 17.75 1.5H10.25C4 1.5 1.5 4 1.5 10.25V17.75C1.5 24 4 26.5 10.25 26.5H17.75C24 26.5 26.5 24 26.5 17.75Z" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M2.15002 7.88745H25.85" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M9.65002 1.63745V7.71245" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M18.35 1.63745V7.14995" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M11.1875 17.0625V15.5625C11.1875 13.6375 12.55 12.85 14.2125 13.8125L15.5125 14.5625L16.8125 15.3125C18.475 16.275 18.475 17.85 16.8125 18.8125L15.5125 19.5625L14.2125 20.3125C12.55 21.275 11.1875 20.4875 11.1875 18.5625V17.0625V17.0625Z" stroke="#7AE36A" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 };
 export const SendIcon = () => {
     return (
         <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1.28485 9.05992C1.18511 6.36629 14.362 0.0321942 15.6031 1.2894C17.0105 2.71505 13.6456 6.95149 12.8877 8.30049C12.432 9.11171 12.4445 9.46354 12.9627 10.2739C15.3096 13.944 16.4739 15.7725 15.7503 16.5629C14.597 17.8229 1.38218 11.6887 1.28485 9.05992Z" stroke="#042A1B" stroke-width="1.2" />
+            <path d="M1.28485 9.05992C1.18511 6.36629 14.362 0.0321942 15.6031 1.2894C17.0105 2.71505 13.6456 6.95149 12.8877 8.30049C12.432 9.11171 12.4445 9.46354 12.9627 10.2739C15.3096 13.944 16.4739 15.7725 15.7503 16.5629C14.597 17.8229 1.38218 11.6887 1.28485 9.05992Z" stroke="#042A1B" strokeWidth="1.2" />
         </svg>
 
     );
@@ -199,7 +199,7 @@ export const SendIcon = () => {
 export const HeadPhoneIcon = () => {
     return (
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#clip0_15_2387)">
+            <g clipPath="url(#clip0_15_2387)">
                 <path d="M13.9141 0H14.087C16.3855 0.0103906 18.6709 0.884297 20.3678 2.43906C21.8296 3.75758 22.8556 5.53438 23.3264 7.44187C23.4101 7.8307 23.2542 8.25617 22.9447 8.50445C22.6543 8.74344 22.2365 8.81672 21.8838 8.68383C21.5359 8.56297 21.2696 8.25289 21.187 7.89578C20.7955 6.38859 19.9653 4.98859 18.7846 3.96703C17.5859 2.91813 16.0311 2.28594 14.4402 2.20117C12.8182 2.09945 11.1645 2.55281 9.83227 3.48687C8.37649 4.49367 7.32485 6.04078 6.85563 7.74211C6.80477 7.92969 6.75555 8.12383 6.63906 8.28352C6.39735 8.63625 5.93578 8.82109 5.51797 8.72539C5.06625 8.6368 4.70149 8.2343 4.65774 7.77602C4.6211 7.47578 4.74524 7.19086 4.82071 6.90648C5.41406 4.95578 6.60297 3.17953 8.22938 1.94141C9.84485 0.694531 11.8759 0.013125 13.9141 0Z" fill="#7AE36A" />
                 <path d="M2.25203 11.5505C3.22109 10.839 4.43133 10.4616 5.63336 10.5054C6.37328 10.5415 7.09734 10.8384 7.64805 11.3339C8.34094 11.9442 8.75274 12.8586 8.74945 13.7822C8.75 15.2408 8.75055 16.6993 8.74945 18.1578C8.75219 19.1208 8.30266 20.0724 7.55727 20.6816C6.9218 21.2143 6.07797 21.4844 5.25109 21.4325C3.81227 21.3833 2.41172 20.727 1.44266 19.6644C0.580234 18.738 0.0749219 17.5043 0 16.2432V15.7133C0.0317187 15.3392 0.0765625 14.9651 0.173906 14.602C0.483984 13.3841 1.23594 12.2887 2.25203 11.5505ZM4.72555 12.7749C3.78492 12.9904 2.9575 13.645 2.53258 14.5107C2.17328 15.226 2.08742 16.0753 2.30891 16.8453C2.55773 17.7586 3.22602 18.5439 4.08516 18.9404C4.61672 19.1772 5.22539 19.3276 5.80453 19.2012C6.24148 19.0552 6.56852 18.6254 6.56141 18.16C6.56305 16.7004 6.56305 15.2402 6.56195 13.7806C6.56961 13.3147 6.24313 12.8826 5.80508 12.7366C5.45016 12.6453 5.07719 12.6972 4.72555 12.7749Z" fill="#042A1B" />
                 <path d="M21.2215 10.7756C21.9904 10.4245 22.8687 10.4524 23.6797 10.6225C25.0475 10.9101 26.285 11.7529 27.0627 12.9128C27.638 13.7555 27.9579 14.7623 28 15.7806V16.1875C27.9486 17.2331 27.6074 18.2651 26.9976 19.1182C26.2074 20.248 24.9747 21.0508 23.6256 21.3303C23.6026 22.0992 23.7142 22.8987 23.4309 23.6348C23.0021 24.8768 21.7667 25.7813 20.4526 25.8098C19.3326 25.8174 18.2126 25.8092 17.0932 25.8136C16.8263 26.5535 16.292 27.195 15.6035 27.5778C15.1425 27.8436 14.6136 27.9797 14.0837 28H13.8354C13.2404 27.9584 12.6531 27.7698 12.1603 27.4307C11.3515 26.8876 10.8107 25.9694 10.7314 24.9982C10.6619 24.2293 10.8818 23.4401 11.3318 22.814C11.7546 22.2222 12.3769 21.776 13.0758 21.5726C13.9366 21.3128 14.9046 21.4342 15.6746 21.8996C16.3292 22.2862 16.8367 22.9091 17.0926 23.6244C18.1399 23.6266 19.1877 23.6233 20.2355 23.6261C20.4253 23.6283 20.621 23.6102 20.7944 23.5265C21.1772 23.357 21.4403 22.9534 21.4364 22.534C21.4397 22.1063 21.4359 21.6787 21.4375 21.2505C20.446 20.8977 19.6454 20.0501 19.3698 19.0318C19.2112 18.4997 19.256 17.9391 19.25 17.3917C19.2517 16.1508 19.2462 14.91 19.2528 13.6697C19.2817 12.4321 20.084 11.2596 21.2215 10.7756ZM22.2753 12.7181C21.9106 12.8029 21.6027 13.0894 21.4906 13.446C21.4288 13.6243 21.437 13.8162 21.437 14.0022C21.4386 15.3869 21.4364 16.7715 21.4381 18.1562C21.4255 18.6976 21.875 19.1964 22.4137 19.2429C23.7142 19.3151 24.9977 18.5051 25.52 17.3168C25.8339 16.6244 25.9011 15.8205 25.6895 15.0894C25.427 14.1252 24.6953 13.3044 23.7683 12.9319C23.298 12.7498 22.7785 12.6333 22.2753 12.7181ZM13.7485 23.6545C13.3443 23.7458 13.0113 24.0865 12.9298 24.4929C12.856 24.8347 12.9588 25.2093 13.2005 25.463C13.4417 25.7266 13.8179 25.8579 14.1707 25.7983C14.5704 25.7387 14.921 25.4373 15.0407 25.0518C15.1632 24.6837 15.067 24.2555 14.8001 23.975C14.5403 23.689 14.1231 23.5626 13.7485 23.6545Z" fill="#042A1B" />
