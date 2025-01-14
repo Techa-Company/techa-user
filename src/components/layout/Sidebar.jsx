@@ -41,6 +41,7 @@ const Sidebar = () => {
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
+        document.body.style.overflow = isSidebarOpen ? 'auto' : 'hidden';
     };
 
     const handleScroll = () => {
@@ -90,7 +91,7 @@ const Sidebar = () => {
             <h1 className=" font-bold text-white lg:text-[#042A1B] text-3xl">
                 سرفصل ها
             </h1>
-            <div className='mt-8'>
+            <div className='mt-8 overflow-y-auto' style={{ maxHeight: 'calc(100vh - 72px)' }}>
                 <Accordion title="فصل اول" subtitle="مقدمه ای بری ReactJS" content={generateContent(5)} isOpen={openAccordion === 0} onClick={() => toggleAccordion(0)} />
                 <Accordion title="فصل دوم" subtitle="مفاهیم پیشرفته" content={generateContent(3)} isOpen={openAccordion === 1} onClick={() => toggleAccordion(1)} />
                 <Accordion title="فصل سوم" subtitle="پروژه عملی" content={generateContent(4)} isOpen={openAccordion === 2} onClick={() => toggleAccordion(2)} />
