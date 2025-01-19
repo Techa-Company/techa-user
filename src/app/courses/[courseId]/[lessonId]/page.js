@@ -1,27 +1,72 @@
-"use client"
+"use client";
 import { BottomAngleIcon, ClockIcon } from "@/components/Icons/Icons";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from 'next/navigation'; // اضافه کردن useParams
 
 export default function Lesson() {
-
     const [openAccordion, setOpenAccordion] = useState(0);
+    const [lessonData, setLessonData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
+    // دریافت courseId و lessonId از URL
+    const params = useParams();
+    const courseId = params.courseId;
+    const lessonId = params.lessonId;
 
+    console.log(courseId, lessonId)
 
+    useEffect(() => {
+        // دریافت داده‌ها از API
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`http://45.139.10.84:5000/api/Content`);
+                const data = await response.json();
+
+                console.log(data)
+
+                // فیلتر داده‌ها بر اساس CourseId و ParentId
+                if (data.Data && Array.isArray(data.Data)) {
+                    const filteredData = data.Data.filter(
+                        item => item.CourseId === parseInt(courseId) && item.Id === parseInt(lessonId)
+                    );
+                    console.log(filteredData)
+                    setLessonData(filteredData[0]); // اولین آیتم فیلتر شده
+                } else {
+                    console.error("Invalid data format:", data);
+                    setLessonData(null); // مقدار پیش‌فرض برای جلوگیری از خطا
+                }
+            } catch (error) {
+                console.error("Error fetching content:", error);
+                setLessonData(null); // مقدار پیش‌فرض برای جلوگیری از خطا
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (courseId && lessonId) {
+            fetchData();
+        }
+    }, [courseId, lessonId]);
 
     const toggleAccordion = (index) => {
         setOpenAccordion(openAccordion === index ? -1 : index);
     };
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
+    if (!lessonData) {
+        return <div>No lesson data available</div>;
+    }
 
     return (
         <div className=''>
             <div className='flex flex-col sm:flex-row gap-5 justify-between items-center'>
                 <h1 className=" font-bold text-[#042A1B] text-3xl">
-                    Arrow Function
+                    {lessonData.Title}
                 </h1>
                 <div className="flex gap-4 items-center">
                     <Link className="flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5" href="">
@@ -39,34 +84,17 @@ export default function Lesson() {
                 </div>
             </div>
             <div className="text-[17.5px] font-normal leading-7 text-justify mt-7 grid gap-5">
-                <p>
-                    قبل از آموزش ری اکت ReactJS ابتدای کار به شما بگیم که تکنولوژی ری اکت برگ برنده برنامه نویسان در دنیای امروز هست اصلا اغراق نکردیم. یه غول به تمام معنا و دنیایی بی انتها از پروژه هایی که میشه با اون نوشت، اون هم خیلی سریع و راحت! تکنولوژی که دنیای وب رو دگرگون کرد و دستپخت شرکت فیسبوک هست که اینستاگرام رو هم با اون طراحی کرده!
-                </p>
-                <p>
-                    کامپوننت محور بودن ری اکت باعث میشه شما با کدنویسی یک بخش بتونید بی نهایت بار در بخش های مختلف پروژه از اون استفاده کنید و از طرفی میتونید پروژه هایی بسازید که بدون نیاز به رفرش، هر دیتا و بخشی از صفحه رو تغییر بدید اون هم با سرعت نور! برای همین ری اکت، زمان کدنویسی و به اتمام پروژه رو خیلی کوتاهتر از قبل کرده!
-                </p>
-                <div className="bg-[#F3F6F3] rounded-2xl p-2">
-                    <div className="px-5 flex items-center justify-between py-2">
-                        <h3 className="text-[16px] font-bold text-[#042A1B]">مثال</h3>
-                        <button className="text-white font-bold text-sm px-6 py-2 rounded-md bg-[#042A1B]">خودت امتحان کن</button>
-                    </div>
-                    <div className="bg-white rounded-2xl h-60">
-
-                    </div>
+                <div
+                    dangerouslySetInnerHTML={{ __html: lessonData.Description }}
+                >
                 </div>
-                <p>
-                    قبل از آموزش ری اکت ReactJS ابتدای کار به شما بگیم که تکنولوژی ری اکت برگ برنده برنامه نویسان در دنیای امروز هست اصلا اغراق نکردیم. یه غول به تمام معنا و دنیایی بی انتها از پروژه هایی که میشه با اون نوشت، اون هم خیلی سریع و راحت! تکنولوژی که دنیای وب رو دگرگون کرد و دستپخت شرکت فیسبوک هست که اینستاگرام رو هم با اون طراحی کرده!
-                </p>
-                <p>
-                    کامپوننت محور بودن ری اکت باعث میشه شما با کدنویسی یک بخش بتونید بی نهایت بار در بخش های مختلف پروژه از اون استفاده کنید و از طرفی میتونید پروژه هایی بسازید که بدون نیاز به رفرش، هر دیتا و بخشی از صفحه رو تغییر بدید اون هم با سرعت نور! برای همین ری اکت، زمان کدنویسی و به اتمام پروژه رو خیلی کوتاهتر از قبل کرده!
-                </p>
                 <div className="bg-[#F3F6F3] rounded-2xl p-2">
                     <div className="px-5 flex items-center justify-between py-2">
                         <h3 className="text-[16px] font-bold text-[#042A1B]">مثال</h3>
                         <button className="text-white font-bold text-sm px-6 py-2 rounded-md bg-[#042A1B]">خودت امتحان کن</button>
                     </div>
                     <div className="bg-white rounded-2xl h-60">
-
+                        {/* محتوای مثال */}
                     </div>
                 </div>
             </div>
@@ -87,4 +115,3 @@ export default function Lesson() {
         </div>
     );
 };
-
