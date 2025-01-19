@@ -1,7 +1,9 @@
 "use client"
+
+import { useParams } from 'next/navigation';
 import { BottomAngleIcon, ClockIcon } from "@/components/Icons/Icons";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Accordion = ({ title, content, isOpen, onClick }) => {
     return (
@@ -23,9 +25,36 @@ const Accordion = ({ title, content, isOpen, onClick }) => {
 
 export default function CourseDetail() {
 
+    const params = useParams();
+    const { courseId } = params;
+
+    console.log(courseId);
+
+
     const [activeTab, setActiveTab] = useState(0);
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [openAccordion, setOpenAccordion] = useState(0);
+    const [courseDetails, setCourseDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (courseId) {
+            fetch(`http://45.139.10.84:5000/api/Course/${courseId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.IsSuccess) {
+                        setCourseDetails(data.Data);
+                    }
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error("Error fetching course details:", error);
+                    setLoading(false);
+                });
+        }
+    }, [courseId]);
+
+    console.log(courseDetails)
 
     const tabContent = [
         {
@@ -75,7 +104,7 @@ export default function CourseDetail() {
         <div className=''>
             <div className='flex flex-col sm:flex-row gap-5 justify-between items-center'>
                 <h1 className=" font-extrabold text-[#042A1B] text-3xl">
-                    دوره آموزشی <span className="font-bold">React</span>
+                    دوره آموزشی <span className="font-bold">{courseDetails?.Title}</span>
                 </h1>
                 <div className="flex space-x-1 bg-[#D0DDD140] p-1.5 rounded-full">
                     {tabContent.map((tab, index) => (
@@ -97,24 +126,8 @@ export default function CourseDetail() {
                         className={`transition-opacity duration-300 ${activeTab === index ? 'block' : 'hidden'}`}
                     >
                         <div className={`overflow-hidden text-[17.5px] text-[#042A1B] text-justify leading-7  font-normal transition-all duration-500 relative ${showFullDescription ? 'max-h-screen' : 'max-h-40'}`}>
-                            <p>
-                                قبل از آموزش ری اکت ReactJS ابتدای کار به شما بگیم که تکنولوژی ری اکت برگ برنده برنامه نویسان در دنیای امروز هست اصلا اغراق نکردیم. یه غول به تمام معنا و دنیایی بی انتها از پروژه هایی که میشه با اون نوشت، اون هم خیلی سریع و راحت! تکنولوژی که دنیای وب رو دگرگون کرد و دستپخت شرکت فیسبوک هست که اینستاگرام رو هم با اون طراحی کرده
-                            </p>
-                            <p>
-                                قبل از آموزش ری اکت ReactJS ابتدای کار به شما بگیم که تکنولوژی ری اکت برگ برنده برنامه نویسان در دنیای امروز هست اصلا اغراق نکردیم. یه غول به تمام معنا و دنیایی بی انتها از پروژه هایی که میشه با اون نوشت، اون هم خیلی سریع و راحت! تکنولوژی که دنیای وب رو دگرگون کرد و دستپخت شرکت فیسبوک هست که اینستاگرام رو هم با اون طراحی کرده!
-                            </p>
-                            <p>
-                                قبل از آموزش ری اکت ReactJS ابتدای کار به شما بگیم که تکنولوژی ری اکت برگ برنده برنامه نویسان در دنیای امروز هست اصلا اغراق نکردیم. یه غول به تمام معنا و دنیایی بی انتها از پروژه هایی که میشه با اون نوشت، اون هم خیلی سریع و راحت! تکنولوژی که دنیای وب رو دگرگون کرد و دستپخت شرکت فیسبوک هست که اینستاگرام رو هم با اون طراحی کرده
-                            </p>
-                            <p>
-                                قبل از آموزش ری اکت ReactJS ابتدای کار به شما بگیم که تکنولوژی ری اکت برگ برنده برنامه نویسان در دنیای امروز هست اصلا اغراق نکردیم. یه غول به تمام معنا و دنیایی بی انتها از پروژه هایی که میشه با اون نوشت، اون هم خیلی سریع و راحت! تکنولوژی که دنیای وب رو دگرگون کرد و دستپخت شرکت فیسبوک هست که اینستاگرام رو هم با اون طراحی کرده!
-                            </p>
-                            <p >
-                                خالد حسینی تو رمان باد بادک باز مینویسه : ﻣﺮﺩ ﺁﻫﺴﺘﻪ ﺩﺭ ﮔﻮﺵ ﻓﺮﺯﻧﺪ ﺗﺎﺯﻩ ﺑﻪ ﺑﻠﻮﻍ ﺭﺳﯿﺪﻩ ﺍﺵ ﺑﺮﺍﯼ ﭘﻨﺪ ﭼﻨﯿﻦ ﻧﺠﻮﺍ ﮐﺮﺩ : ” ﭘﺴﺮﻡ ﺩﺭ ﺯﻧﺪﮔﯽ ﻫﺮﮔﺰ ﺩﺯﺩﯼ ﻧﮑﻦ ” ﭘﺴﺮ ﻣﺘﻌﺠﺐ ﻭ ﻣﺒﻬﻮﺕ ﺑﻪ ﭘﺪﺭ ﻧﮕﺎﻩ ﮐﺮﺩ ﺑﺪﯾﻦ ﻣﻌﻨﺎ ﮐﻪ ﺍﻭ ﻫﺮﮔﺰ ﺩﺳﺖ ﮐﺞ ﻧﺪﺍﺷﺘﻪ ﭘﺪﺭ ﺑﻪ ﻧﮕﺎﻩ ﻣﺘﻌﺠﺐ ﻓﺮﺯﻧﺪ ﻟﺒﺨﻨﺪﯼ ﺯﺩ ﻭ ﺍﺩﺍﻣﻪ ﺩﺍﺩ : ﺩﺭ ﺯﻧﺪﮔﯽ ﺩﺭﻭﻍ ﻧﮕﻮ ﭼﺮﺍ ﮐﻪ ﺍﮔﺮ ﮔﻔﺘﯽ ﺻﺪﺍﻗﺖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍﯼ، ﺧﯿﺎﻧﺖ ﻧﮑﻦ ﮐﻪ ﺍﮔﺮ ﮐﺮﺩﯼ ﻋﺸﻖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍﯼ، ﺧﺸﻮﻧﺖ ﻧﮑﻦ ﺍﮔﺮ ﮐﺮﺩﯼ ﻣﺤﺒﺖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍﯼ، ﻧﺎ ﺣﻖ ﻧﮕﻮ ﺍﮔﺮ ﮔﻔﺘﯽ ﺣﻖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍﯼ، ﺑﯽ ﺣﯿﺎﯾﯽ ﻧﮑﻦ ﺍﮔﺮ ﮐﺮﺩﯼ ﺷﺮﺍﻓﺖ ﺭﺍ ﺩﺯﺩﯾﺪﻩ ﺍی... ﭘﺲ ﺩﺭ ﺯﻧﺪﮔﯽ ﻓﻘﻂ ﺩﺯﺩﯼ نکن !
-                            </p>
-                            <p>
-                                قبل از آموزش ری اکت ReactJS ابتدای کار به شما بگیم که تکنولوژی ری اکت برگ برنده برنامه نویسان در دنیای امروز هست اصلا اغراق نکردیم. یه غول به تمام معنا و دنیایی بی انتها از پروژه هایی که میشه با اون نوشت، اون هم خیلی سریع و راحت! تکنولوژی که دنیای وب رو دگرگون کرد و دستپخت شرکت فیسبوک هست که اینستاگرام رو هم با اون طراحی کرده!
-                            </p>
+                            <div dangerouslySetInnerHTML={{ __html: courseDetails?.Description || "" }} >
+                            </div>
                             <span className={`absolute w-full bg-white h-5 bottom-0 opacity-70 ${!showFullDescription ? "block" : "hidden"}`}></span>
                         </div>
                         <button onClick={toggleDescription} className="mt-2 flex items-center  font-semibold gap-2 text-[#7AE36A]">

@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import { CheckIcon, SmallCheckIcon } from '../Icons/Icons';
 import Link from 'next/link';
 import { ChevronDown, PanelTopOpen } from 'lucide-react';
+import { useParams } from 'next/navigation'; // اضافه کردن useParams
 
 const Accordion = ({ title, subtitle, content, isOpen, onClick }) => {
     return (
@@ -34,6 +35,40 @@ const Sidebar = () => {
     const [openAccordion, setOpenAccordion] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [topPosition, setTopPosition] = useState(72);
+    const [contents, setContents] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // دریافت courseId از URL
+    const params = useParams();
+    const courseId = params.courseId;
+
+    useEffect(() => {
+        // دریافت داده‌ها از API
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`http://45.139.10.84:5000/api/Content`);
+                const data = await response.json();
+
+                // بررسی ساختار پاسخ و فیلتر داده‌ها بر اساس CourseId
+                if (data.Data && Array.isArray(data.Data)) {
+                    const filteredData = data.Data.filter(item => item.CourseId === parseInt(courseId));
+                    setContents(filteredData);
+                } else {
+                    console.error("Invalid data format:", data);
+                    setContents([]); // مقدار پیش‌فرض برای جلوگیری از خطا
+                }
+            } catch (error) {
+                console.error("Error fetching content:", error);
+                setContents([]); // مقدار پیش‌فرض برای جلوگیری از خطا
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (courseId) {
+            fetchData();
+        }
+    }, [courseId]);
 
     const toggleAccordion = (index) => {
         setOpenAccordion(openAccordion === index ? -1 : index);
@@ -59,29 +94,21 @@ const Sidebar = () => {
         };
     }, []);
 
-    const generateContent = (length) => (
-        <ul className='flex flex-col gap-7'>
-            {Array.from({ length }, (_, index) => {
-                const minutes = Math.floor(Math.random() * 60) + 1;
-                return (
-                    <li className='relative' key={index}>
-                        <Link className='flex items-center justify-between' href={`/courses/${index + 1}/${index + 1}`}>
-                            <div className='flex items-center gap-3'>
-                                <span className='w-5 h-5 flex justify-center items-center rounded-full bg-[#7AE36A]'>
-                                    <SmallCheckIcon />
-                                </span>
-                                <p className='font-medium text-lg '>متغیر ها</p>
-                            </div>
-                            <span className='text-white lg:text-[#042A1B] opacity-50 font-light'>{minutes} دقیقه</span>
-                        </Link>
-                        {index !== length - 1 && (
-                            <span className='absolute right-2.5 top-8 border-r-2 border-dashed h-5'></span>
-                        )}
-                    </li>
-                );
-            })}
-        </ul>
-    );
+    // گروه‌بندی داده‌ها بر اساس ParentId
+    const groupedContents = (contents || []).reduce((acc, content) => {
+        if (!content.ParentId) {
+            acc[content.Id] = { ...content, children: [] };
+        } else {
+            if (acc[content.ParentId]) {
+                acc[content.ParentId].children.push(content);
+            }
+        }
+        return acc;
+    }, {});
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <aside
@@ -92,12 +119,35 @@ const Sidebar = () => {
                 سرفصل ها
             </h1>
             <div className='mt-8 overflow-y-auto' style={{ maxHeight: 'calc(100vh - 72px)' }}>
-                <Accordion title="فصل اول" subtitle="مقدمه ای بری ReactJS" content={generateContent(5)} isOpen={openAccordion === 0} onClick={() => toggleAccordion(0)} />
-                <Accordion title="فصل دوم" subtitle="مفاهیم پیشرفته" content={generateContent(3)} isOpen={openAccordion === 1} onClick={() => toggleAccordion(1)} />
-                <Accordion title="فصل سوم" subtitle="پروژه عملی" content={generateContent(4)} isOpen={openAccordion === 2} onClick={() => toggleAccordion(2)} />
-                <Accordion title="فصل سوم" subtitle="پروژه عملی" content={generateContent(6)} isOpen={openAccordion === 3} onClick={() => toggleAccordion(3)} />
-                <Accordion title="فصل سوم" subtitle="پروژه عملی" content={generateContent(3)} isOpen={openAccordion === 4} onClick={() => toggleAccordion(4)} />
-                <Accordion title="فصل سوم" subtitle="پروژه عملی" content={generateContent(2)} isOpen={openAccordion === 5} onClick={() => toggleAccordion(5)} />
+                {Object.values(groupedContents).map((content, index) => (
+                    <Accordion
+                        key={content.Id}
+                        title={`فصل ${index + 1}`}
+                        subtitle={content.Title}
+                        content={
+                            <ul className='flex flex-col gap-7'>
+                                {content.children.map((child) => (
+                                    <li className='relative' key={child.Id}>
+                                        <Link className='flex items-center justify-between' href={`/courses/${courseId}/${child.Id}`}>
+                                            <div className='flex items-center gap-3'>
+                                                <span className='w-5 h-5 flex justify-center items-center rounded-full bg-[#7AE36A]'>
+                                                    <SmallCheckIcon />
+                                                </span>
+                                                <p className='font-medium text-lg '>{child.Title}</p>
+                                            </div>
+                                            <span className='text-white lg:text-[#042A1B] opacity-50 font-light'>{child.Duration} دقیقه</span>
+                                        </Link>
+                                        {content.children.indexOf(child) !== content.children.length - 1 && (
+                                            <span className='absolute right-2.5 top-8 border-r-2 border-dashed h-5'></span>
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        }
+                        isOpen={openAccordion === index}
+                        onClick={() => toggleAccordion(index)}
+                    />
+                ))}
             </div>
             <div className='w-9 h-9 lg:hidden absolute -left-9 top-16 flex justify-center items-center bg-[#042A1B] rounded-l-lg cursor-pointer' onClick={toggleSidebar}>
                 <PanelTopOpen className={`transition-transform duration-200 ${isSidebarOpen ? "-rotate-90" : "rotate-90"} text-[#7AE36A]`} />
