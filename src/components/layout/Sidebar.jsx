@@ -118,7 +118,7 @@ const Sidebar = () => {
             <h1 className=" font-bold text-white lg:text-[#042A1B] text-3xl">
                 سرفصل ها
             </h1>
-            <div className='mt-8 overflow-y-auto' style={{ maxHeight: 'calc(100vh - 72px)' }}>
+            <div className='mt-8 overflow-y-auto no-scrollbar' style={{ maxHeight: 'calc(100vh - 72px)' }}>
                 {Object.values(groupedContents).map((content, index) => (
                     <Accordion
                         key={content.Id}

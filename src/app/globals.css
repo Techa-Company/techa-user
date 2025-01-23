@@ -431,3 +431,13 @@ pre {
     transform: rotate(360deg);
   }
 }
+
+.no-scrollbar {
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
