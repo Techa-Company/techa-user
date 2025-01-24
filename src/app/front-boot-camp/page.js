@@ -249,13 +249,13 @@ export default function CourseDetail() {
                     <div className="bg-[#D0DDD140] rounded-3xl py-5 px-5 flex flex-col items-center">
                         <span className='text-[#042A1B]'>
                             <svg width="50" height="50" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 2.5V6.25" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M20 2.5V6.25" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M4.375 11.3625H25.625" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M26.25 10.625V21.25C26.25 25 24.375 27.5 20 27.5H10C5.625 27.5 3.75 25 3.75 21.25V10.625C3.75 6.875 5.625 4.375 10 4.375H20C24.375 4.375 26.25 6.875 26.25 10.625Z" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M14.9944 17.125H15.0056" stroke="#7AE36A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M10.3679 17.125H10.3791" stroke="#7AE36A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M10.3679 20.875H10.3791" stroke="#7AE36A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M10 2.5V6.25" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M20 2.5V6.25" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M4.375 11.3625H25.625" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M26.25 10.625V21.25C26.25 25 24.375 27.5 20 27.5H10C5.625 27.5 3.75 25 3.75 21.25V10.625C3.75 6.875 5.625 4.375 10 4.375H20C24.375 4.375 26.25 6.875 26.25 10.625Z" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M14.9944 17.125H15.0056" stroke="#7AE36A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M10.3679 17.125H10.3791" stroke="#7AE36A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M10.3679 20.875H10.3791" stroke="#7AE36A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
 
                         </span>
@@ -265,8 +265,8 @@ export default function CourseDetail() {
                     <div className="bg-[#D0DDD140] rounded-3xl py-5 px-5 flex flex-col items-center">
                         <span>
                             <svg width="46" height="46" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M26.5 14C26.5 20.9 20.9 26.5 14 26.5C7.1 26.5 1.5 20.9 1.5 14C1.5 7.1 7.1 1.5 14 1.5C20.9 1.5 26.5 7.1 26.5 14Z" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M18.6375 17.975L14.7625 15.6625C14.0875 15.2625 13.5375 14.3 13.5375 13.5125V8.38751" stroke="#7AE36A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M26.5 14C26.5 20.9 20.9 26.5 14 26.5C7.1 26.5 1.5 20.9 1.5 14C1.5 7.1 7.1 1.5 14 1.5C20.9 1.5 26.5 7.1 26.5 14Z" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M18.6375 17.975L14.7625 15.6625C14.0875 15.2625 13.5375 14.3 13.5375 13.5125V8.38751" stroke="#7AE36A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
 
                         </span>
@@ -276,11 +276,11 @@ export default function CourseDetail() {
                     <div className="bg-[#D0DDD140] rounded-3xl py-5 px-5 flex flex-col items-center">
                         <span>
                             <svg width="44" height="44" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 26.5H18C23.025 26.5 23.925 24.4875 24.1875 22.0375L25.125 12.0375C25.4625 8.9875 24.5875 6.5 19.25 6.5H6.75C1.4125 6.5 0.537497 8.9875 0.874997 12.0375L1.8125 22.0375C2.075 24.4875 2.975 26.5 8 26.5Z" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M8 6.5V5.5C8 3.2875 8 1.5 12 1.5H14C18 1.5 18 3.2875 18 5.5V6.5" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M15.5 15.25V16.5C15.5 16.5125 15.5 16.5125 15.5 16.525C15.5 17.8875 15.4875 19 13 19C10.525 19 10.5 17.9 10.5 16.5375V15.25C10.5 14 10.5 14 11.75 14H14.25C15.5 14 15.5 14 15.5 15.25Z" stroke="#7AE36A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M25.0625 12.75C22.175 14.85 18.875 16.1 15.5 16.525" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M1.27499 13.0875C4.08749 15.0125 7.26249 16.175 10.5 16.5375" stroke="#042A1B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M8 26.5H18C23.025 26.5 23.925 24.4875 24.1875 22.0375L25.125 12.0375C25.4625 8.9875 24.5875 6.5 19.25 6.5H6.75C1.4125 6.5 0.537497 8.9875 0.874997 12.0375L1.8125 22.0375C2.075 24.4875 2.975 26.5 8 26.5Z" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M8 6.5V5.5C8 3.2875 8 1.5 12 1.5H14C18 1.5 18 3.2875 18 5.5V6.5" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M15.5 15.25V16.5C15.5 16.5125 15.5 16.5125 15.5 16.525C15.5 17.8875 15.4875 19 13 19C10.525 19 10.5 17.9 10.5 16.5375V15.25C10.5 14 10.5 14 11.75 14H14.25C15.5 14 15.5 14 15.5 15.25Z" stroke="#7AE36A" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M25.0625 12.75C22.175 14.85 18.875 16.1 15.5 16.525" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M1.27499 13.0875C4.08749 15.0125 7.26249 16.175 10.5 16.5375" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
 
                         </span>
@@ -290,11 +290,11 @@ export default function CourseDetail() {
                     <div className="bg-[#D0DDD140] rounded-3xl py-5 px-5 flex flex-col items-center">
                         <span>
                             <svg width="42" height="42" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M26.5 17.75V10.25C26.5 4 24 1.5 17.75 1.5H10.25C4 1.5 1.5 4 1.5 10.25V17.75C1.5 24 4 26.5 10.25 26.5H17.75C24 26.5 26.5 24 26.5 17.75Z" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M2.14999 7.88751H25.85" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M9.64999 1.63751V7.71251" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M18.35 1.63751V7.15001" stroke="#042A1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M11.1875 17.0625V15.5625C11.1875 13.6375 12.55 12.85 14.2125 13.8125L15.5125 14.5625L16.8125 15.3125C18.475 16.275 18.475 17.85 16.8125 18.8125L15.5125 19.5625L14.2125 20.3125C12.55 21.275 11.1875 20.4875 11.1875 18.5625V17.0625V17.0625Z" stroke="#7AE36A" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M26.5 17.75V10.25C26.5 4 24 1.5 17.75 1.5H10.25C4 1.5 1.5 4 1.5 10.25V17.75C1.5 24 4 26.5 10.25 26.5H17.75C24 26.5 26.5 24 26.5 17.75Z" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M2.14999 7.88751H25.85" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M9.64999 1.63751V7.71251" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M18.35 1.63751V7.15001" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M11.1875 17.0625V15.5625C11.1875 13.6375 12.55 12.85 14.2125 13.8125L15.5125 14.5625L16.8125 15.3125C18.475 16.275 18.475 17.85 16.8125 18.8125L15.5125 19.5625L14.2125 20.3125C12.55 21.275 11.1875 20.4875 11.1875 18.5625V17.0625V17.0625Z" stroke="#7AE36A" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
 
                         </span>
@@ -307,9 +307,6 @@ export default function CourseDetail() {
                         <h1 className="font-extrabold text-4xl ">
                             مدرس <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">دوره</span>
                         </h1>
-                        {/* <p className="text-lg font-normal mt-3">
-                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است
-                        </p> */}
                     </div>
                     <div className="grid lg:grid-cols-2 gap-20 items-center mt-20">
                         <div className='text-[#042A1B]'>
@@ -319,7 +316,7 @@ export default function CourseDetail() {
                             </p>
                             <Link className='px-5 py-2 text-[#7AE36A] rounded-xl font-semibold border border-[#7AE36A] mt-2 inline-block hover:text-white hover:bg-[#7AE36A] hover:scale-110 transition-all duration-300' href="https://Joshang.ir">مشاهده روزمه</Link>
                         </div>
-                        <div className="relative w-2/3 pb-[60%] lg:mt-0 mx-auto">
+                        <div className="relative w-full sm:w-2/3 pb-[80%] sm:pb-[60%] lg:mt-0 mx-auto">
                             <Image src="/images/teacher.jpeg" className='rounded-3xl' layout="fill" objectFit="cover" alt="banner" />
                         </div>
                     </div>
@@ -389,7 +386,7 @@ export default function CourseDetail() {
                             چرا این <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">دوره</span>؟
                         </h1>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
                         {/* مورد ۱ */}
                         <div className="flex items-center p-6 bg-[#D0DDD140] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
                             <div className="w-12 h-12 flex items-center justify-center bg-[#7AE36A] rounded-full">
@@ -490,11 +487,7 @@ export default function CourseDetail() {
                         </div>
                     </div>
                 </div>
-
-                <div className='mt-32'>
-
-                </div>
-                <div className="mt-20 bg-gradient-to-br from-[#031A12] via-[#042A1B] to-[#0A4D3C] p-10 rounded-2xl shadow-2xl relative overflow-hidden">
+                <div className="mt-20 bg-gradient-to-br from-[#031A12] via-[#042A1B] to-[#0A4D3C] px-5 py-10 sm:p-10 rounded-2xl shadow-2xl relative overflow-hidden">
                     {/* افکت نورپردازی */}
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#7AE36A10_0%,transparent_70%)]" />
 
@@ -503,34 +496,34 @@ export default function CourseDetail() {
                             قیمت و پیش ثبت نام
                         </h2>
                         <p className="text-lg text-[#D0DDD1] mt-4">
-                            فرصت باقیمانده برای ثبتنام با <span className="font-bold text-[#7AE36A]">۲۰٪ تخفیف</span>
+                            فرصت باقی مانده برای ثبت نام با  <span className="font-bold text-[#7AE36A]">۲۰٪ تخفیف</span>
                         </p>
 
                         {/* تایمر پیشرفته */}
-                        <div className="flex flex-row-reverse justify-evenly items-center  px-5 py-10 rounded-3xl ">
+                        <div className="flex flex-row-reverse justify-evenly items-center  sm:px-5 py-10 rounded-3xl ">
                             <div className="text-center mx-4">
-                                <div className="text-6xl font-bold text-[#7AE36A]">
+                                <div className="text-4xl sm:text-6xl font-bold text-[#7AE36A]">
                                     {timeLeft.days.toString().padStart(2, "0")}
                                 </div>
                                 <div className="text-lg text-white mt-2">روز</div>
                             </div>
-                            {/* <div className="text-6xl font-bold text-[#7AE36A]">:</div> */}
+                            {/* <div className="text-4xl sm:text-6xl font-bold text-[#7AE36A]">:</div> */}
                             <div className="text-center mx-4">
-                                <div className="text-6xl font-bold text-[#7AE36A]">
+                                <div className="text-4xl sm:text-6xl font-bold text-[#7AE36A]">
                                     {timeLeft.hours.toString().padStart(2, "0")}
                                 </div>
                                 <div className="text-lg text-white mt-2">ساعت</div>
                             </div>
-                            {/* <div className="text-6xl font-bold text-[#7AE36A]">:</div> */}
+                            {/* <div className="text-4xl sm:text-6xl font-bold text-[#7AE36A]">:</div> */}
                             <div className="text-center mx-4">
-                                <div className="text-6xl font-bold text-[#7AE36A]">
+                                <div className="text-4xl sm:text-6xl font-bold text-[#7AE36A]">
                                     {timeLeft.minutes.toString().padStart(2, "0")}
                                 </div>
                                 <div className="text-lg text-white mt-2">دقیقه</div>
                             </div>
-                            {/* <div className="text-6xl font-bold text-[#7AE36A]">:</div> */}
+                            {/* <div className="text-4xl sm:text-6xl font-bold text-[#7AE36A]">:</div> */}
                             <div className="text-center mx-4">
-                                <div className="text-6xl font-bold text-[#7AE36A]">
+                                <div className="text-4xl sm:text-6xl font-bold text-[#7AE36A]">
                                     {timeLeft.seconds.toString().padStart(2, "0")}
                                 </div>
                                 <div className="text-lg text-white mt-2">ثانیه</div>
@@ -551,13 +544,13 @@ export default function CourseDetail() {
 
                         {/* کارت قیمت تخفیف‌دار */}
                         <div className="bg-gradient-to-br from-[#7AE36A] to-[#5ACD4A] p-8 rounded-2xl shadow-lg">
-                            <h3 className="text-2xl font-bold text-[#042A1B]">پیشثبتنام ویژه</h3>
+                            <h3 className="text-2xl font-bold text-[#042A1B]">پیش ثبت نام ویژه</h3>
                             <div className="mt-4">
                                 <p className="text-4xl font-bold text-[#042A1B]">۹,۶۰۰,۰۰۰ تومان</p>
                                 <p className="text-[#042A1B] mt-2">+ هدیه رایگان راهنمای استخدام</p>
                             </div>
                             <button className="mt-6 w-full bg-[#042A1B] text-white py-3 rounded-xl font-semibold hover:bg-[#031A12] transition-all duration-300">
-                                پیشثبتنام آنلاین
+                                پیش ثبت نام
                             </button>
                         </div>
                     </div>
@@ -570,40 +563,38 @@ export default function CourseDetail() {
                     </div>
                 </div>
 
-                <div className="mt-20 bg-[#F8FCF9] p-8 rounded-2xl shadow-sm border border-[#D0DDD1]">
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-[#042A1B] flex items-center gap-3">
-                            <span>ارتباط با پشتیبانی</span>
+                <div className="mt-32 bg-[#F8FCF9] py-10 px-5 sm:p-10 rounded-2xl shadow-sm border border-[#D0DDD1]">
+                    <div className="text-center">
+                        <h1 className="text-3xl font-bold text-[#042A1B] flex justify-center items-center gap-3">
+                            <span>درخواست پشتیبانی</span>
                             <MessageCircleHeart className="text-[#7AE36A] w-8 h-8" />
                         </h1>
                         <p className="mt-2 text-[#042A1B]/80">
-                            سوالات و پیشنهادات خود را با ما در میان بگذارید
+                            برای دریافت اطلاعات بیشتر درباره بوت‌کمپ یا پشتیبانی، فرم زیر را پر کنید.
                         </p>
                     </div>
 
-                    <form className="grid gap-5">
-                        {/* فیلد نام */}
-                        <div className='flex gap-10'>
-
-                            <div className="relative w-full">
+                    <form className="mt-20 grid gap-5 lg:w-2/3 mx-auto">
+                        {/* فیلدهای نام و ایمیل */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="relative">
                                 <input
                                     type="text"
                                     placeholder="نام کامل"
                                     className="w-full p-3.5 bg-white rounded-lg border border-[#D0DDD1] 
-                         focus:border-[#7AE36A] focus:ring-1 focus:ring-[#7AE36A]/30 
-                         placeholder:text-[#042A1B]/50 transition-all"
+                             focus:border-[#7AE36A] focus:ring-1 focus:ring-[#7AE36A]/30 
+                             placeholder:text-[#042A1B]/50 transition-all"
                                 />
                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#042A1B]/40" />
                             </div>
 
-                            {/* فیلد ایمیل */}
-                            <div className="relative w-full">
+                            <div className="relative">
                                 <input
                                     type="email"
                                     placeholder="پست الکترونیک"
                                     className="w-full p-3.5 bg-white rounded-lg border border-[#D0DDD1] 
-                                focus:border-[#7AE36A] focus:ring-1 focus:ring-[#7AE36A]/30 
-                                placeholder:text-[#042A1B]/50 transition-all"
+                             focus:border-[#7AE36A] focus:ring-1 focus:ring-[#7AE36A]/30 
+                             placeholder:text-[#042A1B]/50 transition-all"
                                 />
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#042A1B]/40" />
                             </div>
@@ -612,7 +603,7 @@ export default function CourseDetail() {
                         {/* فیلد پیام */}
                         <div className="relative">
                             <textarea
-                                placeholder="متن پیام"
+                                placeholder="پیام شما"
                                 rows="4"
                                 className="w-full p-3.5 bg-white rounded-lg border border-[#D0DDD1] 
                          focus:border-[#7AE36A] focus:ring-1 focus:ring-[#7AE36A]/30 
@@ -629,7 +620,7 @@ export default function CourseDetail() {
                      transition-colors w-fit ml-auto"
                         >
                             <Send className="w-4 h-4 rotate-[-45deg]" />
-                            ارسال پیام
+                            ارسال درخواست
                         </button>
                     </form>
                 </div>

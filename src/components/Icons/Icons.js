@@ -157,10 +157,10 @@ export const ClockIcon = () => {
 export const CalenderIcon = () => {
     return (
         <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 1.5V5.25" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M17 1.5V5.25" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M1.375 10.3625H22.625" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M23.25 9.625V20.25C23.25 24 21.375 26.5 17 26.5H7C2.625 26.5 0.75 24 0.75 20.25V9.625C0.75 5.875 2.625 3.375 7 3.375H17C21.375 3.375 23.25 5.875 23.25 9.625Z" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M7 1.5V5.25" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M17 1.5V5.25" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M1.375 10.3625H22.625" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M23.25 9.625V20.25C23.25 24 21.375 26.5 17 26.5H7C2.625 26.5 0.75 24 0.75 20.25V9.625C0.75 5.875 2.625 3.375 7 3.375H17C21.375 3.375 23.25 5.875 23.25 9.625Z" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 };
@@ -168,11 +168,11 @@ export const CalenderIcon = () => {
 export const BagIcon = () => {
     return (
         <svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.00003 26.5H18C23.025 26.5 23.925 24.4875 24.1875 22.0375L25.125 12.0375C25.4625 8.9875 24.5875 6.5 19.25 6.5H6.75003C1.41253 6.5 0.537527 8.9875 0.875027 12.0375L1.81253 22.0375C2.07503 24.4875 2.97503 26.5 8.00003 26.5Z" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M8 6.5V5.5C8 3.2875 8 1.5 12 1.5H14C18 1.5 18 3.2875 18 5.5V6.5" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M15.5 15.25V16.5C15.5 16.5125 15.5 16.5125 15.5 16.525C15.5 17.8875 15.4875 19 13 19C10.525 19 10.5 17.9 10.5 16.5375V15.25C10.5 14 10.5 14 11.75 14H14.25C15.5 14 15.5 14 15.5 15.25Z" stroke="#7AE36A" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M25.0625 12.75C22.175 14.85 18.875 16.1 15.5 16.525" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M1.27502 13.0875C4.08752 15.0125 7.26252 16.175 10.5 16.5375" stroke="#042A1B" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M8.00003 26.5H18C23.025 26.5 23.925 24.4875 24.1875 22.0375L25.125 12.0375C25.4625 8.9875 24.5875 6.5 19.25 6.5H6.75003C1.41253 6.5 0.537527 8.9875 0.875027 12.0375L1.81253 22.0375C2.07503 24.4875 2.97503 26.5 8.00003 26.5Z" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M8 6.5V5.5C8 3.2875 8 1.5 12 1.5H14C18 1.5 18 3.2875 18 5.5V6.5" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M15.5 15.25V16.5C15.5 16.5125 15.5 16.5125 15.5 16.525C15.5 17.8875 15.4875 19 13 19C10.525 19 10.5 17.9 10.5 16.5375V15.25C10.5 14 10.5 14 11.75 14H14.25C15.5 14 15.5 14 15.5 15.25Z" stroke="#7AE36A" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M25.0625 12.75C22.175 14.85 18.875 16.1 15.5 16.525" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M1.27502 13.0875C4.08752 15.0125 7.26252 16.175 10.5 16.5375" stroke="#042A1B" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 };
@@ -184,7 +184,7 @@ export const VideoIcon = () => {
             <path d="M2.15002 7.88745H25.85" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M9.65002 1.63745V7.71245" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M18.35 1.63745V7.14995" stroke="#042A1B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M11.1875 17.0625V15.5625C11.1875 13.6375 12.55 12.85 14.2125 13.8125L15.5125 14.5625L16.8125 15.3125C18.475 16.275 18.475 17.85 16.8125 18.8125L15.5125 19.5625L14.2125 20.3125C12.55 21.275 11.1875 20.4875 11.1875 18.5625V17.0625V17.0625Z" stroke="#7AE36A" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M11.1875 17.0625V15.5625C11.1875 13.6375 12.55 12.85 14.2125 13.8125L15.5125 14.5625L16.8125 15.3125C18.475 16.275 18.475 17.85 16.8125 18.8125L15.5125 19.5625L14.2125 20.3125C12.55 21.275 11.1875 20.4875 11.1875 18.5625V17.0625V17.0625Z" stroke="#7AE36A" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 };
