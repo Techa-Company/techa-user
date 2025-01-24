@@ -85,6 +85,8 @@ export default function Lesson() {
             </div>
             <div className="text-[17.5px] font-normal leading-7 text-justify mt-7 grid gap-5">
                 <div
+                    className="prose prose-headings:text-3xl prose-headings:my-5 prose-p:text-secondary prose-p:leading-9 prose-p:text-justify prose-code:text-[#e83e8c] 
+      prose-code:px-2 prose-code:py-1 prose-code:rounded-sm prose-code:bg-[#ebedf2] max-w-full"
                     dangerouslySetInnerHTML={{ __html: lessonData.Description }}
                 >
                 </div>
