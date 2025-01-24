@@ -441,3 +441,40 @@ pre {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 75%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.shine-effect:hover::after {
+  opacity: 1;
+  animation: shine 1.5s linear infinite;
+}
+
+.shadow-glow {
+  filter: drop-shadow(0 0 8px #7ae36a);
+}
