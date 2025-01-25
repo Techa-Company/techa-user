@@ -160,6 +160,7 @@ const Poster = () => {
                     </motion.div>
 
                     {/* افکت پارتیکل */}
+                    {/* افکت پارتیکل */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={isInView ? { opacity: 1 } : {}}
@@ -171,8 +172,8 @@ const Poster = () => {
                                 key={i}
                                 className="absolute w-2 h-2 bg-[#7AE36A] rounded-full shadow-glow"
                                 initial={{
-                                    x: Math.random() * window.innerWidth,
-                                    y: Math.random() * window.innerHeight
+                                    x: typeof window !== 'undefined' ? Math.random() * window.innerWidth : 0, // اصلاح شده
+                                    y: typeof window !== 'undefined' ? Math.random() * window.innerHeight : 0 // اصلاح شده
                                 }}
                                 animate={isInView ? {
                                     scale: [0.5, 1, 0.5],
