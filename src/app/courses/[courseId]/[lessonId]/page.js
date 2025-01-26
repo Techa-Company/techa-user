@@ -3,6 +3,7 @@ import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation"; // اضافه کردن useParams
+import { renderInlineSnippets } from "../../../../components/inline/utils/renderUtils";
 
 export default function Lesson() {
   const [openAccordion, setOpenAccordion] = useState(0);
@@ -50,6 +51,10 @@ export default function Lesson() {
       fetchData();
     }
   }, [courseId, lessonId]);
+
+  useEffect(() => {
+    renderInlineSnippets();
+  }, [lessonData]);
 
   const toggleAccordion = (index) => {
     setOpenAccordion(openAccordion === index ? -1 : index);

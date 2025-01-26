@@ -1,6 +1,6 @@
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 import { AuthProvider } from "../components/contexts/AuthContext";
 export const metadata = {
   title: "پلتفرم آموزشی تکا | Techa",

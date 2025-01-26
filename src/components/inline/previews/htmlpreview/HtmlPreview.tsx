@@ -29,7 +29,7 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
   return (
     <div
       dir="ltr"
-      className="flex flex-col w-full p-4 space-y-4 border border-gray-300 rounded-lg bg-gray-50 shadow-md"
+      className="flex z-50 flex-col w-max p-4 space-y-4 border border-gray-300 rounded-lg bg-gray-50 shadow-md"
     >
       {isExecutionMode && (
         <button
