@@ -113,7 +113,7 @@ const JavaScriptPreview: React.FC<JavascriptPreviewProps> = ({
   }, []);
 
   return (
-    <div dir="ltr" className="flex flex-col">
+    <div className="flex flex-col" dir="ltr">
       {/* Code Editor */}
       <MonacoEditor
         height="200px"
@@ -123,8 +123,6 @@ const JavaScriptPreview: React.FC<JavascriptPreviewProps> = ({
         options={{
           readOnly: !isEditable,
           lineNumbers: "on",
-          minimap: { enabled: false },
-          automaticLayout: true,
         }}
         theme="vs-light"
       />
