@@ -5,7 +5,7 @@ import useTabsStore from "../stores/tabSlice";
 import {
   SaveReactTemplate,
   UpdateReactTempate,
-} from "@/app/_assets/_api/_handlers/InlineReactHandler";
+} from "@/app/assets/api/handlers/InlineReactHandler";
 interface SaveDialogModalProps {}
 const SaveDialogModal: React.FC<SaveDialogModalProps> = () => {
   const { currentTab, decrement } = useTabsStore();

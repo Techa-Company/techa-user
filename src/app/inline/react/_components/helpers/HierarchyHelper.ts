@@ -1,7 +1,7 @@
 import {
   ProjectDirectoryDisplayDTO,
   ReactTemplateDisplayDTO,
-} from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+} from "@/app/assets/api/types/dtos/InlineReactDtos";
 import { TreeNodeProps } from "../treeView/treenode/TreeNode.types";
 
 // Helper function to build hierarchical structure

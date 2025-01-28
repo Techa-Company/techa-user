@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import useModalStore from "../../stores/modalSlice";
 import useTabsStore from "../../stores/tabSlice";
-import { ReactTemplateDefaults } from "@/app/_assets/_utils/reactTemplateConsts";
+import { ReactTemplateDefaults } from "@/app/assets/utils/reactTemplateConsts";
 
 const NewTabModal: React.FC = () => {
   const [inputValue, setInputValue] = useState("");

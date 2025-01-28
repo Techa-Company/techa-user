@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { FormEvent, useState } from "react";
 import LoadingSpinner from "../widgets/LoadingSpinner";
-import { useAuth } from "@/app/_assets/_components/contexts/AuthContext";
+import { useAuth } from "@/app/assets/components/contexts/AuthContext";
 import { useParams } from "next/navigation";
 import {
   SaveReactTemplate,
   UpdateReactTempate,
-} from "@/app/_assets/_api/_handlers/InlineReactHandler";
+} from "@/app/assets/api/handlers/InlineReactHandler";
 import useTabsStore from "../stores/tabSlice";
 import useModalStore from "../stores/modalSlice";
 import useComponentStore from "../stores/componentSlice";

@@ -1,4 +1,4 @@
-import { TemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { TemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 import React from "react";
 
 interface TemplateDisplayProps {

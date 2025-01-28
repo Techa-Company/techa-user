@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LoadingSpinner from "../widgets/LoadingSpinner";
-import { ReactTemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
-import axios from "@/app/_assets/_api/_handlers/axiosInstance";
+import { ReactTemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
+import axios from "@/app/assets/api/handlers/axiosInstance";
 import useComponentStore from "../stores/componentSlice";
 interface ComponentItemProps {
   component: ReactTemplateDisplayDTO;

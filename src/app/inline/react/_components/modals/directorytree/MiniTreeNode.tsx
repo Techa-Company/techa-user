@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { TreeNodeProps } from "../../treeView/treenode/TreeNode.types";
-import { ProjectDirectoryDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ProjectDirectoryDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 
 interface MiniTreeNodeProps {
   item: TreeNodeProps["item"];

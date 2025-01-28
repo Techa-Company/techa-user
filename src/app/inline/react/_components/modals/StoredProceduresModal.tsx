@@ -1,8 +1,8 @@
 "use client";
 import React, { FC } from "react";
 import useModalStore from "../stores/modalSlice";
-import { ExecuteSqlQueryHandler } from "@/app/_assets/_api/_handlers/InlineSqlHandler";
-import { STORED_PROCEDURES_WITH_PARAMETERS_QUERY } from "@/app/_assets/_utils/queries";
+import { ExecuteSqlQueryHandler } from "@/app/assets/api/handlers/InlineSqlHandler";
+import { STORED_PROCEDURES_WITH_PARAMETERS_QUERY } from "@/app/assets/utils/queries";
 interface StoredProceduresModalProps {
   onAddClick: (procedure: { name: string }) => void;
 }

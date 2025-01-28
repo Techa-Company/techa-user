@@ -6,7 +6,7 @@ import {
   DeleteReactTemplateApiHandler,
   UpdateDirectoryApiHandler,
   UpdateReactTempate,
-} from "@/app/_assets/_api/_handlers/InlineReactHandler";
+} from "@/app/assets/api/handlers/InlineReactHandler";
 import { useQueryState } from "nuqs";
 import { useDrop } from "react-dnd";
 import useDirectoryStore from "../stores/directoriesSlice";

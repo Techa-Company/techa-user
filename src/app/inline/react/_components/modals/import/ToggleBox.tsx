@@ -1,11 +1,11 @@
 "use client";
-import { ImportReactTemplate } from "@/app/_assets/_api/_handlers/InlineReactHandler";
-import { ReactTemplate } from "@/app/_assets/_api/_types/ITemplateTypes";
+import { ImportReactTemplate } from "@/app/assets/api/handlers/InlineReactHandler";
+import { ReactTemplate } from "@/app/assets/api/types/ITemplateTypes";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import React from "react";
 import useComponentStore from "../../stores/componentSlice";
-import { ReactTemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ReactTemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 import usePageDataStore from "../../stores/pageDataSlice";
 import useTabsStore from "../../stores/tabSlice";
 interface ToggleBoxProps {

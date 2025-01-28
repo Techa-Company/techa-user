@@ -1,15 +1,15 @@
 // components/PageInitializer.tsx
 import React, { useEffect } from "react";
-import { useAuth } from "@/app/_assets/_components/contexts/AuthContext";
+import { useAuth } from "@/app/assets/components/contexts/AuthContext";
 
-import { compileAndRenderJSX } from "@/app/_assets/_utils/lib";
-import { InlineReactPageData } from "@/app/_assets/_api/_types/ITemplateTypes";
+import { compileAndRenderJSX } from "@/app/assets/utils/lib";
+import { InlineReactPageData } from "@/app/assets/api/types/ITemplateTypes";
 import {
   GetAllComponentsByFilter,
   GetComponentsByProjectApiHandler,
   GetDirectoriesByFilterApiHandler,
   GetProjectsByFilter,
-} from "@/app/_assets/_api/_handlers/InlineReactHandler";
+} from "@/app/assets/api/handlers/InlineReactHandler";
 import useComponentStore from "./stores/componentSlice";
 import usePageDataStore from "./stores/pageDataSlice";
 import useTabsStore from "./stores/tabSlice";

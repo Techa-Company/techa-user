@@ -1,10 +1,10 @@
-import { ApiResponse } from "../../../../frontend-techa/app/_assets/_api/_types/_dtos/ApiResponse";
-import BaseDto from "../../../../frontend-techa/app/_assets/_api/_types/_dtos/BaseDto";
+import { ApiResponse } from "../../api/types/dtos/ApiResponse";
+import BaseDto from "../../api/types/dtos/BaseDto";
 import {
   HtmlSnippetCreateDTO,
   HtmlSnippetDisplayDTO,
 } from "../types/dtos/InlineHtmlDtos";
-import axios from "../../../../frontend-techa/app/_assets/_api/_handlers/axiosInstance";
+import axios from "../../api/handlers/axiosInstance";
 
 export const GetHtmlSnippetAllApiHandler = async () => {
   return await axios.get<ApiResponse & { Data: HtmlSnippetDisplayDTO[] }>(

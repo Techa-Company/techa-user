@@ -3,12 +3,12 @@ import {
   GetDirectoryByIdApiHandler,
   GetReactTemplateById,
   mainComponentFilter,
-} from "@/app/_assets/_api/_handlers/InlineReactHandler";
-import { GetUserByUsername } from "@/app/_assets/_api/_handlers/UserHandlers";
-import { ReactTemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+} from "@/app/assets/api/handlers/InlineReactHandler";
+import { GetUserByUsername } from "@/app/assets/api/handlers/UserHandlers";
+import { ReactTemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 import TemplateType, {
   InlineReactPageData,
-} from "@/app/_assets/_api/_types/ITemplateTypes";
+} from "@/app/assets/api/types/ITemplateTypes";
 
 async function FetchPageData(
   username: string

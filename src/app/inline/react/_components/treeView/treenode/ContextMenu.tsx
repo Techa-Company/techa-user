@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import { UpdateReactTempate } from "@/app/_assets/_api/_handlers/InlineReactHandler";
+import { UpdateReactTempate } from "@/app/assets/api/handlers/InlineReactHandler";
 import { TreeNodeProps } from "./TreeNode.types";
-import { ReactTemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ReactTemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 import useComponentStore from "../../stores/componentSlice";
 
 export interface ContextMenuProps {

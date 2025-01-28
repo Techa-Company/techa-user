@@ -1,8 +1,8 @@
 import {
   CdnLinkDisplayDTO,
   ProjectDisplayDTO,
-} from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
-import { InlineReactPageData } from "@/app/_assets/_api/_types/ITemplateTypes";
+} from "@/app/assets/api/types/dtos/InlineReactDtos";
+import { InlineReactPageData } from "@/app/assets/api/types/ITemplateTypes";
 import { create } from "zustand";
 
 interface PageDataState {

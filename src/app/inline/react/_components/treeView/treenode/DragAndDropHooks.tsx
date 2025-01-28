@@ -1,6 +1,6 @@
 import { useDrag, useDrop } from "react-dnd";
 import { TreeNodeProps } from "./TreeNode.types";
-import { ReactTemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ReactTemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 
 type DragAndDropHooksType = (
   item: TreeNodeProps["item"],

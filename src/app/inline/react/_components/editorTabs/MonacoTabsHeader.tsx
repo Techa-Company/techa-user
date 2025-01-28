@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import MonacoTabItem from "./MonacoTabItem";
 import useTabsStore from "../stores/tabSlice";
 import { BsPlus } from "react-icons/bs";
-import { ReactTemplateDefaults } from "@/app/_assets/_utils/reactTemplateConsts";
+import { ReactTemplateDefaults } from "@/app/assets/utils/reactTemplateConsts";
 import useModalStore from "../stores/modalSlice";
 
 const MonacoTabsHeader: React.FC = () => {

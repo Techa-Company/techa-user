@@ -1,5 +1,5 @@
-import { Content } from "../../../../../frontend-techa/app/_assets/_api/_types/IContent";
-import BaseDto from "../../../../../frontend-techa/app/_assets/_api/_types/_dtos/BaseDto";
+import { Content } from "../../../api/types/IContent";
+import BaseDto from "../../../api/types/dtos/BaseDto";
 export interface HtmlSnippetDisplayDTO extends BaseDto {
   Title: string;
   Script: string;

@@ -4,15 +4,15 @@ import { FiTrash } from "react-icons/fi"; // Importing trash icon from react-ico
 import useModalStore from "../stores/modalSlice";
 import usePageDataStore from "../stores/pageDataSlice";
 import { useQueryState } from "nuqs";
-import { StudentDatabaseDisplayDto } from "@/app/_assets/_api/_types/_dtos/InlineSqlDtos";
+import { StudentDatabaseDisplayDto } from "@/app/assets/api/types/dtos/InlineSqlDtos";
 import {
   DeleteStudentDatabaseApiHandler,
   GetStudentDatabasesByFilter,
   SaveStudentDatabaseApiHandler,
-} from "@/app/_assets/_api/_handlers/InlineSqlHandler";
-import { useAuth } from "@/app/_assets/_components/contexts/AuthContext";
-import { UpdateProjectApiHandler } from "@/app/_assets/_api/_handlers/InlineReactHandler";
-import { ProjectUpdateDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+} from "@/app/assets/api/handlers/InlineSqlHandler";
+import { useAuth } from "@/app/assets/components/contexts/AuthContext";
+import { UpdateProjectApiHandler } from "@/app/assets/api/handlers/InlineReactHandler";
+import { ProjectUpdateDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 
 const ChooseDatabaseModal = () => {
   const { isChooseDatabaseModalVisible: isOpen, setModalVisibility } =

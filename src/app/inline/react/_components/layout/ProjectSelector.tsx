@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import {
   GetProjectsByFilter,
   SaveProjectApiHandler,
-} from "@/app/_assets/_api/_handlers/InlineReactHandler";
-import { useAuth } from "@/app/_assets/_components/contexts/AuthContext";
-import { ProjectDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+} from "@/app/assets/api/handlers/InlineReactHandler";
+import { useAuth } from "@/app/assets/components/contexts/AuthContext";
+import { ProjectDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 import { useQueryState } from "nuqs";
 import usePageDataStore from "../stores/pageDataSlice";
 import useTabsStore from "../stores/tabSlice";

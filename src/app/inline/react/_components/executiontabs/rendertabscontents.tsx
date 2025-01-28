@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { LiveError } from "react-live";
 import useComponentStore from "../stores/componentSlice";
-import { DeleteReactTemplate } from "@/app/_assets/_api/_handlers/InlineReactHandler";
+import { DeleteReactTemplate } from "@/app/assets/api/handlers/InlineReactHandler";
 import LoadingSpinner from "../widgets/LoadingSpinner";
 
 interface ComponentItemProps {

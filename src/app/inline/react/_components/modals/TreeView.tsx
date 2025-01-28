@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TreeComponentItem from "./TreeComponentItem";
 import Xarrow from "react-xarrows";
-import { ReactTemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ReactTemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 
 interface TreeViewProps {
   components: ReactTemplateDisplayDTO[];

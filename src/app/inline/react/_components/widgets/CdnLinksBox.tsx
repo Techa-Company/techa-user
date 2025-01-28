@@ -6,7 +6,7 @@ import useModalStore from "../stores/modalSlice";
 import {
   DeleteCdnLinkApiHandler,
   SaveCdnLinkApiHandler,
-} from "@/app/_assets/_api/_handlers/InlineReactHandler";
+} from "@/app/assets/api/handlers/InlineReactHandler";
 import usePageDataStore from "../stores/pageDataSlice";
 import { useQueryState } from "nuqs";
 

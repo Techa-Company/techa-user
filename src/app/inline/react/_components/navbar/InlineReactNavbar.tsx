@@ -1,7 +1,7 @@
 "use client";
 
-import { useAuth } from "@/app/_assets/_components/contexts/AuthContext";
-import NavItem from "@/app/_assets/_components/navbar/NavItem";
+import { useAuth } from "@/app/assets/components/contexts/AuthContext";
+import NavItem from "@/app/assets/components/navbar/NavItem";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/assets/ghaem-platform-logo.png";

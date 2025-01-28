@@ -1,4 +1,4 @@
-import { ReactTemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ReactTemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 import React, { useState } from "react";
 
 interface RenameModalProps {

@@ -1,4 +1,4 @@
-import { ProjectDirectoryDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ProjectDirectoryDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 import { create } from "zustand";
 
 interface DirectoryState {

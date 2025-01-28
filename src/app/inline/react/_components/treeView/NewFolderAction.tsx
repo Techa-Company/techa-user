@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SaveProjectDirectoryApiHandler } from "@/app/_assets/_api/_handlers/InlineReactHandler";
+import { SaveProjectDirectoryApiHandler } from "@/app/assets/api/handlers/InlineReactHandler";
 
 interface NewFolderActionProps {
   directoryId?: number;

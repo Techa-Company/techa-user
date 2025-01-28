@@ -11,7 +11,7 @@ import DragAndDropHooks from "./DragAndDropHooks";
 import ContextMenu, { ContextMenuProps } from "./ContextMenu";
 import ItemActions from "./ItemActions";
 import { TreeNodeProps } from "./TreeNode.types";
-import { ReactTemplateDisplayDTO } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ReactTemplateDisplayDTO } from "@/app/assets/api/types/dtos/InlineReactDtos";
 
 const TreeNode: React.FC<TreeNodeProps> = ({
   item,

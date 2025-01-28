@@ -8,7 +8,7 @@ import "react-resizable/css/styles.css";
 import { BiSolidSave, BiImport, BiIntersect, BiBookOpen } from "react-icons/bi";
 import SaveFileModal from "./components/modals/SaveFileModal";
 import ImportsModal from "./components/modals/import/ImportsModal";
-import axios from "../../../_api/_handlers/axiosInstance";
+import axios from "../../../api/handlers/axiosInstance";
 import StoredProceduresModal from "./components/modals/StoredProceduresModal";
 import ComponentsModal from "./components/modals/ComponentsModal";
 
@@ -24,8 +24,8 @@ import { createTab } from "./stores/tabsSlice";
 import { setActiveIndex } from "./stores/activeIndexSlice";
 import * as ReactIcons from "react-icons/fa6";
 import { useParams } from "next/navigation";
-import { getReactTemplate } from "@/app/_assets/_api/_handlers/InlineReactHandler";
-import { useAuth } from "@/app/_assets/_components/contexts/AuthContext";
+import { getReactTemplate } from "@/app/assets/api/handlers/InlineReactHandler";
+import { useAuth } from "@/app/assets/components/contexts/AuthContext";
 // Some of Variables come from Asp.net Viewbags, they're defined in the Index.cshtml of ReactTest (Tutorial Area)
 
 const MonacoEditorComponent = dynamic(

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "../../widgets/LoadingSpinner";
 import ToggleBox from "./ToggleBox";
-import { useAuth } from "@/app/_assets/_components/contexts/AuthContext";
+import { useAuth } from "@/app/assets/components/contexts/AuthContext";
 import useComponentStore from "../../stores/componentSlice";
 import useModalStore from "../../stores/modalSlice";
 import useTabsStore from "../../stores/tabSlice";

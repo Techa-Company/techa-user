@@ -1,4 +1,4 @@
-import { ReactTemplateDisplayDTO as ReactTemplate } from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+import { ReactTemplateDisplayDTO as ReactTemplate } from "@/app/assets/api/types/dtos/InlineReactDtos";
 import { create } from "zustand";
 
 interface ComponentState {

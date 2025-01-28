@@ -4,7 +4,7 @@ import { FaReact } from "react-icons/fa";
 import {
   ProjectDirectoryDisplayDTO,
   ReactTemplateDisplayDTO,
-} from "@/app/_assets/_api/_types/_dtos/InlineReactDtos";
+} from "@/app/assets/api/types/dtos/InlineReactDtos";
 
 export interface PreviewTreeNodeProps {
   item: {
