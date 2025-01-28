@@ -1,12 +1,15 @@
-"use client"
-import { EmailIcon, HeadPhoneIcon, MapIcon } from "@/components/Icons/Icons";
+"use client";
+import {
+  EmailIcon,
+  HeadPhoneIcon,
+  MapIcon,
+} from "../../components/Icons/Icons";
 import { CheckIcon, Send, SendIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ContactUs() {
-
-  const position = [200.505, -0.09]
+  const position = [200.505, -0.09];
 
   return (
     <div className="pt-40">
@@ -14,9 +17,7 @@ export default function ContactUs() {
         <div className="flex flex-col lg:grid grid-cols-5 gap-y-16 gap-10">
           <div className="col-span-2">
             <h1 className=" font-black text-[#042A1B] text-4xl flex gap-3 items-center">
-              <span>
-                سلام!
-              </span>
+              <span>سلام!</span>
               <Image src="/images/hand.svg" width={40} height={40} alt="" />
             </h1>
             <h1 className=" font-black text-[#042A1B] text-4xl flex items-center mt-3">
@@ -27,9 +28,21 @@ export default function ContactUs() {
               کارشناسان ما پاسخگوی سوالات و انتقادات و پیشنهادات شما هستند.
             </p>
             <form action="" className="mt-10 grid gap-4">
-              <input className="w-full border border-[#D0DDD1] focus:outline-none rounded-2xl px-3 py-2 placeholder:text-sm placeholder:font-normal placeholder:opacity-50 placeholder:text-[#042A1B]" type="text" placeholder="نام و نام خانوادگی" />
-              <input className="w-full border border-[#D0DDD1] focus:outline-none rounded-2xl px-3 py-2 placeholder:text-sm placeholder:font-normal placeholder:opacity-50 placeholder:text-[#042A1B]" type="text" placeholder="پست الکترونیک" />
-              <textarea className="w-full border border-[#D0DDD1] focus:outline-none rounded-2xl px-3 py-2 placeholder:text-sm placeholder:font-normal placeholder:opacity-50 placeholder:text-[#042A1B]" placeholder="پیام شما" rows="4"></textarea>
+              <input
+                className="w-full border border-[#D0DDD1] focus:outline-none rounded-2xl px-3 py-2 placeholder:text-sm placeholder:font-normal placeholder:opacity-50 placeholder:text-[#042A1B]"
+                type="text"
+                placeholder="نام و نام خانوادگی"
+              />
+              <input
+                className="w-full border border-[#D0DDD1] focus:outline-none rounded-2xl px-3 py-2 placeholder:text-sm placeholder:font-normal placeholder:opacity-50 placeholder:text-[#042A1B]"
+                type="text"
+                placeholder="پست الکترونیک"
+              />
+              <textarea
+                className="w-full border border-[#D0DDD1] focus:outline-none rounded-2xl px-3 py-2 placeholder:text-sm placeholder:font-normal placeholder:opacity-50 placeholder:text-[#042A1B]"
+                placeholder="پیام شما"
+                rows="4"
+              ></textarea>
               <div className="flex justify-end">
                 <button className="flex items-center bg-[#7AE36A] w-fit px-7 py-2.5 rounded-xl text-[#042A1B] font-medium text-sm">
                   <p>ارسال پیام</p>
@@ -43,32 +56,45 @@ export default function ContactUs() {
           <div className="col-span-3">
             <div className="grid gap-5">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div className='flex items-center gap-3'>
-                  <div className='w-[60px] h-[60px] flex justify-center items-center rounded-2xl bg-[#F3F6F3]'>
+                <div className="flex items-center gap-3">
+                  <div className="w-[60px] h-[60px] flex justify-center items-center rounded-2xl bg-[#F3F6F3]">
                     <HeadPhoneIcon />
                   </div>
                   <div>
-                    <p className='text-[#042A1B] text-[16px] font-normal'>شماره تماس</p>
-                    <h3 className='text-[#042A1B] text-[25px] font-bold'>021-82800003</h3>
+                    <p className="text-[#042A1B] text-[16px] font-normal">
+                      شماره تماس
+                    </p>
+                    <h3 className="text-[#042A1B] text-[25px] font-bold">
+                      021-82800003
+                    </h3>
                   </div>
                 </div>
-                <div className='flex items-center gap-3'>
-                  <div className='w-[60px] h-[60px] flex justify-center items-center rounded-2xl bg-[#F3F6F3]'>
+                <div className="flex items-center gap-3">
+                  <div className="w-[60px] h-[60px] flex justify-center items-center rounded-2xl bg-[#F3F6F3]">
                     <EmailIcon />
                   </div>
                   <div>
-                    <p className='text-[#042A1B] text-[16px] font-normal'>پست الکترونیک</p>
-                    <h3 className='text-[#042A1B] text-xl font-semibold'>Support@Techa.me</h3>
+                    <p className="text-[#042A1B] text-[16px] font-normal">
+                      پست الکترونیک
+                    </p>
+                    <h3 className="text-[#042A1B] text-xl font-semibold">
+                      Support@Techa.me
+                    </h3>
                   </div>
                 </div>
               </div>
-              <div className='flex items-start gap-3'>
-                <div className='min-w-[60px] min-h-[60px] flex justify-center items-center rounded-2xl bg-[#F3F6F3]'>
+              <div className="flex items-start gap-3">
+                <div className="min-w-[60px] min-h-[60px] flex justify-center items-center rounded-2xl bg-[#F3F6F3]">
                   <MapIcon />
                 </div>
                 <div>
-                  <p className='text-[#042A1B] text-[16px] font-normal'>آدرس شرکت</p>
-                  <h3 className='text-[#042A1B] text-xl font-bold'>قزوین، خیابان دانشگاه، بلوار نخبگان، ضلع شمالی دانشگاه آزاد اسلامی قزوین، مرکز رشد واحدهای فن آور</h3>
+                  <p className="text-[#042A1B] text-[16px] font-normal">
+                    آدرس شرکت
+                  </p>
+                  <h3 className="text-[#042A1B] text-xl font-bold">
+                    قزوین، خیابان دانشگاه، بلوار نخبگان، ضلع شمالی دانشگاه آزاد
+                    اسلامی قزوین، مرکز رشد واحدهای فن آور
+                  </h3>
                 </div>
               </div>
             </div>
@@ -85,6 +111,6 @@ export default function ContactUs() {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
