@@ -1,8 +1,11 @@
+// pages/courses/index.js
+
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import CourseCard from "../../components/courses/CourseCard"
+import CourseCard from "../../components/courses/CourseCard";
+// import Loading from "../../components/Loading";
+import LoadingSkeleton from "../../components/common/LoadingSkeleton"
+
 export default function Courses() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,22 +34,24 @@ export default function Courses() {
     "/images/js.png",
   ];
 
-
-
   return (
     <div className="pt-32">
       <div className="container px-5 xl:px-20 mx-auto">
         <h1 className="font-extrabold text-[#042A1B] text-3xl">دوره‌های ما</h1>
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="loader"></div>
-          </div>
+          // <Loader />
+          <LoadingSkeleton />
         ) : (
           <div className="grid gap-10 mt-10 lg:px-10">
             {courses.map((course, index) => {
               return (
-                <CourseCard key={index} course={course} index={index} image={images[index % images.length]} />
-              )
+                <CourseCard
+                  key={index}
+                  course={course}
+                  index={index}
+                  image={images[index % images.length]}
+                />
+              );
             })}
           </div>
         )}
