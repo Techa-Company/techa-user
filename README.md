@@ -8,9 +8,7 @@
 ![Framer Motion](https://img.shields.io/badge/Framer_Motion-5.0-0055FF?style=flat&logo=framer&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-**نسخه نمایشی زنده:** ![صفحه اصلی](http://45.139.10.84:3000)
-
----
+## **نسخه نمایشی زنده:** [مشاهده آنلاین](http://45.139.10.84:3000/)
 
 ## ✨ ویژگی‌های پروژه
 
@@ -42,7 +40,7 @@
 
 ![صفحه اصلی](./public/images/screenshot1.png)
 
-![صفحه دوره](./public/images/screenshot2.png)
+![صفحه بوت کمپ](./public/images/screenshot2.png)
 
 </div>
 
