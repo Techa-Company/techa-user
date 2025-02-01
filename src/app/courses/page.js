@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import CourseCard from "../../components/courses/CourseCard";
 // import Loading from "../../components/Loading";
-import LoadingSkeleton from "../../components/common/LoadingSkeleton"
+import CoursesSkeleton from "../../components/common/CoursesSkeleton"
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
@@ -40,7 +40,7 @@ export default function Courses() {
         <h1 className="font-extrabold text-[#042A1B] text-3xl">دوره‌های ما</h1>
         {loading ? (
           // <Loader />
-          <LoadingSkeleton />
+          <CoursesSkeleton />
         ) : (
           <div className="grid gap-10 mt-10 lg:px-10">
             {courses.map((course, index) => {

@@ -4,7 +4,7 @@ import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-const Loader = () => {
+const CoursesSkeleton = () => {
     return (
         <div className="grid gap-10 mt-10 lg:px-10">
             {[...Array(3)].map((_, index) => (
@@ -30,4 +30,4 @@ const Loader = () => {
     );
 };
 
-export default Loader;
+export default CoursesSkeleton;
