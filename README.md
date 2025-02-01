@@ -1,6 +1,6 @@
 <div dir="rtl">
 
-# 🚀 بوت‌کمپ فول‌استک تکا
+# 🚀 پلتفرم آموزشی تکا
 
 ![Next.js](https://img.shields.io/badge/Next.js-14.1.0-000000?style=flat&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.5-3178C6?style=flat&logo=typescript&logoColor=white)
@@ -8,7 +8,7 @@
 ![Framer Motion](https://img.shields.io/badge/Framer_Motion-5.0-0055FF?style=flat&logo=framer&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-**نسخه نمایشی زنده:** به‌زودی...
+**نسخه نمایشی زنده:** ![صفحه اصلی](http://45.139.10.84:3000)
 
 ---
 
