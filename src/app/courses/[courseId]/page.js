@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AlertCircle, CheckCircle, ChevronDown, PlayCircle } from "lucide-react";
 import { ClockIcon } from "../../../components/Icons/Icons";
@@ -182,28 +182,27 @@ const CourseInfoTab = ({ courseDetails }) => {
 };
 
 // کامپوننت اصلی
+
+// فرض می‌کنیم کامپوننت‌های CourseInfoTab و Exercises تعریف شده‌اند
+
+
+
 export default function CourseDetail() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { courseId } = params;
 
-  const [activeTab, setActiveTab] = useState(0);
+  // دریافت پارامتر تب از URL
+  const tabParam = searchParams.get("tab");
+  const initialTabIndex = tabParam ? parseInt(tabParam) : 0;
+
+  const [activeTab, setActiveTab] = useState(initialTabIndex);
   const [courseDetails, setCourseDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // به صورت موقت محتوای دوره را دستی تنظیم می‌کنیم
-    const fakeCourseDetails = {
-      Title: "دوره آموزش ری‌اکت",
-      Description: "<p>این دوره برای آموزش ری‌اکت طراحی شده است...</p>",
-      // سایر جزئیات دوره...
-    };
-
-    setCourseDetails(fakeCourseDetails);
-    setLoading(false);
-
-    // در صورت نیاز می‌توانید از API استفاده کنید
-
+    // دریافت اطلاعات دوره از API
     if (courseId) {
       fetch(`http://45.139.10.84:5000/api/Course/${courseId}`)
         .then((response) => response.json())
@@ -218,7 +217,6 @@ export default function CourseDetail() {
           setLoading(false);
         });
     }
-
   }, [courseId]);
 
   const tabContent = [
@@ -235,12 +233,38 @@ export default function CourseDetail() {
     {
       id: 2,
       title: "نظرات کاربران",
-      content: "در این بخش نظرات کاربران نمایش داده می‌شود.",
+      content: <Comments />,
     },
   ];
 
+  // تعریف انیمیشن‌ها برای تب‌ها
+  const tabVariants = {
+    initial: {
+      opacity: 0,
+      x: 50,
+    },
+    animate: {
+      opacity: 1,
+      x: 0,
+    },
+    exit: {
+      opacity: 0,
+      x: -50,
+    },
+  };
+
+  // تابع برای تغییر تب و به‌روزرسانی URL
+  const handleTabChange = (index) => {
+    setActiveTab(index);
+    router.push(
+      `${window.location.pathname}?tab=${index}`,
+      undefined,
+      { shallow: true }
+    );
+  };
+
   return (
-    <div className="">
+    <div>
       {/* عنوان و تب‌ها */}
       <div className="flex flex-col sm:flex-row gap-5 justify-between items-center">
         <h1 className="font-extrabold text-[#042A1B] text-3xl">
@@ -248,35 +272,43 @@ export default function CourseDetail() {
         </h1>
         <div className="flex space-x-1 bg-[#D0DDD140] p-1.5 rounded-full">
           {tabContent.map((tab, index) => (
-            <button
+            <motion.button
               key={index}
-              className={`py-2 px-5 text-sm sm:text-[16px] font-medium text-[#042A1B] rounded-full transition duration-300 ${activeTab !== index
+              className={`py-2 px-5 text-sm sm:text-[16px] font-medium text-[#042A1B] rounded-full ${activeTab !== index
                 ? "bg-transparent opacity-50"
                 : "bg-[#ffffff] font-semibold opacity-100"
                 }`}
-              onClick={() => setActiveTab(index)}
+              onClick={() => handleTabChange(index)}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
               {tab.title}
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>
 
-      {/* محتوای تب‌ها */}
+      {/* محتوای تب‌ها با انیمیشن */}
       <div className="my-5">
-        {tabContent.map((tab, index) => (
-          <div
-            key={index}
-            className={`transition-opacity duration-300 ${activeTab === index ? "block" : "hidden"
-              }`}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            variants={tabVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.5 }}
           >
-            {tab.content}
-          </div>
-        ))}
+            {tabContent[activeTab].content}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
 }
+
+
 
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -599,6 +631,298 @@ const Exercises = ({ courseId }) => {
           </AnimatePresence>
         </motion.div>
       ))}
+    </div>
+  );
+};
+
+
+
+
+import { Star, StarHalf, Star as StarFilled } from "lucide-react";
+
+
+
+const Comments = () => {
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState({
+    userName: "",
+    userAvatar: "",
+    rating: 0,
+    comment: "",
+    date: "",
+  });
+  const [replyContent, setReplyContent] = useState("");
+  const [replyingTo, setReplyingTo] = useState(null);
+
+  useEffect(() => {
+    // شبیه‌سازی دریافت نظرات از API
+    const fetchComments = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const fakeComments = [
+        {
+          id: 1,
+          userName: "علی رضایی",
+          userAvatar: "https://i.pravatar.cc/150?img=65",
+          rating: 4.5,
+          date: "2023-10-12",
+          comment:
+            "این دوره بسیار عالی بود و مطالب به خوبی توضیح داده شده بودند. واقعا راضی هستم.",
+          replies: [
+            {
+              id: 11,
+              userName: "مدیر سایت",
+              userAvatar: "https://i.pravatar.cc/150?img=63",
+              date: "2023-10-13",
+              comment: "خوشحالیم که دوره مورد پسند شما بوده است.",
+            },
+          ],
+        },
+        {
+          id: 2,
+          userName: "مریم احمدی",
+          userAvatar: "https://i.pravatar.cc/150?img=47",
+          rating: 5,
+          date: "2023-10-10",
+          comment:
+            "مدرس بسیار مسلط بود و پاسخ سوالات را با حوصله می‌داد. توصیه می‌کنم حتما این دوره را بگذرانید.",
+          replies: [],
+        },
+        {
+          id: 3,
+          userName: "محمد کاظمی",
+          userAvatar: "https://i.pravatar.cc/150?img=68",
+          rating: 4,
+          date: "2023-10-08",
+          comment:
+            "دوره خوبی بود اما می‌شد برخی مباحث را بیشتر توضیح داد. در کل رضایت‌بخش بود.",
+          replies: [],
+        },
+        // نظرات بیشتر...
+      ];
+      setComments(fakeComments);
+    };
+    fetchComments();
+  }, []);
+
+  const renderStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<StarFilled key={`full-${i}`} className="text-yellow-400" />);
+    }
+
+    if (hasHalfStar) {
+      stars.push(<StarHalf key="half" className="text-yellow-400" />);
+    }
+
+    const emptyStars = 5 - stars.length;
+
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<Star key={`empty-${i}`} className="text-gray-300" />);
+    }
+
+    return <div className="flex">{stars}</div>;
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return date.toLocaleDateString("fa-IR", options);
+  };
+
+  const handleAddComment = () => {
+    if (newComment.userName && newComment.comment && newComment.rating > 0) {
+      const commentToAdd = {
+        ...newComment,
+        id: comments.length + 1,
+        date: new Date().toISOString().split("T")[0],
+        userAvatar: "/images/default-avatar.jpg", // تصویر پیش‌فرض
+        replies: [],
+      };
+      setComments([commentToAdd, ...comments]);
+      setNewComment({
+        userName: "",
+        userAvatar: "",
+        rating: 0,
+        comment: "",
+        date: "",
+      });
+    } else {
+      alert("لطفاً تمامی فیلدها را پر کنید.");
+    }
+  };
+
+  const handleAddReply = (commentId) => {
+    if (replyContent) {
+      const replyToAdd = {
+        id: Date.now(),
+        userName: "شما",
+        userAvatar: "/images/default-avatar.jpg",
+        date: new Date().toISOString().split("T")[0],
+        comment: replyContent,
+      };
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment.id === commentId
+            ? {
+              ...comment,
+              replies: [...comment.replies, replyToAdd],
+            }
+            : comment
+        )
+      );
+      setReplyContent("");
+      setReplyingTo(null);
+    } else {
+      alert("لطفاً پاسخ خود را بنویسید.");
+    }
+  };
+
+  return (
+    <div className="mt-8">
+      <h2 className="text-2xl font-bold text-[#042A1B] mb-6">نظرات کاربران</h2>
+      {/* فرم ارسال نظر جدید */}
+      <div className="bg-white p-6 rounded-xl shadow-md mb-8">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">ارسال نظر جدید</h3>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">نام شما</label>
+          <input
+            type="text"
+            value={newComment.userName}
+            onChange={(e) =>
+              setNewComment({ ...newComment, userName: e.target.value })
+            }
+            className="w-full p-3 border rounded-lg"
+            placeholder="نام خود را وارد کنید"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">امتیاز شما</label>
+          <select
+            value={newComment.rating}
+            onChange={(e) =>
+              setNewComment({ ...newComment, rating: parseFloat(e.target.value) })
+            }
+            className="w-full p-3 border rounded-lg"
+          >
+            <option value={0}>انتخاب کنید</option>
+            <option value={5}>۵</option>
+            <option value={4.5}>۴.۵</option>
+            <option value={4}>۴</option>
+            <option value={3.5}>۳.۵</option>
+            <option value={3}>۳</option>
+            <option value={2.5}>۲.۵</option>
+            <option value={2}>۲</option>
+            <option value={1.5}>۱.۵</option>
+            <option value={1}>۱</option>
+            <option value={0.5}>۰.۵</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">متن نظر</label>
+          <textarea
+            value={newComment.comment}
+            onChange={(e) =>
+              setNewComment({ ...newComment, comment: e.target.value })
+            }
+            className="w-full p-3 border rounded-lg"
+            placeholder="نظر خود را بنویسید"
+            rows={4}
+          ></textarea>
+        </div>
+        <button
+          onClick={handleAddComment}
+          className="px-6 py-3 bg-[#7AE36A] text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+        >
+          ارسال نظر
+        </button>
+      </div>
+      {/* لیست نظرات */}
+      <div className="space-y-6">
+        {comments.map((comment, index) => (
+          <motion.div
+            key={comment.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="bg-white p-6 rounded-xl shadow-md"
+          >
+            <div className="flex items-center mb-4">
+              <img
+                src={comment.userAvatar}
+                alt={comment.userName}
+                className="w-12 h-12 rounded-full object-cover border-2 border-[#7AE36A]"
+              />
+              <div className="mr-4">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {comment.userName}
+                </h3>
+                <span className="text-sm text-gray-500">
+                  {formatDate(comment.date)}
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center mb-4">
+              {renderStars(comment.rating)}
+              <span className="text-sm text-gray-600 mr-2">
+                {comment.rating} از ۵
+              </span>
+            </div>
+            <p className="text-gray-700 leading-7 text-justify">{comment.comment}</p>
+            <button
+              onClick={() =>
+                setReplyingTo(replyingTo === comment.id ? null : comment.id)
+              }
+              className="mt-4 text-sm text-[#7AE36A] font-semibold hover:text-emerald-600 transition-colors"
+            >
+              {replyingTo === comment.id ? "انصراف از پاسخ" : "پاسخ"}
+            </button>
+            {/* فرم پاسخ */}
+            {replyingTo === comment.id && (
+              <div className="mt-4">
+                <textarea
+                  value={replyContent}
+                  onChange={(e) => setReplyContent(e.target.value)}
+                  className="w-full p-3 border rounded-lg mb-2"
+                  placeholder="پاسخ خود را بنویسید"
+                  rows={3}
+                ></textarea>
+                <button
+                  onClick={() => handleAddReply(comment.id)}
+                  className="px-4 py-2 bg-[#7AE36A] text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+                >
+                  ارسال پاسخ
+                </button>
+              </div>
+            )}
+            {/* نمایش پاسخ‌ها */}
+            {comment.replies && comment.replies.length > 0 && (
+              <div className="mt-6 space-y-4 border-t pt-4 border-gray-200">
+                {comment.replies.map((reply) => (
+                  <div key={reply.id} className="flex items-start">
+                    <img
+                      src={reply.userAvatar}
+                      alt={reply.userName}
+                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
+                    />
+                    <div className="mr-4">
+                      <h4 className="text-md font-semibold text-gray-800">
+                        {reply.userName}
+                      </h4>
+                      <span className="text-sm text-gray-500">
+                        {formatDate(reply.date)}
+                      </span>
+                      <p className="text-gray-700 mt-2">{reply.comment}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 };
