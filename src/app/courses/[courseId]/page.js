@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { AlertCircle, CheckCircle, ChevronDown, PlayCircle } from "lucide-react";
 import { ClockIcon } from "../../../components/Icons/Icons";
 
-// کامپوننت آکاردئون
 const Accordion = ({ title, content, isOpen, onClick }) => {
   return (
     <div
@@ -35,8 +34,7 @@ const Accordion = ({ title, content, isOpen, onClick }) => {
   );
 };
 
-// کامپوننت تب اطلاعات دوره
-const CourseInfoTab = ({ courseDetails }) => {
+const CourseInfo = ({ courseDetails }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(-1);
 
@@ -183,7 +181,7 @@ const CourseInfoTab = ({ courseDetails }) => {
 
 // کامپوننت اصلی
 
-// فرض می‌کنیم کامپوننت‌های CourseInfoTab و Exercises تعریف شده‌اند
+// فرض می‌کنیم کامپوننت‌های CourseInfo و Exercises تعریف شده‌اند
 
 
 
@@ -223,7 +221,7 @@ export default function CourseDetail() {
     {
       id: 0,
       title: "اطلاعات دوره",
-      content: <CourseInfoTab courseDetails={courseDetails} />,
+      content: <CourseInfo courseDetails={courseDetails} />,
     },
     {
       id: 1,
@@ -926,6 +924,3 @@ const Comments = () => {
     </div>
   );
 };
-
-
-
