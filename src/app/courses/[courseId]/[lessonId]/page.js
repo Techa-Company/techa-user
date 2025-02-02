@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation"; // اضافه کردن useParams
@@ -76,22 +76,10 @@ export default function Lesson() {
         </h1>
         <div className="flex gap-4 items-center">
           <Link
-            className="flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5"
-            href=""
-          >
-            <span className="w-4 h-4 flex justify-center items-center border border-[#042A1B] rounded-md">
-              <ChevronRight className="" />
-            </span>
-            <p className="text-[#042A1B] text-[16px] font-medium">قبلی</p>
-          </Link>
-          <Link
-            className="flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5"
-            href=""
-          >
-            <p className="text-[#042A1B] text-[16px] font-medium">بعدی</p>
-            <span className="w-4 h-4 flex justify-center items-center border border-[#042A1B] rounded-md">
-              <ChevronLeft className="" />
-            </span>
+            className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-2.5 px-6 transition-all duration-300 shadow-lg hover:shadow-xl"
+            href={`/courses/${courseId}/${lessonId}/exercises`}          >
+            <BookOpen className="w-6 h-6" />
+            <p className="text-[18px] font-semibold">تمرین ها</p>
           </Link>
         </div>
       </div>
@@ -111,26 +99,22 @@ export default function Lesson() {
           <div className="bg-white rounded-2xl h-60">{/* محتوای مثال */}</div>
         </div>
       </div>
-      <div className="flex gap-4 items-center justify-between mt-10">
+      <div className="flex gap-4 items-center mt-10 justify-between">
         <Link
           className="flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5"
           href=""
         >
-          <span className="w-4 h-4 mb-1 flex justify-center items-center border border-[#042A1B] rounded-md">
+          <span className="w-4 h-4 flex justify-center items-center border border-[#042A1B] rounded-md">
             <ChevronRight className="" />
           </span>
-          <p className="text-[#042A1B] text-[16px] font-medium">
-            قبلی: <span className="font-bold">توابع آرایه</span>
-          </p>
+          <p className="text-[#042A1B] text-[16px] font-medium">قبلی</p>
         </Link>
         <Link
           className="flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5"
           href=""
         >
-          <p className="text-[#042A1B] text-[16px] font-medium">
-            بعدی: <span className="font-bold">متغییرها</span>
-          </p>
-          <span className="w-4 h-4 mb-1 flex justify-center items-center border border-[#042A1B] rounded-md">
+          <p className="text-[#042A1B] text-[16px] font-medium">بعدی</p>
+          <span className="w-4 h-4 flex justify-center items-center border border-[#042A1B] rounded-md">
             <ChevronLeft className="" />
           </span>
         </Link>
