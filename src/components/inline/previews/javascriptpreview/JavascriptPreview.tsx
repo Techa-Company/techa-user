@@ -3,108 +3,151 @@ import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtm
 import { JsSnippetDisplayDTO } from "../../../../api/types/dtos/InlineJsDtos";
 import MonacoEditor from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
+import {
+  Play,
+  Square,
+  Edit,
+  Terminal,
+  RefreshCw,
+  ChevronRight,
+  X, // import the close icon
+} from "lucide-react";
 
-// Props interface
 interface JavascriptPreviewProps {
   tutorialID: number;
 }
 
-// ConsoleOutput component for displaying logs
-export const ConsoleOutput: React.FC<{ output: string }> = ({ output }) => (
-  <div
-    style={{
-      border: "1px solid #ddd",
-      marginBlock: "10px",
-      padding: "10px",
-      height: "150px",
-      overflowY: "auto",
-      backgroundColor: "#f9f9f9",
-    }}
-  >
-    <pre>{output}</pre>
+export const ConsoleOutput: React.FC<{ output: string[] }> = ({ output }) => (
+  <div className="bg-gray-900 text-gray-100 p-4 rounded-b-lg font-mono text-sm h-32 overflow-y-auto">
+    {output.map((line, i) => (
+      <div
+        key={i}
+        className="flex items-start gap-2 border-b border-gray-700 py-1"
+      >
+        <ChevronRight className="w-4 h-4 flex-shrink-0 text-gray-500" />
+        <pre className={`flex-1 text-${line.color}`}>{line.text}</pre>
+      </div>
+    ))}
   </div>
 );
 
-// Main JavaScriptPreview component
 const JavaScriptPreview: React.FC<JavascriptPreviewProps> = ({
   tutorialID,
 }) => {
-  const [code, setCode] = useState<string>(
+  const [code, setCode] = useState(
     '<p>Hello World</p><script>console.log("Hello from script!");</script>'
   );
   const [isEditable, setEditable] = useState(false);
-  const [consoleOutput, setConsoleOutput] = useState<string>("");
-  const [isBoxVisible, setIsBoxVisible] = useState(false); // Track visibility of the box
+  const [consoleOutput, setConsoleOutput] = useState<
+    Array<{ text: string; color: string }>
+  >([]);
+  const [isRunning, setIsRunning] = useState(false);
+  const [iframeKey, setIframeKey] = useState(0);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false); // Set default to true
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const uniqueIdRef = useRef(
     `js-preview-${tutorialID}-${Math.random().toString(36).substring(2, 9)}`
   );
 
-  // Fetch and load initial HTML snippet code
   useEffect(() => {
-    fetchJavascriptSnippet(tutorialID).then((res) => {
+    const fetchData = async () => {
+      const res = await fetchJavascriptSnippet(tutorialID);
       if (res) setCode(res.Script);
-    });
+    };
+    fetchData();
   }, [tutorialID]);
 
-  // Handle running the HTML/JS code in an iframe and capture console logs
-  const runCodeInIframe = () => {
-    setConsoleOutput(""); // Clear previous console output
+  const runCodeInIframe = async () => {
+    setConsoleOutput([]);
+    setIsRunning(true);
+    setIframeKey((prev) => prev + 1);
+    setIsPreviewVisible(true); // Show the preview and console when running code
 
-    if (iframeRef.current) {
-      // Set iframe source to about:blank to reset its content
-      iframeRef.current.src = "about:blank";
+    await new Promise((resolve) => setTimeout(resolve, 50));
 
-      // Allow the iframe to reset before writing new content
-      setTimeout(() => {
-        if (!iframeRef.current) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
 
-        const iframeDoc =
-          iframeRef.current.contentDocument ||
-          iframeRef.current.contentWindow?.document;
-        if (!iframeDoc) return;
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!iframeDoc) return;
 
-        // Open and write new content into the iframe
-        iframeDoc.open();
-        iframeDoc.write(`
+    iframeDoc.open();
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
           <script>
             (function() {
               const uniqueId = "${uniqueIdRef.current}";
-              const originalConsoleLog = console.log;
-              console.log = function(...args) {
-                window.parent.postMessage({ type: 'console-log', id: uniqueId, message: args.join(' ') }, '*');
-                originalConsoleLog.apply(console, args);
+              const originalConsole = console;
+              window.console = {
+                log: (...args) => {
+                  window.parent.postMessage({ 
+                    type: 'console-log', 
+                    id: uniqueId, 
+                    method: 'log', 
+                    message: args.join(' ') 
+                  }, '*');
+                  originalConsole.log(...args);
+                },
+                error: (...args) => {
+                  window.parent.postMessage({ 
+                    type: 'console-log', 
+                    id: uniqueId, 
+                    method: 'error', 
+                    message: args.join(' ') 
+                  }, '*');
+                  originalConsole.error(...args);
+                },
+                warn: (...args) => {
+                  window.parent.postMessage({ 
+                    type: 'console-log', 
+                    id: uniqueId, 
+                    method: 'warn', 
+                    message: args.join(' ') 
+                  }, '*');
+                  originalConsole.warn(...args);
+                }
               };
             })();
           </script>
+        </head>
+        <body>
           ${code}
-        `);
-        iframeDoc.close();
+        </body>
+      </html>
+    `);
+    iframeDoc.close();
 
-        setTimeout(() => {
-          const hasContent =
-            iframeDoc.body &&
-            Array.from(iframeDoc.body.children).filter(
-              (child) => child.tagName !== "SCRIPT"
-            ).length > 0;
+    const checkContent = () => {
+      setIsRunning(false);
+      iframe.parentElement?.classList.remove("hidden");
+    };
 
-          setIsBoxVisible(hasContent); // Show or hide the box based on content presence
-        }, 10); // Brief delay to allow content rendering
-      }, 50); // Slightly longer delay to ensure iframe reset is complete
-    }
+    iframe.onload = checkContent;
+    iframeDoc.readyState === "complete"
+      ? checkContent()
+      : (iframe.onload = checkContent);
   };
 
-  // Listen for messages from the iframe for capturing console.log outputs
   useEffect(() => {
     const handleConsoleMessage = (event: MessageEvent) => {
       if (
         event.data.type === "console-log" &&
         event.data.id === uniqueIdRef.current
       ) {
-        setConsoleOutput(
-          (prevOutput) => prevOutput + "\n" + event.data.message
-        );
+        const color =
+          {
+            log: "emerald-400",
+            error: "red-400",
+            warn: "amber-400",
+          }[event.data.method] || "gray-400";
+
+        setConsoleOutput((prev) => [
+          ...prev,
+          { text: event.data.message, color },
+        ]);
       }
     };
 
@@ -113,65 +156,124 @@ const JavaScriptPreview: React.FC<JavascriptPreviewProps> = ({
   }, []);
 
   return (
-    <div className="flex flex-col" dir="ltr">
-      {/* Code Editor */}
-      <MonacoEditor
-        height="200px"
-        language="html"
-        value={code}
-        onChange={(value) => setCode(value || "")}
-        options={{
-          readOnly: !isEditable,
-          lineNumbers: "on",
-        }}
-        theme="vs-light"
-      />
+    <div
+      className="flex flex-col gap-4 bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-700"
+      dir="ltr"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between bg-gray-900 px-4 py-3 border-b border-gray-700">
+        <div className="flex items-center gap-2">
+          <Terminal className="w-5 h-5 text-emerald-400" />
+          <h2 className="text-gray-200 font-semibold text-sm">JS PLAYGROUND</h2>
+        </div>
 
-      {/* Execution and Editable State Buttons */}
-      <div className="mt-2 flex ">
-        <button
-          onClick={() => setEditable(!isEditable)}
-          className="p-2.5 w-36 mt-1.5 rounded-sm shadow-md border bg-slate-200 hover:bg-cyan-300/50"
-        >
-          {isEditable ? "Done" : "اجرا برخط"}
-        </button>
-        {isEditable && (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setEditable(!isEditable)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors duration-200"
+          >
+            {isEditable ? (
+              <>
+                <Square className="w-4 h-4" />
+                <span className="text-xs font-medium">Lock</span>
+              </>
+            ) : (
+              <>
+                <Edit className="w-4 h-4" />
+                <span className="text-xs font-medium">Edit</span>
+              </>
+            )}
+          </button>
+
           <button
             onClick={runCodeInIframe}
-            className="p-2.5 w-36 ml-2 mt-1.5 rounded-sm shadow-md border bg-blue-200 hover:bg-blue-300"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white transition-colors duration-200"
           >
-            Run
+            {isRunning ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <Play className="w-4 h-4" />
+            )}
+            <span className="text-xs font-medium">RUN</span>
           </button>
-        )}
+
+          {/* New Close Button */}
+          <button
+            onClick={() => setIsPreviewVisible(!isPreviewVisible)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-red-600 hover:bg-red-500 text-white transition-colors duration-200"
+          >
+            <X className="w-4 h-4" />
+            <span className="text-xs font-medium">
+              {isPreviewVisible ? "Close" : "Open"} Preview
+            </span>
+          </button>
+        </div>
       </div>
 
-      {/* HTML Output in iframe */}
-      {isEditable && (
-        <div className="mt-4 border border-gray-300">
-          <iframe
-            ref={iframeRef}
-            title="JS Preview Output"
-            style={{
-              width: "100%",
-              height: "200px",
-              display: isBoxVisible ? "block" : "none",
-            }}
-          />
+      {/* Editor */}
+      <div className="px-4 pb-4">
+        <MonacoEditor
+          height="300px"
+          language="html"
+          value={code}
+          onChange={setCode}
+          options={{
+            readOnly: !isEditable,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: "off",
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            glyphMargin: false,
+            folding: false,
+            lineDecorationsWidth: 0,
+            lineNumbersMinChars: 0,
+            renderLineHighlight: "none",
+          }}
+          theme="vs-dark"
+          className="rounded-lg overflow-hidden border border-gray-700"
+        />
+      </div>
+
+      {/* Preview */}
+      {isPreviewVisible && ( // Show preview only if visible
+        <div className="bg-gray-900 mx-4 mb-4 rounded-lg overflow-hidden border border-gray-700">
+          <div className="px-4 py-2.5 bg-gray-800 border-b border-gray-700">
+            <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Preview
+            </h3>
+          </div>
+          <div className="h-48 relative bg-gray-900">
+            <iframe
+              key={iframeKey}
+              ref={iframeRef}
+              title="JS Preview Output"
+              className="w-full h-full"
+            />
+          </div>
         </div>
       )}
 
-      {/* Output Console */}
-      {isEditable && <ConsoleOutput output={consoleOutput} />}
+      {/* Console */}
+      {isPreviewVisible && ( // Show console only if visible
+        <div className="bg-gray-900 mx-4 mb-4 rounded-lg overflow-hidden border border-gray-700">
+          <div className="px-4 py-2.5 bg-gray-800 border-b border-gray-700">
+            <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Console
+            </h3>
+          </div>
+          <ConsoleOutput output={consoleOutput} />
+        </div>
+      )}
     </div>
   );
 };
 
-export default JavaScriptPreview;
-
-// Mock API fetch function for demonstration
 async function fetchJavascriptSnippet(
   tutorialID: number
 ): Promise<JsSnippetDisplayDTO | null> {
   const { data } = await GetHtmlSnippetByIdApiHandler(tutorialID);
   return data.IsSuccess ? data.Data : null;
 }
+
+export default JavaScriptPreview;

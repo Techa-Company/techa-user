@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MonacoEditor from "@monaco-editor/react";
-
 import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtmlHandler";
 import { HtmlSnippetDisplayDTO } from "../../../../api/types/dtos/InlineHtmlDtos";
+import { Play, Square, Edit, Terminal, RefreshCw, X } from "lucide-react";
 
 interface HtmlPreviewProps {
   tutorialID: number;
@@ -11,66 +11,152 @@ interface HtmlPreviewProps {
 
 const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
   const [code, setCode] = useState("<div>Loading...</div>");
-  const [isExecutionMode, setExecutionMode] = useState(false);
+  const [isEditable, setEditable] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [iframeKey, setIframeKey] = useState(0);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
-    // Mocked API call function, replace with actual data retrieval
-    fetchHtmlSnippet(tutorialID).then((htmlSnippet) => {
-      if (!htmlSnippet) return;
-      setCode(htmlSnippet.Script);
-    });
+    const fetchData = async () => {
+      const res = await fetchHtmlSnippet(tutorialID);
+      if (res) setCode(res.Script);
+    };
+    fetchData();
   }, [tutorialID]);
 
-  // Toggle execution mode to enable editing and live preview
-  const toggleExecutionMode = () => {
-    setExecutionMode((prev) => !prev);
+  const runCodeInIframe = async () => {
+    setIsRunning(true);
+    setIframeKey((prev) => prev + 1);
+    setIsPreviewVisible(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!iframeDoc) return;
+
+    iframeDoc.open();
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; padding: 1rem; background: white; }
+          </style>
+        </head>
+        <body>
+          ${code}
+        </body>
+      </html>
+    `);
+    iframeDoc.close();
+
+    const checkContent = () => setIsRunning(false);
+    iframe.onload = checkContent;
   };
 
   return (
     <div
+      className="flex flex-col gap-4 bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-700"
       dir="ltr"
-      className="flex z-50 flex-col w-max p-4 space-y-4 border border-gray-300 rounded-lg bg-gray-50 shadow-md"
     >
-      {isExecutionMode && (
-        <button
-          className="ml-auto text-black hover:text-black/60"
-          onClick={toggleExecutionMode}
-        >
-          x
-        </button>
+      {/* Header */}
+      <div className="flex items-center justify-between bg-gray-900 px-4 py-3 border-b border-gray-700">
+        <div className="flex items-center gap-2">
+          <Terminal className="w-5 h-5 text-emerald-400" />
+          <h2 className="text-gray-200 font-semibold text-sm">
+            HTML PLAYGROUND
+          </h2>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setEditable(!isEditable)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors duration-200"
+          >
+            {isEditable ? (
+              <>
+                <Square className="w-4 h-4" />
+                <span className="text-xs font-medium">Lock</span>
+              </>
+            ) : (
+              <>
+                <Edit className="w-4 h-4" />
+                <span className="text-xs font-medium">Edit</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={runCodeInIframe}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white transition-colors duration-200"
+          >
+            {isRunning ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <Play className="w-4 h-4" />
+            )}
+            <span className="text-xs font-medium">RUN</span>
+          </button>
+
+          <button
+            onClick={() => setIsPreviewVisible(!isPreviewVisible)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-red-600 hover:bg-red-500 text-white transition-colors duration-200"
+          >
+            <X className="w-4 h-4" />
+            <span className="text-xs font-medium">
+              {isPreviewVisible ? "Close" : "Open"} Preview
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Editor */}
+      <div className="px-4 pb-4">
+        <MonacoEditor
+          height="300px"
+          language="html"
+          value={code}
+          onChange={(value) => setCode(value || "")}
+          options={{
+            readOnly: !isEditable,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: "off",
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            glyphMargin: false,
+            folding: false,
+            lineDecorationsWidth: 0,
+            lineNumbersMinChars: 0,
+            renderLineHighlight: "none",
+          }}
+          theme="vs-dark"
+          className="rounded-lg overflow-hidden border border-gray-700"
+        />
+      </div>
+
+      {/* Preview */}
+      {isPreviewVisible && (
+        <div className="bg-gray-900 mx-4 mb-4 rounded-lg overflow-hidden border border-gray-700">
+          <div className="px-4 py-2.5 bg-gray-800 border-b border-gray-700">
+            <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+              Preview
+            </h3>
+          </div>
+          <div className="h-96 relative bg-gray-900">
+            <iframe
+              key={iframeKey}
+              ref={iframeRef}
+              title="HTML Preview Output"
+              className="w-full h-full"
+            />
+          </div>
+        </div>
       )}
-      <h2 className="text-lg font-semibold mb-2">HTML Snippet Editor</h2>
-
-      {/* Execute Online Button */}
-
-      {/* Code Editor with Line Count */}
-      {/* Code Editor with Line Numbers */}
-      <MonacoEditor
-        height="200px"
-        language="html"
-        value={code}
-        onChange={(value) => setCode(value || "")}
-        options={{
-          readOnly: !isExecutionMode,
-          lineNumbers: "on",
-          minimap: { enabled: false },
-          automaticLayout: true,
-        }}
-      />
-
-      {/* Live HTML Preview */}
-      {isExecutionMode && (
-        <div
-          className="p-4 mt-4 border border-gray-200 rounded-md bg-white shadow-sm"
-          dangerouslySetInnerHTML={{ __html: code }}
-        ></div>
-      )}
-      <button
-        onClick={toggleExecutionMode}
-        className="self-end px-3 py-1 rounded-md bg-slate-200 hover:bg-cyan-300/50 shadow-sm"
-      >
-        {isExecutionMode ? "Close Execution" : "اجرای برخط"}
-      </button>
     </div>
   );
 };

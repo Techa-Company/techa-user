@@ -88,15 +88,15 @@ export default function Lesson() {
       prose-code:px-2 prose-code:py-1 prose-code:rounded-sm prose-code:bg-[#ebedf2] max-w-full"
           dangerouslySetInnerHTML={{ __html: lessonData.Description }}
         ></div>
-        <div className="bg-[#F3F6F3] rounded-2xl p-2">
+        {/* <div className="bg-[#F3F6F3] rounded-2xl p-2">
           <div className="px-5 flex items-center justify-between py-2">
             <h3 className="text-[16px] font-bold text-[#042A1B]">مثال</h3>
             <button className="text-white font-bold text-sm px-6 py-2 rounded-md bg-[#042A1B]">
               خودت امتحان کن
             </button>
           </div>
-          <div className="bg-white rounded-2xl h-60">{/* محتوای مثال */}</div>
-        </div>
+          <div className="bg-white rounded-2xl h-60"></div>
+        </div> */}
       </div>
       <div className="flex gap-4 items-center mt-10 justify-between">
         <Link
