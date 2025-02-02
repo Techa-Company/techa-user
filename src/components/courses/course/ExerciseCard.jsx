@@ -96,13 +96,13 @@ const ExerciseCard = ({ exercise, onClick, isSelected }) => {
                 />
             )}
 
-            <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center justify-between relative z-10 gap-3">
                 <div className="space-y-3">
                     <div className="flex items-center gap-3">
                         <motion.div
                             className={`w-12 h-12 rounded-lg flex items-center justify-center ${isSelected
-                                    ? "bg-emerald-500 text-white"
-                                    : "bg-emerald-50 text-emerald-500"
+                                ? "bg-emerald-500 text-white"
+                                : "bg-emerald-50 text-emerald-500"
                                 }`}
                             whileHover={{ scale: 1.05 }}
                         >
@@ -117,10 +117,10 @@ const ExerciseCard = ({ exercise, onClick, isSelected }) => {
                     <div className="w-full bg-gray-200 rounded-full h-2">
                         <motion.div
                             className={`h-2 rounded-full ${exercise.status === "completed"
-                                    ? "bg-emerald-500"
-                                    : exercise.status === "pending"
-                                        ? "bg-amber-500"
-                                        : "bg-gray-300"
+                                ? "bg-emerald-500"
+                                : exercise.status === "pending"
+                                    ? "bg-amber-500"
+                                    : "bg-gray-300"
                                 }`}
                             initial={{ width: 0 }}
                             animate={{
@@ -138,10 +138,10 @@ const ExerciseCard = ({ exercise, onClick, isSelected }) => {
                     <div className="flex items-center gap-4 text-sm">
                         <span
                             className={`px-3 py-1 rounded-full ${exercise.status === "completed"
-                                    ? "bg-emerald-100 text-emerald-700"
-                                    : exercise.status === "pending"
-                                        ? "bg-amber-100 text-amber-700"
-                                        : "bg-gray-100 text-gray-600"
+                                ? "bg-emerald-100 text-emerald-700"
+                                : exercise.status === "pending"
+                                    ? "bg-amber-100 text-amber-700"
+                                    : "bg-gray-100 text-gray-600"
                                 }`}
                         >
                             {exercise.difficulty}
@@ -155,7 +155,6 @@ const ExerciseCard = ({ exercise, onClick, isSelected }) => {
                 <motion.div
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="pl-4"
                 >
                     <StatusIcon />
                 </motion.div>

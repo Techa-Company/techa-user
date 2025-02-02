@@ -50,7 +50,7 @@ export default function ExercisePage({ params }) {
   }, []);
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto">
       <div className="grid grid-cols-1 gap-8">
         {/* لیست تمرینات */}
         <div className="lg:col-span-1 space-y-4">
