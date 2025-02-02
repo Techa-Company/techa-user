@@ -25,9 +25,9 @@ axios.interceptors.response.use(
       if (errorMessage == 6) {
         const currentPath = window.location.pathname;
         // Redirect to signout and pass the current path as a query parameter
-        window.location.href = `/signout?redirect=${encodeURIComponent(
-          currentPath
-        )}`;
+        // window.location.href = `/signout?redirect=${encodeURIComponent(
+        //   currentPath
+        // )}`;
       }
     }
     return Promise.reject(error);

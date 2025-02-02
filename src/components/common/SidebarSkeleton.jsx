@@ -5,7 +5,7 @@ const SidebarSkeleton = () => {
     return (
         <>
             {[...Array(4)].map((_, index) => (
-                <div key={index} className='mb-5'>
+                <div key={index} className='mb-5 w-full'>
                     <div className='flex items-center justify-between py-3 px-3 lg:px-5'>
                         <div className='flex items-center gap-3'>
                             <Skeleton circle width={36} height={36} />

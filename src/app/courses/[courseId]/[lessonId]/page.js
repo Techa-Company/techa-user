@@ -2,15 +2,15 @@
 import { BookOpen, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation"; // اضافه کردن useParams
+import { useParams } from "next/navigation";
 import { renderInlineSnippets } from "../../../../components/inline/utils/renderUtils";
+import LessonSkeleton from "../../../../components/courses/course/lesson/LessonSkeleton"; // وارد کردن کامپوننت اسکلتون
 
 export default function Lesson() {
   const [openAccordion, setOpenAccordion] = useState(0);
   const [lessonData, setLessonData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // دریافت courseId و lessonId از URL
   const params = useParams();
   const courseId = params.courseId;
   const lessonId = params.lessonId;
@@ -18,7 +18,6 @@ export default function Lesson() {
   console.log(courseId, lessonId);
 
   useEffect(() => {
-    // دریافت داده‌ها از API
     const fetchData = async () => {
       try {
         const response = await fetch(`http://45.139.10.84:5000/api/Content`);
@@ -26,7 +25,6 @@ export default function Lesson() {
 
         console.log(data);
 
-        // فیلتر داده‌ها بر اساس CourseId و ParentId
         if (data.Data && Array.isArray(data.Data)) {
           const filteredData = data.Data.filter(
             (item) =>
@@ -34,14 +32,14 @@ export default function Lesson() {
               item.Id === parseInt(lessonId)
           );
           console.log(filteredData);
-          setLessonData(filteredData[0]); // اولین آیتم فیلتر شده
+          setLessonData(filteredData[0]);
         } else {
           console.error("Invalid data format:", data);
-          setLessonData(null); // مقدار پیش‌فرض برای جلوگیری از خطا
+          setLessonData(null);
         }
       } catch (error) {
         console.error("Error fetching content:", error);
-        setLessonData(null); // مقدار پیش‌فرض برای جلوگیری از خطا
+        setLessonData(null);
       } finally {
         setLoading(false);
       }
@@ -61,7 +59,7 @@ export default function Lesson() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LessonSkeleton />;
   }
 
   if (!lessonData) {
@@ -77,7 +75,8 @@ export default function Lesson() {
         <div className="flex gap-4 items-center">
           <Link
             className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-2.5 px-6 transition-all duration-300 shadow-lg hover:shadow-xl"
-            href={`/courses/${courseId}/${lessonId}/exercises`}          >
+            href={`/courses/${courseId}/${lessonId}/exercises`}
+          >
             <BookOpen className="w-6 h-6" />
             <p className="text-[18px] font-semibold">تمرین ها</p>
           </Link>
