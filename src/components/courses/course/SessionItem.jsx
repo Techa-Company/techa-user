@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { PlayCircle, CheckCircle, AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const SessionItem = ({ session, sessionIndex }) => {
     const [hoveredSession, setHoveredSession] = useState(null);
+    const router = useRouter();
+
 
     const handleMouseEnter = () => {
         setHoveredSession(session.Id);
@@ -14,6 +17,11 @@ const SessionItem = ({ session, sessionIndex }) => {
     const handleMouseLeave = () => {
         setHoveredSession(null);
     };
+
+    const handleClick = () => {
+        router.push(`/courses/${21}/${session}/exercises`);
+    };
+
 
     const SessionBadge = ({ progress }) => {
         switch (progress) {
@@ -50,14 +58,15 @@ const SessionItem = ({ session, sessionIndex }) => {
       border border-gray-100 hover:border-emerald-100 cursor-pointer"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
         >
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <div className="relative">
                         <div
                             className={`w-10 h-10 rounded-lg flex items-center justify-center ${hoveredSession === session.Id
-                                    ? "bg-emerald-500 text-white"
-                                    : "bg-emerald-50 text-emerald-500"
+                                ? "bg-emerald-500 text-white"
+                                : "bg-emerald-50 text-emerald-500"
                                 }`}
                         >
                             <PlayCircle size={20} />
