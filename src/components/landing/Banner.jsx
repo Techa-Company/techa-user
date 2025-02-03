@@ -35,12 +35,12 @@ const Banner = () => {
                         <p className="font-light text-white my-5 pr-3">
                             برای عضویت و اطلاع از دوره‌ها، شماره تماس خود را وارد نمایید.
                         </p>
-                        <div className="bg-white max-w-full w-fit flex gap-3 items-center rounded-full p-2">
+                        <div className="bg-white max-w-full w-fit flex gap-5 items-center rounded-full p-2">
                             <div className='lg:w-fit'>
                                 <input
                                     inputMode='numeric'
                                     style={{ direction: "ltr" }}
-                                    className="max-w-40 sm:max-w-full w-full lg:w-10/12 text-xl font-semibold text-black focus:outline-none"
+                                    className="max-w-40 sm:max-w-full w-full text-xl font-semibold text-black focus:outline-none"
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
@@ -48,7 +48,7 @@ const Banner = () => {
                             </div>
                             <div className="flex items-center gap-5">
                                 <div className="flex items-center gap-2">
-                                    <h3 style={{ direction: "ltr" }} className="font-semibold text-[#042A1B] text-xl">+98</h3>
+                                    {/* <h3 style={{ direction: "ltr" }} className="font-semibold text-[#042A1B] text-xl">+98</h3> */}
                                     <img src="/images/Iran.svg" alt="" />
                                 </div>
                                 <button className="py-3 px-5 bg-[#7AE36A] text-black text-xl font-semibold rounded-full">عضویت</button>

@@ -81,7 +81,7 @@ const Sidebar = () => {
 
     return (
         <aside
-            className={`min-w-96 max-w-96 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none bottom-0 py-10 lg:py-0 px-5 transition-all duration-200 ${isSidebarOpen ? 'right-0' : '-right-96'}`}
+            className={`min-w-80 max-w-80 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none bottom-0 py-10 lg:py-0 px-5 transition-all duration-200 ${isSidebarOpen ? 'right-0' : '-right-80'}`}
             style={{ top: `${topPosition}px` }}
         >
             <h1 className="font-bold text-white lg:text-[#042A1B] text-3xl">
