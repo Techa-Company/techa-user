@@ -5,7 +5,7 @@ import Link from 'next/link';
 const Footer = () => {
 
     return (
-        <footer className="bg-[#042A1B] relative">
+        <footer className="bg-[#042A1B] relative hidden">
             <img className="hidden md:block absolute -top-32 w-full h-32 rotate-180" src="/images/banner.png" alt="banner" />
             <div className="container mx-auto px-5 xl:px-20">
                 <div className='w-full absolute -top-20 sm:-top-12 md:-top-32 xl:-top-36 2xl:-top-44 right-1/2 translate-x-1/2 px-5 lg:px-10'>

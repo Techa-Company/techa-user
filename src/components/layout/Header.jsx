@@ -10,6 +10,14 @@ const Header = () => {
     const [scrolled, setScrolled] = useState(false);
     const pathname = usePathname()
 
+    // const isAccountPage = pathname.includes('/account')
+
+    const headerClasses = `fixed
+    w-full z-40 transition-all duration-200 
+    ${pathname === "/" ? "" : "bg-[#042A1B]"} 
+    ${scrolled ? 'shadow-2xl bg-[#042A1B] py-3' : 'py-5'}
+`
+
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth <= 640);
@@ -51,7 +59,7 @@ const Header = () => {
     return (
         <>
             <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 ${isMenuOpen ? 'block' : 'hidden'}`}></div>
-            <header className={`fixed w-full z-40 transition-all duration-200 ${pathname === "/" ? "" : "bg-[#042A1B]"} ${scrolled ? 'shadow-2xl bg-[#042A1B] py-3' : 'py-5'}`}>
+            <header className={headerClasses}>
                 <div className='container mx-auto px-5 xl:px-20'>
                     <nav className='flex justify-between items-center'>
                         <div className='flex items-center'>

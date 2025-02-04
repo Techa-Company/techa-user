@@ -18,7 +18,7 @@ const Comments = () => {
             const fakeComments = [
                 {
                     id: 1,
-                    userName: "علی رضایی",
+                    userName: "علی جوشنگ",
                     userAvatar: "https://i.pravatar.cc/150?img=65",
                     rating: 4.5,
                     date: "2023-10-12",
