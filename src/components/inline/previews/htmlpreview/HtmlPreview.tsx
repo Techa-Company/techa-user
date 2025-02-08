@@ -130,6 +130,7 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
             automaticLayout: true,
             glyphMargin: false,
             folding: false,
+            tabSize: 4,
             lineDecorationsWidth: 0,
             lineNumbersMinChars: 0,
             renderLineHighlight: "none",

@@ -17,7 +17,9 @@ interface JavascriptPreviewProps {
   tutorialID: number;
 }
 
-export const ConsoleOutput: React.FC<{ output: string[] }> = ({ output }) => (
+export const ConsoleOutput: React.FC<{
+  output: Array<{ text: string; color: string }>;
+}> = ({ output }) => (
   <div className="bg-gray-900 text-gray-100 p-4 rounded-b-lg font-mono text-sm h-32 overflow-y-auto">
     {output.map((line, i) => (
       <div
@@ -226,6 +228,7 @@ const JavaScriptPreview: React.FC<JavascriptPreviewProps> = ({
             automaticLayout: true,
             glyphMargin: false,
             folding: false,
+            tabSize: 4,
             lineDecorationsWidth: 0,
             lineNumbersMinChars: 0,
             renderLineHighlight: "none",
