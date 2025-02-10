@@ -1,12 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AboutIcon,
   AboutLightIcon,
   BarsIcon,
-  CircleXIcon,
   ContactIcon,
   ContactLightIcon,
   ContactUSIcon,
@@ -21,11 +20,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
   LogIn,
-  UserPlus,
   LogOut,
   Bookmark,
   Settings,
-  ChevronDown,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -43,7 +40,7 @@ const Header = () => {
       setIsMobile(window.innerWidth <= 640);
     };
     const handleScroll = () => {
-      if (window.scrollY > 20) {
+      if (window.scrollY > 50) {
         setScrolled(true);
       } else {
         setScrolled(false);
@@ -91,19 +88,17 @@ const Header = () => {
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${
-          isMenuOpen ? "block" : "hidden"
-        }`}
+        className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${isMenuOpen ? "block" : "hidden"
+          }`}
       ></div>
       <header
-        className={`fixed w-full z-50 transition-all duration-200 ${
-          pathname === "/" ? "" : "bg-[#042A1B]"
-        } ${scrolled ? "shadow-2xl bg-[#042A1B] py-3" : "py-5"}`}
+        className={`fixed w-full z-50  bg-[#042A1B] ${scrolled ? "shadow-2xl py-3" : "py-5"} transition-all duration-200`}
       >
         <div className="container mx-auto px-5 2xl:px-20">
           <nav className="flex justify-between items-center">
             <div className="flex items-center">
-              <div className="lg:border-l border-[#FFFFFF33] pl-8">
+              <Link className="lg:border-l border-[#FFFFFF33] pl-8"
+                href="/">
                 <Image
                   src="/images/logo-light.svg"
                   width={200}
@@ -111,11 +106,10 @@ const Header = () => {
                   alt="logo"
                   priority
                 />
-              </div>
+              </Link>
               <div
-                className={`pt-14 lg:pt-0 px-5 lg:px-0 fixed w-64 lg:w-auto ${
-                  isMenuOpen ? "-right-0" : "-right-64"
-                } bottom-0 top-0 z-50 bg-[#042A1B] lg:bg-transparent border-8 border-r-0 rounded-2xl rounded-r-none border-[#7AE36A] lg:border-0 lg:static transition-all duration-300 menu-container`}
+                className={`pt-14 lg:pt-0 px-5 lg:px-0 fixed w-64 lg:w-auto ${isMenuOpen ? "-right-0" : "-right-64"
+                  } bottom-0 top-0 z-50 bg-[#042A1B] lg:bg-transparent border-8 border-r-0 rounded-2xl rounded-r-none border-[#7AE36A] lg:border-0 lg:static transition-all duration-300 menu-container`}
               >
                 <Image
                   src="/images/logo-light.svg"
@@ -260,24 +254,42 @@ const Header = () => {
                             </div>
 
                             <ul className="py-2">
-                              <li className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer">
-                                <User className="w-5 h-5 text-[#7AE36A]" />
-                                پروفایل کاربری
+                              <li>
+                                <Link
+                                  href="/account" // لینک مربوط به پروفایل کاربری
+                                  className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
+                                >
+                                  <User className="w-5 h-5 text-[#7AE36A]" />
+                                  پروفایل کاربری
+                                </Link>
                               </li>
-                              <li className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer">
-                                <Bookmark className="w-5 h-5 text-[#7AE36A]" />
-                                دوره‌های من
+                              <li>
+                                <Link
+                                  href="/my-courses" // لینک مربوط به دوره‌های من
+                                  className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
+                                >
+                                  <Bookmark className="w-5 h-5 text-[#7AE36A]" />
+                                  دوره‌های من
+                                </Link>
                               </li>
-                              <li className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer">
-                                <Settings className="w-5 h-5 text-[#7AE36A]" />
-                                تنظیمات
+                              <li>
+                                <Link
+                                  href="/settings" // لینک مربوط به تنظیمات
+                                  className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
+                                >
+                                  <Settings className="w-5 h-5 text-[#7AE36A]" />
+                                  تنظیمات
+                                </Link>
                               </li>
-                              <li
-                                className="px-4 py-3 hover:bg-red-500/10 text-red-400 flex items-center gap-3 transition-colors cursor-pointer"
-                                onClick={handleLogout}
-                              >
-                                <LogOut className="w-5 h-5" />
-                                خروج از حساب
+                              <li>
+                                <Link
+                                  href="/logout" // لینک مربوط به خروج از حساب
+                                  className="px-4 py-3 hover:bg-red-500/10 text-red-400 flex items-center gap-3 transition-colors cursor-pointer"
+                                  onClick={handleLogout}
+                                >
+                                  <LogOut className="w-5 h-5" />
+                                  خروج از حساب
+                                </Link>
                               </li>
                             </ul>
                           </motion.div>
