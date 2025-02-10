@@ -5,17 +5,15 @@ import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtm
 import { HtmlSnippetDisplayDTO } from "../../../../api/types/dtos/InlineHtmlDtos";
 import { Play, Square, Edit, Terminal, RefreshCw, X } from "lucide-react";
 
-interface HtmlPreviewProps {
-  tutorialID: number;
-}
 
-const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
+
+const HtmlPreview = ({ tutorialID }) => {
   const [code, setCode] = useState("<div>Loading...</div>");
   const [isEditable, setEditable] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const iframeRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,14 +62,7 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
       dir="ltr"
     >
       {/* Header */}
-      <div className="flex items-center justify-between bg-gray-900 px-4 py-3 border-b border-gray-700">
-        <div className="flex items-center gap-2">
-          <Terminal className="w-5 h-5 text-emerald-400" />
-          <h2 className="text-gray-200 font-semibold text-sm">
-            HTML PLAYGROUND
-          </h2>
-        </div>
-
+      <div className="flex flex-col-reverse lg:flex-row items-center justify-between bg-gray-900 px-4 py-3 border-b border-gray-700">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setEditable(!isEditable)}
@@ -79,13 +70,13 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
           >
             {isEditable ? (
               <>
+                <span className="text-xs font-medium">قفل</span>
                 <Square className="w-4 h-4" />
-                <span className="text-xs font-medium">Lock</span>
               </>
             ) : (
               <>
+                <span className="text-xs font-medium">ویرایش</span>
                 <Edit className="w-4 h-4" />
-                <span className="text-xs font-medium">Edit</span>
               </>
             )}
           </button>
@@ -94,23 +85,30 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
             onClick={runCodeInIframe}
             className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white transition-colors duration-200"
           >
+            <span className="text-xs font-medium">اجرا</span>
             {isRunning ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
             ) : (
               <Play className="w-4 h-4" />
             )}
-            <span className="text-xs font-medium">RUN</span>
           </button>
 
+          {/* New Close Button */}
           <button
             onClick={() => setIsPreviewVisible(!isPreviewVisible)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-red-600 hover:bg-red-500 text-white transition-colors duration-200"
           >
-            <X className="w-4 h-4" />
             <span className="text-xs font-medium">
-              {isPreviewVisible ? "Close" : "Open"} Preview
+              {isPreviewVisible ? "بستن" : "بازکردن"} پیش نمایش
             </span>
+            <X className="w-4 h-4" />
           </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <h2 className="text-gray-200 font-semibold text-sm" dir="rtl">
+            اجرای برخط HTML
+          </h2>
+          <Terminal className="w-5 h-5 text-emerald-400 scale-x-[-1]" />
         </div>
       </div>
 
@@ -124,8 +122,8 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
           options={{
             readOnly: !isEditable,
             minimap: { enabled: false },
-            fontSize: 14,
-            lineNumbers: "off",
+            fontSize: 15,
+            lineNumbers: "on",
             scrollBeyondLastLine: false,
             automaticLayout: true,
             glyphMargin: false,
@@ -144,8 +142,8 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
       {isPreviewVisible && (
         <div className="bg-gray-900 mx-4 mb-4 rounded-lg overflow-hidden border border-gray-700">
           <div className="px-4 py-2.5 bg-gray-800 border-b border-gray-700">
-            <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wider">
-              Preview
+            <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wider text-end">
+              پیش نمایش
             </h3>
           </div>
           <div className="h-96 relative bg-gray-900">
@@ -163,8 +161,8 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ tutorialID }) => {
 };
 
 async function fetchHtmlSnippet(
-  tutorialID: number
-): Promise<HtmlSnippetDisplayDTO | null> {
+  tutorialID
+) {
   const { data } = await GetHtmlSnippetByIdApiHandler(tutorialID);
   return data.IsSuccess ? data.Data : null;
 }
