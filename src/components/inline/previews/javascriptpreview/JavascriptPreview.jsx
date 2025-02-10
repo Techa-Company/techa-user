@@ -13,14 +13,7 @@ import {
   X, // import the close icon
 } from "lucide-react";
 
-
-<<<<<<< HEAD:src/components/inline/previews/javascriptpreview/JavascriptPreview.tsx
-export const ConsoleOutput: React.FC<{
-  output: Array<{ text: string; color: string }>;
-}> = ({ output }) => (
-=======
 export const ConsoleOutput = ({ output }) => (
->>>>>>> 019e37f1b5f47fbcdbf76e924a7e264c41b9b0d3:src/components/inline/previews/javascriptpreview/JavascriptPreview.jsx
   <div className="bg-gray-900 text-gray-100 p-4 rounded-b-lg font-mono text-sm h-32 overflow-y-auto">
     {output.map((line, i) => (
       <div
@@ -34,9 +27,7 @@ export const ConsoleOutput = ({ output }) => (
   </div>
 );
 
-const JavaScriptPreview = ({
-  tutorialID,
-}) => {
+const JavaScriptPreview = ({ tutorialID }) => {
   const [code, setCode] = useState(
     '<p>Hello World</p><script>console.log("Hello from script!");</script>'
   );
@@ -275,9 +266,7 @@ const JavaScriptPreview = ({
   );
 };
 
-async function fetchJavascriptSnippet(
-  tutorialID
-) {
+async function fetchJavascriptSnippet(tutorialID) {
   const { data } = await GetHtmlSnippetByIdApiHandler(tutorialID);
   return data.IsSuccess ? data.Data : null;
 }
