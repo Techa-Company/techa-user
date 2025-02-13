@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtmlHandler";
-import { HtmlSnippetDisplayDTO } from "../../../../api/types/dtos/InlineHtmlDtos";
 import { Play, Square, Edit, Terminal, RefreshCw, X } from "lucide-react";
 
 

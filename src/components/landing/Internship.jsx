@@ -10,9 +10,8 @@ const Internship = () => {
                     <div className='text-[#042A1B]'>
                         <h1 className='text-4xl font-extrabold '>کارآموزی پروژه محور</h1>
                         <p className='text-[17px] text-justify font-normal leading-7 my-4'>
-                            کسب مهارتها و کسب تجربه و غنی کردن رزومه یکی از مسائل مهم برای ورود به بازار کار است، در بستر پلتفرم قائم می توانید بعد از کسب مهارت تسکهای واقعی دریافت کرده و کسب در آمد کنید
-                        </p>
-                        <Link className='bg-[#7AE36A] px-5 py-2 rounded-full font-semibold  mt-2 inline-block hover:text-white transition-all duration-300' href="/courses">عضویت در دوره‌ها</Link>
+                            تکا با ایجادمحیطی عملیاتی، پروژه های واقعی در اختیار کارآموزان منتخب قرار می دهد که در مدت کوتاهی بتوانند یا پروژه محول شده را به سوددهی برسانند و برای خود یک درآمد مستمر ایجاد کنند یا اینکه با کسب تجارب فراوان از شکستها و موفقیتها با یک روزمه قوی جذب بازار کار شوند.                        </p>
+                        <Link className='bg-[#7AE36A] px-5 py-2 rounded-full font-semibold  mt-2 inline-block hover:text-white transition-all duration-300' href="/courses">پروژه های در حال اجرا</Link>
                     </div>
                     <div className="relative w-full pb-[60%] lg:mt-0">
                         <Image src="/images/Internship.png" layout="fill" objectFit="cover" alt="banner" />
