@@ -1,3 +1,4 @@
+// components/Banner.js
 "use client"
 import { useState } from 'react';
 import Image from 'next/image';
@@ -7,7 +8,6 @@ const Banner = () => {
 
     const handleInputChange = (e) => {
         const value = e.target.value;
-
         if (/^\d*$/.test(value)) {
             if (value.startsWith('09') && value.length <= 11) {
                 setInputValue(value);
@@ -25,7 +25,12 @@ const Banner = () => {
                             لذت آموزش و کدنویسی آنلاین در بستر وب <br />
                             بدون نیاز به نصب هیچگونه نرم افزار جانبی
                             <div className="relative w-full h-3 mt-2">
-                                <Image className="object-cover" src="/images/line.svg" layout="fill" alt="banner" />
+                                <Image
+                                    src="/images/line.svg"
+                                    fill
+                                    style={{ objectFit: "cover" }}
+                                    alt="banner"
+                                />
                             </div>
                         </div>
                         <div className="pr-3 mt-10 lg:mt-20 flex items-center">
@@ -48,7 +53,6 @@ const Banner = () => {
                             </div>
                             <div className="flex items-center gap-5">
                                 <div className="flex items-center gap-2">
-                                    {/* <h3 style={{ direction: "ltr" }} className="font-semibold text-[#042A1B] text-xl">+98</h3> */}
                                     <img src="/images/Iran.svg" alt="" />
                                 </div>
                                 <button className="py-3 px-5 bg-[#7AE36A] text-black text-xl font-semibold rounded-full">عضویت</button>
@@ -56,7 +60,12 @@ const Banner = () => {
                         </div>
                     </div>
                     <div className="relative w-full pb-[85%] mt-10 lg:mt-0">
-                        <Image src="/images/Pic.svg" layout="fill" objectFit="cover" alt="banner" />
+                        <Image
+                            src="/images/Pic.svg"
+                            fill
+                            style={{ objectFit: "cover" }}
+                            alt="banner"
+                        />
                     </div>
                 </div>
             </div>

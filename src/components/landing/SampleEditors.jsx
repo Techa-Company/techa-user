@@ -54,8 +54,12 @@ console.log('Sum of 5 and 10 is:', sum(5, 10));`;
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="grid lg:grid-cols-2 gap-10 items-center">
                     <div className="relative w-full pb-[60%] lg:mt-0 order-2 lg:order-1">
-                        <Image src="/images/Editor.png" layout="fill" objectFit="cover" alt="banner" />
-                    </div>
+                        <Image
+                            src="/images/Editor.png"
+                            fill
+                            style={{ objectFit: "cover" }}
+                            alt="banner"
+                        />                    </div>
                     <div className='text-[#042A1B] w-full order-1'>
                         <div className="w-full">
                             <div className='flex flex-col sm:flex-row gap-5 justify-between items-center'>
