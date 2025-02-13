@@ -1,11 +1,10 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Smartphone, Timer, RotateCw } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Link from "next/link";
 import { useAuth } from "../../../components/contexts/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 

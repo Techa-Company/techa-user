@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation"; // Adjust according to your router
+import { Suspense, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "../../../components/contexts/AuthContext";
 
-const Page = () => {
+const SignoutContent = () => {
   const { logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -15,15 +15,19 @@ const Page = () => {
       if (success) {
         router.push(`/auth/login?redirect=${encodeURIComponent(redirect)}`);
       } else {
-        // Handle logout failure if needed
         console.error("Logout failed");
       }
     };
-
     handleLogout();
   }, [redirect, logout, router]);
 
-  return <p>Signing out...</p>;
+  return <p>در حال خروج...</p>;
 };
+
+const Page = () => (
+  <Suspense fallback={<div>در حال بارگذاری...</div>}>
+    <SignoutContent />
+  </Suspense>
+);
 
 export default Page;
