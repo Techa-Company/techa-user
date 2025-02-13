@@ -20,7 +20,7 @@ const Sidebar = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://45.139.10.84:5000/api/Content`);
+                const response = await fetch(`https://api.techa.me/api/Content`);
                 const data = await response.json();
 
                 if (data.Data && Array.isArray(data.Data)) {

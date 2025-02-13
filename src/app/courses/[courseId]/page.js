@@ -27,7 +27,7 @@ export default function CourseDetail() {
   useEffect(() => {
     // دریافت اطلاعات دوره از API
     if (courseId) {
-      fetch(`http://45.139.10.84:5000/api/Course/${courseId}`)
+      fetch(`https://api.techa.me/api/Course/${courseId}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.IsSuccess) {

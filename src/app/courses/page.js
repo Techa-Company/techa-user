@@ -11,7 +11,7 @@ export default function Courses() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://45.139.10.84:5000/api/Course")
+    fetch("https://api.techa.me/api/Course")
       .then((response) => response.json())
       .then((data) => {
         if (data.IsSuccess) {
