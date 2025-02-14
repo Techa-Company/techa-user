@@ -1,12 +1,10 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Smartphone, Timer, RotateCw } from "lucide-react";
-import { useState, useEffect, useRef, Suspense } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useAuth } from "../../../components/contexts/AuthContext";
-import { useRouter, useSearchParams } from "next/navigation";
 
 const schema = yup.object().shape({
   phone: yup
@@ -21,10 +19,6 @@ const Login = () => {
   const [timer, setTimer] = useState(120);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const inputsRef = useRef([]);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect");
-  const { login } = useAuth();
 
   // تایمر
   useEffect(() => {
@@ -69,16 +63,16 @@ const Login = () => {
   };
 
   // تایید کد
-  const verifyCode = async () => {
-    const fullCode = code.join("");
-    if (fullCode.length === 5) {
-      // منطق تایید کد
-      const result = await login({ phone: "09xxxxxxxxx" });
-      if (result) {
-        router.push(redirect || "/");
-      }
-    }
-  };
+  // const verifyCode = async () => {
+  //   const fullCode = code.join("");
+  //   if (fullCode.length === 5) {
+  //     // منطق تایید کد
+  //     const result = await login({ phone: "09xxxxxxxxx" });
+  //     if (result) {
+  //       router.push(redirect || "/");
+  //     }
+  //   }
+  // };
 
   const {
     register,
@@ -182,7 +176,7 @@ const Login = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type={step === 1 ? "submit" : "button"}
-            onClick={step === 2 ? verifyCode : null}
+            // onClick={step === 2 ? true : null}
             disabled={isSubmitting || (step === 2 && isResendDisabled)}
             className="w-full py-3 bg-gradient-to-r from-[#7AE36A] to-[#4CAF50] rounded-xl text-white font-semibold hover:shadow-lg transition-all relative overflow-hidden"
           >
