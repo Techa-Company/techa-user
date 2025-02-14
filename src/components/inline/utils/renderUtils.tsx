@@ -1,41 +1,53 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import HtmlPreview from "../previews/htmlpreview/HtmlPreview";
 import ReactPreview from "../previews/reactpreview/ReactPreview";
 import JavaScriptPreview from "../previews/javascriptpreview/JavascriptPreview";
+import SQLPreview from "../previews/sql/SQLPreview";
 
-/**
- * Finds all elements with a data-reactId or data-htmlId attribute.
- * Returns these elements as an array.
- */
-export function findPreviewElements() {
-  const elements = document.querySelectorAll(
-    `[data-reactId], [data-htmlId], [data-javascriptId]`
+type PreviewElement = HTMLElement | HTMLTextAreaElement;
+
+export function findPreviewElements(): PreviewElement[] {
+  const elements = document.querySelectorAll<PreviewElement>(
+    `[data-reactId], 
+     [data-htmlId], 
+     [data-javascriptId], 
+     textarea.sql-sample`
   );
   return Array.from(elements);
 }
 
-/**
- * Renders the appropriate preview component based on the data attribute present on the element.
- * - If the element has data-htmlId, it renders HtmlPreview.
- * - If the element has data-reactId, it renders ReactPreview.
- */
 export const renderInlineSnippets = () => {
   const elements = findPreviewElements();
 
   elements.forEach((element) => {
+    const container = document.createElement("div");
+    container.className = "preview-container";
+
+    if (element instanceof HTMLElement) {
+      container.style.cssText = element.style.cssText;
+    }
+
+    element.parentNode?.insertBefore(container, element);
+    element.style.display = "none";
+
     const htmlId = element.getAttribute("data-htmlId");
     const reactId = element.getAttribute("data-reactId");
-    const javascriptId = element.getAttribute("data-javascriptid");
+    const javascriptId = element.getAttribute("data-javascriptId");
+    const sqlCode =
+      element instanceof HTMLTextAreaElement
+        ? element.value.trim()
+        : element.textContent?.trim() || "";
+
+    const root = createRoot(container);
 
     if (htmlId) {
-      const tutorialID = parseInt(htmlId, 10);
-      ReactDOM.render(<HtmlPreview tutorialID={tutorialID} />, element);
+      root.render(<HtmlPreview tutorialID={Number(htmlId)} />);
     } else if (reactId) {
-      const tutorialID = parseInt(reactId, 10);
-      ReactDOM.render(<ReactPreview tutorialID={tutorialID} />, element);
+      root.render(<ReactPreview tutorialID={Number(reactId)} />);
     } else if (javascriptId) {
-      const tutorialID = parseInt(javascriptId, 10);
-      ReactDOM.render(<JavaScriptPreview tutorialID={tutorialID} />, element);
+      root.render(<JavaScriptPreview tutorialID={Number(javascriptId)} />);
+    } else if (sqlCode) {
+      root.render(<SQLPreview code={sqlCode} />);
     }
   });
 };

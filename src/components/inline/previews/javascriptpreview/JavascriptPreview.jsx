@@ -1,6 +1,5 @@
 "use client";
 import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtmlHandler";
-import { JsSnippetDisplayDTO } from "../../../../api/types/dtos/InlineJsDtos";
 import MonacoEditor from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 import {
