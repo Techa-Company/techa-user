@@ -189,7 +189,7 @@ const ReactPreview = ({ tutorialID }) => {
             <h2 className="text-gray-200 font-semibold text-sm">
               اجرای برخط React
             </h2>
-            <Terminal className="w-5 h-5 text-emerald-400 scale-x-[-1]" />
+            <Terminal className="w-10 h-10 text-emerald-400 scale-x-[-1]" />
           </div>
         </div>
 
@@ -199,7 +199,7 @@ const ReactPreview = ({ tutorialID }) => {
             language="javascript"
             disabled={!isEditable}
             className="rounded-lg overflow-hidden border border-gray-700 max-w-full"
-            // theme="vs-dark"
+          // theme="vs-dark"
           />
         </div>
 

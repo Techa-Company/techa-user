@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { GetHtmlSnippetByIdApiHandler } from "../../../api/handlers/InlineHtmlHandler";
 import MonacoEditor from "@monaco-editor/react";
+import { useEffect, useRef, useState } from "react";
 import {
     Play,
     Square,
@@ -8,11 +9,11 @@ import {
     Terminal,
     RefreshCw,
     ChevronRight,
-    X,
+    X, // import the close icon
 } from "lucide-react";
 
-export const ConsoleOutput = ({ output, className }) => (
-    <div className={`bg-gray-900 text-gray-100 p-4 rounded-b-lg font-mono text-sm overflow-y-auto ${className}`}>
+export const ConsoleOutput = ({ output }) => (
+    <div className="bg-gray-900 text-gray-100 p-4 rounded-b-lg font-mono text-sm h-32 overflow-y-auto">
         {output.map((line, i) => (
             <div
                 key={i}
@@ -25,53 +26,132 @@ export const ConsoleOutput = ({ output, className }) => (
     </div>
 );
 
-const SQLPreview = ({ code: initialCode }) => {
-    const [internalCode, setInternalCode] = useState('');
-    const [isEditable, setEditable] = useState(false);
+const ExerciseJSEditor = ({ tutorialID, onCodeChange, editable }) => {
+    const [code, setCode] = useState("");
+
+
+    const [isEditable, setEditable] = useState(editable);
     const [consoleOutput, setConsoleOutput] = useState([]);
     const [isRunning, setIsRunning] = useState(false);
-    const [results, setResults] = useState([]);
-    const [isMounted, setIsMounted] = useState(false);
+    const [iframeKey, setIframeKey] = useState(0);
     const [isPreviewVisible, setIsPreviewVisible] = useState(false); // Set default to true
 
+    const iframeRef = useRef(null);
+    const uniqueIdRef = useRef(
+        `js-preview-${tutorialID}-${Math.random().toString(36).substring(2, 9)}`
+    );
 
     useEffect(() => {
-        setInternalCode(initialCode || '-- SQL کد خود را اینجا بنویسید\nSELECT * FROM users;');
-        setIsMounted(true);
-    }, [initialCode]);
+        onCodeChange(code);
+    }, [code]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await fetchJavascriptSnippet(tutorialID);
+            if (res) setCode(res.Script);
+        };
+        fetchData();
+    }, [tutorialID]);
 
-
-
-    const runQuery = async () => {
+    const runCodeInIframe = async () => {
         setConsoleOutput([]);
         setIsRunning(true);
+        setIframeKey((prev) => prev + 1);
+        setIsPreviewVisible(true); // Show the preview and console when running code
 
-        try {
-            // شبیه‌سازی اجرای کوئری
-            const mockResponse = [
-                { id: 1, name: 'Test 1' },
-                { id: 2, name: 'Test 2' }
-            ];
+        await new Promise((resolve) => setTimeout(resolve, 50));
 
-            setResults(mockResponse);
-            setConsoleOutput([{
-                text: 'Query executed successfully',
-                color: 'emerald-400'
-            }]);
-            setIsPreviewVisible(true)
-        } catch (error) {
-            setConsoleOutput([{
-                text: error.message,
-                color: 'red-400'
-            }]);
-        } finally {
+        const iframe = iframeRef.current;
+        if (!iframe) return;
+
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!iframeDoc) return;
+
+        iframeDoc.open();
+        iframeDoc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <script>
+            (function() {
+              const uniqueId = "${uniqueIdRef.current}";
+              const originalConsole = console;
+              window.console = {
+                log: (...args) => {
+                  window.parent.postMessage({ 
+                    type: 'console-log', 
+                    id: uniqueId, 
+                    method: 'log', 
+                    message: args.join(' ') 
+                  }, '*');
+                  originalConsole.log(...args);
+                },
+                error: (...args) => {
+                  window.parent.postMessage({ 
+                    type: 'console-log', 
+                    id: uniqueId, 
+                    method: 'error', 
+                    message: args.join(' ') 
+                  }, '*');
+                  originalConsole.error(...args);
+                },
+                warn: (...args) => {
+                  window.parent.postMessage({ 
+                    type: 'console-log', 
+                    id: uniqueId, 
+                    method: 'warn', 
+                    message: args.join(' ') 
+                  }, '*');
+                  originalConsole.warn(...args);
+                }
+              };
+            })();
+          </script>
+        </head>
+        <body>
+          ${code}
+        </body>
+      </html>
+    `);
+        iframeDoc.close();
+
+        const checkContent = () => {
             setIsRunning(false);
-        }
+            iframe.parentElement?.classList.remove("hidden");
+        };
+
+        iframe.onload = checkContent;
+        iframeDoc.readyState === "complete"
+            ? checkContent()
+            : (iframe.onload = checkContent);
     };
 
-    if (!isMounted) return null;
+    useEffect(() => {
+        const handleConsoleMessage = (event) => {
+            if (
+                event.data.type === "console-log" &&
+                event.data.id === uniqueIdRef.current
+            ) {
+                const color =
+                    {
+                        log: "emerald-400",
+                        error: "red-400",
+                        warn: "amber-400",
+                    }[event.data.method] || "gray-400";
+
+                setConsoleOutput((prev) => [
+                    ...prev,
+                    { text: event.data.message, color },
+                ]);
+            }
+        };
+
+        window.addEventListener("message", handleConsoleMessage);
+        return () => window.removeEventListener("message", handleConsoleMessage);
+    }, []);
+
     return (
-        <div className="flex flex-col gap-4 bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-700"
+        <div
+            className="flex flex-col gap-4 bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-700"
             dir="ltr"
         >
             {/* Header */}
@@ -95,7 +175,7 @@ const SQLPreview = ({ code: initialCode }) => {
                     </button>
 
                     <button
-                        onClick={runQuery}
+                        onClick={runCodeInIframe}
                         className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white transition-colors duration-200"
                     >
                         <span className="text-xs font-medium">اجرا</span>
@@ -118,8 +198,8 @@ const SQLPreview = ({ code: initialCode }) => {
                     </button>
                 </div>
                 <div className="flex items-center gap-2">
-                    <h2 className="text-gray-200 font-semibold text-2xl">
-                        اجرای برخط SQL
+                    <h2 className="text-gray-200 font-semibold text-sm">
+                        اجرای برخط جاوا اسکریپت
                     </h2>
                     <Terminal className="w-10 h-10 text-emerald-400 scale-x-[-1]" />
                 </div>
@@ -128,15 +208,10 @@ const SQLPreview = ({ code: initialCode }) => {
             {/* Editor */}
             <div className="px-4 pb-4">
                 <MonacoEditor
-                    height="200px"
-                    language="sql"
-                    value={internalCode}
-                    onChange={setInternalCode}
-                    // loading={
-                    //     <div className="text-gray-400 text-center py-4">
-                    //         در حال بارگذاری ویرایشگر...
-                    //     </div>
-                    // }
+                    height="300px"
+                    language="html"
+                    value={code}
+                    onChange={setCode}
                     options={{
                         readOnly: !isEditable,
                         minimap: { enabled: true },
@@ -153,64 +228,49 @@ const SQLPreview = ({ code: initialCode }) => {
                         tabSize: 8,
                         formatOnType: true,
                         formatOnPaste: true,
-
                     }}
                     theme="vs-dark"
                     className="rounded-lg overflow-hidden border border-gray-700 max-w-full"
                 />
             </div>
 
-            {/* Results Table */}
-            {isPreviewVisible && (
+            {/* Preview */}
+            {isPreviewVisible && ( // Show preview only if visible
                 <div className="bg-gray-900 mx-4 mb-4 rounded-lg overflow-hidden border border-gray-700">
                     <div className="px-4 py-2.5 bg-gray-800 border-b border-gray-700">
                         <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wider text-end">
                             پیش نمایش
                         </h3>
                     </div>
-                    <div className="overflow-x-auto max-h-96">
-                        <table className="w-full text-gray-300">
-                            <thead className="bg-gray-700">
-                                <tr>
-                                    {Object.keys(results[0]).map((key) => (
-                                        <th key={key} className="px-4 py-2 text-sm text-left">
-                                            {key}
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {results.map((row, i) => (
-                                    <tr key={i} className="border-b border-gray-700">
-                                        {Object.values(row).map((value, j) => (
-                                            <td key={j} className="px-4 py-2 text-sm">
-                                                {value}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    <div className="h-48 relative bg-gray-900">
+                        <iframe
+                            key={iframeKey}
+                            ref={iframeRef}
+                            title="JS Preview Output"
+                            className="w-full h-full"
+                        />
                     </div>
                 </div>
             )}
 
             {/* Console */}
-            {isPreviewVisible && (
+            {isPreviewVisible && ( // Show console only if visible
                 <div className="bg-gray-900 mx-4 mb-4 rounded-lg overflow-hidden border border-gray-700">
                     <div className="px-4 py-2.5 bg-gray-800 border-b border-gray-700">
                         <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wider text-end">
                             کنسول
                         </h3>
                     </div>
-                    <ConsoleOutput
-                        output={consoleOutput}
-                        className="max-h-48"
-                    />
+                    <ConsoleOutput output={consoleOutput} />
                 </div>
             )}
         </div>
     );
 };
 
-export default SQLPreview;
+async function fetchJavascriptSnippet(tutorialID) {
+    const { data } = await GetHtmlSnippetByIdApiHandler(tutorialID);
+    return data.IsSuccess ? data.Data : null;
+}
+
+export default ExerciseJSEditor;
