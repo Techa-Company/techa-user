@@ -83,7 +83,38 @@ const Login = () => {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden ">
+      {[...Array(100)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-2 h-2 bg-[#6ACF5A] rounded-full z-50 backdrop-blur-sm"
+          initial={{
+            top: `${Math.random() * -20 - 10}%`,
+            left: `${Math.random() * 100}%`,
+            scale: 0,
+            rotate: Math.random() * 360,
+            opacity: 0,
+          }}
+          animate={{
+            scale: [0, Math.random() * 0.5 + 0.5, 0],
+            opacity: [0, Math.random() * 0.5 + 0.3, 0],
+            y: "150vh",
+            x: `${Math.random() * 30 - 15}vw`,
+            rotate: Math.random() * 720 + 360,
+          }}
+          transition={{
+            duration: Math.random() * 3 + 7, // 7 تا 10 ثانیه
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "linear",
+            delay: Math.random() * 15, // تأخیر بیشتر برای پراکندگی بهتر
+          }}
+          style={{
+            filter: `blur(${Math.random() * 3}px)`,
+            boxShadow: `0 0 ${Math.random() * 15 + 5}px rgba(255,255,255,0.7)`,
+          }}
+        />
+      ))}
       <motion.form
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
