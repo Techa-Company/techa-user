@@ -6,7 +6,7 @@ const CourseBenefits = () => {
             <div className="container mx-auto px-5 2xl:px-20">
                 <div className="text-[#042A1B] text-center">
                     <h1 className="font-extrabold text-4xl ">
-                        مـــزایای <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">دوره ها</span>
+                        مـــزایای <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">کارآموزی</span>
                     </h1>
                     <p className="text-lg font-normal mt-3">
                         لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است
@@ -18,8 +18,9 @@ const CourseBenefits = () => {
                             <div className='w-[90px] h-[90px] flex justify-center items-center bg-[#F6DC65] rounded-full mb-3'>
                                 <img src="/images/Exercise.svg" alt="" />
                             </div>
-                            <h3 className='mt-2 text-center text-xl font-bold '>تمرین‌ها و مثال‌ها</h3>
-                            <p className='text-center font-medium text-[16px] mt-1'>بیش از 1200 مثال و تمرین</p>
+                            <h3 className='mt-2 text-center text-xl font-bold '>آموزش و کارآموزی کاملا مجازی</h3>
+                            <p className='text-center font-medium text-[16px] mt-1'>هزاران تمرین و محتوای تخصصی به همراه فیلم آموزش
+                            </p>
                         </div>
                     </div>
                     <div className='relative pt-[100%] border-[5px] border-[#F6DC6526] rounded-3xl sm:rounded-full'>
@@ -27,8 +28,9 @@ const CourseBenefits = () => {
                             <div className='w-[90px] h-[90px] flex justify-center items-center bg-[#F6DC65] rounded-full mb-3'>
                                 <img src="/images/Class.svg" alt="" />
                             </div>
-                            <h3 className='mt-2 text-center text-xl font-bold '>کلاس مجازی</h3>
-                            <p className='text-center font-medium text-[16px] mt-1'>آموزش و تمرین در بستر اسکای روم</p>
+                            <h3 className='mt-2 text-center text-xl font-bold '>پرداخت حداقل هزینه</h3>
+                            <p className='text-center font-medium text-[16px] mt-1'>امکان پرداخت هزینه آموزش از حقوق کارآموزی
+                            </p>
                         </div>
                     </div>
                     <div className='relative pt-[100%] border-[5px] border-[#F6DC6526] rounded-3xl sm:rounded-full'>
@@ -36,8 +38,9 @@ const CourseBenefits = () => {
                             <div className='w-[90px] h-[90px] flex justify-center items-center bg-[#F6DC65] rounded-full mb-3'>
                                 <img src="/images/Work.svg" alt="" />
                             </div>
-                            <h3 className='mt-2 text-center text-xl font-bold '>کارآموزی و ورود به بازار کار</h3>
-                            <p className='text-center font-medium text-[16px] mt-1'>ارائه نقشه راه پروژه محور برای افزایش تجربه و مهارت</p>
+                            <h3 className='mt-2 text-center text-xl font-bold '>کسب رزومه قوی</h3>
+                            <p className='text-center font-medium text-[16px] mt-1'>اجرای پروژه های واقعی به همراه مربی
+                            </p>
                         </div>
                     </div>
                     <div className='relative pt-[100%] border-[5px] border-[#F6DC6526] rounded-3xl sm:rounded-full'>
@@ -45,8 +48,8 @@ const CourseBenefits = () => {
                             <div className='w-[90px] h-[90px] flex justify-center items-center bg-[#F6DC65] rounded-full mb-3'>
                                 <img src="/images/Online.svg" alt="" />
                             </div>
-                            <h3 className='mt-2 text-center text-xl font-bold '>محیط اجرای برخط </h3>
-                            <p className='text-center font-medium text-[16px] mt-1'>ارائه محیط‌های اجرای برخط برای انواع زبان‌ها و کتابخانه‌های مختلف</p>
+                            <h3 className='mt-2 text-center text-xl font-bold '>درآمد از استارت آپ شخصی</h3>
+                            <p className='text-center font-medium text-[16px] mt-1'>رشد دادن پروژه ارائه شده و کسب منفعت مستمر</p>
                         </div>
                     </div>
                 </div>

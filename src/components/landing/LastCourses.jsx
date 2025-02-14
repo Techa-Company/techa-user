@@ -52,7 +52,8 @@ const LastCourses = () => {
                 <div className="flex flex-col md:flex-row md:justify-between items-center">
                     <div className="text-[#042A1B] text-center md:text-start">
                         <h1 className="font-extrabold text-4xl ">
-                            معرفی <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">دوره ها</span>
+                            مهارت های ویژه
+                            <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">کارآموزان</span>
                         </h1>
                         <p className="text-lg font-normal mt-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ</p>
                     </div>
