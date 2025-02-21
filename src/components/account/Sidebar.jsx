@@ -7,16 +7,16 @@ import { Home, User, Book, Dumbbell, ShoppingCart, Ticket, Mail, Folder, Briefca
 
 const sidebarItems = [
     { name: 'داشبورد', href: '/account', icon: Home },
-    { name: 'پروفایل', href: '/dashboard/profile', icon: User },
-    { name: 'دوره‌های من', href: '/dashboard/courses', icon: Book },
-    { name: 'تمرین‌ها', href: '/dashboard/exercises', icon: Dumbbell },
-    { name: 'بوت کمپ', href: '/dashboard/bootcamp', icon: Briefcase },
-    { name: 'مدارک من', href: '/dashboard/certificates', icon: Folder },
-    { name: 'لایسنس‌های من', href: '/dashboard/licenses', icon: Key },
-    { name: 'درخواست مشاوره', href: '/dashboard/consultation', icon: Phone },
-    { name: 'خریدها', href: '/dashboard/purchases', icon: ShoppingCart },
-    { name: 'تیکت‌ها', href: '/dashboard/tickets', icon: Ticket },
-    { name: 'ارتباط با استاد', href: '/dashboard/contact', icon: Mail },
+    { name: 'پروفایل', href: '/account/profile', icon: User },
+    { name: 'دوره‌های من', href: '/account/courses', icon: Book },
+    { name: 'تمرین‌ها', href: '/account/exercises', icon: Dumbbell },
+    { name: 'بوت کمپ', href: '/account/bootcamp', icon: Briefcase },
+    { name: 'مدارک من', href: '/account/certificates', icon: Folder },
+    { name: 'لایسنس‌های من', href: '/account/license', icon: Key },
+    { name: 'درخواست مشاوره', href: '/account/consultation', icon: Phone },
+    { name: 'خریدها', href: '/account/purchases', icon: ShoppingCart },
+    { name: 'تیکت‌ها', href: '/account/tickets', icon: Ticket },
+    { name: 'ارتباط با استاد', href: '/account/contact', icon: Mail },
 ]
 
 export default function Sidebar() {
