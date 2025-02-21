@@ -43,7 +43,7 @@ export default function Sidebar() {
 
     useEffect(() => {
         const handleScroll = () => {
-            setTopPosition(window.scrollY > 20 ? 56 : 72)
+            setTopPosition(window.scrollY > 50 ? 56 : 72)
         }
 
         window.addEventListener('scroll', handleScroll)

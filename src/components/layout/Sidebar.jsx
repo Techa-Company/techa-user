@@ -52,7 +52,7 @@ const Sidebar = () => {
     };
 
     const handleScroll = () => {
-        if (window.scrollY > 20) {
+        if (window.scrollY > 50) {
             setTopPosition(56);
         } else {
             setTopPosition(72);
