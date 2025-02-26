@@ -491,3 +491,18 @@ pre {
 .h-full {
   height: 100%;
 }
+
+@layer components {
+  .prose {
+    @apply text-emerald-700 leading-relaxed;
+  }
+  .prose h2 {
+    @apply text-2xl font-bold text-emerald-800 mb-4;
+  }
+  .prose ul {
+    @apply list-disc pr-4 space-y-2;
+  }
+  .prose li {
+    @apply pr-2;
+  }
+}
