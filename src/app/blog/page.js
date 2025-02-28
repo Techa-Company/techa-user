@@ -114,7 +114,7 @@ export default function BlogPage() {
                     <SearchAndFilter />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-                        {posts.slice(0, 4).map((post, index) => (
+                        {posts.map((post, index) => (
                             <BlogCard
                                 key={post.id}
                                 post={post}
