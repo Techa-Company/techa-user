@@ -19,252 +19,238 @@ export default function ProjectDetail({ params }) {
     }
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="max-w-7xl mx-auto px-4 py-8 pt-32"
-        >
-            <div className="flex flex-col lg:flex-row gap-8">
-                {/* Main Content */}
-                <div className="flex-1">
-                    {/* Gallery */}
-                    <motion.div
-                        initial={{ scale: 0.95 }}
-                        animate={{ scale: 1 }}
-                        className="grid gap-4 mb-8"
-                    >
-                        <div className="relative h-96 rounded-2xl overflow-hidden bg-emerald-50 border-4 border-emerald-100">
-                            <img
-                                src={project.gallery[0]}
-                                className="w-full h-full object-cover"
-                                alt={project.title}
-                            />
-                            <div className="absolute bottom-4 right-4 bg-emerald-500/90 text-white px-4 py-2 rounded-full text-sm">
-                                🚀 پروژه فعال
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-3 gap-4">
-                            {project.gallery.slice(1).map((img, i) => (
-                                <motion.div
-                                    key={i}
-                                    whileHover={{ scale: 1.05 }}
-                                    className="aspect-square rounded-xl overflow-hidden bg-emerald-50 border-2 border-emerald-100"
-                                >
-                                    <img src={img} className="w-full h-full object-cover" />
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
+        <div className="container mx-auto 2xl:px-20 px-5 pt-32">
 
-                    {/* Tabs */}
-                    <div className="border-2 border-emerald-100 rounded-xl bg-white shadow-lg mb-8">
-                        <div className="flex border-b-2 border-emerald-100">
-                            {['description', 'requirements', 'timeline'].map((tab) => (
-                                <button
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    className={`px-6 py-4 text-sm font-bold relative transition-all ${activeTab === tab
-                                        ? 'text-emerald-600 bg-emerald-50 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-1 after:bg-emerald-500'
-                                        : 'text-gray-600 hover:bg-emerald-50/50'
-                                        }`}
-                                >
-                                    {tab === 'description' && '📝 توضیحات پروژه'}
-                                    {tab === 'requirements' && '🎯 نیازمندی‌ها'}
-                                    {tab === 'timeline' && '⏳ زمانبندی'}
-                                </button>
-                            ))}
-                        </div>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
 
-                        <div className="p-6">
-                            {activeTab === 'description' && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="prose text-gray-700 leading-relaxed"
-                                    dangerouslySetInnerHTML={{ __html: project.description }}
+            >
+                <div className="flex flex-col lg:flex-row gap-8">
+                    {/* Main Content */}
+                    <div className="flex-1">
+                        {/* Gallery */}
+                        <motion.div
+                            initial={{ scale: 0.95 }}
+                            animate={{ scale: 1 }}
+                            className="grid gap-4 mb-8"
+                        >
+                            <div className="relative h-96 rounded-2xl overflow-hidden bg-emerald-50 border-4 border-emerald-100">
+                                <img
+                                    src={project.gallery[0]}
+                                    className="w-full h-full object-cover"
+                                    alt={project.title}
                                 />
-                            )}
+                                <div className="absolute bottom-4 right-4 bg-emerald-500/90 text-white px-4 py-2 rounded-full text-sm">
+                                    🚀 پروژه فعال
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4">
+                                {project.gallery.slice(1).map((img, i) => (
+                                    <motion.div
+                                        key={i}
+                                        whileHover={{ scale: 1.05 }}
+                                        className="aspect-square rounded-xl overflow-hidden bg-emerald-50 border-2 border-emerald-100"
+                                    >
+                                        <img src={img} className="w-full h-full object-cover" />
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
 
-                            {activeTab === 'requirements' && (
-                                <motion.ul
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="space-y-6"
-                                >
-                                    {project.requirements.map((req, i) => (
-                                        <li key={i} className="flex items-start gap-4 p-4 bg-emerald-50 rounded-xl">
-                                            <div className="p-2 bg-emerald-100 rounded-lg">
-                                                <BadgeCheck className="w-6 h-6 text-emerald-600" />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-bold text-lg text-emerald-800">{req.title}</h3>
-                                                <p className="text-gray-600 mt-1">{req.description}</p>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </motion.ul>
-                            )}
+                        {/* Tabs */}
+                        <div className="border-2 border-emerald-100 rounded-xl bg-white shadow-lg mb-8">
+                            <div className="flex border-b-2 border-emerald-100">
+                                {['description', 'requirements', 'timeline'].map((tab) => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab)}
+                                        className={`px-6 py-4 text-sm font-bold relative transition-all ${activeTab === tab
+                                            ? 'text-emerald-600 bg-emerald-50 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-1 after:bg-emerald-500'
+                                            : 'text-gray-600 hover:bg-emerald-50/50'
+                                            }`}
+                                    >
+                                        {tab === 'description' && '📝 توضیحات پروژه'}
+                                        {tab === 'requirements' && '🎯 نیازمندی‌ها'}
+                                        {tab === 'timeline' && '⏳ زمانبندی'}
+                                    </button>
+                                ))}
+                            </div>
 
-                            {activeTab === 'timeline' && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="relative pl-6 border-l-4 border-emerald-200"
-                                >
-                                    {project.timeline.map((stage, i) => (
-                                        <div key={i} className="relative mb-8 group">
-                                            <div className="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[10px] top-2 ring-4 ring-emerald-100" />
-                                            <div className="p-4 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-all">
-                                                <h3 className="font-bold text-emerald-800 text-lg">{stage.title}</h3>
-                                                <div className="flex items-center gap-2 mt-2 text-emerald-600">
-                                                    <Clock className="w-4 h-4" />
-                                                    <span className="text-sm">{stage.date}</span>
+                            <div className="p-6">
+                                {activeTab === 'description' && (
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="prose text-gray-700 leading-relaxed"
+                                        dangerouslySetInnerHTML={{ __html: project.description }}
+                                    />
+                                )}
+
+                                {activeTab === 'requirements' && (
+                                    <motion.ul
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="space-y-6"
+                                    >
+                                        {project.requirements.map((req, i) => (
+                                            <li key={i} className="flex items-start gap-4 p-4 bg-emerald-50 rounded-xl">
+                                                <div className="p-2 bg-emerald-100 rounded-lg">
+                                                    <BadgeCheck className="w-6 h-6 text-emerald-600" />
                                                 </div>
-                                                <p className="mt-2 text-gray-700">{stage.description}</p>
+                                                <div>
+                                                    <h3 className="font-bold text-lg text-emerald-800">{req.title}</h3>
+                                                    <p className="text-gray-600 mt-1">{req.description}</p>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </motion.ul>
+                                )}
+
+                                {activeTab === 'timeline' && (
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="relative pl-6 border-l-4 border-emerald-200"
+                                    >
+                                        {project.timeline.map((stage, i) => (
+                                            <div key={i} className="relative mb-8 group">
+                                                <div className="absolute w-4 h-4 bg-emerald-500 rounded-full -left-[10px] top-2 ring-4 ring-emerald-100" />
+                                                <div className="p-4 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-all">
+                                                    <h3 className="font-bold text-emerald-800 text-lg">{stage.title}</h3>
+                                                    <div className="flex items-center gap-2 mt-2 text-emerald-600">
+                                                        <Clock className="w-4 h-4" />
+                                                        <span className="text-sm">{stage.date}</span>
+                                                    </div>
+                                                    <p className="mt-2 text-gray-700">{stage.description}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </motion.div>
-                            )}
+                                        ))}
+                                    </motion.div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Sidebar */}
-                <div className="lg:w-96 space-y-6">
-                    {/* Project Status Card */}
-                    <motion.div
-                        initial={{ y: 20 }}
-                        animate={{ y: 0 }}
-                        className="bg-white p-6 rounded-xl shadow-lg border-2 border-emerald-100"
-                    >
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-2xl font-bold text-emerald-800">{project.title}</h2>
-                            <span className={`px-3 py-1 rounded-full text-sm ${project.status === 'active'
-                                ? 'bg-emerald-100 text-emerald-700'
-                                : 'bg-amber-100 text-amber-700'
-                                }`}>
-                                {project.status === 'active' ? '✅ فعال' : '🔄 در حال بررسی'}
-                            </span>
-                        </div>
-
-                        {/* Progress */}
-                        <div className="mb-6">
-                            <div className="flex justify-between text-sm mb-2 text-emerald-700">
-                                <span>پیشرفت پروژه</span>
-                                <span>{project.progress}%</span>
-                            </div>
-                            <div className="h-3 bg-emerald-100 rounded-full overflow-hidden">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${project.progress}%` }}
-                                    className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full"
-                                    transition={{ duration: 0.8 }}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Stats */}
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                            <div className="p-4 bg-emerald-50 rounded-xl border-2 border-emerald-100">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-emerald-100 rounded-lg">
-                                        <Users className="w-6 h-6 text-emerald-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-emerald-600">ظرفیت</p>
-                                        <p className="font-bold text-emerald-800">
-                                            {project.currentInterns}/{project.requiredInterns}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-4 bg-emerald-50 rounded-xl border-2 border-emerald-100">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-emerald-100 rounded-lg">
-                                        <Code2 className="w-6 h-6 text-emerald-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-emerald-600">سطح دشواری</p>
-                                        <p className="font-bold text-emerald-800">{project.difficulty}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Apply Button */}
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${project.currentInterns < project.requiredInterns
-                                ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-200 hover:shadow-emerald-300'
-                                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                }`}
-                            disabled={project.currentInterns >= project.requiredInterns}
+                    {/* Sidebar */}
+                    <div className="lg:w-96 space-y-6">
+                        {/* Project Status Card */}
+                        <motion.div
+                            initial={{ y: 20 }}
+                            animate={{ y: 0 }}
+                            className="bg-white p-6 rounded-xl shadow-lg border-2 border-emerald-100"
                         >
-                            {project.currentInterns < project.requiredInterns
-                                ? '✨ ارسال درخواست همکاری'
-                                : '⛔ ظرفیت تکمیل شده'}
-                        </motion.button>
-                    </motion.div>
-
-                    {/* Team Card */}
-                    <motion.div
-                        initial={{ y: 20 }}
-                        animate={{ y: 0 }}
-                        className="bg-white p-6 rounded-xl shadow-lg border-2 border-emerald-100"
-                    >
-                        <h3 className="flex items-center gap-2 text-lg font-bold mb-4 text-emerald-800">
-                            <div className="p-2 bg-emerald-100 rounded-lg">
-                                <BrainCircuit className="w-6 h-6 text-emerald-600" />
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-2xl font-bold text-emerald-800">{project.title}</h2>
+                                <span className={`px-3 py-1 rounded-full text-sm ${project.status === 'active'
+                                    ? 'bg-emerald-100 text-emerald-700'
+                                    : 'bg-amber-100 text-amber-700'
+                                    }`}>
+                                    {project.status === 'active' ? '✅ فعال' : '🔄 در حال بررسی'}
+                                </span>
                             </div>
-                            تیم پروژه
-                        </h3>
-                        <div className="space-y-4">
-                            {project.team.map((member, i) => (
-                                <div key={i} className="flex items-center gap-4 p-3 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-all">
-                                    <div className="w-12 h-12 rounded-full bg-emerald-100 overflow-hidden border-2 border-emerald-200">
-                                        <img src={member.avatar} className="w-full h-full object-cover" />
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-emerald-800">{member.name}</p>
-                                        <p className="text-sm text-emerald-600">{member.role}</p>
-                                        <div className="flex gap-2 mt-1">
-                                            <button className="text-emerald-500 hover:text-emerald-700">
-                                                <Twitter className="w-4 h-4" />
-                                            </button>
-                                            <button className="text-emerald-500 hover:text-emerald-700">
-                                                <Linkedin className="w-4 h-4" />
-                                            </button>
+
+                            {/* Progress */}
+                            <div className="mb-6">
+                                <div className="flex justify-between text-sm mb-2 text-emerald-700">
+                                    <span>پیشرفت پروژه</span>
+                                    <span>{project.progress}%</span>
+                                </div>
+                                <div className="h-3 bg-emerald-100 rounded-full overflow-hidden">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${project.progress}%` }}
+                                        className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full"
+                                        transition={{ duration: 0.8 }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Stats */}
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                                <div className="p-4 bg-emerald-50 rounded-xl border-2 border-emerald-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-emerald-100 rounded-lg">
+                                            <Users className="w-6 h-6 text-emerald-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-emerald-600">ظرفیت</p>
+                                            <p className="font-bold text-emerald-800">
+                                                {project.currentInterns}/{project.requiredInterns}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </motion.div>
+                                <div className="p-4 bg-emerald-50 rounded-xl border-2 border-emerald-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-emerald-100 rounded-lg">
+                                            <Code2 className="w-6 h-6 text-emerald-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-emerald-600">سطح دشواری</p>
+                                            <p className="font-bold text-emerald-800">{project.difficulty}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Apply Button */}
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${project.currentInterns < project.requiredInterns
+                                    ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-200 hover:shadow-emerald-300'
+                                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                    }`}
+                                disabled={project.currentInterns >= project.requiredInterns}
+                            >
+                                {project.currentInterns < project.requiredInterns
+                                    ? '✨ ارسال درخواست همکاری'
+                                    : '⛔ ظرفیت تکمیل شده'}
+                            </motion.button>
+                        </motion.div>
+
+                        {/* Team Card */}
+                        <motion.div
+                            initial={{ y: 20 }}
+                            animate={{ y: 0 }}
+                            className="bg-white p-6 rounded-xl shadow-lg border-2 border-emerald-100"
+                        >
+                            <h3 className="flex items-center gap-2 text-lg font-bold mb-4 text-emerald-800">
+                                <div className="p-2 bg-emerald-100 rounded-lg">
+                                    <BrainCircuit className="w-6 h-6 text-emerald-600" />
+                                </div>
+                                تیم پروژه
+                            </h3>
+                            <div className="space-y-4">
+                                {project.team.map((member, i) => (
+                                    <div key={i} className="flex items-center gap-4 p-3 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-all">
+                                        <div className="w-12 h-12 rounded-full bg-emerald-100 overflow-hidden border-2 border-emerald-200">
+                                            <img src={member.avatar} className="w-full h-full object-cover" />
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-emerald-800">{member.name}</p>
+                                            <p className="text-sm text-emerald-600">{member.role}</p>
+                                            <div className="flex gap-2 mt-1">
+                                                <button className="text-emerald-500 hover:text-emerald-700">
+                                                    <Twitter className="w-4 h-4" />
+                                                </button>
+                                                <button className="text-emerald-500 hover:text-emerald-700">
+                                                    <Linkedin className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
-            </div>
-        </motion.div>
+            </motion.div>
+        </div>
     )
 }
 
-// اضافه کردن استایل به globals.css
-/*
-@layer components {
-    .prose {
-        @apply text-emerald-700 leading-relaxed;
-    }
-    .prose h2 {
-        @apply text-2xl font-bold text-emerald-800 mb-4;
-    }
-    .prose ul {
-        @apply list-disc pr-4 space-y-2;
-    }
-    .prose li {
-        @apply pr-2;
-    }
-}
-*/
 
 const projects = [
     {
@@ -279,6 +265,7 @@ const projects = [
         gallery: [
             "/images/project.svg",
             "/images/project.svg",
+            "/images/project.svg",
             "/images/project.svg"
         ],
         description: `
@@ -287,6 +274,7 @@ const projects = [
             <ul>
                 <li>سیستم رهگیری هوشمند درخواست‌ها</li>
                 <li>داشبورد مدیریتی پیشرفته</li>
+                <li>یکپارچه‌سازی با سامانه‌های شهرداری</li>
                 <li>یکپارچه‌سازی با سامانه‌های شهرداری</li>
             </ul>
         `,
@@ -337,6 +325,7 @@ const projects = [
         gallery: [
             "/images/project.svg",
             "/images/project.svg",
+            "/images/project.svg",
             "/images/project.svg"
         ],
         description: `
@@ -383,6 +372,7 @@ const projects = [
         progress: 30,
         difficulty: "متوسط",
         gallery: [
+            "/images/project.svg",
             "/images/project.svg",
             "/images/project.svg",
             "/images/project.svg"
@@ -443,6 +433,7 @@ const projects = [
         gallery: [
             "/images/project.svg",
             "/images/project.svg",
+            "/images/project.svg",
             "/images/project.svg"
         ],
         description: `
@@ -496,6 +487,7 @@ const projects = [
         gallery: [
             "/images/project.svg",
             "/images/project.svg",
+            "/images/project.svg",
             "/images/project.svg"
         ],
         description: `
@@ -542,6 +534,7 @@ const projects = [
         progress: 55,
         difficulty: "متوسط",
         gallery: [
+            "/images/project.svg",
             "/images/project.svg",
             "/images/project.svg",
             "/images/project.svg"
@@ -600,6 +593,7 @@ const projects = [
         progress: 25,
         difficulty: "متوسط",
         gallery: [
+            "/images/project.svg",
             "/images/project.svg",
             "/images/project.svg",
             "/images/project.svg"
