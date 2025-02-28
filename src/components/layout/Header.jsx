@@ -23,6 +23,15 @@ import {
   LogOut,
   Bookmark,
   Settings,
+  Home,
+  BookOpen,
+  FileText,
+  Info,
+  Mail,
+  GraduationCap,
+  Pen,
+  Users,
+  PhoneCall,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -94,14 +103,14 @@ const Header = () => {
       <header
         className={`fixed w-full z-50  bg-[#042A1B] ${scrolled ? "shadow-2xl py-3" : "py-5"} transition-all duration-200`}
       >
-        <div className="container mx-auto px-5 2xl:px-20">
+        <div className="container mx-auto px-5 lg:px-0 xl:px-5 2xl:px-20">
           <nav className="flex justify-between items-center">
             <div className="flex items-center">
-              <Link className="lg:border-l border-[#FFFFFF33] pl-8"
+              <Link className="lg:border-l border-[#FFFFFF33] lg:pl-5 xl:pl-8"
                 href="/">
                 <Image
                   src="/images/logo-light.svg"
-                  width={200}
+                  width={180}
                   height={100}
                   alt="logo"
                   priority
@@ -119,47 +128,75 @@ const Header = () => {
                   alt="logo"
                   priority
                 />
-                <ul className="lg:pr-8 flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-10 mt-10 lg:mt-0">
-                  <li className="flex items-center gap-2">
-                    <span>{!isMobile ? <HomeLightIcon /> : <HomeIcon />}</span>
+                <ul className="lg:pr-5 xl:pr-8 flex flex-col lg:flex-row lg:items-center gap-8 xl:gap-10 mt-10 lg:mt-0">
+                  <li className="flex items-center gap-2 group">
+                    <span>
+                      <Home className={`stroke-[#7AE36A] ${pathname === "/" ? "opacity-100" : "opacity-30"
+                        } group-hover:opacity-100`} strokeWidth={1} />
+                    </span>
                     <Link
-                      className="font-normal text-sm text-white"
+                      className={`font-normal text-sm ${pathname === "/" ? "text-[#7AE36A]" : "text-white"
+                        }`}
                       onClick={() => setIsMenuOpen(false)}
                       href="/"
                     >
                       صفحه اصلی
                     </Link>
                   </li>
-                  <li className="flex items-center gap-2">
+
+                  <li className="flex items-center gap-2 group">
                     <span>
-                      {!isMobile ? <CourseLightIcon /> : <CourseIcon />}
+                      <GraduationCap className={`stroke-[#7AE36A] ${pathname.startsWith("/courses") ? "opacity-100" : "opacity-30"
+                        } group-hover:opacity-100`} strokeWidth={1} />
                     </span>
                     <Link
-                      className="font-normal text-sm text-white"
+                      className={`font-normal text-sm ${pathname.startsWith("/courses") ? "text-[#7AE36A]" : "text-white"
+                        }`}
                       onClick={() => setIsMenuOpen(false)}
                       href="/courses"
                     >
                       دوره های ما
                     </Link>
                   </li>
-                  <li className="flex items-center gap-2">
+
+                  <li className="flex items-center gap-2 group">
                     <span>
-                      {!isMobile ? <AboutLightIcon /> : <AboutIcon />}
+                      <Pen className={`stroke-[#7AE36A] ${pathname.startsWith("/blog") ? "opacity-100" : "opacity-30"
+                        } group-hover:opacity-100`} strokeWidth={1} />
                     </span>
                     <Link
-                      className="font-normal text-sm text-white"
+                      className={`font-normal text-sm ${pathname.startsWith("/blog") ? "text-[#7AE36A]" : "text-white"
+                        }`}
+                      onClick={() => setIsMenuOpen(false)}
+                      href="/blog"
+                    >
+                      بلاگ
+                    </Link>
+                  </li>
+
+                  <li className="flex items-center gap-2 group">
+                    <span>
+                      <Users className={`stroke-[#7AE36A] ${pathname.startsWith("/about-us") ? "opacity-100" : "opacity-30"
+                        } group-hover:opacity-100`} strokeWidth={1} />
+                    </span>
+                    <Link
+                      className={`font-normal text-sm ${pathname.startsWith("/about-us") ? "text-[#7AE36A]" : "text-white"
+                        }`}
                       onClick={() => setIsMenuOpen(false)}
                       href="/about-us"
                     >
                       درباره ما
                     </Link>
                   </li>
-                  <li className="flex items-center gap-2">
+
+                  <li className="flex items-center gap-2 group">
                     <span>
-                      {!isMobile ? <ContactLightIcon /> : <ContactIcon />}
+                      <PhoneCall className={`stroke-[#7AE36A] ${pathname.startsWith("/contact-us") ? "opacity-100" : "opacity-30"
+                        } group-hover:opacity-100`} strokeWidth={1} />
                     </span>
                     <Link
-                      className="font-normal text-sm text-white"
+                      className={`font-normal text-sm ${pathname.startsWith("/contact-us") ? "text-[#7AE36A]" : "text-white"
+                        }`}
                       onClick={() => setIsMenuOpen(false)}
                       href="/contact-us"
                     >
@@ -183,11 +220,11 @@ const Header = () => {
             <div className="flex  items-center gap-3">
               <div className="lg:hidden">
                 {isMenuOpen ? (
-                  <span onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                  <span className="cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     <XIcon />
                   </span>
                 ) : (
-                  <span onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                  <span className="cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     <BarsIcon />
                   </span>
                 )}
