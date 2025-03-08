@@ -1,0 +1,8 @@
+module.exports = {
+    apps: [{
+      name: "my-react-app",
+      script: "npm",
+      args: "start",
+    }]
+  }
+  

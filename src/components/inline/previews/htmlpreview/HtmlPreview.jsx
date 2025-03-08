@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtmlHandler";
-import { HtmlSnippetDisplayDTO } from "../../../../api/types/dtos/InlineHtmlDtos";
 import { Play, Square, Edit, Terminal, RefreshCw, X } from "lucide-react";
 
 const HtmlPreview = ({ tutorialID }) => {
@@ -106,7 +105,7 @@ const HtmlPreview = ({ tutorialID }) => {
           <h2 className="text-gray-200 font-semibold text-sm" dir="rtl">
             اجرای برخط HTML
           </h2>
-          <Terminal className="w-5 h-5 text-emerald-400 scale-x-[-1]" />
+          <Terminal className="w-10 h-10 text-emerald-400 scale-x-[-1]" />
         </div>
       </div>
 

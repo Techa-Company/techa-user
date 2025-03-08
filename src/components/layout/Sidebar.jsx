@@ -20,7 +20,7 @@ const Sidebar = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://45.139.10.84:5000/api/Content`);
+                const response = await fetch(`https://api.techa.me/api/Content`);
                 const data = await response.json();
 
                 if (data.Data && Array.isArray(data.Data)) {
@@ -49,11 +49,10 @@ const Sidebar = () => {
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
-        document.body.style.overflow = isSidebarOpen ? 'auto' : 'hidden';
     };
 
     const handleScroll = () => {
-        if (window.scrollY > 20) {
+        if (window.scrollY > 50) {
             setTopPosition(56);
         } else {
             setTopPosition(72);
@@ -66,6 +65,10 @@ const Sidebar = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    useEffect(() => {
+        document.body.style.overflow = isSidebarOpen ? 'hidden' : 'auto';
+    }, [isSidebarOpen]);
 
     // گروه‌بندی داده‌ها بر اساس ParentId
     const groupedContents = (contents || []).reduce((acc, content) => {
@@ -101,7 +104,11 @@ const Sidebar = () => {
                                 <ul className='flex flex-col gap-7'>
                                     {content.children.map((child) => (
                                         <li className='relative' key={child.Id}>
-                                            <Link className='flex items-center justify-between' href={`/courses/${courseId}/${child.Id}`}>
+                                            <Link
+                                                className='flex items-center justify-between'
+                                                href={`/courses/${courseId}/${child.Id}`}
+                                                onClick={() => setIsSidebarOpen(false)} // این خط اضافه شد
+                                            >
                                                 <div className='flex items-center gap-3'>
                                                     <span className='w-5 h-5 flex justify-center items-center rounded-full bg-[#7AE36A]'>
                                                         <SmallCheckIcon />

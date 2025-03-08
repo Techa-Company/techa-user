@@ -1,3 +1,4 @@
+// components/Banner.js
 "use client"
 import { useState } from 'react';
 import Image from 'next/image';
@@ -7,7 +8,6 @@ const Banner = () => {
 
     const handleInputChange = (e) => {
         const value = e.target.value;
-
         if (/^\d*$/.test(value)) {
             if (value.startsWith('09') && value.length <= 11) {
                 setInputValue(value);
@@ -18,14 +18,20 @@ const Banner = () => {
     return (
         <div className="pt-40 pb-20 md:pb-10 bg-[#042A1B] h-fit relative">
             <div className="container mx-auto px-5 xl:px-20">
-                <div className="grid lg:grid-cols-2 gap-5 items-center">
+                <div className="grid lg:grid-cols-2 gap-x-20 gap-5 items-center">
                     <div>
-                        <h1 className="text-[#042A1B] text-4xl font-extrabold bg-[#F6DC66] py-3 px-5 rounded-xl w-fit ">آموزش و توسعه آنلاین</h1>
+                        <h1 className="text-[#042A1B] text-4xl font-extrabold bg-[#F6DC66] py-3 px-5 rounded-xl w-fit ">کارآموزی مهارت محور
+                        </h1>
                         <div className="pr-3 font-semibold text-white text-lg sm:text-[26px] mt-7 leading-[50px] w-fit">
-                            لذت آموزش و کدنویسی آنلاین در بستر وب <br />
-                            بدون نیاز به نصب هیچگونه نرم افزار جانبی
+                            تکا پیشران شما برای رسیدن به اکو سیستم استارت آپی و درآمدزایی
+                            ابزار رشد شما پلتفرمی است تعاملی که مربی با کمک محتواهای کاربردی شما را آماده راه اندازی یک پروژه واقعی و درآمدزا می کند.
                             <div className="relative w-full h-3 mt-2">
-                                <Image className="object-cover" src="/images/line.svg" layout="fill" alt="banner" />
+                                <Image
+                                    src="/images/line.svg"
+                                    fill
+                                    style={{ objectFit: "cover" }}
+                                    alt="banner"
+                                />
                             </div>
                         </div>
                         <div className="pr-3 mt-10 lg:mt-20 flex items-center">
@@ -48,7 +54,6 @@ const Banner = () => {
                             </div>
                             <div className="flex items-center gap-5">
                                 <div className="flex items-center gap-2">
-                                    {/* <h3 style={{ direction: "ltr" }} className="font-semibold text-[#042A1B] text-xl">+98</h3> */}
                                     <img src="/images/Iran.svg" alt="" />
                                 </div>
                                 <button className="py-3 px-5 bg-[#7AE36A] text-black text-xl font-semibold rounded-full">عضویت</button>
@@ -56,7 +61,12 @@ const Banner = () => {
                         </div>
                     </div>
                     <div className="relative w-full pb-[85%] mt-10 lg:mt-0">
-                        <Image src="/images/Pic.svg" layout="fill" objectFit="cover" alt="banner" />
+                        <Image
+                            src="/images/output-onlinegiftools.gif"
+                            fill
+                            style={{ objectFit: "cover" }}
+                            alt="banner"
+                        />
                     </div>
                 </div>
             </div>

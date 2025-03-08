@@ -1,18 +1,11 @@
 "use client"
 import DashboardCard from '../../components/account/Card'
 import { motion } from 'framer-motion'
-// import RecentActivities from '@/components/dashboard/RecentActivities'
-import { Activity, CheckSquare, Book, MessageSquare, Users, ShoppingCart, Ticket } from 'lucide-react';
+import CourseGrid from "../../components/account/CourseGrid"
+import { Activity, CheckSquare, Book, ShoppingCart, Ticket } from 'lucide-react';
 export default function DashboardPage() {
     return (
-        <div className="space-y-8">
-            {/* <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <UserProfile />
-            </motion.div> */}
+        <div className="space-y-8 px-5 sm:px-10">
             <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -55,13 +48,7 @@ export default function DashboardPage() {
                     trend={{ value: -5, icon: Activity }}
                 />
             </motion.div>
-            {/* <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-            >
-                <RecentActivities />
-            </motion.div> */}
+            <CourseGrid />
         </div>
     )
 }

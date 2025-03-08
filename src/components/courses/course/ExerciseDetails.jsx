@@ -24,7 +24,10 @@ const ExerciseDetails = ({ exercise }) => {
                 <p className="mt-2 leading-relaxed">{exercise.description}</p>
             </div>
 
-            <SubmissionForm exercise={exercise} />
+            <SubmissionForm exercise={{
+                id: "123", // ID تمرین
+                language: "html" // یا javascript/react
+            }} />
         </motion.div>
     );
 };

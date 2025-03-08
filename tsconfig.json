@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     "src/components/inline/previews/htmlpreview/HtmlPreview.jsx",
-    "src/components/inline/previews/javascriptpreview/JavascriptPreview.jsx"
+    "src/components/inline/previews/javascriptpreview/JavascriptPreview.jsx",
+    "src/components/inline/previews/reactpreview/ReactPreview.jsx"
   ],
   "exclude": [
     "node_modules"

@@ -56,8 +56,7 @@ const Poster = () => {
                                                     transition={{ duration: 1, delay: 0.5 }}
                                                     className="block"
                                                 >
-                                                    بوت کمپ فول استک
-                                                </motion.span>
+                                                    بوت کمپ توسعه و راهبری                                                 </motion.span>
                                             </span>{' '}
                                             <span className="inline-block overflow-hidden">
                                                 <motion.span
@@ -66,7 +65,7 @@ const Poster = () => {
                                                     transition={{ duration: 1, delay: 0.8 }}
                                                     className="block bg-[#7AE36A] text-[#042A1B] px-4 py-2 rounded-xl"
                                                 >
-                                                    فرانت‌اند
+                                                    پروژه
                                                 </motion.span>
                                             </span>
                                         </motion.h1>
@@ -80,15 +79,15 @@ const Poster = () => {
                                     transition={{ delay: 1.2 }}
                                     className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed"
                                 >
-                                    <div className="overflow-hidden">
+                                    {/* <div className="overflow-hidden">
                                         <motion.div
                                             initial={{ y: '100%' }}
                                             animate={isInView ? { y: 0 } : {}}
                                             transition={{ duration: 0.8, delay: 1.4 }}
                                         >
-                                            تبدیل شو به توسعه‌دهنده سطح Senior با پروژه‌های واقعی
+                                            یک دوره فشرده آموزش انواع مهارتهای موردنیاز کارآموز برای مدیریت یک پروژه استارت آپی واقعی برای افراد گزینش شده
                                         </motion.div>
-                                    </div>
+                                    </div> */}
                                     <div className="overflow-hidden">
                                         <motion.span
                                             initial={{ y: '100%' }}
@@ -96,7 +95,7 @@ const Poster = () => {
                                             transition={{ duration: 0.8, delay: 1.6 }}
                                             className="text-[#7AE36A] font-bold"
                                         >
-                                            بدون نیاز به پیش‌زمینه برنامه‌نویسی
+                                            یک دوره فشرده آموزش انواع مهارتهای موردنیاز کارآموز برای مدیریت یک پروژه استارت آپی واقعی برای افراد گزینش شده
                                         </motion.span>
                                     </div>
                                 </motion.div>
@@ -116,8 +115,7 @@ const Poster = () => {
                                         >
                                             <span className="relative z-10 flex items-center justify-center gap-2">
                                                 <Rocket className="w-5 h-5" />
-                                                مشاهده دوره
-                                            </span>
+                                                شرایط گزینش و جزئیات آموزش                                            </span>
                                         </motion.button>
                                     </Link>
 

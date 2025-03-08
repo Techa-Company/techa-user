@@ -478,21 +478,31 @@ pre {
 .shadow-glow {
   filter: drop-shadow(0 0 8px #7ae36a);
 }
-/* globals.css یا فایل CSS مربوطه */
-body {
-  background: linear-gradient(-45deg, #ffffff, #f0f0f0, #e0e0e0, #ffffff);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
+
+/* در فایل CSS全局 */
+.grid-rows-3 {
+  grid-template-rows: repeat(3, 1fr);
 }
 
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+@layer components {
+  .prose {
+    @apply text-emerald-700 leading-relaxed;
   }
-  50% {
-    background-position: 100% 50%;
+  .prose h2 {
+    @apply text-2xl font-bold text-emerald-800 mb-4;
   }
-  100% {
-    background-position: 0% 50%;
+  .prose ul {
+    @apply list-disc pr-4 space-y-2;
+  }
+  .prose li {
+    @apply pr-2;
   }
 }

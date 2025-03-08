@@ -1,8 +1,9 @@
-import "./globals.css";
+import "../styles/globals.css";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import { AuthProvider } from "../components/contexts/AuthContext";
 import 'react-loading-skeleton/dist/skeleton.css';
+import { Bounce, ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "پلتفرم آموزشی تکا | Techa",
@@ -18,7 +19,21 @@ export default function RootLayout({ children }) {
           <Header />
           <main className="mb-40 md:mb-60">{children}</main>
           <Footer />
+
         </AuthProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={true}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          transition={Bounce}
+        />
       </body>
     </html>
   );
