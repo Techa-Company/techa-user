@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import ReactAreaComponent from "../../react/ReactAreaComponent";
 
 interface InlineReactViewProps {
   tutorialID: number;
@@ -11,15 +12,12 @@ const InlineReactView: React.FC<InlineReactViewProps> = ({
   setVisibility,
 }) => {
   return (
-    <div className="relative bg-white rounded-lg shadow-lg w-full h-[90vh] p-6 mt-4 border border-gray-200">
+    <div className="relative bg-white rounded-lg shadow-lg p-6 mt-4 border border-gray-200">
       {/* Inline Content Header */}
       <h2 className="text-xl font-bold mb-4">React Tutorial {tutorialID}</h2>
 
       {/* Inline iframe for the interactive tutorial */}
-      <iframe
-        src={`/inline/react/${tutorialID}?isInline=true`}
-        className="w-full h-4/5 rounded-lg"
-      />
+      <ReactAreaComponent tutorialId={tutorialID} />
 
       {/* Reset Button to return to the initial view */}
       <button

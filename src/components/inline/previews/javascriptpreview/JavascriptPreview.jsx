@@ -1,6 +1,5 @@
 "use client";
 import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtmlHandler";
-import { JsSnippetDisplayDTO } from "../../../../api/types/dtos/InlineJsDtos";
 import MonacoEditor from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -219,11 +218,8 @@ const JavaScriptPreview = ({ tutorialID }) => {
             automaticLayout: true,
             glyphMargin: false,
             folding: false,
-            tabSize: 4,
-            lineDecorationsWidth: 0,
-            lineNumbersMinChars: 0,
-            renderLineHighlight: "none",
             tabSize: 8,
+            renderLineHighlight: "none",
             formatOnType: true,
             formatOnPaste: true,
           }}

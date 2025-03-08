@@ -5,8 +5,6 @@ import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtm
 import { HtmlSnippetDisplayDTO } from "../../../../api/types/dtos/InlineHtmlDtos";
 import { Play, Square, Edit, Terminal, RefreshCw, X } from "lucide-react";
 
-
-
 const HtmlPreview = ({ tutorialID }) => {
   const [code, setCode] = useState("<div>Loading...</div>");
   const [isEditable, setEditable] = useState(false);
@@ -128,9 +126,7 @@ const HtmlPreview = ({ tutorialID }) => {
             automaticLayout: true,
             glyphMargin: false,
             folding: false,
-            tabSize: 4,
-            lineDecorationsWidth: 0,
-            lineNumbersMinChars: 0,
+            tabSize: 8,
             renderLineHighlight: "none",
           }}
           theme="vs-dark"
@@ -160,9 +156,7 @@ const HtmlPreview = ({ tutorialID }) => {
   );
 };
 
-async function fetchHtmlSnippet(
-  tutorialID
-) {
+async function fetchHtmlSnippet(tutorialID) {
   const { data } = await GetHtmlSnippetByIdApiHandler(tutorialID);
   return data.IsSuccess ? data.Data : null;
 }

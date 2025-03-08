@@ -29,6 +29,7 @@
     "react-vertical-timeline-component": "^3.5.3",
     "swiper": "^11.2.1",
     "techa-user": "file:",
+    "worker-loader": "^3.0.8",
     "yup": "^1.6.1"
   },
   "devDependencies": {
