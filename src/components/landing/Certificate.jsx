@@ -42,7 +42,7 @@ const Certificate = () => {
                             </h2>
                         </motion.div>
 
-                        <motion.p
+                        <motion.div
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
@@ -54,7 +54,7 @@ const Certificate = () => {
                                 <li>قابل <span className="font-semibold text-emerald-600">اشتراک‌گذاری</span> در شبکه‌های اجتماعی</li>
                                 <li>مجهز به <span className="font-semibold text-emerald-600">کد پیگیری یکتا</span></li>
                             </ul>
-                        </motion.p>
+                        </motion.div>
 
                         <motion.div
                             initial={{ opacity: 0 }}
