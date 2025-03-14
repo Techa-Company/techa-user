@@ -6,6 +6,7 @@ import LastArticles from "../components/landing/LastArticles";
 import Projects from "../components/landing/Projects";
 import Poster from "../components/landing/Poster";
 import SampleEditor from "../components/landing/SampleEditors";
+import Certificate from "../components/landing/Certificate";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Banner />
       <Poster />
       <LastCourses />
+      <Certificate />
       <CourseBenefits />
       <Internship />
       <Projects />
