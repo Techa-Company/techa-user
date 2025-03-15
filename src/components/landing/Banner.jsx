@@ -3,18 +3,51 @@
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import Image from 'next/image';
+import { toast } from "react-toastify";
 
 const Banner = () => {
-    const [inputValue, setInputValue] = useState('09');
+    const [phone, setPhone] = useState('09')
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        if (/^\d*$/.test(value)) {
-            if (value.startsWith('09') && value.length <= 11) {
-                setInputValue(value);
-            }
+    const handleSubmit = async () => {
+        if (phone.length !== 11) {
+            toast.error('شماره موبایل باید 11 رقمی باشد')
+            return
         }
-    };
+
+        setIsSubmitting(true)
+        try {
+            const response = await fetch('http://45.139.10.84:7000/api/numbers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ phone })
+            })
+
+            const data = await response.json()
+            if (response.ok) {
+                toast.success('درخواست با موفقیت ثبت شد!')
+                setPhone('09')
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error('خطا در ارتباط با سرور')
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+
+    const handlePhoneChange = (e) => {
+        const value = e.target.value
+        const cleaned = value.replace(/\D/g, '').slice(0, 11)
+
+        if (cleaned.startsWith('09')) {
+            setPhone(cleaned)
+        }
+    }
 
     const phrases = [
         "اعتبار بگیر",
@@ -149,15 +182,20 @@ const Banner = () => {
                                     style={{ direction: "ltr" }}
                                     className="max-w-40 sm:max-w-full w-full text-xl font-semibold text-black focus:outline-none"
                                     type="text"
-                                    value={inputValue}
-                                    onChange={handleInputChange}
+                                    value={phone}
+                                    onChange={handlePhoneChange}
                                 />
                             </div>
                             <div className="flex items-center gap-5">
                                 <div className="flex items-center gap-2">
                                     <img src="/images/Iran.svg" alt="" />
                                 </div>
-                                <button className="py-3 px-5 bg-[#7AE36A] text-black text-xl font-semibold rounded-full">عضویت</button>
+                                <button
+                                    onClick={handleSubmit}
+                                    className="py-3 px-5 bg-[#7AE36A] text-black text-xl font-semibold rounded-full">
+                                    {isSubmitting ? 'در حال ثبت...' : 'عضویت'}
+
+                                </button>
                             </div>
                         </div>
                     </div>

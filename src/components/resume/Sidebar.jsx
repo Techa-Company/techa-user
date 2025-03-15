@@ -2,7 +2,6 @@
 import {
     Linkedin,
     Github,
-    Check,
     Mail,
     Download,
     Languages,
@@ -441,7 +440,7 @@ export default function Sidebar() {
             </div>
 
             {/* Download Button */}
-            <motion.div
+            {/* <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="mt-5"
@@ -450,7 +449,7 @@ export default function Sidebar() {
                     <Download className="w-5 h-5" />
                     دانلود رزومه
                 </button>
-            </motion.div>
+            </motion.div> */}
 
             {isQrVisible && <QrModal />}
         </div>
