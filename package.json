@@ -20,6 +20,7 @@
     "monaco-tailwindcss": "^0.6.1",
     "next": "14.2.0",
     "nuqs": "^2.3.1",
+    "qrcode.react": "^4.2.0",
     "react": "^18",
     "react-code-blocks": "^0.1.6",
     "react-cookie": "^7.2.2",

@@ -17,6 +17,7 @@ const SectionWrapper = ({ children, delay = 0 }) => (
 
 const SkillItem = ({ name, level, icon, isVerified, experience }) => (
     <motion.div
+        dir='ltr'
         whileHover={{ y: -5 }}
         className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 relative group transition-all duration-300"
     >
@@ -25,7 +26,7 @@ const SkillItem = ({ name, level, icon, isVerified, experience }) => (
             <div className="flex items-center gap-3 flex-1">
                 {icon && (
                     <div className="bg-green-50 rounded-xl mt-1">
-                        <img src="/images/teacher.jpeg" className='w-14' alt="" />
+                        <img src={icon} className='w-14 h-14' alt="" />
                     </div>
                 )}
 
@@ -176,7 +177,7 @@ const ExperienceItem = ({ position, company, year, description, techStack }) => 
             y: -2,
             transition: { duration: 0.2 }
         }}
-        className="relative pl-10 border-l-2 border-slate-100 group bg-white p-8 rounded-2xl shadow-[0_4px_24px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_-4px_rgba(0,0,0,0.08)] transition-all duration-300"
+        className="relative pl-10 border-l-2 border-slate-100 group bg-white p-5 rounded-2xl shadow-[0_4px_24px_-2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_-4px_rgba(0,0,0,0.08)] transition-all duration-300"
     >
         {/* Timeline Indicator */}
         <div className="absolute w-3.5 h-3.5 bg-white border-2 border-green-400 rounded-full -left-[9px] top-6 shadow-[0_2px_8px_rgba(99,102,241,0.2)] transition-all group-hover:border-green-500 group-hover:scale-110" />
@@ -230,14 +231,14 @@ export default function MainContent() {
     const [selectedCert, setSelectedCert] = useState(null);
 
     return (
-        <div className="w-full p-6 lg:p-12 bg-gray-50">
+        <div className="w-full p-5  bg-gray-50">
             {/* بخش مهارت‌ها */}
             <SectionWrapper>
                 <div className="flex items-center gap-3 mb-8">
                     <Code className="w-8 h-8 text-green-500" />
                     <h2 className="text-3xl font-bold">مهارت‌های فنی</h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
                     {sampleData.skills.map((skill, index) => (
                         <SkillItem
                             key={index}
@@ -253,7 +254,7 @@ export default function MainContent() {
                     <Briefcase className="w-8 h-8 text-green-500" />
                     <h2 className="text-3xl font-bold">تجربه‌های حرفه‌ای</h2>
                 </div>
-                <div className="space-y-6 grid grid-cols-2 gap-10">
+                <div className="space-y-6 grid xl:grid-cols-2 2xl:grid-cols-3 gap-5">
                     {sampleData.experiences.map((exp, index) => (
                         <ExperienceItem key={index} {...exp} />
                     ))}
@@ -320,7 +321,7 @@ export default function MainContent() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
                     {sampleData.projects.map((project, index) => (
                         <motion.div
                             key={index}
@@ -423,7 +424,7 @@ export default function MainContent() {
             </SectionWrapper>
 
             <SectionWrapper delay={0.2}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className="py-16">
                     {/* Title Section */}
                     <div className="text-center mb-12">
                         <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -433,7 +434,7 @@ export default function MainContent() {
                     </div>
 
                     {/* Projects Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
                         {sampleData.projects.map((project, index) => (
                             <motion.div
                                 key={index}
@@ -502,7 +503,7 @@ export default function MainContent() {
             </SectionWrapper>
 
             <SectionWrapper delay={0.3}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className=" py-16">
                     {/* Title Section */}
                     <div className="text-center mb-12">
                         <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -514,7 +515,7 @@ export default function MainContent() {
                     </div>
 
                     {/* Certificates Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
                         {sampleData.certificatesData.map((cert, index) => (
                             <motion.div
                                 key={index}
@@ -722,118 +723,167 @@ const sampleData = {
     ],
     skills: [
         {
-            name: 'HTML/CSS',
+            name: 'HTML',
             level: 95,
-            icon: '/images/teacher.jpeg',
+            icon: '/images/icons/html.png',
             isVerified: true,
-            experience: '۵+ سال'
+            experience: '4+ سال'
+        },
+        {
+            name: 'CSS',
+            level: 95,
+            icon: '/images/icons/css.png',
+            isVerified: true,
+            experience: '4+ سال'
+        },
+        {
+            name: 'TailwindCSS',
+            level: 95,
+            icon: '/images/icons/tailwind.png',
+            isVerified: true,
+            experience: '3+ سال'
         },
         {
             name: 'JavaScript',
             level: 90,
-            icon: '/images/teacher.jpeg',
+            icon: '/images/icons/js.png',
             isVerified: false,
-            experience: '۳+ سال'
+            experience: '4+ سال'
         },
         {
             name: 'React',
             level: 92,
-            icon: '/images/teacher.jpeg',
+            icon: '/images/icons/react.png',
             isVerified: true,
             experience: '۴+ سال'
         },
         {
             name: 'Next.js',
             level: 88,
-            icon: '/images/teacher.jpeg',
+            icon: '/images/icons/next.png',
             isVerified: true,
             experience: '۳+ سال'
         },
         {
             name: 'TypeScript',
             level: 85,
-            icon: '/images/teacher.jpeg',
+            icon: '/images/icons/ts.png',
             isVerified: false,
             experience: '۲+ سال'
         },
         {
             name: 'Redux',
             level: 90,
-            icon: '/images/teacher.jpeg',
+            icon: '/images/icons/redux.png',
             isVerified: true,
             experience: '۴+ سال'
         },
         {
             name: 'Tailwind CSS',
             level: 87,
-            icon: '/images/teacher.jpeg',
+            icon: '/images/icons/bootstrap.png',
             isVerified: true,
             experience: '۳+ سال'
         },
         {
             name: 'Vue.js',
             level: 84,
-            icon: '/images/teacher.jpeg',
+            icon: '/images/icons/vue.png',
             isVerified: false,
             experience: '۲+ سال'
         },
-        // {
-        //     name: 'Responsive Design',
-        //     level: 89,
-        //     icon: '/images/teacher.jpeg',
-        //     isVerified: true,
-        //     experience: '۳+ سال'
-        // },
-        // {
-        //     name: 'Webpack',
-        //     level: 86,
-        //     icon: '/images/teacher.jpeg',
-        //     isVerified: true,
-        //     experience: '۴+ سال'
-        // }
+        {
+            name: 'React Query',
+            level: 89,
+            icon: '/images/icons/reactquery.png',
+            isVerified: true,
+            experience: '۳+ سال'
+        },
+        {
+            name: 'NodeJS',
+            level: 86,
+            icon: '/images/icons/node-js.png',
+            isVerified: true,
+            experience: '۴+ سال'
+        },
+        {
+            name: 'MySQL',
+            level: 90,
+            icon: '/images/icons/mysql.png',
+            isVerified: true,
+            experience: '۴+ سال'
+        },
+        {
+            name: 'MongoDB',
+            level: 87,
+            icon: '/images/icons/mongo.png',
+            isVerified: true,
+            experience: '۳+ سال'
+        },
+        {
+            name: 'C++',
+            level: 84,
+            icon: '/images/icons/cpp.png',
+            isVerified: false,
+            experience: '۲+ سال'
+        },
+        {
+            name: 'Linux',
+            level: 89,
+            icon: '/images/icons/linux.png',
+            isVerified: true,
+            experience: '۳+ سال'
+        },
     ]
     ,
     experiences: [
         {
-            position: "مهندس ارشد فرانت‌اند",
-            company: "شرکت فناوری نوین",
-            year: "۱۴۰۰-۱۴۰۲",
+            position: "توسعه دهنده فرانت اند",
+            company: "شرکت تکا",
+            year: "1402 - اکنون",
             description: "توسعه و راهبری پلتفرم مدیریت محتوای سازمانی با استفاده از آخرین تکنولوژی‌های وب",
-            techStack: ["React", "TypeScript", "Next.js", "GraphQL"]
+            techStack: [
+                "HTML",
+                "CSS",
+                "Tailwind CSS",
+                "JavaScript (JS)",
+                "React",
+                "Next.js",
+                "TypeScript (TS)",
+                "SQL",
+                "shadcn/ui",
+                "Material-UI (MUI)",
+                "Redux",
+                "Git"
+            ]
         },
         {
-            position: "توسعه‌دهنده فول استک",
-            company: "استارت‌آپ پرداخت الکترونیک",
-            year: "۱۳۹۸-۱۴۰۰",
+            position: "توسعه دهنده فرانت اند",
+            company: "شرکت برازمان",
+            year: "1403 - 1402",
             description: "طراحی و پیاده‌سازی سامانه پرداخت آنلاین با قابلیت مقیاس‌پذیری بالا",
-            techStack: ["Node.js", "NestJS", "PostgreSQL", "Docker"]
+            techStack: [
+                "HTML",
+                "CSS",
+                "Tailwind CSS",
+                "JavaScript (JS)",
+                "React",
+                "Next.js",
+                "TypeScript (TS)",
+                "shadcn/ui",
+                "Material-UI (MUI)",
+                "Redux",
+                "Vue",
+                "Vuex",
+                "Git"
+            ]
         },
         {
-            position: "مشاور فنی",
-            company: "شرکت راهکارهای هوشمند",
-            year: "۱۳۹۶-۱۳۹۸",
+            position: "کارآموزی فرانت اند",
+            company: "شرکت آدم برفی",
+            year: "1401-1401",
             description: "مشاوره و راهبری پیاده‌سازی سیستم‌های سازمانی مبتنی بر ابر",
-            techStack: ["AWS", "Microservices", "Kubernetes", "MongoDB"]
-        }
-    ],
-    projects: [
-        {
-            title: 'سیستم تحلیل پیشرفته',
-            role: 'معمار اصلی',
-            tech: ['Python', 'TensorFlow', 'Kubernetes', 'Apache Kafka'],
-            image: '/images/blog-1.png',
-            link: '#',
-            duration: '18 ماه',
-            description: 'سیستم تحلیل بلادرنگ داده‌های صنعتی با قابلیت پردازش 1M رکورد در ثانیه'
-        },
-        {
-            title: 'پلتفرم اینترنت اشیا',
-            role: 'توسعه دهنده اصلی',
-            tech: ['React', 'Node.js', 'MQTT', 'MongoDB'],
-            image: '/images/blog-1.png',
-            link: '#',
-            duration: '12 ماه',
-            description: 'پلتفرم مدیریت دستگاه‌های هوشمند با پشتیبانی از 50k دستگاه همزمان'
+            techStack: ["HTML", "CSS", "SASS", "Bootsrap", "JavaScript", "Git"]
         }
     ],
     achievements: [
@@ -864,13 +914,13 @@ const sampleData = {
     ],
     projects: [
         {
-            title: "سیستم مدیریت هوشمند انرژی",
+            title: "پلتفرم آموزشی تکا",
             image: "/images/blog-1.png",
-            role: "معمار اصلی سیستم",
-            description: "طراحی و پیاده‌سازی یک پلتفرم جامع برای مدیریت هوشمند مصرف انرژی در مقیاس صنعتی با قابلیت پیش‌بینی و بهینه‌سازی مصرف.",
-            tech: ["IoT", "Machine Learning", "Node.js", "React", "TensorFlow"],
-            duration: "۸ ماه",
-            link: "#",
+            role: "توسعه دهنده فرانت اند و تولید محتوا",
+            description: "طراحی و پیاده‌سازی تکا که مجموعه ای در بدنه دانشگاه، با هدف توانمند سازی دانشجویان برای ورود به بازار کار و درآمدزایی مستقل، از طریق آموزش چند رسانه ای و کارآموزی مهارت محور است.",
+            tech: ["HTML", "CSS", "Tailwind", "JavaScript", "React", "Redux", "Next.js", "Git"],
+            duration: "13 ماه",
+            link: "techa.me",
             awards: ["جایزه بهترین پروژه IoT 2023", "رتبه اول نوآوری انرژی"]
         },
         {
