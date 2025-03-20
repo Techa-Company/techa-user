@@ -4,6 +4,7 @@ import Footer from "../components/layout/Footer";
 import { AuthProvider } from "../components/contexts/AuthContext";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Bounce, ToastContainer } from "react-toastify";
+import 'swiper/css/pagination'
 
 export const metadata = {
   title: "پلتفرم آموزشی تکا | Techa",

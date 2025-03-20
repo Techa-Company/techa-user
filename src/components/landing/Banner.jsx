@@ -132,7 +132,7 @@ const Banner = () => {
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="text-4xl font-extrabold text-[#042A1B] bg-[#F6DC66] px-6 py-4 rounded-xl"
+                                    className="text-xl sm:text-4xl font-extrabold text-[#042A1B] bg-[#F6DC66] px-6 py-4 rounded-xl min-h-[60px] sm:min-h-[72px]"
                                 >
                                     {currentText}
                                     <motion.span
