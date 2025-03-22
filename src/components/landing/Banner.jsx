@@ -199,13 +199,25 @@ const Banner = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="relative w-full pb-[110%] mt-10 lg:mt-0">
-                        <Image
-                            src="/images/aster.png"
-                            fill
-                            style={{ objectFit: "cover" }}
-                            alt="banner"
-                        />
+                    <div className="relative w-full pb-[105%] mt-10 lg:mt-0 overflow-hidden">
+                        <motion.div
+                            className="absolute inset-0"
+                            animate={{
+                                rotate: [0, 20, -10, 20, 0], // چرخش ساعتگرد و پادساعتگرد
+                            }}
+                            transition={{
+                                duration: 10, // مدت زمان انیمیشن
+                                repeat: Infinity, // تکرار بی‌نهایت
+                                ease: "easeInOut", // نوع انیمیشن
+                            }}
+                        >
+                            <Image
+                                src="/images/aster.png"
+                                fill
+                                style={{ objectFit: "cover" }}
+                                alt="banner"
+                            />
+                        </motion.div>
                     </div>
                 </div>
             </div>
