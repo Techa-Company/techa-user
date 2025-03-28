@@ -1,6 +1,7 @@
 "use client"
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Code, BookOpen, GraduationCap, Layout, Terminal, Briefcase, Rocket } from 'lucide-react'
+import { RiHtml5Fill, RiNodejsFill, RiReactjsFill, RiTailwindCssFill, RiTeamFill, RiUser2Fill } from "react-icons/ri";
 import { useRef } from 'react'
 import { cn } from '../../lib/utils'
 import Link from 'next/link'
@@ -21,7 +22,7 @@ const stages = [
     {
         id: 1,
         title: 'آموزش HTML و CSS',
-        icon: Layout,
+        icon: RiHtml5Fill,
         payment: '200,000 تومان',
         // credit: '400,000 تومان',
         summary: 'CSS Grid - انیمیشن‌های پیشرفته - معماری BEM - SASS/SCSS',
@@ -32,7 +33,7 @@ const stages = [
     {
         id: 2,
         title: 'آموزش JS',
-        icon: Terminal,
+        icon: RiNodejsFill,
         payment: '400,000 تومان',
         // credit: '600,000 تومان',
         summary: 'ES6+ - DOM Manipulation - Fetch API - Local Storage',
@@ -43,7 +44,7 @@ const stages = [
     {
         id: 3,
         title: 'آموزش تیلیویند',
-        icon: BookOpen,
+        icon: RiTailwindCssFill,
         payment: '600,000 تومان',
         // credit: '800,000 تومان',
         summary: 'Utility-First - پیکربندی سفارشی - Dark Mode - پلاگین‌ها',
@@ -54,7 +55,7 @@ const stages = [
     {
         id: 4,
         title: 'آموزش React',
-        icon: Rocket,
+        icon: RiReactjsFill,
         payment: '800,000 تومان',
         // credit: '1,200,000 تومان',
         summary: 'Hooks - Context API - React Router - تست با Jest',
@@ -65,7 +66,7 @@ const stages = [
     {
         id: 5,
         title: 'کارآموزی پروژه محور',
-        icon: Briefcase,
+        icon: RiTeamFill,
         payment: '1,200,000 تومان',
         // credit: '1,400,000 تومان',
         summary: 'پلتفرم توسعه نرم افزار - SQL',
@@ -76,7 +77,7 @@ const stages = [
     {
         id: 6,
         title: 'دوره فریلنسری',
-        icon: GraduationCap,
+        icon: RiUser2Fill,
         payment: '1,400,000 تومان',
         // credit: '1,500,000 تومان',
         summary: 'ارائه هاست - فضای توسعه - اجرای پروژه',

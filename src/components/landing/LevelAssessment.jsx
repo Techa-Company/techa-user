@@ -1,160 +1,144 @@
 "use client"
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { BookOpen, Map, ClipboardCheck, Rocket, Sparkles } from 'lucide-react';
-import { useRef } from 'react';
+import { motion } from "framer-motion";
+import { BookOpen, BarChart, Map, Rocket } from "lucide-react";
+import Link from "next/link";
 
-export default function LevelAssessment() {
-    const ref = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start start", "end start"]
-    });
-
-    const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-
-    const staggerVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: (i) => ({
-            opacity: 1,
-            y: 0,
-            transition: { delay: i * 0.2 }
-        })
-    };
-
+const LevelAssessment = () => {
     return (
-        <section
-            ref={ref}
-            className="relative overflow-hidden bg-gradient-to-br from-emerald-50/95 to-green-50/95 py-24 mt-20"
-        >
-            {/* Animated Background Elements */}
-            <motion.div
-                style={{ y: yBg }}
-                className="absolute inset-0 opacity-15"
-            >
-                <div className="h-full w-full bg-[url('/svg/topography.svg')] bg-repeat opacity-20 mix-blend-overlay" />
-            </motion.div>
+        <div className="min-h-[600px] bg-white relative overflow-hidden">
+            {/* Decorative Waves */}
+            <div className="absolute inset-0 opacity-10">
+                <svg viewBox="0 0 1440 600" className="w-full h-full">
+                    <path
+                        fill="#10b981"
+                        d="M0 256l48 32c48 32 144 96 240 90.7 96-5.7 192-79.7 288-101.4 96-21.3 192 10.7 288 48 96 37.7 192 79.7 288 69.7 96-10 192-74 240-106.7l48-32V0H0z"
+                        className="animate-[wave_10s_linear_infinite]"
+                    />
+                </svg>
+            </div>
 
-            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Main Content */}
+            <div className="container mx-auto px-4 py-20 relative z-10">
+                {/* Header Section */}
                 <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    className="text-center mb-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center mb-20"
                 >
                     <motion.div
-                        variants={staggerVariants}
-                        custom={0}
-                        className="inline-block mb-4"
+                        whileHover={{ scale: 1.05 }}
+                        className="inline-flex items-center gap-3 bg-emerald-100 text-emerald-600 px-6 py-3 rounded-full mb-8"
                     >
-                        <div className="bg-emerald-100 px-6 py-2 rounded-full inline-flex items-center gap-2">
-                            <Sparkles className="w-5 h-5 text-emerald-600" />
-                            <span className="font-bold text-emerald-700">یادگیری هوشمندانه</span>
-                        </div>
+                        <Rocket className="w-5 h-5" />
+                        <span className="font-medium">یادگیری هوشمندانه شروع کن</span>
                     </motion.div>
 
-                    <motion.h1
-                        variants={staggerVariants}
-                        custom={1}
-                        className="text-5xl md:text-6xl font-black text-emerald-900 mb-8 leading-tight"
-                    >
-                        <span className="bg-gradient-to-r from-emerald-600 to-green-500 bg-clip-text text-transparent">
-                            نقشه راه یادگیری
-                        </span>
-                        <br />
-                        متناسب با سطح واقعی شما
-                    </motion.h1>
+                    <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
+                        <span className="text-emerald-500">مسیر یادگیری</span> اختصاصی شما
+                    </h1>
+                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                        با تحلیل سطح دانشتون، بهترین و کوتاهترین مسیر رو براتون طراحی میکنیم
+                    </p>
                 </motion.div>
 
-                {/* Interactive Grid */}
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    {/* Feature List */}
+                {/* Steps Grid */}
+                <div className="grid md:grid-cols-3 gap-8 mb-20">
+                    {/* Step 1 */}
                     <motion.div
-                        className="space-y-8"
-                        initial="hidden"
-                        animate="visible"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
                     >
-                        {[
-                            {
-                                icon: ClipboardCheck,
-                                title: "تشخیص سطح دقیق",
-                                text: "با الگوریتم هوشمند مبتنی بر هوش مصنوعی"
-                            },
-                            {
-                                icon: Map,
-                                title: "مسیر شخصی‌سازی شده",
-                                text: "بر اساس نقاط قوت و ضعف شما"
-                            }
-                        ].map((item, i) => (
-                            <motion.div
-                                key={i}
-                                variants={staggerVariants}
-                                custom={i + 2}
-                                className="p-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-emerald-100/50 transition-shadow"
-                                whileHover={{ scale: 1.02 }}
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-emerald-100 rounded-lg">
-                                        <item.icon className="w-8 h-8 text-emerald-600" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-xl font-bold text-emerald-900 mb-2">
-                                            {item.title}
-                                        </h3>
-                                        <p className="text-gray-600">{item.text}</p>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
+                        <div className="w-16 h-16 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                            <BookOpen className="w-8 h-8 text-emerald-600" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-800 mb-4">آزمون تعیین سطح</h3>
+                        <p className="text-gray-600">
+                            آزمون تعاملی و هوشمند با سوالات تطبیقی
+                        </p>
                     </motion.div>
 
-                    {/* CTA Card */}
+                    {/* Step 2 */}
                     <motion.div
-                        initial={{ scale: 0.95, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ type: "spring", stiffness: 100 }}
-                        className="relative group"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.4 }}
+                        className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
                     >
-                        <div className="absolute inset-0 bg-emerald-500/10 rounded-2xl transform group-hover:rotate-1 transition duration-300" />
-                        <div className="relative bg-white rounded-2xl p-8 shadow-2xl shadow-emerald-100/50 border border-emerald-100/80">
-                            <h2 className="text-3xl font-black text-emerald-900 mb-6">
-                                آماده جهش هستی؟
-                                <span className="block text-2xl mt-2 text-emerald-600">شروع کن، رایگانه!</span>
-                            </h2>
-
-                            <motion.button
-                                whileHover={{
-                                    scale: 1.05,
-                                    background: "linear-gradient(45deg, #059669, #10b981)"
-                                }}
-                                whileTap={{ scale: 0.95 }}
-                                style={{
-                                    background: "linear-gradient(45deg, #059669, #10b981)"
-                                }}
-                                className="w-full text-white py-4 px-8 rounded-xl font-bold flex items-center justify-center gap-3 relative overflow-hidden"
-                            >
-                                <span className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
-                                <Rocket className="w-6 h-6 animate-bounce" />
-                                <span className="relative">شروع آزمون هوشمند</span>
-                            </motion.button>
-
-                            <div className="mt-6 flex items-center gap-3 text-emerald-700">
-                                <BookOpen className="w-5 h-5" />
-                                <span className="font-medium">+۱۰۰۰ ساعت محتوای آموزشی رایگان</span>
-                            </div>
+                        <div className="w-16 h-16 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                            <BarChart className="w-8 h-8 text-emerald-600" />
                         </div>
+                        <h3 className="text-2xl font-bold text-gray-800 mb-4">تحلیل پیشرفته</h3>
+                        <p className="text-gray-600">
+                            تشخیص دقیق نقاط قوت و زمینههای پیشرفت
+                        </p>
+                    </motion.div>
+
+                    {/* Step 3 */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.6 }}
+                        className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
+                    >
+                        <div className="w-16 h-16 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
+                            <Map className="w-8 h-8 text-emerald-600" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-800 mb-4">نقشه راه شخصی</h3>
+                        <p className="text-gray-600">
+                            برنامه آموزشی دقیق با منابع یادگیری بهینه
+                        </p>
                     </motion.div>
                 </div>
 
-                {/* Animated Progress Bar */}
+                {/* CTA Section */}
                 <motion.div
-                    className="mt-16 h-2 bg-emerald-100 rounded-full overflow-hidden"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 1.5, ease: "circOut" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center"
                 >
-                    <div className="h-full w-full bg-gradient-to-r from-emerald-400 to-green-400 origin-left scale-x-0 animate-progress" />
+                    <Link
+                        href=""
+                    >
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-emerald-500 text-white px-12 py-4 rounded-full text-lg font-medium hover:bg-emerald-600 transition-colors flex items-center gap-3 mx-auto"
+                        >
+                            شروع آزمون رایگان
+                            <span className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            </span>
+                        </motion.button>
+                    </ Link >
                 </motion.div>
             </div>
-        </section>
+
+            {/* Animated Dots Pattern */}
+            <div className="absolute inset-0 pointer-events-none">
+                {[...Array(30)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute w-2 h-2 bg-emerald-100 rounded-full"
+                        style={{
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`
+                        }}
+                        animate={{
+                            scale: [0.5, 1, 0.5],
+                            opacity: [0.3, 0.6, 0.3]
+                        }}
+                        transition={{
+                            duration: 2 + Math.random() * 3,
+                            repeat: Infinity
+                        }}
+                    />
+                ))}
+            </div>
+        </div>
     );
-}
+};
+
+export default LevelAssessment;
