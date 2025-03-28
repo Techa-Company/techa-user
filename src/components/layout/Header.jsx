@@ -3,16 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import {
-  AboutIcon,
-  AboutLightIcon,
   BarsIcon,
-  ContactIcon,
-  ContactLightIcon,
   ContactUSIcon,
-  CourseIcon,
-  CourseLightIcon,
-  HomeIcon,
-  HomeLightIcon,
   XIcon,
 } from "../Icons/Icons";
 import { usePathname } from "next/navigation";
@@ -24,24 +16,23 @@ import {
   Bookmark,
   Settings,
   Home,
-  BookOpen,
-  FileText,
-  Info,
-  Mail,
   GraduationCap,
   Pen,
   Users,
   PhoneCall,
+  ChevronDown,
+  Link2,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
 const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { user, logout } = useAuth();
-  const isLoggedIn = user ? true : false; // حالت لاگین
-  const [isProfileOpen, setIsProfileOpen] = useState(false); // حالت باز بودن dropdown پروفایل
+  const isLoggedIn = user ? true : false;
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -63,6 +54,9 @@ const Header = () => {
       if (isProfileOpen && !event.target.closest(".profile-container")) {
         setIsProfileOpen(false);
       }
+      if (isSubMenuOpen && !event.target.closest(".submenu-container")) {
+        setIsSubMenuOpen(false);
+      }
     };
 
     handleResize();
@@ -75,7 +69,7 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [isMenuOpen, isProfileOpen]);
+  }, [isMenuOpen, isProfileOpen, isSubMenuOpen]);
 
   useEffect(() => {
     if (isMenuOpen || isProfileOpen) {
@@ -83,12 +77,7 @@ const Header = () => {
     } else {
       document.body.style.overflow = "auto";
     }
-  }, [isMenuOpen, isProfileOpen]);
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setIsProfileOpen(false);
-  };
+  }, [isMenuOpen, isProfileOpen, isSubMenuOpen]);
 
   const handleLogout = () => {
     logout();
@@ -101,7 +90,7 @@ const Header = () => {
           }`}
       ></div>
       <header
-        className={`fixed w-full z-50  bg-[#042A1B] ${scrolled ? "shadow-2xl py-3" : "py-5"} transition-all duration-200`}
+        className={`fixed w-full z-50 bg-[#042A1B] ${scrolled ? "shadow-2xl py-3" : "py-5"} transition-all duration-200`}
       >
         <div className="container mx-auto px-5 lg:px-0 xl:px-5 2xl:px-20">
           <nav className="flex justify-between items-center">
@@ -174,20 +163,130 @@ const Header = () => {
                     </Link>
                   </li>
 
-                  <li className="flex items-center gap-2 group">
-                    <span>
-                      <Users className={`stroke-[#7AE36A] ${pathname.startsWith("/about-us") ? "opacity-100" : "opacity-30"
-                        } group-hover:opacity-100`} strokeWidth={1} />
-                    </span>
-                    <Link
-                      className={`font-normal text-sm ${pathname.startsWith("/about-us") ? "text-[#7AE36A]" : "text-white"
-                        }`}
-                      onClick={() => setIsMenuOpen(false)}
-                      href="/about-us"
+                  {/* لینک های مفید با Dropdown */}
+                  <li
+                    className="group relative submenu-container"
+                    onMouseEnter={() => !isMobile && setIsSubMenuOpen(true)}
+                    onMouseLeave={() => !isMobile && setIsSubMenuOpen(false)}
+                  >
+                    <button
+                      className={`flex items-center gap-2 font-normal text-sm ${pathname.startsWith("/useful-links") ? "text-[#7AE36A]" : "text-white"}`}
+                      onClick={() => setIsSubMenuOpen(!isSubMenuOpen)}
                     >
-                      درباره ما
-                    </Link>
+                      <span>
+                        <Link2 className={`stroke-[#7AE36A] opacity-30 group-hover:opacity-100`} strokeWidth={1} />
+                      </span>
+                      لینک های مفید
+                      <ChevronDown className={`w-4 h-4 transition-transform ${isSubMenuOpen ? "rotate-180" : ""}`} />
+                    </button>
+
+                    {/* Desktop Dropdown */}
+                    <AnimatePresence>
+                      {isSubMenuOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          className="absolute top-full right-0 mt-2 w-56 bg-[#042A1B] border-4 border-[#7AE36A]/30 rounded-xl shadow-2xl backdrop-blur-sm lg:block hidden"
+                        >
+                          <ul className="py-2">
+                            <li>
+                              <Link
+                                href="/about-us"
+                                className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors"
+                                onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                              >
+                                <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                                درباره ما
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/faqs"
+                                className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors"
+                                onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                              >
+                                <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                                سوالات متداول
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="#projects"
+                                className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors"
+                                onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                              >
+                                <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                                پروژه های فعال
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/term"
+                                className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors"
+                                onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                              >
+                                <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                                قوانین و مقررات
+                              </Link>
+                            </li>
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Mobile Dropdown */}
+                    {isMobile && isSubMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="lg:hidden pr-7 mt-2 border-r-4 border-[#7AE36A]/30"
+                      >
+                        <ul className="space-y-4 py-2">
+                          <li>
+                            <Link
+                              href="/about-us"
+                              className="text-white flex items-center gap-3"
+                              onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                            >
+                              <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                              درباره ما
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/faqs"
+                              className="text-white flex items-center gap-3"
+                              onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                            >
+                              <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                              سوالات متداول                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="#projects"
+                              className="text-white flex items-center gap-3"
+                              onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                            >
+                              <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                              پروژه های فعال                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/term"
+                              className="text-white flex items-center gap-3"
+                              onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                            >
+                              <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                              قوانین و مقررات                            </Link>
+                          </li>
+                        </ul>
+                      </motion.div>
+                    )}
                   </li>
+
+
 
                   <li className="flex items-center gap-2 group">
                     <span>
@@ -217,7 +316,7 @@ const Header = () => {
                 </div>
               </div>
             </div>
-            <div className="flex  items-center gap-3">
+            <div className="flex items-center gap-3">
               <div className="lg:hidden">
                 {isMenuOpen ? (
                   <span className="cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -253,7 +352,7 @@ const Header = () => {
                         </span>
                         <div className="relative w-12 h-12">
                           <Image
-                            src="/images/teacher.jpeg" // مسیر تصویر آواتار
+                            src="/images/teacher.jpeg"
                             alt="User Avatar"
                             fill
                             className="rounded-full object-cover border-2 border-[#7AE36A]"
@@ -293,7 +392,7 @@ const Header = () => {
                             <ul className="py-2">
                               <li>
                                 <Link
-                                  href="/account" // لینک مربوط به پروفایل کاربری
+                                  href="/account"
                                   className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
                                 >
                                   <User className="w-5 h-5 text-[#7AE36A]" />
@@ -302,7 +401,7 @@ const Header = () => {
                               </li>
                               <li>
                                 <Link
-                                  href="/my-courses" // لینک مربوط به دوره‌های من
+                                  href="/my-courses"
                                   className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
                                 >
                                   <Bookmark className="w-5 h-5 text-[#7AE36A]" />
@@ -311,7 +410,7 @@ const Header = () => {
                               </li>
                               <li>
                                 <Link
-                                  href="/settings" // لینک مربوط به تنظیمات
+                                  href="/settings"
                                   className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
                                 >
                                   <Settings className="w-5 h-5 text-[#7AE36A]" />
@@ -320,7 +419,7 @@ const Header = () => {
                               </li>
                               <li>
                                 <Link
-                                  href="/logout" // لینک مربوط به خروج از حساب
+                                  href="/logout"
                                   className="px-4 py-3 hover:bg-red-500/10 text-red-400 flex items-center gap-3 transition-colors cursor-pointer"
                                   onClick={handleLogout}
                                 >

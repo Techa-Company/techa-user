@@ -116,7 +116,7 @@ const Projects = () => {
 
 
     return (
-        <div className="py-20">
+        <div id='projects' className="py-20">
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="flex flex-col md:flex-row md:justify-between items-center">
                     <div className="text-[#042A1B] text-center md:text-start">
