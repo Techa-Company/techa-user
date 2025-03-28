@@ -3,81 +3,82 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Code, BookOpen, GraduationCap, Layout, Terminal, Briefcase, Rocket } from 'lucide-react'
 import { useRef } from 'react'
 import { cn } from '../../lib/utils'
+import Link from 'next/link'
 
 const stages = [
+    // {
+    //     id: 1,
+    //     title: 'آموزش مقدماتی HTML,CSS',
+    //     icon: Code,
+    //     payment: 'رایگان',
+    //     // credit: '200,000 تومان',
+    //     summary: 'ساختار پایه HTML - سمانتیک - Flexbox - مدیا کوئری‌ها',
+    //     duration: '۲ هفته',
+    //     projects: 4,
+    //     isLocked: false,
+    //     isCompleted: true
+    // },
     {
         id: 1,
-        title: 'آموزش مقدماتی HTML,CSS',
-        icon: Code,
-        payment: 'رایگان',
-        credit: '200,000 تومان',
-        summary: 'ساختار پایه HTML - سمانتیک - Flexbox - مدیا کوئری‌ها',
-        duration: '۲ هفته',
-        projects: 4,
-        isLocked: false,
-        isCompleted: true
-    },
-    {
-        id: 2,
-        title: 'آموزش تکمیلی HTML,CSS',
+        title: 'آموزش HTML و CSS',
         icon: Layout,
         payment: '200,000 تومان',
-        credit: '400,000 تومان',
+        // credit: '400,000 تومان',
         summary: 'CSS Grid - انیمیشن‌های پیشرفته - معماری BEM - SASS/SCSS',
         duration: '۳ هفته',
         projects: 5,
         isLocked: false
     },
     {
-        id: 3,
+        id: 2,
         title: 'آموزش JS',
         icon: Terminal,
         payment: '400,000 تومان',
-        credit: '600,000 تومان',
+        // credit: '600,000 تومان',
         summary: 'ES6+ - DOM Manipulation - Fetch API - Local Storage',
         duration: '۵ هفته',
         projects: 6,
         isLocked: false
     },
     {
-        id: 4,
+        id: 3,
         title: 'آموزش تیلیویند',
         icon: BookOpen,
         payment: '600,000 تومان',
-        credit: '800,000 تومان',
+        // credit: '800,000 تومان',
         summary: 'Utility-First - پیکربندی سفارشی - Dark Mode - پلاگین‌ها',
         duration: '۲ هفته',
         projects: 3,
         isLocked: false
     },
     {
-        id: 5,
+        id: 4,
         title: 'آموزش React',
         icon: Rocket,
         payment: '800,000 تومان',
-        credit: '1,200,000 تومان',
+        // credit: '1,200,000 تومان',
         summary: 'Hooks - Context API - React Router - تست با Jest',
         duration: '۶ هفته',
         projects: 4,
         isLocked: false
     },
     {
-        id: 6,
+        id: 5,
         title: 'کارآموزی پروژه محور',
         icon: Briefcase,
         payment: '1,200,000 تومان',
-        credit: '1,400,000 تومان',
+        // credit: '1,400,000 تومان',
         summary: 'پلتفرم توسعه نرم افزار - SQL',
         duration: '۸ هفته',
         projects: 2,
         isLocked: false
     },
     {
-        id: 7,
+        id: 6,
         title: 'دوره فریلنسری',
         icon: GraduationCap,
         payment: '1,400,000 تومان',
-        credit: '1,500,000 تومان',
+        // credit: '1,500,000 تومان',
         summary: 'ارائه هاست - فضای توسعه - اجرای پروژه',
         duration: '۳ هفته',
         projects: 3,
@@ -122,76 +123,80 @@ export default function Roadmap() {
                     {stages.map((stage) => {
                         const Icon = stage.icon
                         return (
-                            <motion.div
+                            <Link
                                 key={stage.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "0px 0px -100px 0px" }}
-                                whileHover={{ scale: 1.02 }}
-                                className={cn(
-                                    "relative p-8 rounded-3xl border-2 border-emerald-100 bg-white/90 backdrop-blur-lg",
-                                    stage.isLocked ? "opacity-75" : "hover:shadow-xl",
-                                    "transition-all duration-300"
-                                )}
+                                href={`online-courses/${stage.id}`}
                             >
-                                {/* Stage Number Background */}
-                                <div className="absolute -top-10 left-4 opacity-20">
-                                    <span className="text-[200px] font-black text-emerald-500">
-                                        {stage.id}
-                                    </span>
-                                </div>
-
-                                {/* Icon Container */}
-                                <div className="mb-6 relative z-10">
-                                    <div className="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center">
-                                        <Icon className="w-8 h-8 text-emerald-600" />
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "0px 0px -100px 0px" }}
+                                    whileHover={{ scale: 1.02 }}
+                                    className={cn(
+                                        "relative p-8 rounded-3xl border-2 border-emerald-100 bg-white/90 backdrop-blur-lg",
+                                        stage.isLocked ? "opacity-75" : "hover:shadow-xl",
+                                        "transition-all duration-300"
+                                    )}
+                                >
+                                    {/* Stage Number Background */}
+                                    <div className="absolute -top-10 left-4 opacity-20">
+                                        <span className="text-[200px] font-black text-emerald-500">
+                                            {stage.id}
+                                        </span>
                                     </div>
-                                </div>
 
-                                {/* Content */}
-                                <div className="space-y-4 relative z-10">
-                                    <h3 className="text-2xl font-bold text-emerald-800">
-                                        {stage.title}
-                                    </h3>
-
-                                    {/* Payment and Credit Badges */}
-                                    <div className="flex flex-wrap gap-2">
-                                        <div className="px-4 py-2 rounded-full bg-emerald-50 flex items-center gap-2">
-                                            <span className="text-emerald-600 font-medium">
-                                                {stage.payment}
-                                            </span>
+                                    {/* Icon Container */}
+                                    <div className="mb-6 relative z-10">
+                                        <div className="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center">
+                                            <Icon className="w-8 h-8 text-emerald-600" />
                                         </div>
-                                        <div className="px-4 py-2 rounded-full bg-purple-50 flex items-center gap-2">
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="space-y-4 relative z-10">
+                                        <h3 className="text-2xl font-bold text-emerald-800">
+                                            {stage.title}
+                                        </h3>
+
+                                        {/* Payment and Credit Badges */}
+                                        <div className="flex flex-wrap gap-2">
+                                            <div className="px-4 py-2 rounded-full bg-emerald-50 flex items-center gap-2">
+                                                <span className="text-emerald-600 font-medium">
+                                                    {stage.payment}
+                                                </span>
+                                            </div>
+                                            {/* <div className="px-4 py-2 rounded-full bg-purple-50 flex items-center gap-2">
                                             <span className="text-purple-600 font-medium">
                                                 {stage.credit}
-                                            </span>
+                                                </span>
+                                        </div> */}
+                                        </div>
+
+                                        {/* Summary */}
+                                        <p className="text-slate-600 leading-relaxed">
+                                            {stage.summary}
+                                        </p>
+
+                                        {/* Footer */}
+                                        <div className="flex justify-between items-center pt-4 border-t border-emerald-100">
+                                            <div className="text-sm text-slate-500">
+                                                {stage.duration}
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-2 h-2 bg-emerald-400 rounded-full" />
+                                                <span className="text-sm text-emerald-600">
+                                                    {stage.projects} پروژه عملی
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Summary */}
-                                    <p className="text-slate-600 leading-relaxed">
-                                        {stage.summary}
-                                    </p>
-
-                                    {/* Footer */}
-                                    <div className="flex justify-between items-center pt-4 border-t border-emerald-100">
-                                        <div className="text-sm text-slate-500">
-                                            {stage.duration}
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-emerald-400 rounded-full" />
-                                            <span className="text-sm text-emerald-600">
-                                                {stage.projects} پروژه عملی
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Glow Effect */}
-                                {!stage.isLocked && (
-                                    <div className="absolute inset-0 rounded-3xl pointer-events-none border border-emerald-200/50" />
-                                )}
-                            </motion.div>
+                                    {/* Glow Effect */}
+                                    {!stage.isLocked && (
+                                        <div className="absolute inset-0 rounded-3xl pointer-events-none border border-emerald-200/50" />
+                                    )}
+                                </motion.div>
+                            </Link>
                         )
                     })}
                 </div>
