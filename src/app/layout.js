@@ -5,7 +5,9 @@ import { AuthProvider } from "../components/contexts/AuthContext";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Bounce, ToastContainer } from "react-toastify";
 import 'swiper/css/pagination'
-
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
 export const metadata = {
   title: "پلتفرم آموزشی تکا | Techa",
   description: "پلتفرم آموزشی تکا",

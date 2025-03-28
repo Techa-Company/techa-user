@@ -8,12 +8,14 @@ import Poster from "../components/landing/Poster";
 import SampleEditor from "../components/landing/SampleEditors";
 import Certificate from "../components/landing/Certificate";
 import Roadmap from "../components/landing/Roadmap";
+import LevelAssessment from "../components/landing/LevelAssessment";
 
 export default function Home() {
   return (
     <div>
       <Banner />
       <Poster />
+      <LevelAssessment />
       <LastCourses />
       <Roadmap />
       <CourseBenefits />
