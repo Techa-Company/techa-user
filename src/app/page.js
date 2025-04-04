@@ -15,7 +15,7 @@ export default function Home() {
     <div>
       <Banner />
       <Poster />
-      <LevelAssessment />
+      {/* <LevelAssessment /> */}
       <LastCourses />
       <Roadmap />
       <CourseBenefits />

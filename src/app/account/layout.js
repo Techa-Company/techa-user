@@ -7,15 +7,15 @@ export default function DashboardLayout({ children }) {
 
     const pathname = usePathname()
 
-    useEffect(() => {
-        console.log(pathname)
-        if (pathname.includes('/account')) {
-            document.body.classList.add(styles.accountBody);
-        }
-        return () => {
-            document.body.classList.remove(styles.accountBody);
-        };
-    }, [pathname]);
+    // useEffect(() => {
+    //     console.log(pathname)
+    //     if (pathname.includes('/account')) {
+    //         document.body.classList.add(styles.accountBody);
+    //     }
+    //     return () => {
+    //         document.body.classList.remove(styles.accountBody);
+    //     };
+    // }, [pathname]);
 
     return (
         <>

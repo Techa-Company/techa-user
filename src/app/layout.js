@@ -4,7 +4,6 @@ import Footer from "../components/layout/Footer";
 import { AuthProvider } from "../components/contexts/AuthContext";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Bounce, ToastContainer } from "react-toastify";
-import 'swiper/css/pagination'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
@@ -22,7 +21,6 @@ export default function RootLayout({ children }) {
           <Header />
           <main className="mb-40 md:mb-60">{children}</main>
           <Footer />
-
         </AuthProvider>
         <ToastContainer
           position="top-right"
