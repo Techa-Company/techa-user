@@ -3,13 +3,13 @@ const nextConfig = {
   env: {
     TLS_REJECT_UNAUTHORIZED: "0",
   },
-  module: {
-    rules: [
-      {
-        test: /\.worker\.js$/,
-        use: { loader: "worker-loader" },
-      },
-    ],
+   webpack: (config) => {
+    config.module.rules.push({
+      test: /\.worker\.js$/,
+      use: { loader: "worker-loader" },
+    });
+
+    return config;
   },
   eslint: {
     ignoreDuringBuilds: true,
