@@ -1,10 +1,17 @@
 'use client'
-import { motion } from 'framer-motion'
-import { FiSearch, FiInfo, FiClock, FiPlus, FiBook } from 'react-icons/fi'
-import QuestionList from '../../components/questions/QuestionList'
+import { Editor } from '@tinymce/tinymce-react'
+import { useState } from 'react'
+import { FiArrowRight, FiClock, FiInfo } from 'react-icons/fi'
 import Link from 'next/link'
+import QuestionList from '../../../../../components/questions/QuestionList'
+import { motion } from "framer-motion"
+import { useParams, useRouter } from 'next/navigation'
+const NewQuestionPage = () => {
+    const [content, setContent] = useState('')
+    const [title, setTitle] = useState('')
+    const [selectedCourse, setSelectedCourse] = useState('')
 
-const Questions = () => {
+
     const questions = [
         {
             id: 1,
@@ -96,54 +103,86 @@ const Questions = () => {
 
     const latestQuestions = questions.slice(-6) // آخرین ۵ سوال
 
+    const params = useParams();
+    const { id } = params;
+
     return (
         <div className="min-h-screen bg-gray-50 pt-32">
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* بخش اصلی */}
                     <div className="lg:col-span-3">
-                        {/* هدر و جستجو */}
-                        <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <div className='flex justify-between items-center w-full'>
-                                <h1 className="text-3xl font-bold text-emerald-800 mb-1">
-                                    سوالات و پاسخ‌ها
-                                </h1>
-                                <p className="text-gray-600">
-                                    {questions.length} سوال ثبت شده
-                                </p>
-                            </div>
-                            {/* 
-                            <Link
-                                href="/questions/new"
-                                className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-all"
-                            >
-                                <FiPlus className="text-lg" />
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <h1 className="text-2xl font-bold text-emerald-800 mb-6">
                                 ایجاد سوال جدید
-                            </Link> */}
+                            </h1>
+
+                            <form className="space-y-6">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        عنوان سوال
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                        placeholder="عنوان سوال خود را وارد کنید..."
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        انتخاب دوره
+                                    </label>
+                                    <select
+                                        value={selectedCourse}
+                                        onChange={(e) => setSelectedCourse(e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                    >
+                                        <option value="">انتخاب دوره مربوطه</option>
+                                        <option value="1">مبانی ری اکت</option>
+                                        <option value="2">ری اکت متوسط</option>
+                                        <option value="3">ری اکت پیشرفته</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        متن کامل سوال
+                                    </label>
+                                    <Editor
+                                        apiKey='v12ld4fyiekikay5d5tuv6j4578f6daxybv4qrm2a0oymp5j'
+                                        init={{
+                                            menubar: false,
+                                            plugins: 'lists link code',
+                                            toolbar: 'bold italic | bullist numlist | link code',
+                                            content_style: 'body { font-family: Vazir, sans-serif; font-size: 14px; }',
+                                            directionality: 'rtl'
+                                        }}
+                                        value={content}
+                                        onEditorChange={(newContent) => setContent(newContent)}
+                                        className="border rounded-lg overflow-hidden"
+                                    />
+                                </div>
+
+                                <div className="flex justify-end gap-4">
+                                    <Link
+                                        href={`/courses/${id}/questions`}
+                                        className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                                    >
+                                        انصراف
+                                    </Link>
+                                    <button
+                                        type="submit"
+                                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                                    >
+                                        ارسال سوال
+                                        <FiArrowRight className="text-lg" />
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-
-                        {/* نکته مهم */}
-                        <motion.div
-                            initial={{ scale: 0.98 }}
-                            animate={{ scale: 1 }}
-                            className="bg-emerald-50 border-r-4 border-emerald-500 p-4 rounded-lg mb-8"
-                        >
-                            <div className="flex items-start gap-2">
-                                <FiInfo className="text-emerald-600 mt-1" />
-                                <p className="text-emerald-800 text-sm">
-                                    قبل از پرسش سوال جدید، از منوی سمت راست آخرین سوالات را بررسی کنید.
-                                </p>
-                            </div>
-                        </motion.div>
-
-                        {/* لیست سوالات */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <QuestionList questions={questions} />
-                        </motion.div>
                     </div>
 
                     {/* سایدبار پیشرفته */}
@@ -213,4 +252,4 @@ const Questions = () => {
     )
 }
 
-export default Questions
+export default NewQuestionPage

@@ -227,6 +227,16 @@ const Header = () => {
                             </li>
                             <li>
                               <Link
+                                href="/questions"
+                                className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors"
+                                onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                              >
+                                <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                                پرسش و پاسخ
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
                                 href="#projects"
                                 className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors"
                                 onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}

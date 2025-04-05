@@ -1,7 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import { FiSearch, FiInfo, FiClock, FiPlus, FiBook } from 'react-icons/fi'
-import QuestionList from '../../components/questions/QuestionList'
+import QuestionList from '../../../../components/questions/QuestionList'
 import Link from 'next/link'
 
 const Questions = () => {
@@ -104,7 +104,7 @@ const Questions = () => {
                     <div className="lg:col-span-3">
                         {/* هدر و جستجو */}
                         <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <div className='flex justify-between items-center w-full'>
+                            <div>
                                 <h1 className="text-3xl font-bold text-emerald-800 mb-1">
                                     سوالات و پاسخ‌ها
                                 </h1>
@@ -112,14 +112,14 @@ const Questions = () => {
                                     {questions.length} سوال ثبت شده
                                 </p>
                             </div>
-                            {/* 
+
                             <Link
-                                href="/questions/new"
+                                href="questions/ask"
                                 className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-all"
                             >
                                 <FiPlus className="text-lg" />
                                 ایجاد سوال جدید
-                            </Link> */}
+                            </Link>
                         </div>
 
                         {/* نکته مهم */}
