@@ -211,7 +211,7 @@ const ModernFAQ = () => {
     })).filter(section => section.questions.length > 0);
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white py-16 px-4 sm:px-6 lg:px-8 pt-32">
+        <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 pt-32">
             <div className="max-w-5xl mx-auto">
                 {/* Header Section */}
                 <div className="text-center mb-16">
