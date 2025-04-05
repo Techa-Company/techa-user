@@ -22,6 +22,7 @@ import {
   PhoneCall,
   ChevronDown,
   Link2,
+  BookOpenText,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -117,7 +118,7 @@ const Header = () => {
                   alt="logo"
                   priority
                 />
-                <ul className="lg:pr-5 xl:pr-8 flex flex-col lg:flex-row lg:items-center gap-8 xl:gap-10 mt-10 lg:mt-0">
+                <ul className="lg:pr-5 xl:pr-8 flex flex-col lg:flex-row lg:items-center gap-7 xl:gap-10 mt-10 lg:mt-0">
                   <li className="flex items-center gap-2 group">
                     <span>
                       <Home className={`stroke-[#7AE36A] ${pathname === "/" ? "opacity-100" : "opacity-30"
@@ -145,6 +146,20 @@ const Header = () => {
                       href="/courses"
                     >
                       دوره های ما
+                    </Link>
+                  </li>
+                  <li className="flex items-center gap-2 group">
+                    <span>
+                      <BookOpenText className={`stroke-[#7AE36A] ${pathname.startsWith("/docs") ? "opacity-100" : "opacity-30"
+                        } group-hover:opacity-100`} strokeWidth={1} />
+                    </span>
+                    <Link
+                      className={`font-normal text-sm ${pathname.startsWith("/docs") ? "text-[#7AE36A]" : "text-white"
+                        }`}
+                      onClick={() => setIsMenuOpen(false)}
+                      href="/docs"
+                    >
+                      مستندات
                     </Link>
                   </li>
 
@@ -329,7 +344,7 @@ const Header = () => {
                 )}
               </div>
               <div className="flex items-center gap-5">
-                <div className="hidden lg:flex justify-center items-center gap-3">
+                {/* <div className="hidden lg:flex justify-center items-center gap-3">
                   <div className="text-white">
                     <p className="text-[12.5px] font-normal">
                       با ما در تماس باشید
@@ -339,7 +354,7 @@ const Header = () => {
                   <span>
                     <ContactUSIcon />
                   </span>
-                </div>
+                </div> */}
                 <div className="flex items-center gap-4">
                   {isLoggedIn ? (
                     <div className="relative profile-container">
@@ -445,8 +460,8 @@ const Header = () => {
               </div>
             </div>
           </nav>
-        </div>
-      </header>
+        </div >
+      </header >
     </>
   );
 };

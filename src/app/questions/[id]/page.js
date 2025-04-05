@@ -74,8 +74,11 @@ const QuestionPage = ({ params }) => {
                                     {/* پاسخ نمونه */}
                                     <div className="p-4 bg-gray-50 rounded-lg">
                                         <div className="flex items-start gap-3 mb-3">
-                                            <div className="w-8 h-8 bg-emerald-500 rounded-full"></div>
-                                            <div>
+                                            <img
+                                                src={question.avatar}
+                                                alt="آواتار کاربر"
+                                                className="w-12 h-12 rounded-full object-cover"
+                                            />                                            <div>
                                                 <h4 className="font-semibold">کاربر نمونه</h4>
                                                 <p className="text-sm text-gray-500">۱۴۰۳/۰۳/۲۵</p>
                                             </div>

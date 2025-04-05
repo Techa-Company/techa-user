@@ -8,7 +8,7 @@ import { Star } from 'lucide-react'
 
 const TestimonialsSlider = ({ testimonials }) => {
     return (
-        <section className="py-20 bg-gradient-to-b from-emerald-50 to-white relative overflow-hidden">
+        <section className="py-20 relative overflow-hidden">
             {/* Decorative elements */}
             <div className="absolute top-0 left-0 w-32 h-32 bg-emerald-100/30 rounded-full blur-3xl -translate-y-1/2" />
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-amber-100/30 rounded-full blur-3xl translate-y-1/2" />
@@ -43,7 +43,7 @@ const TestimonialsSlider = ({ testimonials }) => {
                     breakpoints={{
                         640: { slidesPerView: 1 },
                         768: { slidesPerView: 2 },
-                        1024: { slidesPerView: 3 }
+                        1024: { slidesPerView: 2 }
                     }}
                     className="!pb-14"
                 >
