@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from "framer-motion";
 import Image from 'next/image';
 
-const CourseCard = ({ course, index, image }) => {
+const DocCard = ({ course, index, image }) => {
 
 
 
@@ -61,4 +61,4 @@ const CourseCard = ({ course, index, image }) => {
     );
 };
 
-export default CourseCard;
+export default DocCard;

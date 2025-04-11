@@ -3,7 +3,7 @@
 import Skeleton from 'react-loading-skeleton';
 
 
-const CourseDescriptionSkeleton = () => {
+const DocDescriptionSkeleton = () => {
     return (
         <div className="mb-5">
             <Skeleton height={20} width="80%" className="mb-2" />
@@ -12,4 +12,4 @@ const CourseDescriptionSkeleton = () => {
     );
 };
 
-export default CourseDescriptionSkeleton;
+export default DocDescriptionSkeleton;

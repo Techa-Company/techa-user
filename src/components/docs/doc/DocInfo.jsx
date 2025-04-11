@@ -1,8 +1,12 @@
-// components/CourseInfo.js
-import CourseDescription from './CourseDescription';
-import CourseInfoCard from './CourseInfoCard';
+import DocDescription from './DocDescription';
+import DocInfoCard from './DocInfoCard';
 import AccordionList from './AccordionList';
-// import { ClockIcon } from '../Icons/Icons';
+import { useState, useEffect } from 'react';
+import { ClockIcon } from '../../Icons/Icons';
+import DocDescriptionSkeleton from './DocDescriptionSkeleton';
+import DocInfoCardSkeleton from './DocInfoCardSkeleton';
+import AccordionSkeleton from '../../common/AccordionSkeleton';
+
 
 const accordionContent = [
     {
@@ -33,16 +37,7 @@ const accordionContent = [
 ];
 
 
-import { useState, useEffect } from 'react';
-// import AccordionSkeleton from './AccordionSkeleton';
-// import CourseDescriptionSkeleton from './CourseDescriptionSkeleton';
-// import CourseInfoCardSkeleton from './CourseInfoCardSkeleton';
-import { ClockIcon } from '../../Icons/Icons';
-import CourseDescriptionSkeleton from './CourseDescriptionSkeleton';
-import CourseInfoCardSkeleton from './CourseInfoCardSkeleton';
-import AccordionSkeleton from '../../common/AccordionSkeleton';
-
-const CourseInfo = ({ courseDetails }) => {
+const DocInfo = ({ courseDetails }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -55,10 +50,10 @@ const CourseInfo = ({ courseDetails }) => {
     if (loading) {
         return (
             <div>
-                <CourseDescriptionSkeleton />
+                <DocDescriptionSkeleton />
                 <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 2xl:gap-10 mt-5">
                     {[...Array(4)].map((_, index) => (
-                        <CourseInfoCardSkeleton key={index} />
+                        <DocInfoCardSkeleton key={index} />
                     ))}
                 </div>
                 <AccordionSkeleton />
@@ -66,31 +61,30 @@ const CourseInfo = ({ courseDetails }) => {
         );
     }
 
-    // بقیه کدهای قبلی...
 
     return (
         <div>
             {/* توضیحات دوره */}
-            <CourseDescription description={courseDetails?.Description} />
+            <DocDescription description={courseDetails?.Description} />
 
             {/* اطلاعات دوره */}
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 2xl:gap-10 mt-5">
-                <CourseInfoCard
+                <DocInfoCard
                     icon={<ClockIcon />}
                     label="مدت زمان دوره"
                     value="98 ساعت"
                 />
-                <CourseInfoCard
+                <DocInfoCard
                     icon={<ClockIcon />}
                     label="آخرین بروزرسانی"
                     value="04 خرداد 1403"
                 />
-                <CourseInfoCard
+                <DocInfoCard
                     icon={<ClockIcon />}
                     label="پیش نیاز"
                     value="HTML & CSS & JS"
                 />
-                <CourseInfoCard
+                <DocInfoCard
                     icon={<ClockIcon />}
                     label="نوع مشاهده"
                     value="دانلودی/آنلاین"
@@ -126,4 +120,4 @@ const CourseInfo = ({ courseDetails }) => {
     );
 };
 
-export default CourseInfo;
+export default DocInfo;

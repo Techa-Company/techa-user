@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import HeroSection from '../online-courses/HeroSection';
-import CourseFeatures from '../online-courses/CourseFeatures';
-import Curriculum from '../online-courses/Curriculum';
-import TestimonialsSlider from '../online-courses/TestimonialsSlider';
-import FAQs from '../online-courses/FAQs';
-import VideoModal from '../online-courses/VideoModal';
+import HeroSection from './HeroSection';
+import CourseFeatures from './CourseFeatures';
+import Curriculum from './Curriculum';
+import TestimonialsSlider from './TestimonialsSlider';
+import FAQs from './FAQs';
+import VideoModal from './VideoModal';
 import { ArrowLeft, Clock, Facebook, Infinity, LifeBuoy, ShieldCheck, Trophy, Twitter, User, Video } from 'lucide-react'
 
 

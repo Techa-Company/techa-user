@@ -1,5 +1,5 @@
 // components/CourseInfoCard.js
-const CourseInfoCard = ({ icon, label, value }) => {
+const DocInfoCard = ({ icon, label, value }) => {
     return (
         <div className="bg-[#D0DDD140] rounded-xl py-5 px-5">
             <span>{icon}</span>
@@ -9,4 +9,4 @@ const CourseInfoCard = ({ icon, label, value }) => {
     );
 };
 
-export default CourseInfoCard;
+export default DocInfoCard;

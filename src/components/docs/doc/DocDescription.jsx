@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-const CourseDescription = ({ description }) => {
+const DocDescription = ({ description }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
 
     return (
@@ -36,4 +36,4 @@ const CourseDescription = ({ description }) => {
     );
 };
 
-export default CourseDescription;
+export default DocDescription;

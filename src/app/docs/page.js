@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import CourseCard from "../../components/courses/CourseCard";
+import DocCard from "../../components/docs/DocCard";
 import CoursesSkeleton from "../../components/common/CoursesSkeleton";
 import { BookText, Clock, Code, GraduationCap } from "lucide-react";
 import Link from "next/link";

@@ -1,10 +1,11 @@
 "use client";
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { renderInlineSnippets } from "../../../../components/inline/utils/renderUtils";
-import LessonSkeleton from "../../../../components/courses/course/lesson/LessonSkeleton"; // وارد کردن کامپوننت اسکلتون
+import LessonSkeleton from "../../../../components/docs/doc/lesson/LessonSkeleton";
+import { VideoCourseAd, VideoCourseAdEnd } from "../page";
 
 export default function Lesson() {
   const [openAccordion, setOpenAccordion] = useState(0);
@@ -67,12 +68,12 @@ export default function Lesson() {
   }
 
   return (
-    <div className="">
+    <div >
       <div className="flex flex-col sm:flex-row gap-5 justify-between items-center">
         <h1 className=" font-bold text-[#042A1B] text-3xl">
           {lessonData.Title}
         </h1>
-        <div className="flex gap-4 items-center">
+        {/* <div className="flex gap-4 items-center">
           <Link
             className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-2.5 px-6 transition-all duration-300 shadow-lg hover:shadow-xl"
             href={`/courses/${docId}/${lessonId}/exercises`}
@@ -80,23 +81,16 @@ export default function Lesson() {
             <BookOpen className="w-6 h-6" />
             <p className="text-[18px] font-semibold">تمرین ها</p>
           </Link>
-        </div>
+        </div> */}
       </div>
+      <VideoCourseAd courseId={docId} />
       <div className="text-[17.5px] font-normal leading-7 text-justify mt-7 grid gap-5">
         <div
           className="prose prose-headings:text-3xl prose-headings:my-5 prose-p:text-secondary prose-p:leading-9 prose-p:text-justify prose-code:text-[#e83e8c] 
       prose-code:px-2 prose-code:py-1 prose-code:rounded-sm prose-code:bg-[#ebedf2] max-w-full"
           dangerouslySetInnerHTML={{ __html: lessonData.Description }}
         ></div>
-        {/* <div className="bg-[#F3F6F3] rounded-2xl p-2">
-          <div className="px-5 flex items-center justify-between py-2">
-            <h3 className="text-[16px] font-bold text-[#042A1B]">مثال</h3>
-            <button className="text-white font-bold text-sm px-6 py-2 rounded-md bg-[#042A1B]">
-              خودت امتحان کن
-            </button>
-          </div>
-          <div className="bg-white rounded-2xl h-60"></div>
-        </div> */}
+
       </div>
       <div className="flex gap-4 items-center mt-10 justify-between">
         <Link
@@ -104,7 +98,7 @@ export default function Lesson() {
           href=""
         >
           <span className="w-4 h-4 flex justify-center items-center border border-[#042A1B] rounded-md">
-            <ChevronRight className="" />
+            <ChevronRight />
           </span>
           <p className="text-[#042A1B] text-[16px] font-medium">قبلی</p>
         </Link>
@@ -114,10 +108,11 @@ export default function Lesson() {
         >
           <p className="text-[#042A1B] text-[16px] font-medium">بعدی</p>
           <span className="w-4 h-4 flex justify-center items-center border border-[#042A1B] rounded-md">
-            <ChevronLeft className="" />
+            <ChevronLeft />
           </span>
         </Link>
       </div>
+      <VideoCourseAdEnd courseId={docId} />
     </div>
   );
 }

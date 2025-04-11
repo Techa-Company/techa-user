@@ -1,9 +1,9 @@
-// components/CourseInfoCardSkeleton.js
+// components/DocInfoCardSkeleton.js
 "use client";
 import Skeleton from 'react-loading-skeleton';
 
 
-const CourseInfoCardSkeleton = () => {
+const DocInfoCardSkeleton = () => {
     return (
         <div className="bg-[#D0DDD140] rounded-xl py-5 px-5">
             <Skeleton circle height={40} width={40} className="mb-4" />
@@ -13,4 +13,4 @@ const CourseInfoCardSkeleton = () => {
     );
 };
 
-export default CourseInfoCardSkeleton;
+export default DocInfoCardSkeleton;
