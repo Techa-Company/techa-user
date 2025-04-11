@@ -41,7 +41,7 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="sticky top-32 col-span-4 overflow-y-auto space-y-6 scrollbar-hide">
+        <div className="sticky top-32 lg:col-span-4 grid-cols-12 overflow-y-auto space-y-6 scrollbar-hide">
             {/* بخش قیمت و ثبت نام */}
             <div className="bg-white rounded-2xl shadow-xl p-6 border border-emerald-50 relative overflow-hidden">
                 <div className="absolute -top-8 -right-8 w-24 h-24 bg-emerald-100/30 rounded-full" />

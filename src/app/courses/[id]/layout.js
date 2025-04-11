@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <div className="min-h-screen to-white pt-32">
       <div className="container mx-auto px-5 lg:px-0 xl:px-5 2xl:px-20">
-        <div className='grid grid-cols-12 gap-10'>
+        <div className='flex flex-col-reverse lg:grid lg:grid-cols-12 xl:gap-10 gap-5'>
           <Sidebar />
           <div className='col-span-8'>
             {children}

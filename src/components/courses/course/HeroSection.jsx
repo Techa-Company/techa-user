@@ -58,7 +58,7 @@ const HeroSection = ({ data, onVideoClick }) => {
                 style={{ background }}
             />
 
-            <div className="container mx-auto px-4 relative z-10">
+            <div className="relative z-10">
                 <div className="max-w-4xl mx-auto space-y-10">
                     {/* عنوان و توضیحات */}
 
@@ -87,11 +87,11 @@ const HeroSection = ({ data, onVideoClick }) => {
                                 whileHover={{ scale: 1.1 }}
                                 className="p-5 bg-emerald-600 rounded-full border-4 border-white shadow-lg"
                             >
-                                <Play className="w-12 h-12 fill-current text-white" />
+                                <Play className="sm:w-12 w-6 sm:h-12 h-6 fill-current text-white" />
                             </motion.div>
                         </div>
 
-                        <div className="absolute bottom-6 right-6 left-6 flex items-center justify-between text-sm">
+                        <div className="absolute bottom-3 sm:bottom-6 right-6 left-6 flex items-center justify-between text-sm">
                             <span className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full text-emerald-600 backdrop-blur-sm">
                                 <Zap className="w-5 h-5 animate-pulse" />
                                 ویدئوی معرفی دوره
@@ -109,9 +109,9 @@ const HeroSection = ({ data, onVideoClick }) => {
                         transition={{ duration: 0.6 }}
                         className="space-y-8"
                     >
-                        <h1 className="text-5xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                        {/* <h1 className="text-5xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
                             {data.title}
-                        </h1>
+                        </h1> */}
 
                         <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto font-medium">
                             {data.excerpt}

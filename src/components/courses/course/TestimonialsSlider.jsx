@@ -13,7 +13,7 @@ const TestimonialsSlider = ({ testimonials }) => {
             <div className="absolute top-0 left-0 w-32 h-32 bg-emerald-100/30 rounded-full blur-3xl -translate-y-1/2" />
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-amber-100/30 rounded-full blur-3xl translate-y-1/2" />
 
-            <div className="container mx-auto px-4 relative">
+            <div className="relative">
                 <div className="max-w-2xl mx-auto text-center mb-12">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -27,7 +27,7 @@ const TestimonialsSlider = ({ testimonials }) => {
 
                 <Swiper
                     modules={[Pagination, Autoplay]}
-                    spaceBetween={30}
+                    spaceBetween={20}
                     slidesPerView={1}
                     loop={true}
                     autoplay={{ delay: 5000, disableOnInteraction: false }} // Autoplay settings
@@ -43,7 +43,6 @@ const TestimonialsSlider = ({ testimonials }) => {
                     breakpoints={{
                         640: { slidesPerView: 1 },
                         768: { slidesPerView: 2 },
-                        1024: { slidesPerView: 2 }
                     }}
                     className="!pb-14"
                 >

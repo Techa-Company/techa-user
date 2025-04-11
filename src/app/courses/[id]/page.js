@@ -67,7 +67,7 @@ const CoursePage = () => {
     return (
         <div>
             {/* عنوان و تب‌ها */}
-            <div className="flex flex-col sm:flex-row gap-5 justify-between items-center">
+            <div className="flex flex-col md:flex-row gap-5 gap-y-7 justify-between items-center">
                 {loading ? (
                     <DocTitleSkeleton />
                 ) : (

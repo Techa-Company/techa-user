@@ -13,7 +13,7 @@ const FAQs = ({ faqs }) => {
 
     return (
         <section className="py-16 bg-white">
-            <div className="container mx-auto px-4">
+            <div className="">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
