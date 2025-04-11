@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation"; // اضافه کردن هوک navigation
+import { useRouter } from "next/navigation";
 import ExerciseCard from "../../../../../components/courses/course/ExerciseCard";
 import ExerciseInstructions from "../../../../../components/courses/course/ExerciseInstructions";
 import ExerciseDetails from "../../../../../components/courses/course/ExerciseDetails";
@@ -14,7 +14,6 @@ export default function ExercisePage({ params }) {
   const [loading, setLoading] = useState(true);
   const skeletons = [...Array(exercises.length ? exercises.length : 4)];
 
-  // شبیه‌سازی داده‌های تمرینات
   const fakeExercises = [
     {
       id: 1,
@@ -40,6 +39,14 @@ export default function ExercisePage({ params }) {
       deadline: "۱۴۰۳/۰۳/۲۵",
       status: "pending",
     },
+    {
+      id: 4,
+      title: "تمرین سوم: محاسبه فاکتوریل",
+      description: "تابعی بنویسید که فاکتوریل یک عدد را محاسبه کند.",
+      difficulty: "دشوار",
+      deadline: "۱۴۰۳/۰۳/۲۵",
+      status: "completed",
+    },
   ];
 
   useEffect(() => {
@@ -59,7 +66,7 @@ export default function ExercisePage({ params }) {
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold mb-4">تمرینات جلسه</h2>
             <button
-              onClick={() => router.push(`/courses/${params.courseId}?tab=1`)}
+              onClick={() => router.push(`/courses/${params.id}?tab=1`)}
               className="mb-6 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg transition-colors flex items-center gap-2"
             >
               بازگشت

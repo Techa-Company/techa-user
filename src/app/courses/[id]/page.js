@@ -7,8 +7,8 @@ import Comments from '../../../components/courses/course/Comments'
 import TabButtons from '../../../components/courses/course/TabButtons'
 import TabButtonsSkeleton from '../../../components/courses/course/TabButtonsSkeleton'
 import TabContent from '../../../components/courses/course/TabContent'
-import DocTitleSkeleton from '../../../components/docs/doc/DocTitleSkeleton'
-import DocTitle from '../../../components/docs/doc/DocTitle'
+import DocTitleSkeleton from '../../../components/courses/course/CourseTitleSkeleton'
+import DocTitle from '../../../components/courses/course/CourseTitle'
 
 
 const CoursePage = () => {

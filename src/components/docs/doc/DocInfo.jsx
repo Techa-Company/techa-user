@@ -6,6 +6,7 @@ import { ClockIcon } from '../../Icons/Icons';
 import DocDescriptionSkeleton from './DocDescriptionSkeleton';
 import DocInfoCardSkeleton from './DocInfoCardSkeleton';
 import AccordionSkeleton from '../../common/AccordionSkeleton';
+import { Clock, Code2, GitBranch, Terminal } from 'lucide-react';
 
 
 const accordionContent = [
@@ -70,31 +71,31 @@ const DocInfo = ({ courseDetails }) => {
             {/* اطلاعات دوره */}
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 2xl:gap-10 mt-5">
                 <DocInfoCard
-                    icon={<ClockIcon />}
-                    label="مدت زمان دوره"
+                    icon={<Clock className='w-9 h-9 text-[#065F46]' />}
+                    label="مدت زمان مطالعه"
                     value="98 ساعت"
                 />
                 <DocInfoCard
-                    icon={<ClockIcon />}
+                    icon={<GitBranch className='w-9 h-9 text-[#065F46]' />}
                     label="آخرین بروزرسانی"
                     value="04 خرداد 1403"
                 />
                 <DocInfoCard
-                    icon={<ClockIcon />}
+                    icon={<Terminal className='w-9 h-9 text-[#065F46]' />}
                     label="پیش نیاز"
                     value="HTML & CSS & JS"
                 />
                 <DocInfoCard
-                    icon={<ClockIcon />}
-                    label="نوع مشاهده"
-                    value="دانلودی/آنلاین"
+                    icon={<Code2 className='w-9 h-9 text-[#065F46]' />} // یا آیکون مخصوص کدنویسی
+                    label="ادیتور آنلاین"
+                    value="اجرای زنده مثال‌ها"
                 />
             </div>
 
             {/* بخش مناسب بودن دوره */}
             <div className="mt-10">
                 <h1 className="font-extrabold text-[#042A1B] text-2xl">
-                    این دوره برای چه کسانی مناسب است؟
+                    این داکیومنت برای چه کسانی مناسب است؟
                 </h1>
                 <div className="mt-3">
                     <p className="text-[17.5px] text-[#042A1B] text-justify leading-7 font-normal">

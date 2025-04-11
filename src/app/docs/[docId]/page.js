@@ -1,9 +1,9 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import DocTitle from "../../../components/docs/doc/DocTitle";
+import DocTitle from "../../../components/courses/course/CourseTitle";
 import DocInfo from "../../../components/docs/doc/DocInfo";
-import DocTitleSkeleton from "../../../components/docs/doc/DocTitleSkeleton";
+import DocTitleSkeleton from "../../../components/courses/course/CourseTitleSkeleton";
 import { motion } from "framer-motion"
 import Link from "next/link";
 

@@ -1,10 +1,18 @@
-// components/Exercises.js
-"use client";
+"use client"
 import { useEffect, useState } from "react";
-import ChapterItem from "./ChapterItem";
-import ChapterSkeleton from "./ChapterSkeleton";
+import ChapterItem from "../../../../../components/courses/course/ChapterItem";
+import ChapterSkeleton from "../../../../../components/courses/course/ChapterSkeleton";
 
-const Exercises = ({ courseId }) => {
+// export const metadata = {
+//     title: "تکا | دوره های ما",
+//     description: "تکا",
+// };
+
+
+
+
+export default function Layout({ children }) {
+
     const [chapters, setChapters] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -82,18 +90,23 @@ const Exercises = ({ courseId }) => {
     }, []);
 
     return (
-        <div className="mt-8 space-y-6">
-            {loading ? (
-                [...Array(2)].map((_, index) => (
-                    <ChapterSkeleton key={index} />
-                ))
-            ) : (
-                chapters.map((chapter, index) => (
-                    <ChapterItem key={chapter.Id} chapter={chapter} index={index} />
-                ))
-            )}
+        <div >
+            <div className="container px-5 xl:px-20 mx-auto">
+                <div className='grid grid-cols-12 gap-5'>
+                    <div className="col-span-4 space-y-5">
+                        {loading ? (
+                            [...Array(2)].map((_, index) => (
+                                <ChapterSkeleton key={index} />
+                            ))
+                        ) : (
+                            chapters.map((chapter, index) => (
+                                <ChapterItem key={chapter.Id} chapter={chapter} index={index} />
+                            ))
+                        )}
+                    </div>
+                    <main className="col-span-8">{children}</main>
+                </div>
+            </div>
         </div>
     );
-};
-
-export default Exercises;
+}
