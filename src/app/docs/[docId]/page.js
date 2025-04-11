@@ -14,7 +14,7 @@ export default function CourseDetail() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { courseId } = params;
+  const { docId } = params;
 
   // دریافت پارامتر تب از URL
   const tabParam = searchParams.get("tab");
@@ -26,8 +26,8 @@ export default function CourseDetail() {
 
   useEffect(() => {
     // دریافت اطلاعات دوره از API
-    if (courseId) {
-      fetch(`https://api.techa.me/api/Course/${courseId}`)
+    if (docId) {
+      fetch(`https://api.techa.me/api/Course/${docId}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.IsSuccess) {
@@ -40,7 +40,7 @@ export default function CourseDetail() {
           setLoading(false);
         });
     }
-  }, [courseId]);
+  }, [docId]);
 
   const tabContent = [
     {
@@ -51,7 +51,7 @@ export default function CourseDetail() {
     {
       id: 1,
       title: "تمرین‌ها",
-      content: <Exercises courseId={courseId} />,
+      content: <Exercises docId={docId} />,
     },
     {
       id: 2,

@@ -12,10 +12,10 @@ export default function Lesson() {
   const [loading, setLoading] = useState(true);
 
   const params = useParams();
-  const courseId = params.courseId;
+  const docId = params.docId;
   const lessonId = params.lessonId;
 
-  console.log(courseId, lessonId);
+  console.log(docId, lessonId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +28,7 @@ export default function Lesson() {
         if (data.Data && Array.isArray(data.Data)) {
           const filteredData = data.Data.filter(
             (item) =>
-              item.CourseId === parseInt(courseId) &&
+              item.CourseId === parseInt(docId) &&
               item.Id === parseInt(lessonId)
           );
           console.log(filteredData);
@@ -45,10 +45,10 @@ export default function Lesson() {
       }
     };
 
-    if (courseId && lessonId) {
+    if (docId && lessonId) {
       fetchData();
     }
-  }, [courseId, lessonId]);
+  }, [docId, lessonId]);
 
   useEffect(() => {
     renderInlineSnippets();
@@ -75,7 +75,7 @@ export default function Lesson() {
         <div className="flex gap-4 items-center">
           <Link
             className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-2.5 px-6 transition-all duration-300 shadow-lg hover:shadow-xl"
-            href={`/courses/${courseId}/${lessonId}/exercises`}
+            href={`/courses/${docId}/${lessonId}/exercises`}
           >
             <BookOpen className="w-6 h-6" />
             <p className="text-[18px] font-semibold">تمرین ها</p>

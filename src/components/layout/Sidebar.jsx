@@ -15,7 +15,7 @@ const Sidebar = () => {
     const [loading, setLoading] = useState(true);
 
     const params = useParams();
-    const courseId = params.courseId;
+    const docId = params.docId;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,7 +24,7 @@ const Sidebar = () => {
                 const data = await response.json();
 
                 if (data.Data && Array.isArray(data.Data)) {
-                    const filteredData = data.Data.filter(item => item.CourseId === parseInt(courseId));
+                    const filteredData = data.Data.filter(item => item.CourseId === parseInt(docId));
                     setContents(filteredData);
                 } else {
                     console.error("Invalid data format:", data);
@@ -38,10 +38,10 @@ const Sidebar = () => {
             }
         };
 
-        if (courseId) {
+        if (docId) {
             fetchData();
         }
-    }, [courseId]);
+    }, [docId]);
 
     const toggleAccordion = (index) => {
         setOpenAccordion(openAccordion === index ? -1 : index);
@@ -106,7 +106,7 @@ const Sidebar = () => {
                                         <li className='relative' key={child.Id}>
                                             <Link
                                                 className='flex items-center justify-between'
-                                                href={`/courses/${courseId}/${child.Id}`}
+                                                href={`/docs/${docId}/${child.Id}`}
                                                 onClick={() => setIsSidebarOpen(false)} // این خط اضافه شد
                                             >
                                                 <div className='flex items-center gap-3'>
