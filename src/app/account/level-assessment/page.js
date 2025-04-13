@@ -2,9 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback } from "react";
 import {
-    BookOpen, Code, Clock, Star, CheckCircle,
-    RotateCw, ArrowRight, Layout, ChevronRight,
-    Leaf, Trophy, Sparkles, Award, HelpCircle
+    Clock,
 } from "lucide-react";
 import StartScreen from "../../../components/account/level-assessment/StartScreen";
 import QuestionCard from "../../../components/account/level-assessment/QuestionCard";
@@ -12,8 +10,7 @@ import ResultScreen from "../../../components/account/level-assessment/ResultScr
 import HistorySection from "../../../components/account/level-assessment/HistorySection";
 
 const AssessmentWizard = () => {
-    // حالت‌های اصلی
-    const [step, setStep] = useState(0); // 0: شروع, 1: آزمون, 2: نتیجه
+    const [step, setStep] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [timeLeft, setTimeLeft] = useState(0);
@@ -35,7 +32,9 @@ const AssessmentWizard = () => {
                 correct: 0,
                 time: 45,
                 difficulty: 'medium',
-                explanation: "استفاده از تگ <header> برای بخش هدر صفحه مناسب‌تر و معنایی است."
+                explanation: "استفاده از تگ <header> برای بخش هدر صفحه مناسب‌تر و معنایی است.",
+                chapter: 'فصل 1',
+                session: 'جلسه 1'
             },
             {
                 id: 'html2',
@@ -45,7 +44,9 @@ const AssessmentWizard = () => {
                 correct: 1,
                 time: 30,
                 difficulty: 'easy',
-                explanation: "تگ <dl> برای لیست‌های توصیفی (Description List) استفاده می‌شود."
+                explanation: "تگ <dl> برای لیست‌های توصیفی (Description List) استفاده می‌شود.",
+                chapter: 'فصل 1',
+                session: 'جلسه 2'
             }
         ],
         css: [
@@ -64,7 +65,9 @@ const AssessmentWizard = () => {
                 correct: 0,
                 time: 35,
                 difficulty: 'easy',
-                explanation: "خاصیت gap فاصله بین آیتم‌های flex را تعیین می‌کند."
+                explanation: "خاصیت gap فاصله بین آیتم‌های flex را تعیین می‌کند.",
+                chapter: 'فصل 2',
+                session: 'جلسه 1'
             },
             {
                 id: 'css2',
@@ -74,7 +77,9 @@ const AssessmentWizard = () => {
                 correct: 1,
                 time: 30,
                 difficulty: 'medium',
-                explanation: "واحد em نسبت به فونت‌سایز المان والد محاسبه می‌شود."
+                explanation: "واحد em نسبت به فونت‌سایز المان والد محاسبه می‌شود.",
+                chapter: 'فصل 2',
+                session: 'جلسه 2'
             }
         ],
         tailwindCSS: [
@@ -93,7 +98,9 @@ const AssessmentWizard = () => {
                 correct: 0,
                 time: 35,
                 difficulty: 'easy',
-                explanation: "کلاس grid-cols-3 به معنای ایجاد 3 ستون در شبکه است."
+                explanation: "کلاس grid-cols-3 به معنای ایجاد 3 ستون در شبکه است.",
+                chapter: 'فصل 3',
+                session: 'جلسه 1'
             },
             {
                 id: 'tailwind2',
@@ -103,7 +110,9 @@ const AssessmentWizard = () => {
                 correct: 2,
                 time: 30,
                 difficulty: 'easy',
-                explanation: "کلاس border- برای اضافه کردن حاشیه به المان‌ها در Tailwind استفاده می‌شود."
+                explanation: "کلاس border- برای اضافه کردن حاشیه به المان‌ها در Tailwind استفاده می‌شود.",
+                chapter: 'فصل 3',
+                session: 'جلسه 2'
             }
         ],
         javaScript: [
@@ -117,7 +126,9 @@ const AssessmentWizard = () => {
                 correct: 1,
                 time: 40,
                 difficulty: 'medium',
-                explanation: "متد map هر عنصر را دو برابر می‌کند و آرایه جدیدی برمی‌گرداند."
+                explanation: "متد map هر عنصر را دو برابر می‌کند و آرایه جدیدی برمی‌گرداند.",
+                chapter: 'فصل 4',
+                session: 'جلسه 1'
             },
             {
                 id: 'js2',
@@ -127,7 +138,9 @@ const AssessmentWizard = () => {
                 correct: 3,
                 time: 30,
                 difficulty: 'easy',
-                explanation: "Character نوع داده‌ای در JavaScript نیست و به صورت String نمایش داده می‌شود."
+                explanation: "Character نوع داده‌ای در JavaScript نیست و به صورت String نمایش داده می‌شود.",
+                chapter: 'فصل 4',
+                session: 'جلسه 2'
             }
         ],
         react: [
@@ -141,7 +154,9 @@ const AssessmentWizard = () => {
                 correct: 0,
                 time: 30,
                 difficulty: 'easy',
-                explanation: "این کامپوننت یک عنوان با متن 'Hello, World!' را نمایش می‌دهد."
+                explanation: "این کامپوننت یک عنوان با متن 'Hello, World!' را نمایش می‌دهد.",
+                chapter: 'فصل 5',
+                session: 'جلسه 1'
             },
             {
                 id: 'react2',
@@ -151,7 +166,9 @@ const AssessmentWizard = () => {
                 correct: 1,
                 time: 30,
                 difficulty: 'medium',
-                explanation: "هوک useState برای مدیریت وضعیت در کامپوننت‌های React استفاده می‌شود."
+                explanation: "هوک useState برای مدیریت وضعیت در کامپوننت‌های React استفاده می‌شود.",
+                chapter: 'فصل 5',
+                session: 'جلسه 2'
             }
         ],
         nextJS: [
@@ -163,7 +180,9 @@ const AssessmentWizard = () => {
                 correct: 1,
                 time: 45,
                 difficulty: 'medium',
-                explanation: "getServerSideProps برای رندر کردن صفحات در سمت سرور استفاده می‌شود."
+                explanation: "getServerSideProps برای رندر کردن صفحات در سمت سرور استفاده می‌شود.",
+                chapter: 'فصل 6',
+                session: 'جلسه 1'
             },
             {
                 id: 'nextjs2',
@@ -180,7 +199,9 @@ const AssessmentWizard = () => {
                 correct: 1,
                 time: 40,
                 difficulty: 'medium',
-                explanation: "این تابع برای رندر کردن صفحه در زمان ساخت استفاده می‌شود و داده‌ها را به عنوان props به کامپوننت می‌دهد."
+                explanation: "این تابع برای رندر کردن صفحه در زمان ساخت استفاده می‌شود و داده‌ها را به عنوان props به کامپوننت می‌دهد.",
+                chapter: 'فصل 6',
+                session: 'جلسه 2'
             }
         ]
     };
@@ -215,6 +236,7 @@ const AssessmentWizard = () => {
     };
 
     // مدیریت پاسخ‌دهی
+    // مدیریت پاسخ‌دهی
     const handleAnswer = useCallback((answerIndex) => {
         const newAnswers = [...answers, answerIndex];
         setAnswers(newAnswers);
@@ -224,8 +246,12 @@ const AssessmentWizard = () => {
             questionId: allQuestions[currentQuestion].id,
             answer: answerIndex,
             isCorrect: answerIndex === allQuestions[currentQuestion].correct,
-            timeSpent: allQuestions[currentQuestion].time - timeLeft
+            timeSpent: allQuestions[currentQuestion].time - timeLeft,
+            chapter: allQuestions[currentQuestion].chapter, // اضافه کردن فصل
+            session: allQuestions[currentQuestion].session  // اضافه کردن جلسه
         };
+
+
 
         // بررسی پایان آزمون
         if (currentQuestion < allQuestions.length - 1) {
@@ -243,7 +269,9 @@ const AssessmentWizard = () => {
                 details: newAnswers.map((ans, idx) => ({
                     questionId: allQuestions[idx].id,
                     answer: ans,
-                    isCorrect: ans === allQuestions[idx].correct
+                    isCorrect: ans === allQuestions[idx].correct,
+                    chapter: allQuestions[idx].chapter, // اضافه کردن فصل
+                    session: allQuestions[idx].session  // اضافه کردن جلسه
                 }))
             };
 
@@ -256,7 +284,6 @@ const AssessmentWizard = () => {
             setStep(2);
         }
     }, [answers, currentQuestion, allQuestions, timeLeft, selectedTech]);
-
     // محاسبه امتیاز
     const calculateScore = useCallback((answers) => {
         return allQuestions.reduce((score, q, index) =>
