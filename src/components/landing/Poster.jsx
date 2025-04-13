@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { Rocket, Code2 } from 'lucide-react'
+import { Rocket, Code2, Code, Briefcase } from 'lucide-react'
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -33,31 +33,37 @@ const Poster = () => {
 
     const slides = [
         {
-            title: 'بوت کمپ توسعه و راهبری',
-            badge: 'پروژه',
-            description: 'یک دوره فشرده آموزش انواع مهارتهای موردنیاز کارآموز برای مدیریت یک پروژه استارت آپی واقعی برای افراد گزینش شده',
-            link: "/front-boot-camp"
+            title: 'بوت کمپ توسعه فرانت اند',
+            badge: 'پروژه محور',
+            description: 'آموزش عملی با پروژه‌های واقعی و مربیان حرفه‌ای - شامل تمرینات کدنویسی روزانه و ادیتور آنلاین',
+            link: "/front-boot-camp",
+            buttonText: 'شروع سفر یادگیری',
+            icon: <Rocket className="w-5 h-5" />
         },
         {
-            title: 'تجربه یادگیری تعاملی',
-            badge: 'کارآموزی',
-            description: 'یادگیری عملی با پروژه های واقعی و مربیان متخصص در محیطی شبیه سازی شده',
-            link: "/front-boot-camp"
+            title: 'دوره کارآموزی حرفه‌ای',
+            badge: 'تجربه صنعتی',
+            description: 'همکاری با تیم‌های توسعه واقعی و ساخت محصولات قابل ارائه در رزومه',
+            link: "/internship",
+            buttonText: 'فرصت‌های شغلی را کشف کن',
+            icon: <Briefcase className="w-5 h-5" />
         },
         {
-            title: 'پشتیبانی حرفه ای',
-            badge: 'مشاوره',
-            description: 'همراهی مستمر مربیان و دسترسی به جامعه حرفه ای توسعه دهندگان',
-            link: "/front-boot-camp"
+            title: 'مستندات آموزشی پیشرفته',
+            badge: 'منابع تعاملی',
+            description: 'دسترسی به مستندات جامع با قابلیت اجرای کد در ادیتور آنلاین و مثال‌های تعاملی',
+            link: "/docs",
+            buttonText: 'شروع به یادگیری',
+            icon: <Code className="w-5 h-5" />
         }
-    ]
+    ];
 
     return (
         <section className="mt-20 md:mt-60">
             <div className="container mx-auto px-5 xl:px-20">
                 <Swiper
                     modules={[Autoplay, Pagination]}
-                    autoplay={{ delay: 6000, disableOnInteraction: false }}
+                    autoplay={{ delay: 10000, disableOnInteraction: false }}
                     pagination={{ clickable: true }}
                     spaceBetween={50}
                     slidesPerView={1}
@@ -156,8 +162,8 @@ const Poster = () => {
                                                         className="px-8 py-3.5 bg-[#7AE36A] text-[#042A1B] rounded-xl font-bold relative overflow-hidden group shine-effect"
                                                     >
                                                         <span className="relative z-10 flex items-center justify-center gap-2">
-                                                            <Rocket className="w-5 h-5" />
-                                                            شرایط گزینش و جزئیات آموزش
+                                                            {slide.icon}
+                                                            {slide.buttonText}
                                                         </span>
                                                     </motion.button>
                                                 </Link>
