@@ -2,62 +2,83 @@ import Link from 'next/link';
 import React from 'react';
 import { motion } from "framer-motion";
 import Image from 'next/image';
+import { BookText, Clock, GraduationCap } from 'lucide-react';
 
-const DocCard = ({ course, index, image }) => {
-
-
+const DocCard = ({ doc }) => {
 
     const truncateDescription = (description) => {
         const div = document.createElement("div");
         div.innerHTML = description || "توضیحات در دسترس نیست.";
         const text = div.innerText;
-        return text.split(" ").slice(0, 30).join(" ") + "...";
+        return text.split(" ").slice(0, 6).join(" ") + (description ? "..." : "");
     };
     return (
-        <motion.div
-            key={course.Id}
-            className="custom-shadow rounded-3xl flex flex-col md:flex-row p-5"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            whileHover={{ scale: 1.02 }}
+        <div
+            className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 group"
         >
-            {/* تصویر دوره */}
-            <div className="relative w-full h-48 md:w-80 md:h-48 rounded-3xl overflow-hidden">
-                <Image
-                    src={image}
-                    alt="banner"
-                    fill
-                    // className="object-cover"
-                    objectFit="cover"
-                />
-            </div>
-            {/* محتوای دوره */}
-            <div className="text-[#042A1B] p-5 flex flex-col justify-between">
-                <div>
-                    <h3 className="mb-3 text-2xl font-extrabold">
-                        {course.Title}
-                    </h3>
-                    <p className="text-sm text-justify leading-7">
-                        {truncateDescription(course.Description)}
-                    </p>
+            <div className="p-6">
+                {/* هدر کارت */}
+                <div className="flex items-start gap-4 mb-4">
+                    <div className="p-3 bg-emerald-50 rounded-xl">
+                        {doc.icon}
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-bold text-gray-900">
+                            مستندات {doc.title}
+                        </h3>
+                        <p dangerouslySetInnerHTML={{ __html: truncateDescription(doc.description) }} className="text-sm text-gray-600 mt-1">
+
+                        </p>
+                    </div>
                 </div>
-                <div className="grid grid-cols-2 gap-5 text-center mt-5 w-full md:w-60">
-                    <Link
-                        className="text-sm font-normal bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff] transition-colors"
-                        href={`courses/${course.Id}`}
-                    >
-                        مشاهده دوره
-                    </Link>
-                    <Link
-                        className="text-sm font-normal bg-[#D0DDD140] py-2.5 rounded-xl hover:bg-[#7AE36A] hover:text-[#fff] transition-colors"
-                        href=""
-                    >
-                        اجرای بر خط
-                    </Link>
+
+                {/* تگ‌ها */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {doc.tags.map((tag, i) => (
+                        <span
+                            key={i}
+                            className="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs rounded-full"
+                        >
+                            {tag}
+                        </span>
+                    ))}
                 </div>
+
+                {/* اطلاعات دوره */}
+                <div className="space-y-3 text-sm text-gray-600">
+                    <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-emerald-600" />
+                        <span>مدت زمان : {doc.duration}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <BookText className="w-4 h-4 text-emerald-600" />
+                        <span>تعداد درس‌ها: {doc.lessons}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <GraduationCap className="w-4 h-4 text-emerald-600" />
+                        <span>سطح: {doc.level}</span>
+                    </div>
+                </div>
+
+                {/* دکمه اقدام */}
+                <Link href={`docs/${doc.id}`} className="mt-4 w-full py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-colors flex items-center justify-center gap-2">
+                    <span>مشاهده سرفصل‌ ها</span>
+                    <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                    </svg>
+                </Link>
             </div>
-        </motion.div>
+        </div>
     );
 };
 
