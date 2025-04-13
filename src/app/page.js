@@ -10,6 +10,7 @@ import Certificate from "../components/landing/Certificate";
 import Roadmap from "../components/landing/Roadmap";
 import DocumentationSection from "../components/landing/DocumentationSection";
 import LevelAssessment from "../components/landing/LevelAssessment";
+import Pricing from "../components/landing/Pricing";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
       <LevelAssessment />
       <LastCourses />
       <Roadmap />
+      <Pricing />
       <DocumentationSection />
       <CourseBenefits />
       <Certificate />
