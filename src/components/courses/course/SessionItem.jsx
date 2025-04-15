@@ -1,20 +1,21 @@
+// components/SessionItem.js
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PlayCircle, CheckCircle, AlertCircle } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
-const SessionItem = ({ session, sessionIndex }) => {
+const SessionItem = ({ session, sessionIndex, isSelected }) => {
     const [hoveredSession, setHoveredSession] = useState(null);
     const [isActive, setIsActive] = useState(false);
     const router = useRouter();
-    const { id, lessonId } = useParams();
+    const params = useParams();
     const pathname = usePathname();
 
     useEffect(() => {
-        const currentSessionPath = `/courses/${id}/${session.Id}/exercises`;
+        const currentSessionPath = `/courses/${params.id}/${session.Id}/exercises`;
         setIsActive(pathname === currentSessionPath);
-    }, [pathname, id, session.Id]);
+    }, [pathname, params.id, session.Id]);
 
     const handleMouseEnter = () => {
         setHoveredSession(session.Id);
@@ -25,7 +26,7 @@ const SessionItem = ({ session, sessionIndex }) => {
     };
 
     const handleClick = () => {
-        router.push(`/courses/${id}/${session.Id}/exercises`);
+        router.push(`/courses/${params.id}/${session.Id}/exercises`);
     };
 
     const SessionBadge = ({ progress }) => {
@@ -59,7 +60,10 @@ const SessionItem = ({ session, sessionIndex }) => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: sessionIndex * 0.1 }}
-            className={`group bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 hover:border-emerald-100 cursor-pointer ${isActive ? 'border-emerald-500' : ''}`}
+            className={`group bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow border-2 ${isActive || isSelected
+                ? "border-emerald-500 bg-emerald-50"
+                : "border-gray-100 hover:border-emerald-100"
+                }`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleClick}
@@ -68,7 +72,12 @@ const SessionItem = ({ session, sessionIndex }) => {
                 <div className="flex items-center gap-4">
                     <div className="relative">
                         <div
-                            className={`w-10 h-10 rounded-lg flex items-center justify-center ${hoveredSession === session.Id || isActive ? "bg-emerald-500 text-white" : "bg-emerald-50 text-emerald-500"}`}
+                            className={`w-10 h-10 rounded-lg flex items-center justify-center ${isActive || isSelected
+                                ? "bg-emerald-500 text-white"
+                                : hoveredSession === session.Id
+                                    ? "bg-emerald-100 text-emerald-600"
+                                    : "bg-emerald-50 text-emerald-500"
+                                }`}
                         >
                             <PlayCircle size={20} />
                         </div>
@@ -86,19 +95,23 @@ const SessionItem = ({ session, sessionIndex }) => {
                             {session.Title}
                         </h3>
                         <p className="text-sm text-gray-500 mt-1">
-                            {session.Duration} • {!pathname.includes("exercises") && session.Description}
+                            {/* {session.Duration}  */}
+                            {session.Description}
                         </p>
                     </div>
-                </ div>
-                <SessionBadge
-                    progress={
-                        sessionIndex % 3 === 0
-                            ? "completed"
-                            : sessionIndex % 3 === 1
-                                ? "pending"
-                                : null
-                    }
-                />
+                </div>
+                <div className="min-w-fit">
+
+                    <SessionBadge
+                        progress={
+                            sessionIndex % 3 === 0
+                                ? "completed"
+                                : sessionIndex % 3 === 1
+                                    ? "pending"
+                                    : null
+                        }
+                    />
+                </div>
             </div>
         </motion.div>
     );

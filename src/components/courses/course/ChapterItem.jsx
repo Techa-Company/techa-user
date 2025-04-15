@@ -1,12 +1,22 @@
 // components/ChapterItem.js
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import SessionItem from "./SessionItem";
 
-const ChapterItem = ({ chapter, index }) => {
+const ChapterItem = ({ chapter, index, selectedSessionId }) => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const hasSelectedSession = chapter.Sessions.some(
+        (session) => session.Id == selectedSessionId
+    );
+
+    useEffect(() => {
+        if (hasSelectedSession) {
+            setIsOpen(true);
+        }
+    }, [hasSelectedSession]);
 
     const toggleChapter = () => {
         setIsOpen(!isOpen);
@@ -17,12 +27,13 @@ const ChapterItem = ({ chapter, index }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
+            className="mb-6"
         >
             {/* عنوان فصل */}
             <div
                 className={`
           bg-white p-6 rounded-xl cursor-pointer shadow-sm
-          border-2 ${isOpen ? "border-emerald-500" : "border-gray-100"}
+          border-2 border-gray-100
           hover:border-emerald-400 transition-all duration-300
         `}
                 onClick={toggleChapter}
@@ -53,7 +64,7 @@ const ChapterItem = ({ chapter, index }) => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="mt-4 space-y-2 pr-6"
+                        className="mt-4 space-y-2 pr-6 overflow-hidden"
                     >
                         {chapter.Sessions.filter((s) => s.HasExercises).map(
                             (session, sessionIndex) => (
@@ -61,6 +72,7 @@ const ChapterItem = ({ chapter, index }) => {
                                     key={session.Id}
                                     session={session}
                                     sessionIndex={sessionIndex}
+                                    isSelected={session.Id === selectedSessionId}
                                 />
                             )
                         )}

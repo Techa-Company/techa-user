@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import ChapterItem from "../../../../../components/courses/course/ChapterItem";
 import ChapterSkeleton from "../../../../../components/courses/course/ChapterSkeleton";
+import { useParams } from "next/navigation";
 
 // export const metadata = {
 //     title: "تکا | دوره های ما",
@@ -15,6 +16,8 @@ export default function Layout({ children }) {
 
     const [chapters, setChapters] = useState([]);
     const [loading, setLoading] = useState(true);
+    const params = useParams();
+
 
     useEffect(() => {
         const fetchChapters = async () => {
@@ -100,7 +103,8 @@ export default function Layout({ children }) {
                             ))
                         ) : (
                             chapters.map((chapter, index) => (
-                                <ChapterItem key={chapter.Id} chapter={chapter} index={index} />
+                                <ChapterItem key={chapter.Id} chapter={chapter} index={index}
+                                    selectedSessionId={params.lessonId} />
                             ))
                         )}
                     </div>
