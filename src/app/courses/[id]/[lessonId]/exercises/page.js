@@ -31,23 +31,26 @@ export default function ExercisePage({ params }) {
       deadline: "۱۴۰۳/۰۳/۲۰",
       status: "pending",
     },
+
+
     {
       id: 3,
-      title: "تمرین سوم: محاسبه فاکتوریل",
-      description: "تابعی بنویسید که فاکتوریل یک عدد را محاسبه کند.",
-      difficulty: "متوسط",
-      deadline: "۱۴۰۳/۰۳/۲۵",
-      status: "pending",
+      title: "تمرین پنجم: طراحی الگوریتم مرتب‌سازی",
+      description: "یک الگوریتم برای مرتب‌سازی آرایه‌ها طراحی کنید.",
+      difficulty: "دشوار",
+      deadline: "۱۴۰۳/۰۳/۳۰",
+      status: "rejected",
     },
     {
       id: 4,
-      title: "تمرین سوم: محاسبه فاکتوریل",
-      description: "تابعی بنویسید که فاکتوریل یک عدد را محاسبه کند.",
-      difficulty: "دشوار",
-      deadline: "۱۴۰۳/۰۳/۲۵",
-      status: "completed",
+      title: "تمرین ششم: تحلیل الگوریتم جستجو",
+      description: "تحلیل زمان اجرا برای الگوریتم جستجوی دودویی انجام دهید.",
+      difficulty: "متوسط",
+      deadline: "۱۴۰۳/۰۴/۰۵",
+      status: "unfinished",
     },
   ];
+
 
   useEffect(() => {
     setTimeout(() => {
