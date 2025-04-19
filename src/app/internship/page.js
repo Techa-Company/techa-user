@@ -1,22 +1,27 @@
 "use client";
 
 import {
-  Calendar1,
   ChevronDown,
-  LifeBuoy,
-  RefreshCw,
   Users,
   Briefcase,
-  BookOpen,
-  Code,
-  Network,
-  Award,
-  Rocket,
-  MessageCircleHeart,
-  User,
-  Mail,
+  GitBranch,
+  ClipboardList,
+  Clock,
+  BarChart2,
+  Trophy,
   PenLine,
   Send,
+  Mail,
+  User,
+  MessageCircleHeart,
+  Rocket,
+  Award,
+  Network,
+  Code,
+  BookOpen,
+  RefreshCw,
+  LifeBuoy,
+
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -26,47 +31,99 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import { nanoid } from "@reduxjs/toolkit";
 
-const Accordion = ({ title, content, isOpen, onClick }) => {
+const ProcessTimeline = () => {
+  const steps = [
+    {
+      title: "ارزیابی اولیه",
+      icon: <ClipboardList size={24} />,
+      content: "بررسی رزومه و انجام مصاحبه فنی برای سنجش سطح مهارت‌ها"
+    },
+    {
+      title: "انتخاب تیم",
+      icon: <Users size={24} />,
+      content: "انتساب به یکی از تیم‌های توسعه بر اساس مهارت و علاقه‌مندی"
+    },
+    {
+      title: "تعیین پروژه",
+      icon: <GitBranch size={24} />,
+      content: "دریافت پروژه واقعی مطابق با نیازهای شرکت"
+    },
+    {
+      title: "برنامه‌ریزی اسپرینت",
+      icon: <Clock size={24} />,
+      content: "شرکت در جلسات برنامه‌ریزی و تعیین وظایف هفتگی"
+    },
+    {
+      title: "توسعه و همکاری",
+      icon: <BarChart2 size={24} />,
+      content: "همکاری با تیم و توسعه پروژه تحت نظارت منتور ارشد"
+    },
+    {
+      title: "تحویل نهایی",
+      icon: <Trophy size={24} />,
+      content: "ارائه پروژه و دریافت گواهی پایان دوره"
+    }
+  ];
+
+
+
   return (
-    <div
-      className="border-b border-[#D0DDD1] py-5 cursor-pointer"
-      onClick={onClick}
-    >
-      <div className="flex items-center justify-between">
-        <p className="text-[16px] font-normal text-[#042A1B] ">{title}</p>
-        <span
-          className={`text-[#7AE36A] transition-transform duration-300 ${isOpen ? "rotate-180" : ""
-            }`}
-        >
-          <ChevronDown />
-        </span>
-      </div>
-      <div
-        className={`overflow-hidden transition-all duration-500 ${isOpen ? "max-h-screen" : "max-h-0"
-          }`}
-      >
-        <div className="mt-5 pr-5 pl-10">
-          <p className="text-[16px] font-medium text-[#042A1B]  leading-7 text-justify">
-            {content}
-          </p>
-        </div>
+    <div className="relative mt-20">
+      <div className="hidden lg:block absolute left-1/2 top-0 h-full w-1 bg-[#D0DDD1] transform -translate-x-1/2" />
+
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-10">
+        {steps.map((step, index) => (
+          <motion.div
+            key={index}
+            className="relative lg:even:mt-20 lg:odd:mb-20"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.2 }}
+          >
+            <div className="bg-white p-6 rounded-2xl shadow-lg border border-[#D0DDD1]">
+              <div className="w-12 h-12 mb-4 bg-[#7AE36A] rounded-full flex items-center justify-center">
+                {step.icon}
+              </div>
+              <h3 className="text-xl font-bold text-[#042A1B] mb-2">{step.title}</h3>
+              <p className="text-[#042A1B]/80">{step.content}</p>
+            </div>
+
+            {/* Connectors for mobile */}
+            {index !== steps.length - 1 && (
+              <div className="lg:hidden absolute -bottom-10 left-1/2 h-10 w-1 bg-[#D0DDD1] transform -translate-x-1/2" />
+            )}
+          </motion.div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default function CourseDetail() {
+export default function InternshipProgram() {
   const [activeTab, setActiveTab] = useState(0);
-  const [showFullDescription, setShowFullDescription] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(0);
-
   const dispatch = useDispatch();
 
+  const accordionContent = [
+    {
+      title: "شرایط پذیرش در برنامه کارآموزی چیست؟",
+      content: "دانش پایه برنامه‌نویسی، آشنایی با Git و انگیزه بالا برای یادگیری"
+    },
+    {
+      title: "مدت زمان دوره کارآموزی چقدر است؟",
+      content: "بین 3 تا 6 ماه بسته به پیشرفت فردی و پیچیدگی پروژه"
+    },
+    {
+      title: "آیا پس از پایان دوره امکان استخدام وجود دارد؟",
+      content: "بهترین افراد پس از ارزیابی نهایی به تیم اصلی اضافه می‌شوند"
+    }
+  ];
+
   const [timeLeft, setTimeLeft] = useState({
-    days: 0,
+    days: 10,
     hours: 0,
     minutes: 0,
-    seconds: 0,
+    seconds: 5,
   });
 
   const calculateTimeLeft = () => {
@@ -97,148 +154,78 @@ export default function CourseDetail() {
     setShowFullDescription(!showFullDescription);
   };
 
-  const toggleAccordion = (index) => {
-    setOpenAccordion(openAccordion === index ? -1 : index);
-  };
-
-  const accordionContent = [
-    {
-      title: "آیا برای شرکت در این دوره نیاز به پیش‌نیاز خاصی دارم؟",
-      content:
-        "خیر، این دوره از سطح مقدماتی شروع می‌شود و تمام مفاهیم لازم را به شما آموزش می‌دهد. تنها چیزی که نیاز دارید علاقه و انگیزه کافی برای یادگیری است.",
-    },
-    {
-      title: "چقدر زمان باید روزانه برای این دوره اختصاص دهم؟",
-      content:
-        "پیشنهاد می‌شود حداقل ۲ تا ۳ ساعت در روز را به یادگیری و تمرین اختصاص دهید. البته این زمان بستگی به سرعت یادگیری شما دارد.",
-    },
-    {
-      title: "آیا پس از پایان دوره، گواهی معتبر دریافت می‌کنم؟",
-      content:
-        "بله، پس از اتمام موفقیت‌آمیز دوره، یک گواهی معتبر به شما اعطا می‌شود که می‌توانید از آن در رزومه خود استفاده کنید.",
-    },
-    {
-      title: "آیا این دوره شامل پروژه‌های عملی است؟",
-      content:
-        "بله، این دوره شامل چندین پروژه عملی است که به شما کمک می‌کند تا دانش خود را در دنیای واقعی به کار بگیرید.",
-    },
-    {
-      title: "چگونه می‌توانم از پشتیبانی دوره استفاده کنم؟",
-      content:
-        "شما می‌توانید از طریق پنل کاربری خود سوالات خود را مطرح کنید و یا در جلسات رفع اشکال شرکت کنید. پشتیبان‌های دوره همیشه آماده کمک به شما هستند.",
-    },
-    {
-      title: "آیا این دوره برای افراد مبتدی مناسب است؟",
-      content:
-        "بله، این دوره به گونه‌ای طراحی شده است که افراد مبتدی نیز بتوانند به راحتی مفاهیم را یاد بگیرند و پیشرفت کنند.",
-    },
-    {
-      title: "چگونه می‌توانم در پایان دوره شغل پیدا کنم؟",
-      content:
-        "این دوره شامل بخش‌هایی مانند راهنمایی برای ساخت رزومه، آمادگی برای مصاحبه‌های شغلی و معرفی به شرکت‌های معتبر است که به شما در یافتن شغل کمک می‌کند.",
-    },
-    {
-      title: "آیا محتوای دوره به‌روز است؟",
-      content:
-        "بله، محتوای دوره به‌طور مداوم به‌روزرسانی می‌شود تا مطابق با آخرین تکنولوژی‌ها و استانداردهای صنعت باشد.",
-    },
-    {
-      title: "آیا می‌توانم بعد از اتمام دوره، به‌صورت فریلنسر کار کنم؟",
-      content:
-        "بله، این دوره شما را برای کار به‌صورت فریلنسر نیز آماده می‌کند و مهارت‌های لازم برای مدیریت پروژه‌های مستقل را به شما آموزش می‌دهد.",
-    },
-    {
-      title: "آیا امکان پرداخت اقساطی برای این دوره وجود دارد؟",
-      content:
-        "بله، امکان پرداخت اقساطی برای این دوره وجود دارد. برای اطلاعات بیشتر می‌توانید با پشتیبانی تماس بگیرید.",
-    },
-  ];
 
   const courseOutline = [
     {
       id: 0,
-      title: "HTML",
-      icon: "/images/html.png", // مسیر عکس HTML
+      title: "Git و GitHub",
+      icon: "/images/git.png", // مسیر عکس Git
       content: [
-        "ساختار پایه‌ای HTML",
-        "تگ‌های اصلی (head, body, title, etc.)",
-        "فرم‌ها و ورودی‌ها",
-        "معرفی Semantic HTML",
-        "کار با لیست‌ها و جداول",
-        "ایجاد لینک‌ها و تصاویر",
-        "معرفی HTML5 و ویژگی‌های جدید",
+        "معرفی Git و مفاهیم پایه",
+        "کار با Branch ها و Merge",
+        "حل تعارضات (Conflict Resolution)",
+        "استفاده از GitHub برای همکاری تیمی",
+        "کار با Pull Requests و Code Reviews",
+        "ادغام CI/CD با GitHub Actions",
+        "بهینه‌سازی Workflow با Git Hooks",
       ],
     },
     {
       id: 1,
-      title: "CSS",
-      icon: "/images/css.png", // مسیر عکس CSS
+      title: "مدیریت پروژه با Scrum",
+      icon: "/images/scrum.png", // مسیر عکس Scrum
       content: [
-        "استایل‌دهی پایه‌ای",
-        "Flexbox و Grid",
-        "انیمیشن‌ها و ترنزیشن‌ها",
-        "رسپانسیو کردن وب‌سایت",
-        "کار با Media Queries",
-        "معرفی CSS Variables",
-        "استفاده از Preprocessors مانند SASS",
+        "معرفی Agile و Scrum",
+        "نقش‌ها در تیم Scrum (Product Owner, Scrum Master, Developer)",
+        "برنامه‌ریزی اسپرینت‌ها (Sprint Planning)",
+        "جلسات روزانه (Daily Standups)",
+        "بررسی و بازبینی اسپرینت (Sprint Review)",
+        "بازتاب اسپرینت (Sprint Retrospective)",
+        "مدیریت Backlog و Prioritization",
       ],
     },
     {
       id: 2,
-      title: "Tailwind CSS",
-      icon: "/images/tailwind.png", // مسیر عکس Tailwind CSS
+      title: "همکاری تیمی",
+      icon: "/images/teamwork.png", // مسیر عکس Teamwork
       content: [
-        "معرفی Tailwind CSS",
-        "Utility-First Approach",
-        "سفارشی‌سازی تنظیمات",
-        "استفاده از کامپوننت‌ها",
-        "کار با پلاگین‌ها",
-        "بهینه‌سازی برای تولید",
-        "ایجاد تم‌های سفارشی",
+        "اصول همکاری مؤثر در تیم‌های توسعه",
+        "برقراری ارتباط مؤثر با هم‌تیمی‌ها",
+        "مدیریت تعارضات در تیم",
+        "نحوه ارائه بازخورد سازنده",
+        "کار با ابزارهای هم‌نویسی کد (Pair Programming)",
+        "مشارکت در پروژه‌های Open Source",
+        "نحوه ارائه و دفاع از ایده‌ها",
       ],
     },
     {
       id: 3,
-      title: "JavaScript",
-      icon: "/images/js.png", // مسیر عکس JavaScript
+      title: "تست‌نویسی",
+      icon: "/images/testing.png", // مسیر عکس Testing
       content: [
-        "معرفی جاوااسکریپت",
-        "DOM Manipulation",
-        "Event Handling",
-        "کار با API ها",
-        "معرفی ES6+ Features",
-        "کار با Async/Await",
-        "معرفی Webpack و Babel",
+        "معرفی تست‌نویسی و انواع تست‌ها (Unit, Integration, E2E)",
+        "نوشتن تست‌های Unit با Jest",
+        "تست‌نویسی برای کامپوننت‌های React با React Testing Library",
+        "تست‌نویسی End-to-End با Cypress",
+        "ادغام تست‌ها در CI/CD Pipeline",
+        "نوشتن تست‌های Mock و Stub",
+        "بهینه‌سازی Coverage و گزارش‌گیری",
       ],
     },
     {
       id: 4,
-      title: "React",
-      icon: "/images/react.png", // مسیر عکس React
+      title: "توسعه حرفه‌ای",
+      icon: "/images/professional.png", // مسیر عکس Professional Development
       content: [
-        "معرفی React و JSX",
-        "کامپوننت‌ها و Props",
-        "مدیریت State و Hooks",
-        "راستینگ با React Router",
-        "کار با Context API",
-        "معرفی Redux و Zustand",
-        "بهینه‌سازی عملکرد React",
+        "نوشتن کد تمیز و قابل نگهداری (Clean Code)",
+        "اصول SOLID و Design Patterns",
+        "بهینه‌سازی عملکرد و Load Time",
+        "کار با ابزارهای Debugging و Profiling",
+        "مدیریت وابستگی‌ها با npm/yarn",
+        "معرفی Webpack و Babel",
+        "نحوه مستندسازی کد و پروژه‌ها",
       ],
     },
-    // {
-    //   id: 5,
-    //   title: "Git",
-    //   icon: "/images/git.png", // مسیر عکس Git
-    //   content: [
-    //     "معرفی Git و GitHub",
-    //     "کار با Branch ها",
-    //     "ادغام و حل تعارضات",
-    //     "Deploy پروژه‌ها",
-    //     "کار با Git Hooks",
-    //     "معرفی CI/CD Pipelines",
-    //     "بهینه‌سازی Workflow",
-    //   ],
-    // },
   ];
 
   return (
@@ -246,11 +233,12 @@ export default function CourseDetail() {
       <div className="container px-5 xl:px-20 mx-auto">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div className="text-[#042A1B]">
-            <h1 className="text-[28px] sm:text-5xl font-extrabold sm:leading-[60px]">
-              بوت کمپ برنامه نویسی فرانت اند <br />
-              از مقدماتی تا حرفه ای{" "}
+            <h1 className="text-4xl font-extrabold leading-[50px]">
+              دوره کارآموزی حرفه‌ای
+              <span className="bg-[#7AE36A] px-3 rounded-xl"> فرانت‌اند</span>
             </h1>
-            <p className="text-[17px] text-justify font-normal leading-7 my-4">
+            <p className="text-lg text-justify font-normal leading-7 my-6">
+
               مداد رنگی ها مشغول بودند به جز مداد سفید، هیچکس به او کار نمیداد،
               همه میگفتند : تو به هیچ دردی نمیخوری، یک شب که مداد رنگی ها تو
               سیاهی شب گم شده بودند، مداد سفید تا صبح ماه کشید مهتاب کشید و
@@ -259,237 +247,52 @@ export default function CourseDetail() {
               کنار هم نباشیم…
             </p>
             <Link
-              className="bg-[#7AE36A] px-5 py-2 rounded-full font-semibold  mt-2 inline-block hover:text-white transition-all duration-300"
-              href="#pre-registration"
-            >
-              پیش ثبت نام
+              className="bg-[#7AE36A] px-6 py-3 rounded-full font-semibold hover:bg-[#6ACD5A] transition-all"
+              href="#pre-registration">
+              ثبت نام
             </Link>
           </div>
-          <div className="relative w-full pb-[60%] lg:mt-0">
+          <div className="relative w-full pb-[60%]">
             <Image
-              src="/images/bootcamp.jpg"
+              src="/images/internship-image.png"
               className="rounded-3xl"
               layout="fill"
               objectFit="cover"
-              alt="banner"
+              alt="Internship"
             />
           </div>
         </div>
         {/* Features */}
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 2xl:gap-10 mt-20 sm:px-20">
-          <div className="bg-[#D0DDD140] rounded-3xl py-5 px-5 flex flex-col items-center">
-            <span className="text-[#042A1B]">
-              <svg
-                width="50"
-                height="50"
-                viewBox="0 0 30 30"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10 2.5V6.25"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M20 2.5V6.25"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M4.375 11.3625H25.625"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M26.25 10.625V21.25C26.25 25 24.375 27.5 20 27.5H10C5.625 27.5 3.75 25 3.75 21.25V10.625C3.75 6.875 5.625 4.375 10 4.375H20C24.375 4.375 26.25 6.875 26.25 10.625Z"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M14.9944 17.125H15.0056"
-                  stroke="#7AE36A"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M10.3679 17.125H10.3791"
-                  stroke="#7AE36A"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M10.3679 20.875H10.3791"
-                  stroke="#7AE36A"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            <p className="text-[#042A1B7F] font-normal my-5">مدت زمان دوره</p>
-            <h4 className="text-[#042A1B] font-extrabold text-xl sm:text-2xl">
-              98 ساعت
-            </h4>
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 mt-20">
+          <div className="bg-[#D0DDD140] rounded-2xl p-6 text-center">
+            <Briefcase className="w-12 h-12 mx-auto text-[#042A1B]" />
+            <h3 className="text-2xl font-bold mt-4">پروژه واقعی</h3>
+            <p className="text-[#042A1B]/80 mt-2">تجربه کار روی محصولات واقعی</p>
           </div>
-          <div className="bg-[#D0DDD140] rounded-3xl py-5 px-5 flex flex-col items-center">
-            <span>
-              <svg
-                width="46"
-                height="46"
-                viewBox="0 0 28 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M26.5 14C26.5 20.9 20.9 26.5 14 26.5C7.1 26.5 1.5 20.9 1.5 14C1.5 7.1 7.1 1.5 14 1.5C20.9 1.5 26.5 7.1 26.5 14Z"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M18.6375 17.975L14.7625 15.6625C14.0875 15.2625 13.5375 14.3 13.5375 13.5125V8.38751"
-                  stroke="#7AE36A"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            <p className="text-[#042A1B7F] font-normal my-5">آخرین بروزرسانی</p>
-            <h4 className="text-[#042A1B] font-extrabold text-xl sm:text-2xl">
-              04 خرداد 1403
-            </h4>
+
+          <div className="bg-[#D0DDD140] rounded-2xl p-6 text-center">
+            <Users className="w-12 h-12 mx-auto text-[#042A1B]" />
+            <h3 className="text-2xl font-bold mt-4">همکاری تیمی</h3>
+            <p className="text-[#042A1B]/80 mt-2">کار در قالب تیم‌های استارتاپی</p>
           </div>
-          <div className="bg-[#D0DDD140] rounded-3xl py-5 px-5 flex flex-col items-center">
-            <span>
-              <svg
-                width="44"
-                height="44"
-                viewBox="0 0 26 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8 26.5H18C23.025 26.5 23.925 24.4875 24.1875 22.0375L25.125 12.0375C25.4625 8.9875 24.5875 6.5 19.25 6.5H6.75C1.4125 6.5 0.537497 8.9875 0.874997 12.0375L1.8125 22.0375C2.075 24.4875 2.975 26.5 8 26.5Z"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M8 6.5V5.5C8 3.2875 8 1.5 12 1.5H14C18 1.5 18 3.2875 18 5.5V6.5"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M15.5 15.25V16.5C15.5 16.5125 15.5 16.5125 15.5 16.525C15.5 17.8875 15.4875 19 13 19C10.525 19 10.5 17.9 10.5 16.5375V15.25C10.5 14 10.5 14 11.75 14H14.25C15.5 14 15.5 14 15.5 15.25Z"
-                  stroke="#7AE36A"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M25.0625 12.75C22.175 14.85 18.875 16.1 15.5 16.525"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M1.27499 13.0875C4.08749 15.0125 7.26249 16.175 10.5 16.5375"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            <p className="text-[#042A1B7F] font-normal my-5">پیش نیاز</p>
-            <h4 className="text-[#042A1B] font-extrabold text-xl sm:text-2xl">
-              عشق و علاقه
-            </h4>
+
+          <div className="bg-[#D0DDD140] rounded-2xl p-6 text-center">
+            <GitBranch className="w-12 h-12 mx-auto text-[#042A1B]" />
+            <h3 className="text-2xl font-bold mt-4">Workflow حرفه‌ای</h3>
+            <p className="text-[#042A1B]/80 mt-2">آشنایی با فرایندهای Agile</p>
           </div>
-          <div className="bg-[#D0DDD140] rounded-3xl py-5 px-5 flex flex-col items-center">
-            <span>
-              <svg
-                width="42"
-                height="42"
-                viewBox="0 0 28 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M26.5 17.75V10.25C26.5 4 24 1.5 17.75 1.5H10.25C4 1.5 1.5 4 1.5 10.25V17.75C1.5 24 4 26.5 10.25 26.5H17.75C24 26.5 26.5 24 26.5 17.75Z"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2.14999 7.88751H25.85"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M9.64999 1.63751V7.71251"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M18.35 1.63751V7.15001"
-                  stroke="#042A1B"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M11.1875 17.0625V15.5625C11.1875 13.6375 12.55 12.85 14.2125 13.8125L15.5125 14.5625L16.8125 15.3125C18.475 16.275 18.475 17.85 16.8125 18.8125L15.5125 19.5625L14.2125 20.3125C12.55 21.275 11.1875 20.4875 11.1875 18.5625V17.0625V17.0625Z"
-                  stroke="#7AE36A"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            <p className="text-[#042A1B7F] font-normal my-5">نوع مشاهده</p>
-            <h4 className="text-[#042A1B] font-extrabold text-xl sm:text-2xl">
-              دانلودی/آنلاین
-            </h4>
+
+          <div className="bg-[#D0DDD140] rounded-2xl p-6 text-center">
+            <Trophy className="w-12 h-12 mx-auto text-[#042A1B]" />
+            <h3 className="text-2xl font-bold mt-4">گواهی معتبر</h3>
+            <p className="text-[#042A1B]/80 mt-2">مدرک پایان دوره با تأیید شرکتی</p>
           </div>
         </div>
         {/* Teacher */}
         <div className="mt-32">
           <div className="text-[#042A1B] text-center">
             <h1 className="font-extrabold text-4xl ">
-              مدرس{" "}
+              منتور {" "}
               <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">
                 دوره
               </span>
@@ -527,6 +330,13 @@ export default function CourseDetail() {
               />
             </div>
           </div>
+        </div>
+        {/* Progress */}
+        <div className="mt-32">
+          <h2 className="text-4xl font-bold text-center">
+            فرایند <span className="bg-[#7AE36A] px-3 rounded-xl">کارآموزی</span>
+          </h2>
+          <ProcessTimeline />
         </div>
         {/* Sylabues */}
         <div className="mt-32">
@@ -814,8 +624,8 @@ export default function CourseDetail() {
                 </p>
               </div>
               <button
-                className="mt-6 w-full bg-[#042A1B] text-white py-3 rounded-xl font-semibold hover:bg-[#031A12] transition-all duration-300 cursor-pointer"
-                onClick={() => dispatch(addToCart({ id: nanoid(), title: "بوت کمپ برنامه نویسی فرانت اند", image: "/images/bootcamp.jpg", price: 8000000 }))}
+                className="mt-6 w-full bg-[#042A1B] text-white py-3 rounded-xl font-semibold hover:bg-[#031A12] transition-all duration-300"
+                onClick={() => dispatch(addToCart({ id: nanoid(), title: "دوره حرفه ای کارآموزی فرانت اند", image: "/images/internship-image.png", price: 9000000 }))}
 
               >
                 پیش ثبت نام
@@ -852,8 +662,8 @@ export default function CourseDetail() {
                   type="text"
                   placeholder="نام کامل"
                   className="w-full p-3.5 bg-white rounded-lg border border-[#D0DDD1] 
-                             focus:border-[#7AE36A] focus:outline-none focus:ring-1 focus:ring-[#7AE36A] 
-                             placeholder:text-[#042A1B]/50"
+                             focus:border-[#7AE36A] focus:ring-1 focus:ring-[#7AE36A]/30 
+                             placeholder:text-[#042A1B]/50 transition-all"
                 />
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#042A1B]/40" />
               </div>
@@ -863,8 +673,8 @@ export default function CourseDetail() {
                   type="email"
                   placeholder="پست الکترونیک"
                   className="w-full p-3.5 bg-white rounded-lg border border-[#D0DDD1] 
-                             focus:border-[#7AE36A] focus:outline-none focus:ring-1 focus:ring-[#7AE36A] 
-                             placeholder:text-[#042A1B]/50"
+                             focus:border-[#7AE36A] focus:ring-1 focus:ring-[#7AE36A]/30 
+                             placeholder:text-[#042A1B]/50 transition-all"
                 />
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#042A1B]/40" />
               </div>
@@ -876,8 +686,8 @@ export default function CourseDetail() {
                 placeholder="پیام شما"
                 rows="4"
                 className="w-full p-3.5 bg-white rounded-lg border border-[#D0DDD1] 
-                         focus:border-[#7AE36A] focus:outline-none focus:ring-1 focus:ring-[#7AE36A] 
-                         placeholder:text-[#042A1B]/50"
+                         focus:border-[#7AE36A] focus:ring-1 focus:ring-[#7AE36A]/30 
+                         placeholder:text-[#042A1B]/50 transition-all"
               ></textarea>
               <PenLine className="absolute left-3 top-4 text-[#042A1B]/40" />
             </div>
@@ -894,25 +704,36 @@ export default function CourseDetail() {
             </button>
           </form>
         </div>
-        {/* FAQs */}
+
         <div className="mt-32">
-          <div className="text-[#042A1B] text-center">
-            <h1 className="font-extrabold text-4xl ">
-              سوالات{" "}
-              <span className="bg-[#7AE36A] py-0.5 px-3 rounded-xl inline-block">
-                متداول
-              </span>
-            </h1>
-          </div>
-          <div className="mt-20 lg:px-20">
-            {accordionContent.map((accordion, index) => (
-              <Accordion
+          <h2 className="text-4xl font-bold text-center mb-20">
+            سوالات <span className="bg-[#7AE36A] px-3 rounded-xl">متداول</span>
+          </h2>
+          <div className="max-w-3xl mx-auto">
+            {accordionContent.map((item, index) => (
+              <div
                 key={index}
-                title={accordion.title}
-                content={accordion.content}
-                isOpen={openAccordion === index}
-                onClick={() => toggleAccordion(index)}
-              />
+                className="border-b border-[#D0DDD1] py-5 cursor-pointer"
+                onClick={() => setOpenAccordion(openAccordion === index ? -1 : index)}
+              >
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-medium">{item.title}</p>
+                  <ChevronDown className={`transform transition-transform ${openAccordion === index ? "rotate-180" : ""
+                    }`} />
+                </div>
+                <AnimatePresence>
+                  {openAccordion === index && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <p className="mt-4 text-[#042A1B]/80">{item.content}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ))}
           </div>
         </div>

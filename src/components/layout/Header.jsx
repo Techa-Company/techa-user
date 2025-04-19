@@ -29,6 +29,7 @@ import { RiShoppingCartLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 
 const Header = () => {
+  const [mounted, setMounted] = useState(false); // Add mounted state
   const [isMobile, setIsMobile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
@@ -42,6 +43,8 @@ const Header = () => {
 
   console.log(items)
   useEffect(() => {
+    setMounted(true); // Set mounted to true after component mounts
+
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 640);
     };
@@ -347,22 +350,19 @@ const Header = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              {
-                items.length > 0 && (
-
-                  <Link
-                    href="/cart"
-                    className="relative flex items-center gap-1 text-white hover:text-emerald-300 transition-colors"
-                  >
+              {mounted && items.length > 0 && (
+                <Link
+                  href="/cart"
+                  className="relative flex items-center gap-1 text-white hover:text-emerald-300 transition-colors"
+                >
+                  <span>
                     <RiShoppingCartLine className="w-6 h-6" />
-                    {items.length > 0 && (
-                      <span className="absolute -top-2 -right-3 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs">
-                        {items.length}
-                      </span>
-                    )}
-                  </Link>
-                )
-              }
+                  </span>
+                  <span className="absolute -top-2 -right-3 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                    {items.length}
+                  </span>
+                </Link>
+              )}
 
               <div className="lg:hidden">
                 {isMenuOpen ? (

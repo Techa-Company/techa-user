@@ -7,7 +7,9 @@ import {
     RiCoupon3Line,
     RiWallet3Line,
     RiBankLine,
-    RiCashLine
+    RiCashLine,
+    RiArrowLeftLine,
+    RiArrowRightLine
 } from 'react-icons/ri';
 import {
     removeFromCart,
@@ -15,9 +17,10 @@ import {
     selectPayment,
     clearCart
 } from '../features/cart/cartSlice';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const paymentMethods = [
     { id: 'online', name: 'پرداخت آنلاین', icon: <RiWallet3Line className="w-6 h-6" /> },
@@ -36,6 +39,12 @@ const CartPage = () => {
     const dispatch = useDispatch();
     const [discountInput, setDiscountInput] = useState('');
     const [showPayment, setShowPayment] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+        return () => setIsMounted(false);
+    }, []);
 
     const handleApplyDiscount = () => {
         dispatch(applyDiscount(discountInput.toUpperCase()));
@@ -44,180 +53,216 @@ const CartPage = () => {
 
     const grandTotal = totalAmount - discountAmount;
 
-    return (
-        <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white py-12">
-            <div className="container mx-auto px-4 lg:px-8">
-                <div className="max-w-6xl mx-auto">
-                    <div className="flex items-center justify-between mb-8">
-                        <h1 className="text-3xl font-dana-bold text-emerald-800 flex items-center gap-3">
-                            <RiShoppingCartLine className="w-8 h-8" />
-                            سبد خرید شما
-                        </h1>
-                        <Link
-                            href="/courses"
-                            className="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-lg hover:bg-emerald-200 transition-colors"
-                        >
-                            بازگشت به فروشگاه
-                        </Link>
-                    </div>
+    const cartItemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 },
+        exit: { opacity: 0, x: 50 }
+    };
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* لیست دوره ها */}
-                        <div className="lg:col-span-2 space-y-6">
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-50 pt-32">
+            <div className="container mx-auto px-5 lg:px-0 xl:px-5 2xl:px-20">
+                {/* Header Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4"
+                >
+                    <h1 className="text-2xl md:text-3xl font-bold text-emerald-800 flex items-center gap-3">
+                        <RiShoppingCartLine className="w-7 h-7 md:w-8 md:h-8" />
+                        سبد خرید شما
+                    </h1>
+                    <Link
+                        href="/courses"
+                        className="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-4 py-2 md:px-5 md:py-2.5 rounded-lg transition-all duration-300 flex items-center gap-2 group"
+                    >
+                        <RiArrowRightLine className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                        بازگشت به فروشگاه
+                    </Link>
+                </motion.div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+                    {/* Cart Items Section */}
+                    <div className="lg:col-span-2 space-y-4 md:space-y-6">
+                        <AnimatePresence>
                             {items.length === 0 ? (
-                                <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-                                    <Image
-                                        src="/images/empty-cart.png"
-                                        width={300}
-                                        height={200}
-                                        alt="سبد خرید خالی"
-                                        className="mx-auto"
-                                    />
-                                    <p className="text-gray-600 text-lg my-5">سبد خرید شما خالی است</p>
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center border-2 border-dashed border-emerald-100 hover:border-emerald-200 transition-colors"
+                                >
+                                    <div className="max-w-xs mx-auto">
+                                        <Image
+                                            src="/images/empty-cart.png"
+                                            width={400}
+                                            height={300}
+                                            alt="سبد خرید خالی"
+                                            className="mx-auto w-3/4 md:w-full"
+                                        />
+                                    </div>
+                                    <p className="text-gray-600 text-lg my-5">سبد خرید شما خالی است!</p>
                                     <Link
                                         href="/courses"
-                                        className="bg-emerald-600 text-white px-8 py-3 rounded-xl hover:bg-emerald-700 transition-colors"
+                                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl transition-colors inline-flex items-center gap-2"
                                     >
+                                        <RiShoppingCartLine className="w-5 h-5" />
                                         مشاهده دوره‌ها
                                     </Link>
-                                </div>
+                                </motion.div>
                             ) : (
-                                items.map(item => (
-                                    <div
+                                items.map((item, index) => (
+                                    <motion.div
                                         key={item.id}
-                                        className="bg-white rounded-2xl shadow-lg p-6 border border-emerald-100 group transition-all hover:shadow-xl"
+                                        variants={cartItemVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
+                                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                                        className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-emerald-100 group hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                                     >
-                                        <div className="flex gap-4 items-center">
-                                            <Image
-                                                src={item.image}
-                                                alt={item.title}
-                                                width={150}
-                                                height={150}
-                                                className="rounded-xl object-cover border-2 border-emerald-100"
-                                            />
-                                            <div className="flex-1">
-                                                <h3 className="font-dana-bold text-emerald-800 text-lg mb-2">
+                                        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                                            <div className="relative w-full md:w-32 h-32 shrink-0">
+                                                <Image
+                                                    src={item.image}
+                                                    alt={item.title}
+                                                    fill
+                                                    className="rounded-xl object-cover border-2 border-emerald-100"
+                                                    sizes="(max-width: 768px) 100vw, 150px"
+                                                />
+                                            </div>
+                                            <div className="flex-1 w-full">
+                                                <h3 className="font-dana-bold text-emerald-800 text-lg md:text-xl mb-2">
                                                     {item.title}
                                                 </h3>
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-emerald-600 font-dana-medium">
+                                                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                                                    <span className="text-emerald-600 font-dana-medium text-lg">
                                                         {item.price.toLocaleString()} تومان
                                                     </span>
+                                                    <button
+                                                        onClick={() => dispatch(removeFromCart(item.id))}
+                                                        className="text-red-500 hover:text-red-600 flex items-center gap-2 transition-colors md:pr-4"
+                                                    >
+                                                        <RiDeleteBinLine className="w-5 h-5" />
+                                                        <span className="text-sm md:text-base">حذف از سبد</span>
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <button
-                                                onClick={() => dispatch(removeFromCart(item.id))}
-                                                className="text-red-500 hover:text-red-600 flex items-center gap-2"
-                                            >
-                                                <RiDeleteBinLine className="w-5 h-5" />
-                                                حذف
-                                            </button>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 ))
                             )}
-                        </div>
+                        </AnimatePresence>
+                    </div>
 
-                        {/* خلاصه سبد خرید */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 h-fit sticky top-24 border border-emerald-100">
-                            <h2 className="text-xl font-dana-bold text-emerald-800 mb-6">جزئیات پرداخت</h2>
+                    {/* Payment Summary Section */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="bg-white rounded-2xl shadow-xl p-5 md:p-6 h-fit sticky top-24 border border-emerald-100 backdrop-blur-sm bg-opacity-90"
+                    >
+                        <h2 className="text-xl font-dana-bold text-emerald-800 mb-5 md:mb-6">جزئیات پرداخت</h2>
 
-                            <div className="space-y-6">
-                                {/* بخش تخفیف */}
-                                <div className="bg-emerald-50 rounded-xl p-4">
-                                    <label className="block text-sm font-dana-medium text-emerald-800 mb-2">
-                                        کد تخفیف دارید؟
-                                    </label>
-                                    <div className="flex gap-2">
-                                        <input
-                                            type="text"
-                                            placeholder="کد تخفیف را وارد کنید"
-                                            className="flex-1 border border-emerald-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                                            value={discountInput}
-                                            onChange={(e) => setDiscountInput(e.target.value)}
-                                        />
-                                        <button
-                                            onClick={handleApplyDiscount}
-                                            className="bg-emerald-600 text-white px-5 rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2"
-                                        >
-                                            <RiCoupon3Line className="w-5 h-5" />
-                                            اعمال
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* خلاصه قیمت */}
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-gray-600">جمع کل:</span>
-                                        <span className="font-dana-medium text-emerald-800">
-                                            {totalAmount.toLocaleString()} تومان
-                                        </span>
-                                    </div>
-
-                                    {discountAmount > 0 && (
-                                        <div className="flex justify-between items-center text-green-600">
-                                            <span>تخفیف ({discountCode}):</span>
-                                            <span>-{discountAmount.toLocaleString()} تومان</span>
-                                        </div>
-                                    )}
-
-                                    <div className="border-t border-emerald-100 pt-4">
-                                        <div className="flex justify-between items-center font-dana-bold text-lg">
-                                            <span>مبلغ نهایی:</span>
-                                            <span className="text-emerald-600">
-                                                {grandTotal.toLocaleString()} تومان
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* انتخاب درگاه پرداخت */}
-                                <div className="pt-4 border-t border-emerald-100">
-                                    <h3 className="text-lg font-dana-medium text-emerald-800 mb-4">
-                                        روش پرداخت
-                                    </h3>
-
-                                    <div className="grid grid-cols-1 gap-3">
-                                        {paymentMethods.map(method => (
-                                            <button
-                                                key={method.id}
-                                                onClick={() => {
-                                                    dispatch(selectPayment(method.id));
-                                                    setShowPayment(true);
-                                                }}
-                                                className={`p-4 rounded-xl border-2 transition-all ${selectedPayment === method.id
-                                                    ? 'border-emerald-500 bg-emerald-50'
-                                                    : 'border-emerald-100 hover:border-emerald-300'
-                                                    }`}
-                                            >
-                                                <div className="flex items-center gap-3">
-                                                    <span className="text-emerald-600">{method.icon}</span>
-                                                    <span className="font-dana-medium">{method.name}</span>
-                                                </div>
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    {/* دکمه پرداخت نهایی */}
-                                    {selectedPayment && (
-                                        <div className="mt-6 animate-fade-in">
-                                            <button
-                                                onClick={() => {
-                                                    // اتصال به درگاه پرداخت
-                                                    dispatch(clearCart());
-                                                }}
-                                                className="w-full bg-emerald-600 text-white py-3.5 rounded-xl hover:bg-emerald-700 transition-colors font-dana-medium flex items-center justify-center gap-2"
-                                            >
-                                                پرداخت ایمن
-                                                <RiWallet3Line className="w-5 h-5" />
-                                            </button>
-                                        </div>
-                                    )}
+                        <div className="space-y-5 md:space-y-6">
+                            {/* Discount Section */}
+                            <div className="bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl p-4 border border-emerald-100">
+                                <label className="block text-sm font-dana-medium text-emerald-800 mb-2">
+                                    کد تخفیف
+                                </label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        placeholder="کد تخفیف را وارد کنید..."
+                                        className="flex-1 border border-emerald-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm md:text-base"
+                                        value={discountInput}
+                                        onChange={(e) => setDiscountInput(e.target.value)}
+                                    />
+                                    <button
+                                        onClick={handleApplyDiscount}
+                                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 md:px-5 rounded-lg transition-colors flex items-center gap-2 text-sm md:text-base"
+                                    >
+                                        <RiCoupon3Line className="w-4 h-4 md:w-5 md:h-5" />
+                                        اعمال
+                                    </button>
                                 </div>
                             </div>
+
+                            {/* Price Summary */}
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-gray-600">جمع کل:</span>
+                                    <span className="font-dana-medium text-emerald-800">
+                                        {totalAmount.toLocaleString()} تومان
+                                    </span>
+                                </div>
+
+                                {discountAmount > 0 && (
+                                    <div className="flex justify-between items-center text-green-600">
+                                        <span>تخفیف ({discountCode}):</span>
+                                        <span>-{discountAmount.toLocaleString()} تومان</span>
+                                    </div>
+                                )}
+
+                                <div className="border-t border-emerald-100 pt-4">
+                                    <div className="flex justify-between items-center font-dana-bold text-lg md:text-xl">
+                                        <span>مبلغ نهایی:</span>
+                                        <span className="text-emerald-600">
+                                            {grandTotal.toLocaleString()} تومان
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Payment Methods */}
+                            <div className="pt-4 border-t border-emerald-100">
+                                <h3 className="text-lg font-dana-medium text-emerald-800 mb-4">
+                                    روش پرداخت
+                                </h3>
+
+                                <div className="grid grid-cols-1 gap-2 md:gap-3">
+                                    {paymentMethods.map(method => (
+                                        <motion.button
+                                            key={method.id}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={() => {
+                                                dispatch(selectPayment(method.id));
+                                                setShowPayment(true);
+                                            }}
+                                            className={`p-3 md:p-4 rounded-xl border-2 transition-all ${selectedPayment === method.id
+                                                ? 'border-emerald-500 bg-emerald-50'
+                                                : 'border-emerald-100 hover:border-emerald-300'
+                                                }`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <span className={`${selectedPayment === method.id ? 'text-emerald-600' : 'text-gray-600'}`}>
+                                                    {method.icon}
+                                                </span>
+                                                <span className="font-dana-medium text-sm md:text-base">
+                                                    {method.name}
+                                                </span>
+                                            </div>
+                                        </motion.button>
+                                    ))}
+                                </div>
+
+                                {/* Checkout Button */}
+                                {selectedPayment && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mt-6"
+                                    >
+                                        <button
+                                            onClick={() => dispatch(clearCart())}
+                                            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 md:py-3.5 rounded-xl transition-all duration-300 font-dana-medium flex items-center justify-center gap-2 relative overflow-hidden"
+                                        >
+                                            پرداخت ایمن
+                                            <RiWallet3Line className="w-5 h-5" />
+                                        </button>
+                                    </motion.div>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </div>
