@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { renderInlineSnippets } from "../../../../components/inline/utils/renderUtils";
 import LessonSkeleton from "../../../../components/docs/doc/lesson/LessonSkeleton";
-import { VideoCourseAd, VideoCourseAdEnd } from "../page";
-
+import VideoCourseAd from "../../../../components/docs/doc/VideoCourseAd"
+import VideoCourseAdEnd from "../../../../components/docs/doc/VideoCourseAdEnd"
 export default function Lesson() {
   const [openAccordion, setOpenAccordion] = useState(0);
   const [lessonData, setLessonData] = useState(null);
