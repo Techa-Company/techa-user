@@ -3,11 +3,17 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react';
 import { RiQuestionAnswerLine } from 'react-icons/ri';
-
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../app/features/cart/cartSlice';
 const Sidebar = () => {
+
+    const dispatch = useDispatch()
+
     const { id } = useParams
 
     const course = {
+        title: "دوره ی برنامه نویسی با جاوا اسکریپت",
+        image: "/images/blog-1.png",
         price: 1490000,
         originalPrice: 1990000,
         discount: 25,
@@ -64,11 +70,12 @@ const Sidebar = () => {
                             <span className="text-gray-500 mb-1">تومان</span>
                         </div>
                     </div>
-                    <button className="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl font-dana-medium shadow-lg shadow-emerald-100 transition-all flex items-center justify-center gap-2">
+                    <button className="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl font-dana-medium shadow-lg shadow-emerald-100 transition-all flex items-center justify-center gap-2"
+                        onClick={() => dispatch(addToCart(course))}>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
-                        ثبت نام فوری در دوره
+                        ثبت نام در دوره
                     </button>
                 </div>
 

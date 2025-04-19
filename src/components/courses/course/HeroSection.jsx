@@ -78,8 +78,8 @@ const HeroSection = ({ data, onVideoClick }) => {
                             alt={data.title}
                             fill
                             className="object-cover transform transition-transform duration-500 group-hover:scale-105"
-                            placeholder="blur"
-                            blurDataURL="/images/blur.jpg"
+                        // placeholder="blur"
+                        // blurDataURL="/images/"
                         />
 
                         <div className="absolute inset-0 flex items-center justify-center">

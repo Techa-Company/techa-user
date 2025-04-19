@@ -12,30 +12,34 @@ export const metadata = {
   description: "پلتفرم آموزشی تکا",
 };
 
+import { Providers } from "./Providers"
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="fa">
-      <link rel="icon" href="/images/favicon.svg" sizes="any" />
-      <body>
-        <AuthProvider>
-          <Header />
-          <main className="mb-40 md:mb-60">{children}</main>
-          <Footer />
-        </AuthProvider>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={true}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-          transition={Bounce}
-        />
-      </body>
-    </html>
+    <Providers>
+      <html lang="fa">
+        <link rel="icon" href="/images/favicon.svg" sizes="any" />
+        <body>
+          <AuthProvider>
+            <Header />
+            <main className="mb-40 md:mb-60">{children}</main>
+            <Footer />
+          </AuthProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={true}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+            transition={Bounce}
+          />
+        </body>
+      </html>
+    </Providers>
   );
 }
