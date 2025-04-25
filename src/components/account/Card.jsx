@@ -2,6 +2,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+
 export default function DashboardCard({
     title,
     count,
@@ -13,7 +14,7 @@ export default function DashboardCard({
     return (
         <motion.div
             whileHover={{ y: -5, scale: 1.02 }}
-            className={`${color} p-6 rounded-2xl shadow-xl relative overflow-hidden group transition-all duration-300`}
+            className={`bg-gradient-to-br ${color} p-6 rounded-2xl shadow-xl relative overflow-hidden group transition-all duration-300`}
         >
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -26,10 +27,12 @@ export default function DashboardCard({
 
                 {trend && (
                     <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
-                        <span className={`text-sm ${trend.value > 0 ? 'text-green-200' : 'text-red-200'}`}>
+                        <span className={`text-sm ${trend.value > 0 ? 'text-green-200' : 'text-red-200'
+                            }`}>
                             {trend.value > 0 ? '+' : ''}{trend.value}%
                         </span>
-                        <trend.icon className={`w-4 h-4 ${trend.value > 0 ? 'text-green-200' : 'text-red-200'}`} />
+                        <trend.icon className={`w-4 h-4 ${trend.value > 0 ? 'text-green-200' : 'text-red-200'
+                            }`} />
                     </div>
                 )}
             </div>
@@ -44,7 +47,7 @@ export default function DashboardCard({
                         initial={{ width: 0 }}
                         animate={{ width: `${progress}%` }}
                         transition={{ duration: 1.5, type: 'spring' }}
-                        className="h-full bg-white rounded-full shadow-progress"
+                        className="h-full bg-emerald-200 rounded-full shadow-progress"
                     />
                 </div>
             </div>
