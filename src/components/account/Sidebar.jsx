@@ -3,21 +3,21 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { Home, User, Book, Dumbbell, ShoppingCart, Ticket, Mail, Folder, Briefcase, Key, Phone, X, Menu } from 'lucide-react'
+import { Home, User, Book, Dumbbell, ShoppingCart, Ticket, Mail, Folder, Briefcase, Key, Phone, X, Menu, Clipboard, Target } from 'lucide-react'
+
 
 const sidebarItems = [
     { name: 'داشبورد', href: '/account', icon: Home },
-    { name: 'پروفایل', href: '/account/profile', icon: User },
-    { name: 'دوره‌های من', href: '/account/courses', icon: Book },
-    { name: 'تمرین‌ها', href: '/account/exercises', icon: Dumbbell },
-    { name: 'بوت کمپ', href: '/account/bootcamp', icon: Briefcase },
-    { name: 'مدارک من', href: '/account/certificates', icon: Folder },
+    { name: 'پروفایل من', href: '/account/profile', icon: User },
     { name: 'لایسنس‌های من', href: '/account/license', icon: Key },
-    { name: 'درخواست مشاوره', href: '/account/consultation', icon: Phone },
-    { name: 'خریدها', href: '/account/purchases', icon: ShoppingCart },
+    { name: 'دوره‌ های من', href: '/account/courses', icon: Book },
+    { name: 'تمرین ها', href: '/account/exercises', icon: Dumbbell },
+    { name: 'آزمون ها', href: '/account/quiz', icon: Clipboard },
+    { name: 'تعیین سطح هوشمند', href: '/account/level-assessment', icon: Target },
+    { name: 'مدارک من', href: '/account/certificates', icon: Folder },
+    { name: 'خریدها', href: '/account/purchase', icon: ShoppingCart },
     { name: 'تیکت‌ها', href: '/account/tickets', icon: Ticket },
-    { name: 'ارتباط با استاد', href: '/account/contact', icon: Mail },
-]
+];
 
 export default function Sidebar() {
     const pathname = usePathname()
