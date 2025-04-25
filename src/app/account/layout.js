@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
     return (
         <>
             <Sidebar />
-            <section className="flex-1 pt-32 lg:mr-72">
+            <section className="flex-1 pt-32 lg:mr-72 overflow-hidden">
                 {children}
             </section>
         </>
