@@ -1,8 +1,11 @@
-// features/cart/cartSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+
+// بررسی اینکه آیا در مرورگر هستیم
+const isBrowser = typeof window !== 'undefined';
 
 // تابع برای بارگیری از localStorage
 export const loadFromLocalStorage = () => {
+    if (!isBrowser) return undefined;
     try {
         const serializedState = localStorage.getItem('cart');
         if (serializedState === null) return undefined;
@@ -15,6 +18,7 @@ export const loadFromLocalStorage = () => {
 
 // تابع برای ذخیره در localStorage
 const saveToLocalStorage = (state) => {
+    if (!isBrowser) return;
     try {
         const serializedState = JSON.stringify(state);
         localStorage.setItem('cart', serializedState);
@@ -23,13 +27,17 @@ const saveToLocalStorage = (state) => {
     }
 };
 
-const initialState = loadFromLocalStorage() || {
+// initial state پیش‌فرض
+const defaultState = {
     items: [],
     totalAmount: 0,
     discountCode: null,
     discountAmount: 0,
     selectedPayment: null,
 };
+
+// مقداردهی اولیه: اگر در مرورگر هستیم، از localStorage بخونه، وگرنه پیش‌فرض
+const initialState = isBrowser ? loadFromLocalStorage() || defaultState : defaultState;
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -46,7 +54,7 @@ const cartSlice = createSlice({
                 (sum, item) => sum + item.price,
                 0
             );
-            saveToLocalStorage(state); // ذخیره پس از تغییر
+            saveToLocalStorage(state);
         },
         removeFromCart: (state, action) => {
             state.items = state.items.filter(item => item.id !== action.payload);
@@ -54,10 +62,10 @@ const cartSlice = createSlice({
                 (sum, item) => sum + item.price,
                 0
             );
-            saveToLocalStorage(state); // ذخیره پس از تغییر
+            saveToLocalStorage(state);
         },
         applyDiscount: (state, action) => {
-            // ... منطق تخفیف
+            // منطق تخفیف رو اینجا پیاده کن
             saveToLocalStorage(state);
         },
         selectPayment: (state, action) => {
@@ -69,6 +77,7 @@ const cartSlice = createSlice({
             state.totalAmount = 0;
             state.discountCode = null;
             state.discountAmount = 0;
+            state.selectedPayment = null;
             saveToLocalStorage(state);
         },
     },
@@ -81,4 +90,5 @@ export const {
     selectPayment,
     clearCart
 } = cartSlice.actions;
+
 export default cartSlice.reducer;

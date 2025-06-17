@@ -263,6 +263,16 @@ const Header = () => {
                                 قوانین و مقررات
                               </Link>
                             </li>
+                            <li>
+                              <Link
+                                href="/ai"
+                                className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors"
+                                onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                              >
+                                <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                                ویرایشگر هوشمند
+                              </Link>
+                            </li>
                           </ul>
                         </motion.div>
                       )}
@@ -313,6 +323,16 @@ const Header = () => {
                             >
                               <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
                               قوانین و مقررات                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/ai"
+                              className="text-white flex items-center gap-3"
+                              onClick={() => { setIsSubMenuOpen(false); setIsMenuOpen(false) }}
+                            >
+                              <span className="w-2 h-2 bg-[#7AE36A] rounded-full" />
+                              ویرایشگر هوشمند
+                            </Link>
                           </li>
                         </ul>
                       </motion.div>
