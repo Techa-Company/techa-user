@@ -4,6 +4,7 @@ import DocCard from "../../components/docs/DocCard";
 import DocsSkeleton from "../../components/common/DocsSkeleton";
 import { BookText, Clock, Code, GraduationCap } from "lucide-react";
 import Link from "next/link";
+import { SP_fetch } from "../../api/utils/api";
 
 export default function Docs() {
   const [docs, setDocs] = useState([]);
@@ -82,6 +83,43 @@ export default function Docs() {
         console.error("Error fetching courses:", error);
         setLoading(false);
       });
+  }, []);
+
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        //  const response = await fetch("https://api.techa.me/api/Course");
+        const { Data, IsSuccess, Message, StatusCode } = await SP_fetch(
+          "Report_Courses"
+        );
+        const raw = Data.Dataset;
+        console.log(Data)
+
+        if (IsSuccess) {
+          // const enrichedCourses = raw
+          //   .filter((course) => !course.Disabled)
+          //   .map((course) => ({
+          //     ...course,
+          //     Students: Math.floor(Math.random() * 5000),
+          //     Rating: (Math.random() * 1 + 4).toFixed(1),
+          //     Comments: Math.floor(Math.random() * 200),
+          //     Level: ["مبتدی", "متوسط", "پیشرفته"][
+          //       Math.floor(Math.random() * 3)
+          //     ],
+          //     Duration: Math.floor(Math.random() * 20) + 5,
+          //   }));
+          // console.log(enrichedCourses, "enriched");
+          // setCourses(enrichedCourses);
+        }
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
   }, []);
 
 
