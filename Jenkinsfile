@@ -30,11 +30,23 @@ pipeline {
             }
         }
 
+        stage('Build') {
+            steps {
+                script {
+                    try {
+                        sh 'pnpm run build'
+                    } catch (err) {
+                        error("Build failed: ${err}")
+                    }
+                }
+            }
+        }
+
         stage('Run') {
             steps {
                 script {
                     try {
-                        sh 'pnpm run dev'
+                        sh 'pnpm run start'
                         echo 'Run completed successfully ✅'
                     } catch (err) {
                         error("Run failed ❌: ${err}")
