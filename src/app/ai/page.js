@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { Play, Square, Edit, Terminal, RefreshCw, X, Wand2, Code, Layout, Database, Braces } from "lucide-react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AIAssistedMultiLanguageEditor = () => {
     const languages = [
@@ -39,7 +41,7 @@ const AIAssistedMultiLanguageEditor = () => {
     };
 
     const [activeTab, setActiveTab] = useState("html");
-    const [code, setCode] = useState(defaultCodes.html);
+    const [code, setCode] = useState(defaultCodes.html || "");
     const [isEditable, setIsEditable] = useState(true);
     const [isRunning, setIsRunning] = useState(false);
     const [iframeKey, setIframeKey] = useState(0);
@@ -47,7 +49,6 @@ const AIAssistedMultiLanguageEditor = () => {
     const [aiLoading, setAiLoading] = useState(false);
     const [editorTheme, setEditorTheme] = useState("vs-dark");
     const [savedCodes, setSavedCodes] = useState({});
-    const [notifications, setNotifications] = useState([]);
     const iframeRef = useRef(null);
 
     // تغییر تب و بارگزاری کد مربوطه
@@ -131,13 +132,12 @@ const AIAssistedMultiLanguageEditor = () => {
     // درخواست هوش مصنوعی برای اصلاح کد
     const handleAIAssist = async () => {
         setAiLoading(true);
-        addNotification("در حال ارسال کد به هوش مصنوعی...", "info");
+        toast.info("در حال ارسال کد به هوش مصنوعی...");
 
         try {
             const response = await fetch(`https://pool.techa.me/api/Modification/${activeTab}?prompt=${code}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
-                // body: JSON.stringify({ prompt: code })
             });
 
             const result = await response.json();
@@ -145,12 +145,12 @@ const AIAssistedMultiLanguageEditor = () => {
             if (result.IsSuccess && result.Data) {
                 setCode(result.Data);
                 setSavedCodes(prev => ({ ...prev, [activeTab]: result.Data }));
-                addNotification("کد با موفقیت توسط هوش مصنوعی اصلاح شد!", "success");
+                toast.success("کد با موفقیت توسط هوش مصنوعی اصلاح شد!");
             } else {
-                addNotification(`خطا: ${result.Message || "پاسخی از سرور دریافت نشد"}`, "error");
+                toast.error(`خطا: ${result.Message || "پاسخی از سرور دریافت نشد"}`);
             }
         } catch (error) {
-            addNotification("خطا در ارتباط با سرور", "error");
+            toast.error("خطا در ارتباط با سرور");
             console.error("Fetch Error:", error);
         } finally {
             setAiLoading(false);
@@ -160,32 +160,21 @@ const AIAssistedMultiLanguageEditor = () => {
     // ذخیره کد فعلی
     const saveCurrentCode = () => {
         setSavedCodes(prev => ({ ...prev, [activeTab]: code }));
-        addNotification("کد ذخیره شد!", "success");
+        toast.success("کد ذخیره شد!");
     };
 
     // بازگردانی کد ذخیره شده
     const restoreSavedCode = () => {
         if (savedCodes[activeTab]) {
             setCode(savedCodes[activeTab]);
-            addNotification("کد ذخیره شده بازگردانی شد", "info");
+            toast.info("کد ذخیره شده بازگردانی شد");
         }
     };
 
     // بازگردانی به کد پیش‌فرض
     const restoreDefaultCode = () => {
         setCode(defaultCodes[activeTab]);
-        addNotification("کد پیش‌فرض بازگردانی شد", "info");
-    };
-
-    // اضافه کردن نوتیفیکیشن
-    const addNotification = (message, type) => {
-        const id = Date.now();
-        const newNotification = { id, message, type };
-        setNotifications(prev => [...prev, newNotification]);
-
-        setTimeout(() => {
-            setNotifications(prev => prev.filter(n => n.id !== id));
-        }, 5000);
+        toast.info("کد پیش‌فرض بازگردانی شد");
     };
 
     // رندر آیکون زبان
@@ -196,6 +185,20 @@ const AIAssistedMultiLanguageEditor = () => {
 
     return (
         <div className="py-32">
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                toastClassName="font-sans"
+            />
+
             <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-emerald-200">
                 {/* هدر صفحه */}
                 <header className="bg-gradient-to-r from-emerald-600 to-green-500 p-6 flex flex-col md:flex-row items-center justify-between">
@@ -326,23 +329,6 @@ const AIAssistedMultiLanguageEditor = () => {
                         </div>
                     </div>
 
-                    {/* نوتیفیکیشن‌ها */}
-                    <div className="mb-4">
-                        {notifications.map((notification) => (
-                            <div
-                                key={notification.id}
-                                className={`p-3 rounded-lg mb-2 text-sm ${notification.type === "success"
-                                    ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
-                                    : notification.type === "error"
-                                        ? "bg-red-100 text-red-800 border border-red-200"
-                                        : "bg-blue-100 text-blue-800 border border-blue-200"
-                                    }`}
-                            >
-                                {notification.message}
-                            </div>
-                        ))}
-                    </div>
-
                     {/* ادیتور و پریویو */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div className="border-2 border-emerald-200 rounded-xl overflow-hidden shadow-lg">
@@ -365,10 +351,14 @@ const AIAssistedMultiLanguageEditor = () => {
                                 value={code}
                                 onChange={setCode}
                                 theme={editorTheme}
-
                                 options={{
                                     readOnly: !isEditable,
-                                    minimap: { enabled: true },
+                                    minimap: {
+                                        enabled: true,
+                                        showSlider: "always",
+                                        size: "fit",
+                                        renderCharacters: true,
+                                    },
                                     fontSize: 14,
                                     lineNumbers: "on",
                                     scrollBeyondLastLine: false,
@@ -379,7 +369,13 @@ const AIAssistedMultiLanguageEditor = () => {
                                     suggestOnTriggerCharacters: true,
                                     wordBasedSuggestions: true,
                                     parameterHints: { enabled: true },
+                                    scrollbar: {
+                                        vertical: "visible",
+                                        horizontal: "visible",
+                                        useShadows: true
+                                    }
                                 }}
+                                className="w-full"
                             />
                         </div>
 
