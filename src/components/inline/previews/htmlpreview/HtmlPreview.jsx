@@ -2,7 +2,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { GetHtmlSnippetByIdApiHandler } from "../../../../api/handlers/InlineHtmlHandler";
-import { Play, Square, Edit, Terminal, RefreshCw, X } from "lucide-react";
+import { Play, Square, Edit, Terminal, RefreshCw, X, Sparkles } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HtmlPreview = ({ tutorialID }) => {
   const [code, setCode] = useState("<div>Loading...</div>");
@@ -10,6 +12,7 @@ const HtmlPreview = ({ tutorialID }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+  const [isAILoading, setIsAILoading] = useState(false);
   const iframeRef = useRef(null);
 
   useEffect(() => {
@@ -53,11 +56,37 @@ const HtmlPreview = ({ tutorialID }) => {
     iframe.onload = checkContent;
   };
 
+  const handleAIModification = async () => {
+    setIsAILoading(true);
+    try {
+      const response = await fetch(
+        `https://pool.techa.me/api/Modification/html?prompt=${code}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+
+      if (data.IsSuccess && data.Data) {
+        setCode(data.Data);
+        toast.success("کد با موفقیت توسط هوش مصنوعی بهبود یافت");
+      } else {
+        toast.error(data.Message || "خطا در ویرایش کد توسط هوش مصنوعی");
+      }
+    } catch (error) {
+      toast.error("خطا در ارتباط با سرور");
+    } finally {
+      setIsAILoading(false);
+    }
+  };
+
   return (
     <div
       className="flex flex-col gap-4 bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-700"
       dir="ltr"
     >
+      <ToastContainer position="bottom-left" rtl={true} />
       {/* Header */}
       <div className="flex flex-col-reverse lg:flex-row items-center justify-between bg-gray-900 px-4 py-3 border-b border-gray-700">
         <div className="flex items-center gap-2">
@@ -79,6 +108,21 @@ const HtmlPreview = ({ tutorialID }) => {
           </button>
 
           <button
+            onClick={handleAIModification}
+            disabled={isAILoading}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white transition-colors duration-200 disabled:opacity-50"
+          >
+            <span className="text-xs font-medium">
+              {isAILoading ? "در حال پردازش..." : "ویرایش با هوش مصنوعی"}
+            </span>
+            {isAILoading ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <Sparkles className="w-4 h-4" />
+            )}
+          </button>
+
+          <button
             onClick={runCodeInIframe}
             className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white transition-colors duration-200"
           >
@@ -90,7 +134,6 @@ const HtmlPreview = ({ tutorialID }) => {
             )}
           </button>
 
-          {/* New Close Button */}
           <button
             onClick={() => setIsPreviewVisible(!isPreviewVisible)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-red-600 hover:bg-red-500 text-white transition-colors duration-200"
