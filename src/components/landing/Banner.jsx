@@ -53,7 +53,7 @@ const Banner = () => {
         "اعتبار بگیر",
         "مسلط شو",
         "درآمد کسب کن",
-        "اعتبار بگیر، مسلط شو، در آمد کسب کن"
+        "اعتبار بگیر، مسلط شو، درآمد کسب کن"
     ];
 
     const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
@@ -119,7 +119,7 @@ const Banner = () => {
 
 
     return (
-        <div className="pt-40 pb-20 md:pb-10 bg-[#042A1B] h-fit relative">
+        <div className="pt-32 pb-20 md:pb-10 bg-[#042A1B] h-fit relative">
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="grid lg:grid-cols-2 gap-x-20 gap-5 items-center">
                     <div>
@@ -158,8 +158,7 @@ const Banner = () => {
                             </div>
                         </div>
                         <div className="pr-3 font-semibold text-white text-lg sm:text-[26px] mt-7 leading-[50px] w-fit">
-                            تکا مجموعه ای در بدنه دانشگاه، با هدف توانمند سازی دانشجویان برای ورود به بازار کار و درآمدزایی مستقل، از طریق آموزش چند رسانه ای و کارآموزی مهارت محور است
-                            <div className="relative w-full h-3 mt-2">
+                            پلتفرم آموزشی و کارآموزی تکا مجموعه ای در بدنه دانشگاه، با هدف توانمند سازی دانشجویان و جوانان برای ورود به بازار کار و درآمدزایی مستقل در حوزه توسعه سامانه های نرم افزاری می باشد                            <div className="relative w-full h-3 mt-2">
                                 <Image
                                     src="/images/line.svg"
                                     fill
@@ -168,9 +167,9 @@ const Banner = () => {
                                 />
                             </div>
                         </div>
-                        <div className="pr-3 mt-10 lg:mt-20 flex items-center">
-                            <div className="w-2 h-2 rotate-45 bg-[#7AE36A]"></div>
-                            <div className="w-32 h-0.5 bg-[#7AE36A] rounded-full"></div>
+                        <div className="pr-3 mt-10 flex items-center">
+                            {/* <div className="w-2 h-2 rotate-45 bg-[#7AE36A]"></div>
+                            <div className="w-32 h-0.5 bg-[#7AE36A] rounded-full"></div> */}
                         </div>
                         <p className="font-light text-white my-5 pr-3">
                             برای عضویت و اطلاع از دوره‌ها، شماره تماس خود را وارد نمایید.
