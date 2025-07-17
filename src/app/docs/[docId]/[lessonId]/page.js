@@ -5,8 +5,9 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { renderInlineSnippets } from "../../../../components/inline/utils/renderUtils";
 import LessonSkeleton from "../../../../components/docs/doc/lesson/LessonSkeleton";
-import VideoCourseAd from "../../../../components/docs/doc/VideoCourseAd"
-import VideoCourseAdEnd from "../../../../components/docs/doc/VideoCourseAdEnd"
+import VideoCourseAd from "../../../../components/docs/doc/VideoCourseAd";
+import VideoCourseAdEnd from "../../../../components/docs/doc/VideoCourseAdEnd";
+import { SP_fetch } from "../../../../api/utils/api";
 export default function Lesson() {
   const [openAccordion, setOpenAccordion] = useState(0);
   const [lessonData, setLessonData] = useState(null);
@@ -21,13 +22,15 @@ export default function Lesson() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api.techa.me/api/Content`);
+        /*  const response = await fetch(`https://api.techa.me/api/Content`);
         const data = await response.json();
+*/
+        const res = await SP_fetch("Report_Contents");
+        const { Data, IsSuccess, Message, StatusCode } = res;
+        const data = Data.Dataset;
 
-        console.log(data);
-
-        if (data.Data && Array.isArray(data.Data)) {
-          const filteredData = data.Data.filter(
+        if (data && Array.isArray(data)) {
+          const filteredData = data.filter(
             (item) =>
               item.CourseId === parseInt(docId) &&
               item.Id === parseInt(lessonId)
@@ -68,7 +71,7 @@ export default function Lesson() {
   }
 
   return (
-    <div >
+    <div>
       <div className="flex flex-col sm:flex-row gap-5 justify-between items-center">
         <h1 className=" font-bold text-[#042A1B] text-3xl">
           {lessonData.Title}
@@ -90,7 +93,6 @@ export default function Lesson() {
       prose-code:px-2 prose-code:py-1 prose-code:rounded-sm prose-code:bg-[#ebedf2] max-w-full"
           dangerouslySetInnerHTML={{ __html: lessonData.Description }}
         ></div>
-
       </div>
       <div className="flex gap-4 items-center mt-10 justify-between">
         <Link

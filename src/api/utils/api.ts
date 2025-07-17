@@ -1,5 +1,7 @@
 // utils/api.ts
 
+import { isStringObject } from "util/types";
+
 export interface StoredProcedureParameter {
   Name: string;
   Type: string;
@@ -16,6 +18,10 @@ export interface StoredProcedureResponse {
   [key: string]: any;
 }
 
+interface Parameters {
+  [key: `@${string}`]: string;
+}
+
 /**
  * Executes a stored procedure on the .NET backend and returns the parsed JSON response.
  * @param procedureName - The name of the stored procedure to execute.
@@ -25,14 +31,29 @@ export interface StoredProcedureResponse {
  */
 export async function SP_fetch(
   procedureName: string,
-  parameters: StoredProcedureParameter[] = []
+  parameters: Parameters = {},
+  hasDataTable: boolean = true
 ): Promise<StoredProcedureResponse> {
   const url = process.env.NEXT_PUBLIC_API_BASE_URL
-    ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ExecuteSqlCommand/ExecuteStoredProcedureWithDebugger`
+    ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ExecuteTSql/ExecuteStoredProcedure`
     : "https://localhost:7180/api/ExecuteSqlCommand/ExecuteStoredProcedureWithDebugger";
 
-  const body: any = { ProcedureName: procedureName };
-  if (parameters.length > 0) body.Parameters = parameters;
+  const body: any = {
+    ProcedureName: procedureName,
+    ProjectId: 3,
+    HasDataTable: true,
+  };
+
+  if (Object.keys(parameters).length > 0) {
+    // Create a new parameters object with properly formatted keys
+    const formattedParams: Record<string, string> = {};
+    for (const [key, value] of Object.entries(parameters)) {
+      // Ensure key starts with @ and is properly quoted
+      const formattedKey = key.startsWith("@") ? key : `@${key}`;
+      formattedParams[formattedKey] = value.toString();
+    }
+    body.Parameters = formattedParams;
+  }
 
   const response = await fetch(url, {
     method: "POST",
