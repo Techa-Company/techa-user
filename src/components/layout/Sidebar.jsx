@@ -34,7 +34,7 @@ const Sidebar = () => {
         if (raw && Array.isArray(raw)) {
           setContents(raw);
         } else {
-          console.error("Invalid data format:", data);
+          console.error("Invalid data format:", Data);
           setContents([]);
         }
       } catch (error) {
@@ -78,22 +78,42 @@ const Sidebar = () => {
   }, [isSidebarOpen]);
 
   // گروه‌بندی داده‌ها بر اساس ParentId
-  const groupedContents = (contents || []).reduce((acc, content) => {
+  // const groupedContents = (contents || []).reduce((acc, content) => {
+  //   // console.log(acc)
+  //   if (!content.ParentId) {
+  //     acc[content.Id] = { ...content, children: [] };
+  //     // console.log(acc)
+  //   } else {
+  //     if (acc[content.ParentId]) {
+  //       acc[content.ParentId].children.push(content);
+  //     }
+  //   }
+  //   return acc;
+  // }, {});
+
+  const groupedContents = {};
+
+  // مرحله ۱: سرفصل‌ها (ParentId == null)
+  (contents || []).forEach(content => {
     if (!content.ParentId) {
-      acc[content.Id] = { ...content, children: [] };
-    } else {
-      if (acc[content.ParentId]) {
-        acc[content.ParentId].children.push(content);
+      groupedContents[content.Id] = { ...content, children: [] };
+    }
+  });
+
+  // مرحله ۲: جلسات (دارای ParentId)
+  (contents || []).forEach(content => {
+    if (content.ParentId) {
+      if (groupedContents[content.ParentId]) {
+        groupedContents[content.ParentId].children.push(content);
       }
     }
-    return acc;
-  }, {});
+  });
+
 
   return (
     <aside
-      className={`min-w-80 max-w-80 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none bottom-0 py-10 lg:py-0 px-5 transition-all duration-200 ${
-        isSidebarOpen ? "right-0" : "-right-80"
-      }`}
+      className={`min-w-80 max-w-80 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none bottom-0 py-10 lg:py-0 px-5 transition-all duration-200 ${isSidebarOpen ? "right-0" : "-right-80"
+        }`}
       style={{ top: `${topPosition}px` }}
     >
       <h1 className="font-bold text-white lg:text-[#042A1B] text-3xl">
@@ -133,8 +153,8 @@ const Sidebar = () => {
                       </Link>
                       {content.children.indexOf(child) !==
                         content.children.length - 1 && (
-                        <span className="absolute right-2.5 top-8 border-r-2 border-dashed h-5"></span>
-                      )}
+                          <span className="absolute right-2.5 top-8 border-r-2 border-dashed h-5"></span>
+                        )}
                     </li>
                   ))}
                 </ul>
@@ -152,9 +172,8 @@ const Sidebar = () => {
         onClick={toggleSidebar}
       >
         <PanelTopOpen
-          className={`transition-transform duration-200 ${
-            isSidebarOpen ? "-rotate-90" : "rotate-90"
-          } text-[#7AE36A]`}
+          className={`transition-transform duration-200 ${isSidebarOpen ? "-rotate-90" : "rotate-90"
+            } text-[#7AE36A]`}
         />
       </div>
     </aside>

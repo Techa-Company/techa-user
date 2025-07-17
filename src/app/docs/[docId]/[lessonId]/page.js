@@ -25,9 +25,14 @@ export default function Lesson() {
         /*  const response = await fetch(`https://api.techa.me/api/Content`);
         const data = await response.json();
 */
-        const res = await SP_fetch("Report_Contents");
+        // const res = await SP_fetch("Report_Contents");
+        const res = await SP_fetch("Report_Contents", {
+          "@CourseId": docId,
+          "@GetAll": true,
+        });
         const { Data, IsSuccess, Message, StatusCode } = res;
         const data = Data.Dataset;
+        console.log(data)
 
         if (data && Array.isArray(data)) {
           const filteredData = data.filter(
