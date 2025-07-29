@@ -48,7 +48,10 @@ const DocInfo = ({ docDetails }) => {
         }, 2000);
     }, []);
 
-    console.log(docDetails?.FAQs)
+    console.log(docDetails)
+
+    const gregorianDate = docDetails?.LastContentModifiedDate;
+    const faDate = new Date(gregorianDate).toLocaleDateString('fa-IR');
 
     if (loading) {
         return (
@@ -75,17 +78,17 @@ const DocInfo = ({ docDetails }) => {
                 <DocInfoCard
                     icon={<Clock className='w-9 h-9 text-[#065F46]' />}
                     label="مدت زمان مطالعه"
-                    value="98 ساعت"
+                    value={`${docDetails.Duration} ساعت`}
                 />
                 <DocInfoCard
                     icon={<GitBranch className='w-9 h-9 text-[#065F46]' />}
                     label="آخرین بروزرسانی"
-                    value="04 خرداد 1403"
+                    value={faDate}
                 />
                 <DocInfoCard
                     icon={<Terminal className='w-9 h-9 text-[#065F46]' />}
                     label="پیش نیاز"
-                    value="HTML & CSS & JS"
+                    value={docDetails.Prerequisites}
                 />
                 <DocInfoCard
                     icon={<Code2 className='w-9 h-9 text-[#065F46]' />} // یا آیکون مخصوص کدنویسی
