@@ -51,7 +51,22 @@ const DocInfo = ({ docDetails }) => {
     console.log(docDetails)
 
     const gregorianDate = docDetails?.LastContentModifiedDate;
-    const faDate = new Date(gregorianDate).toLocaleDateString('fa-IR');
+    const faDate = new Date(gregorianDate).toLocaleDateString('fa-IR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+
+    function formatDuration(minutes) {
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+
+        const hourText = hours > 0 ? `${hours} ساعت` : '';
+        const minuteText = remainingMinutes > 0 ? `${remainingMinutes} دقیقه` : '';
+
+        return [hourText, minuteText].filter(Boolean).join(' و ');
+    }
+
 
     if (loading) {
         return (
@@ -78,7 +93,7 @@ const DocInfo = ({ docDetails }) => {
                 <DocInfoCard
                     icon={<Clock className='w-9 h-9 text-[#065F46]' />}
                     label="مدت زمان مطالعه"
-                    value={`${docDetails.Duration} ساعت`}
+                    value={formatDuration(docDetails.Duration)}
                 />
                 <DocInfoCard
                     icon={<GitBranch className='w-9 h-9 text-[#065F46]' />}
