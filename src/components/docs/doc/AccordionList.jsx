@@ -9,17 +9,26 @@ const AccordionList = ({ items }) => {
         setOpenAccordion(openAccordion === index ? -1 : index);
     };
 
+    console.log(items)
+
     return (
         <div className="mt-5">
-            {items.map((item, index) => (
-                <AccordionItem
-                    key={index}
-                    title={item.title}
-                    content={item.content}
-                    isOpen={openAccordion === index}
-                    onClick={() => toggleAccordion(index)}
-                />
-            ))}
+
+            {
+                items.length == 0 ?
+                    <h1>Loading ...</h1>
+                    :
+                    JSON.parse(items)?.map((item, index) => (
+                        <>
+                            <AccordionItem
+                                key={index}
+                                title={item.Question}
+                                content={item.Answer}
+                                isOpen={openAccordion === index}
+                                onClick={() => toggleAccordion(index)}
+                            />
+                        </>
+                    ))}
         </div>
     );
 };

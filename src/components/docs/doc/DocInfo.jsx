@@ -38,7 +38,7 @@ const accordionContent = [
 ];
 
 
-const DocInfo = ({ courseDetails }) => {
+const DocInfo = ({ docDetails }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -47,6 +47,8 @@ const DocInfo = ({ courseDetails }) => {
             setLoading(false);
         }, 2000);
     }, []);
+
+    console.log(docDetails?.FAQs)
 
     if (loading) {
         return (
@@ -66,7 +68,7 @@ const DocInfo = ({ courseDetails }) => {
     return (
         <div>
             {/* توضیحات دوره */}
-            <DocDescription description={courseDetails?.Description} />
+            <DocDescription description={docDetails?.Description} />
 
             {/* اطلاعات دوره */}
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 2xl:gap-10 mt-5">
@@ -99,14 +101,7 @@ const DocInfo = ({ courseDetails }) => {
                 </h1>
                 <div className="mt-3">
                     <p className="text-[17.5px] text-[#042A1B] text-justify leading-7 font-normal">
-                        دوره جامع ری اکت برای دو دسته از دانشجوها خیلی مفید و کاربردی هست.
-                        دسته اول کسانی که آموزش جاوا اسکریپت رو تموم کردن و دنبال یک
-                        تکنولوژی مدرن و پولساز بر پایه جاوا اسکریپت هستن تا از زبانی که یاد
-                        گرفتن استفاده کنن. دسته دوم کسانی که در حال حاضر در هر سطحی با ری
-                        اکت کار میکنن اگر جزو یکی از این دوتا دسته هستید، این دوره جامع برای
-                        شما تولید شده و اونقدر به دانش و تجربیات شما اضافه می کنه که هر ایده
-                        و طرحی تو ذهنتون بیاد رو به راحتی بتونید پیاده سازی کنید یا بخش هایی
-                        از پروژه های دیگران رو در پروژه خودتون بسازید.          </p>
+                        {docDetails.TargetAudience}     </p>
                 </div>
             </div>
 
@@ -115,7 +110,7 @@ const DocInfo = ({ courseDetails }) => {
                 <h1 className="font-extrabold text-[#042A1B] text-2xl">
                     سوالات متداول
                 </h1>
-                <AccordionList items={accordionContent} />
+                <AccordionList items={docDetails?.FAQs} />
             </div>
         </div>
     );

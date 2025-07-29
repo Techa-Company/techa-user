@@ -11,24 +11,47 @@ import { SP_fetch } from "../../../api/utils/api";
 export default function CourseDetail() {
   const params = useParams();
   const { docId } = params;
-  const [courseDetails, setCourseDetails] = useState(null);
+  const [docDetails, setDocDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   if (docId) {
+  //     fetch(`https://api.techa.me/api/Course/${docId}`)
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         if (data.IsSuccess) {
+  //           setDocDetails(data.Data);
+  //         }
+  //         setLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching course details:", error);
+  //         setLoading(false);
+  //       });
+  //   }
+  // }, [docId]);
+
+
   useEffect(() => {
     if (docId) {
-      fetch(`https://api.techa.me/api/Course/${docId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.IsSuccess) {
-            setCourseDetails(data.Data);
-          }
+      const fetchCourses = async () => {
+        try {
+          const { Data, IsSuccess, Message, StatusCode } = await SP_fetch(
+            "Form_Courses", {
+            "@Id": docId
+          });
+          const docs = Data.Dataset[0];
+          if (IsSuccess) setDocDetails(docs);
+        } catch (error) {
+          console.error("Error fetching docs:", error);
+        } finally {
           setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching course details:", error);
-          setLoading(false);
-        });
+        }
+      };
+
+      fetchCourses();
     }
   }, [docId]);
+
 
   return (
     <div className="space-y-10">
@@ -36,13 +59,13 @@ export default function CourseDetail() {
         {loading ? (
           <DocTitleSkeleton />
         ) : (
-          <DocTitle title={courseDetails?.title} />
+          <DocTitle title={docDetails?.Title} />
         )}
         {/* بخش تبلیغاتی */}
-        {!loading && courseDetails && <VideoCourseAd courseId={docId} />}
+        {!loading && docDetails && <VideoCourseAd courseId={docId} title={docDetails?.Title} />}
       </div>
 
-      <DocInfo courseDetails={courseDetails} />
+      <DocInfo docDetails={docDetails} />
 
       {!loading && <VideoCourseAdEnd courseId={docId} />}
     </div>
