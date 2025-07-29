@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react";
 import DocCard from "../../components/docs/DocCard";
 import DocsSkeleton from "../../components/common/DocsSkeleton";
-import { BookText, Clock, Code, GraduationCap } from "lucide-react";
-import Link from "next/link";
 import { SP_fetch } from "../../api/utils/api";
 
 export default function Docs() {
@@ -11,109 +9,16 @@ export default function Docs() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://api.techa.me/api/Course")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.IsSuccess) {
-          // ادغام داده‌های دریافتی با داده‌های محلی
-          const localDocs = [
-            {
-              level: "متوسط",
-              duration: "28 ساعت",
-              lessons: "42 درس",
-              icon: <Code className="w-6 h-6 text-emerald-600" />,
-              tags: ["پروژه‌محور", "آپدیت 1403", "تمرین تعاملی"]
-            },
-            {
-              level: "مبتدی",
-              duration: "18 ساعت",
-              lessons: "30 درس",
-              icon: <BookText className="w-6 h-6 text-emerald-600" />,
-              tags: ["مناسب شروع", "تمرین کدنویسی"]
-            },
-            {
-              level: "پیشرفته",
-              duration: "35 ساعت",
-              lessons: "50 درس",
-              icon: <GraduationCap className="w-6 h-6 text-emerald-600" />,
-              tags: ["Backend", "پروژه واقعی"]
-            },
-            {
-              level: "متوسط",
-              duration: "28 ساعت",
-              lessons: "42 درس",
-              icon: <Code className="w-6 h-6 text-emerald-600" />,
-              tags: ["پروژه‌محور", "آپدیت 1403", "تمرین تعاملی"]
-            },
-            {
-              level: "مبتدی",
-              duration: "18 ساعت",
-              lessons: "30 درس",
-              icon: <BookText className="w-6 h-6 text-emerald-600" />,
-              tags: ["مناسب شروع", "تمرین کدنویسی"]
-            },
-            {
-              level: "پیشرفته",
-              duration: "35 ساعت",
-              lessons: "50 درس",
-              icon: <GraduationCap className="w-6 h-6 text-emerald-600" />,
-              tags: ["Backend", "پروژه واقعی"]
-            },
-            {
-              level: "پیشرفته",
-              duration: "35 ساعت",
-              lessons: "50 درس",
-              icon: <GraduationCap className="w-6 h-6 text-emerald-600" />,
-              tags: ["Backend", "پروژه واقعی"]
-            }
-          ];
-
-          // ادغام عنوان و توضیحات از داده‌های دریافتی
-          const mergedDocs = data.Data.filter((doc) => !doc.Disabled).map((doc, index) => ({
-            id: doc.Id,
-            title: doc.Title,
-            description: doc.Description,
-            ...localDocs[index] // اضافه کردن اطلاعات محلی
-          }));
-          setDocs(mergedDocs);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching courses:", error);
-        setLoading(false);
-      });
-  }, []);
-
-
-  useEffect(() => {
     const fetchCourses = async () => {
       try {
-        //  const response = await fetch("https://api.techa.me/api/Course");
         const { Data, IsSuccess, Message, StatusCode } = await SP_fetch(
-          "Report_Courses"
-        );
-        const raw = Data.Dataset;
-        console.log(Data)
-
-        if (IsSuccess) {
-          // const enrichedCourses = raw
-          //   .filter((course) => !course.Disabled)
-          //   .map((course) => ({
-          //     ...course,
-          //     Students: Math.floor(Math.random() * 5000),
-          //     Rating: (Math.random() * 1 + 4).toFixed(1),
-          //     Comments: Math.floor(Math.random() * 200),
-          //     Level: ["مبتدی", "متوسط", "پیشرفته"][
-          //       Math.floor(Math.random() * 3)
-          //     ],
-          //     Duration: Math.floor(Math.random() * 20) + 5,
-          //   }));
-          // console.log(enrichedCourses, "enriched");
-          // setCourses(enrichedCourses);
-        }
+          "Report_Courses", {
+          "@Disabled": false,
+        });
+        const docs = Data.Dataset;
+        if (IsSuccess) setDocs(docs);
       } catch (error) {
-        console.error("Error fetching courses:", error);
+        console.error("Error fetching docs:", error);
       } finally {
         setLoading(false);
       }
@@ -121,7 +26,6 @@ export default function Docs() {
 
     fetchCourses();
   }, []);
-
 
   return (
     <div className="pt-32">
