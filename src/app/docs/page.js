@@ -36,7 +36,7 @@ export default function Docs() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10 lg:px-10">
             {docs.map((doc, index) => (
-              <DocCard key={index} doc={doc} />
+              <DocCard key={index} index={index} doc={doc} />
             ))}
           </div>
         )}

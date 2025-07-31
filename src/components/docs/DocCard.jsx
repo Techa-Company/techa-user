@@ -3,11 +3,11 @@ import React from 'react';
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { ArrowLeft, BookText, Clock, GraduationCap } from 'lucide-react';
-import * as RiIcons from "react-icons/ri";
+import { RiDatabase2Fill, RiDatabaseFill, RiHtml5Fill, RiJavascriptFill, RiReactjsFill, RiTailwindCssFill } from 'react-icons/ri';
 import { formatDuration } from '../../helper';
 
 
-const DocCard = ({ doc }) => {
+const DocCard = ({ index, doc }) => {
 
     const truncateDescription = (description) => {
         const div = document.createElement("div");
@@ -16,11 +16,14 @@ const DocCard = ({ doc }) => {
         return text.split(" ").slice(0, 6).join(" ") + (description ? "..." : "");
     };
 
-    const iconName = doc.Icon;
-    const IconComponent = RiIcons[iconName];
-
-    console.log(doc.Duration)
-
+    const icons = [
+        <RiHtml5Fill className="w-6 h-6 text-emerald-600" />,
+        <RiJavascriptFill className="w-6 h-6 text-emerald-600" />,
+        <RiTailwindCssFill className="w-6 h-6 text-emerald-600" />,
+        <RiReactjsFill className="w-6 h-6 text-emerald-600" />,
+        <RiDatabase2Fill className="w-6 h-6 text-emerald-600" />,
+        <RiDatabaseFill className="w-6 h-6 text-emerald-600" />
+    ]
 
     return (
         <div
@@ -30,11 +33,7 @@ const DocCard = ({ doc }) => {
                 {/* هدر کارت */}
                 <div className="flex items-start gap-4 mb-4">
                     <div className="p-3 bg-emerald-50 rounded-xl">
-                        {IconComponent ? (
-                            <IconComponent className="w-6 h-6 text-emerald-600" />
-                        ) : (
-                            <span className="text-xs text-gray-400">Icon</span>
-                        )}
+                        {icons[index]}
                     </div>
                     <div>
                         <h3 className="text-xl font-bold text-gray-900">
