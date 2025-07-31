@@ -67,7 +67,7 @@ export default function CourseDetail() {
 
       <DocInfo docDetails={docDetails} />
 
-      {!loading && <VideoCourseAdEnd courseId={docId} />}
+      {!loading && <VideoCourseAdEnd courseId={docId} title={docDetails?.Title} />}
     </div>
   );
 }

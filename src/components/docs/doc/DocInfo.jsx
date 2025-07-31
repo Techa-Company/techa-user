@@ -7,7 +7,7 @@ import DocDescriptionSkeleton from './DocDescriptionSkeleton';
 import DocInfoCardSkeleton from './DocInfoCardSkeleton';
 import AccordionSkeleton from '../../common/AccordionSkeleton';
 import { Clock, Code2, GitBranch, Terminal } from 'lucide-react';
-
+import { formatDuration } from "../../../helper"
 
 const accordionContent = [
     {
@@ -57,15 +57,6 @@ const DocInfo = ({ docDetails }) => {
         day: 'numeric',
     });
 
-    function formatDuration(minutes) {
-        const hours = Math.floor(minutes / 60);
-        const remainingMinutes = minutes % 60;
-
-        const hourText = hours > 0 ? `${hours} ساعت` : '';
-        const minuteText = remainingMinutes > 0 ? `${remainingMinutes} دقیقه` : '';
-
-        return [hourText, minuteText].filter(Boolean).join(' و ');
-    }
 
 
     if (loading) {
@@ -103,10 +94,10 @@ const DocInfo = ({ docDetails }) => {
                 <DocInfoCard
                     icon={<Terminal className='w-9 h-9 text-[#065F46]' />}
                     label="پیش نیاز"
-                    value={docDetails.Prerequisites}
+                    value={docDetails.Prerequisites || "ندارد"}
                 />
                 <DocInfoCard
-                    icon={<Code2 className='w-9 h-9 text-[#065F46]' />} // یا آیکون مخصوص کدنویسی
+                    icon={<Code2 className='w-9 h-9 text-[#065F46]' />}
                     label="ادیتور آنلاین"
                     value="اجرای زنده مثال‌ها"
                 />

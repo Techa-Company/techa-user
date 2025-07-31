@@ -2,7 +2,10 @@ import Link from 'next/link';
 import React from 'react';
 import { motion } from "framer-motion";
 import Image from 'next/image';
-import { BookText, Clock, GraduationCap } from 'lucide-react';
+import { ArrowLeft, BookText, Clock, GraduationCap } from 'lucide-react';
+import * as RiIcons from "react-icons/ri";
+import { formatDuration } from '../../helper';
+
 
 const DocCard = ({ doc }) => {
 
@@ -12,6 +15,13 @@ const DocCard = ({ doc }) => {
         const text = div.innerText;
         return text.split(" ").slice(0, 6).join(" ") + (description ? "..." : "");
     };
+
+    const iconName = doc.Icon;
+    const IconComponent = RiIcons[iconName];
+
+    console.log(doc.Duration)
+
+
     return (
         <div
             className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 group"
@@ -20,7 +30,11 @@ const DocCard = ({ doc }) => {
                 {/* هدر کارت */}
                 <div className="flex items-start gap-4 mb-4">
                     <div className="p-3 bg-emerald-50 rounded-xl">
-                        {doc.Icon}
+                        {IconComponent ? (
+                            <IconComponent className="w-6 h-6 text-emerald-600" />
+                        ) : (
+                            <span className="text-xs text-gray-400">Icon</span>
+                        )}
                     </div>
                     <div>
                         <h3 className="text-xl font-bold text-gray-900">
@@ -33,8 +47,8 @@ const DocCard = ({ doc }) => {
                 </div>
 
                 {/* تگ‌ها */}
-                {/* <div className="flex flex-wrap gap-2 mb-4">
-                    {doc.Features?.map((tag, i) => (
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {doc.Features?.split("،").map((tag, i) => (
                         <span
                             key={i}
                             className="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs rounded-full"
@@ -42,13 +56,13 @@ const DocCard = ({ doc }) => {
                             {tag}
                         </span>
                     ))}
-                </div> */}
+                </div>
 
                 {/* اطلاعات دوره */}
                 <div className="space-y-3 text-sm text-gray-600">
                     <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-emerald-600" />
-                        <span>مدت زمان : {doc.Duration} دقیقه </span>
+                        <span>مدت زمان : {formatDuration(doc.Duration)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <BookText className="w-4 h-4 text-emerald-600" />
@@ -63,19 +77,7 @@ const DocCard = ({ doc }) => {
                 {/* دکمه اقدام */}
                 <Link href={`docs/${doc.Id}`} className="mt-4 w-full py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-colors flex items-center justify-center gap-2">
                     <span>مشاهده سرفصل‌ ها</span>
-                    <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                    </svg>
+                    <ArrowLeft />
                 </Link>
             </div>
         </div>

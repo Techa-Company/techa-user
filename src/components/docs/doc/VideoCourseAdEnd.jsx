@@ -1,7 +1,7 @@
 "use client"
 import { motion } from "framer-motion"
 
-const VideoCourseAdEnd = ({ onClose, courseId }) => {
+const VideoCourseAdEnd = ({ onClose, courseId, title }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -35,7 +35,7 @@ const VideoCourseAdEnd = ({ onClose, courseId }) => {
                         <span className="text-3xl bg-emerald-100 p-3 rounded-full">🎓</span>
                         <div>
                             <h3 className="text-xl font-black text-emerald-800">
-                                نسخه حرفه‌ای دوره ریکت
+                                نسخه حرفه‌ای دوره {title}
                             </h3>
                             <p className="text-sm text-emerald-600 mt-1">شروع یادگیری فقط در ۳۰ ثانیه!</p>
                         </div>
