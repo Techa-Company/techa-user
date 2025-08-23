@@ -4,14 +4,10 @@ import ReactPreview from "../previews/reactpreview/ReactPreview";
 import JavaScriptPreview from "../previews/javascriptpreview/JavascriptPreview";
 import SQLPreview from "../previews/sql/SQLPreview";
 
-type PreviewElement = HTMLElement | HTMLTextAreaElement;
-
-export function findPreviewElements(): PreviewElement[] {
-  const elements = document.querySelectorAll<PreviewElement>(
-    `[data-reactId], 
-     [data-htmlId], 
-     [data-javascriptId], 
-     textarea.sql-sample`
+export function findPreviewElements(): HTMLPreElement[] {
+  // فقط pre با این کلاس‌ها
+  const elements = document.querySelectorAll<HTMLPreElement>(
+    "pre.language-jsx, pre.language-sql, pre.language-markup, pre.language-javascript"
   );
   return Array.from(elements);
 }
@@ -19,35 +15,29 @@ export function findPreviewElements(): PreviewElement[] {
 export const renderInlineSnippets = () => {
   const elements = findPreviewElements();
 
-  elements.forEach((element) => {
+  elements.forEach((pre) => {
+    const codeElement = pre.querySelector("code");
+    if (!codeElement) return;
+
+    const code = codeElement.textContent?.trim() || "";
+
+    // ساخت کانتینر جایگزین
     const container = document.createElement("div");
     container.className = "preview-container";
 
-    if (element instanceof HTMLElement) {
-      container.style.cssText = element.style.cssText;
-    }
-
-    element.parentNode?.insertBefore(container, element);
-    element.style.display = "none";
-
-    const htmlId = element.getAttribute("data-htmlId");
-    const reactId = element.getAttribute("data-reactId");
-    const javascriptId = element.getAttribute("data-javascriptId");
-    const sqlCode =
-      element instanceof HTMLTextAreaElement
-        ? element.value.trim()
-        : element.textContent?.trim() || "";
+    pre.parentNode?.insertBefore(container, pre);
+    pre.style.display = "none";
 
     const root = createRoot(container);
 
-    if (htmlId) {
-      root.render(<HtmlPreview tutorialID={Number(htmlId)} />);
-    } else if (reactId) {
-      root.render(<ReactPreview tutorialID={Number(reactId)} />);
-    } else if (javascriptId) {
-      root.render(<JavaScriptPreview tutorialID={Number(javascriptId)} />);
-    } else if (sqlCode) {
-      root.render(<SQLPreview code={sqlCode} />);
+    if (pre.classList.contains("language-markup")) {
+      root.render(<HtmlPreview code={code} />);
+    } else if (pre.classList.contains("language-jsx")) {
+      root.render(<ReactPreview code={code} />);
+    } else if (pre.classList.contains("language-javascript")) {
+      root.render(<JavaScriptPreview code={code} />);
+    } else if (pre.classList.contains("language-sql")) {
+      root.render(<SQLPreview code={code} />);
     }
   });
 };

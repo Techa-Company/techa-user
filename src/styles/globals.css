@@ -510,3 +510,11 @@ pre {
     @apply pr-2;
   }
 }
+.custom-box {
+  color: #2e2e2e !important;
+}
+
+code::before,
+code::after {
+  content: "" !important;
+}

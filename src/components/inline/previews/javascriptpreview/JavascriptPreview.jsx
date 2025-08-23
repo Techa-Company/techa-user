@@ -26,7 +26,7 @@ export const ConsoleOutput = ({ output }) => (
   </div>
 );
 
-const JavaScriptPreview = ({ tutorialID }) => {
+const JavaScriptPreview = ({ code: initialCode }) => {
   const [code, setCode] = useState(
     '<p>Hello World</p><script>console.log("Hello from script!");</script>'
   );
@@ -38,16 +38,12 @@ const JavaScriptPreview = ({ tutorialID }) => {
 
   const iframeRef = useRef(null);
   const uniqueIdRef = useRef(
-    `js-preview-${tutorialID}-${Math.random().toString(36).substring(2, 9)}`
+    `js-preview-${Math.random().toString(36).substring(2, 9)}`
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetchJavascriptSnippet(tutorialID);
-      if (res) setCode(res.Script);
-    };
-    fetchData();
-  }, [tutorialID]);
+    setCode(initialCode)
+  }, [initialCode]);
 
   const runCodeInIframe = async () => {
     setConsoleOutput([]);
@@ -262,9 +258,5 @@ const JavaScriptPreview = ({ tutorialID }) => {
   );
 };
 
-async function fetchJavascriptSnippet(tutorialID) {
-  const { data } = await GetHtmlSnippetByIdApiHandler(tutorialID);
-  return data.IsSuccess ? data.Data : null;
-}
 
 export default JavaScriptPreview;

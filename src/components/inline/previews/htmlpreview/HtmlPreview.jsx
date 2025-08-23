@@ -6,7 +6,7 @@ import { Play, Square, Edit, Terminal, RefreshCw, X, Sparkles } from "lucide-rea
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const HtmlPreview = ({ tutorialID }) => {
+const HtmlPreview = ({ code: initialCode }) => {
   const [code, setCode] = useState("<div>Loading...</div>");
   const [isEditable, setEditable] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
@@ -16,12 +16,8 @@ const HtmlPreview = ({ tutorialID }) => {
   const iframeRef = useRef(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetchHtmlSnippet(tutorialID);
-      if (res) setCode(res.Script);
-    };
-    fetchData();
-  }, [tutorialID]);
+    setCode(initialCode);
+  }, [initialCode]);
 
   const runCodeInIframe = async () => {
     setIsRunning(true);
@@ -145,7 +141,7 @@ const HtmlPreview = ({ tutorialID }) => {
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <h2 className="text-gray-200 font-semibold text-sm" dir="rtl">
+          <h2 className="text-white font-semibold text-sm" dir="rtl">
             اجرای برخط HTML
           </h2>
           <Terminal className="w-10 h-10 text-emerald-400 scale-x-[-1]" />
@@ -197,10 +193,5 @@ const HtmlPreview = ({ tutorialID }) => {
     </div>
   );
 };
-
-async function fetchHtmlSnippet(tutorialID) {
-  const { data } = await GetHtmlSnippetByIdApiHandler(tutorialID);
-  return data.IsSuccess ? data.Data : null;
-}
 
 export default HtmlPreview;

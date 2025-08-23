@@ -26,7 +26,7 @@ const ConsoleOutput = ({ output }) => (
   </div>
 );
 
-const ReactPreview = ({ tutorialID }) => {
+const ReactPreview = ({ code: initialCode }) => {
   const [code, setCode] = useState("Loading...");
   const [isEditable, setEditable] = useState(false);
   const [consoleOutput, setConsoleOutput] = useState([]);
@@ -36,22 +36,12 @@ const ReactPreview = ({ tutorialID }) => {
 
   const iframeRef = useRef(null);
   const uniqueIdRef = useRef(
-    `react-preview-${tutorialID}-${Math.random().toString(36).substring(2, 9)}`
+    `react-preview-${Math.random().toString(36).substring(2, 9)}`
   );
 
   useEffect(() => {
-    GetTemplateById(tutorialID)
-      .then((res) => {
-        if (res.data.IsSuccess) {
-          setCode(
-            res.data.Data.TemplateType === 2
-              ? res.data.Data.Script
-              : "Snippet Not Found!"
-          );
-        }
-      })
-      .catch(() => setCode("Error"));
-  }, [tutorialID]);
+    setCode(initialCode)
+  }, [initialCode]);
 
   const runCodeInIframe = async () => {
     setConsoleOutput([]);
