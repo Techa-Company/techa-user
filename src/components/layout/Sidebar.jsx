@@ -91,24 +91,30 @@ const Sidebar = () => {
   //   return acc;
   // }, {});
 
-  const groupedContents = {};
+  // const groupedContents = {};
 
   // مرحله ۱: سرفصل‌ها (ParentId == null)
+  // مرحله ۱ و ۲ گروه‌بندی (بدون سورت)
+  const groupedContents = new Map();
+
   (contents || []).forEach(content => {
     if (!content.ParentId) {
-      groupedContents[content.Id] = { ...content, children: [] };
+      groupedContents.set(content.Id, { ...content, children: [] });
     }
   });
 
-  // مرحله ۲: جلسات (دارای ParentId)
   (contents || []).forEach(content => {
-    if (content.ParentId) {
-      if (groupedContents[content.ParentId]) {
-        groupedContents[content.ParentId].children.push(content);
-      }
+    if (content.ParentId && groupedContents.has(content.ParentId)) {
+      groupedContents.get(content.ParentId).children.push(content);
     }
   });
 
+  // سپس برای دسترسی به مقادیر:
+  const groupedArray = Array.from(groupedContents.values());
+
+
+
+  console.log(groupedContents);
 
   return (
     <aside
@@ -127,7 +133,7 @@ const Sidebar = () => {
         {loading ? (
           <SidebarSkeleton />
         ) : (
-          Object.values(groupedContents).map((content, index) => (
+          Object.values(groupedArray).map((content, index) => (
             <Accordion
               key={content.Id}
               title={`فصل ${index + 1}`}

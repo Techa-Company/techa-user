@@ -34,9 +34,10 @@ export async function SP_fetch(
   parameters: Parameters = {},
   hasDataTable: boolean = true
 ): Promise<StoredProcedureResponse> {
-  const url = process.env.NEXT_PUBLIC_API_BASE_URL
-    ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ExecuteTSql/ExecuteStoredProcedure`
-    : "https://localhost:7180/api/ExecuteSqlCommand/ExecuteStoredProcedureWithDebugger";
+  // const url = process.env.NEXT_PUBLIC_API_BASE_URL
+  //   ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ExecuteTSql/ExecuteStoredProcedure`
+  //   : "https://localhost:7180/api/ExecuteSqlCommand/ExecuteStoredProcedureWithDebugger";
+  const url = "https://pool.techa.me/api/ExecuteTSql/ExecuteStoredProcedure";
 
   const body: any = {
     ProcedureName: procedureName,

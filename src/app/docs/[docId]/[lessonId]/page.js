@@ -26,22 +26,21 @@ export default function Lesson() {
         const data = await response.json();
 */
         // const res = await SP_fetch("Report_Contents");
-        const res = await SP_fetch("Report_Contents", {
-          "@CourseId": docId,
-          "@GetAll": true,
+        const res = await SP_fetch("Form_Contents", {
+          "@Id": lessonId,
         });
         const { Data, IsSuccess, Message, StatusCode } = res;
         const data = Data.Dataset;
         console.log(data)
 
-        if (data && Array.isArray(data)) {
-          const filteredData = data.filter(
-            (item) =>
-              item.CourseId === parseInt(docId) &&
-              item.Id === parseInt(lessonId)
-          );
-          console.log(filteredData);
-          setLessonData(filteredData[0]);
+        if (data) {
+          // const filteredData = data.filter(
+          //   (item) =>
+          //     item.CourseId === parseInt(docId) &&
+          //     item.Id === parseInt(lessonId)
+          // );
+          // console.log(filteredData);
+          setLessonData(data[0]);
         } else {
           console.error("Invalid data format:", data);
           setLessonData(null);
@@ -94,10 +93,19 @@ export default function Lesson() {
       <VideoCourseAd courseId={docId} />
       <div className="text-[17.5px] font-normal leading-7 text-justify mt-7 grid gap-5">
         <div
-          className="prose prose-headings:text-3xl prose-headings:my-5 prose-p:text-secondary prose-p:leading-9 prose-p:text-justify prose-code:text-[#e83e8c] 
-      prose-code:px-2 prose-code:py-1 prose-code:rounded-sm prose-code:bg-[#ebedf2] max-w-full"
+          className="
+                    prose 
+                    max-w-full 
+                    prose-p:!text-[#2e2e2e] prose-p:!leading-relaxed prose-p:!text-justify prose-p:!font-sans prose-p:!text-base
+                    prose-headings:!text-[#111111] prose-headings:!text-3xl prose-headings:!font-extrabold prose-headings:!mb-6 prose-headings:!mt-8
+                    prose-code:!text-[#d6336c] prose-code:!bg-[#f8d7da] prose-code:!px-2 prose-code:!py-1 prose-code:!rounded-md prose-code:!font-mono prose-code:!text-sm
+                    prose-a:!text-[#2563eb] prose-a:!underline prose-a:!decoration-2 prose-a:!decoration-[#2563eb] prose-a:!transition prose-a:!duration-300 prose-a:!hover:text-[#1e40af]
+                    prose-blockquote:!border-l-4 prose-blockquote:!border-[#2563eb] prose-blockquote:!bg-[#e0e7ff] prose-blockquote:!italic prose-blockquote:!px-4 prose-blockquote:!py-2 prose-blockquote:!rounded-md
+                    prose-ul:!list-disc prose-ul:!ml-6 prose-li:!mb-2
+  "
           dangerouslySetInnerHTML={{ __html: lessonData.Description }}
         ></div>
+
       </div>
       <div className="flex gap-4 items-center mt-10 justify-between">
         <Link
