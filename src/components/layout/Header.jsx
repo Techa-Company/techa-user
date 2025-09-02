@@ -7,7 +7,7 @@ import {
   ContactUSIcon,
   XIcon,
 } from "../Icons/Icons";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
@@ -26,53 +26,48 @@ import {
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
 
 const Header = () => {
-  const [mounted, setMounted] = useState(false); // Add mounted state
+  const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { user, logout } = useAuth();
-  const isLoggedIn = user ? true : false;
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const dispatch = useDispatch();
+  const router = useRouter();
   const pathname = usePathname();
 
-  const items = useSelector(state => state.cart.items)
+  // کاربر از Redux
+  const user = useSelector(state => state.auth.user);
+  const isLoggedIn = !!user;
 
-  console.log(items)
+  console.log(user)
+
+  const items = useSelector(state => state.cart.items);
+
   useEffect(() => {
-    setMounted(true); // Set mounted to true after component mounts
+    setMounted(true);
 
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 640);
-    };
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
+    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
 
     const handleClickOutside = (event) => {
-      if (isMenuOpen && !event.target.closest(".menu-container")) {
-        setIsMenuOpen(false);
-      }
-      if (isProfileOpen && !event.target.closest(".profile-container")) {
-        setIsProfileOpen(false);
-      }
-      if (isSubMenuOpen && !event.target.closest(".submenu-container")) {
-        setIsSubMenuOpen(false);
-      }
+      if (isMenuOpen && !event.target.closest(".menu-container")) setIsMenuOpen(false);
+      if (isProfileOpen && !event.target.closest(".profile-container")) setIsProfileOpen(false);
+      if (isSubMenuOpen && !event.target.closest(".submenu-container")) setIsSubMenuOpen(false);
     };
 
     handleResize();
     handleScroll();
+
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScroll);
     document.addEventListener("click", handleClickOutside);
+
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);
@@ -81,15 +76,12 @@ const Header = () => {
   }, [isMenuOpen, isProfileOpen, isSubMenuOpen]);
 
   useEffect(() => {
-    if (isMenuOpen || isProfileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = (isMenuOpen || isProfileOpen) ? "hidden" : "auto";
   }, [isMenuOpen, isProfileOpen, isSubMenuOpen]);
 
   const handleLogout = () => {
-    logout();
+    dispatch(logout());           // پاک کردن user و کوکی
+    router.replace("/auth/login");     // هدایت به لاگین
   };
 
   return (
@@ -414,9 +406,13 @@ const Header = () => {
                         onClick={() => setIsProfileOpen(!isProfileOpen)}
                         className="flex items-center gap-2 group"
                       >
-                        <span className="text-white font-medium group-hover:text-[#7AE36A] transition-colors">
-                          {user.UserName}
-                        </span>
+                        <div className="flex gap-1">
+                          { }
+                          <ChevronDown className={`text-white w-5 group-hover:text-[#7AE36A] ${isProfileOpen ? 'rotate-180' : 'rotate-0'} transition-all duration-200`} />
+                          <span className="hidden sm:block text-white font-medium group-hover:text-[#7AE36A] transition-colors text-sm">
+                            {user?.FirstName} {user?.LastName}
+                          </span>
+                        </div>
                         <div className="relative w-12 h-12">
                           <Image
                             src="/images/teacher.jpeg"
@@ -433,7 +429,7 @@ const Header = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 20 }}
-                            className="absolute top-14 right-0 w-64 bg-[#042A1B] border-4 border-[#7AE36A]/30 rounded-xl shadow-2xl backdrop-blur-sm"
+                            className="absolute top-14 left-0 w-52 bg-[#042A1B] border-4 border-[#7AE36A]/30 rounded-xl shadow-2xl backdrop-blur-sm"
                           >
                             <div className="p-4 border-b-2 border-[#7AE36A]/20">
                               <div className="flex items-center gap-3">
@@ -447,10 +443,10 @@ const Header = () => {
                                 </div>
                                 <div>
                                   <p className="text-white font-medium">
-                                    {user.FullName}
+                                    {user.FirstName} {user.LastName}
                                   </p>
                                   <p className="text-[#7AE36A] text-sm">
-                                    {user.UserName}
+                                    {user.Mobile}
                                   </p>
                                 </div>
                               </div>
@@ -485,14 +481,13 @@ const Header = () => {
                                 </Link>
                               </li>
                               <li>
-                                <Link
-                                  href="/logout"
+                                <p
                                   className="px-4 py-3 hover:bg-red-500/10 text-red-400 flex items-center gap-3 transition-colors cursor-pointer"
                                   onClick={handleLogout}
                                 >
                                   <LogOut className="w-5 h-5" />
                                   خروج از حساب
-                                </Link>
+                                </p>
                               </li>
                             </ul>
                           </motion.div>

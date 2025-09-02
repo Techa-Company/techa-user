@@ -5,6 +5,10 @@ import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+
+import { useRouter } from "next/navigation";
+import { clearError, verifyOTP, requestOTP, decrementTimer } from "../../../features/auth/authSlice";
 
 const schema = yup.object().shape({
   phone: yup
@@ -14,82 +18,105 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { loading, error, otpSent, timer, user } = useSelector((state) => state.auth);
   const [step, setStep] = useState(1);
-  const [code, setCode] = useState(Array(5).fill(""));
-  const [timer, setTimer] = useState(120);
-  const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [code, setCode] = useState(Array(6).fill(""));
   const inputsRef = useRef([]);
 
-  // تایمر
+  // همگام‌سازی step با وضعیت otpSent
+  useEffect(() => {
+    setStep(otpSent ? 2 : 1);
+  }, [otpSent]);
+
+  // مدیریت تایمر
   useEffect(() => {
     let interval;
     if (step === 2 && timer > 0) {
       interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
+        dispatch(decrementTimer());
       }, 1000);
-    } else {
-      setIsResendDisabled(false);
     }
+
     return () => clearInterval(interval);
-  }, [step, timer]);
+  }, [step, timer, dispatch]);
 
-  // مدیریت کد و auto-tab
+
+  // هدایت کاربر پس از ورود موفق
+  useEffect(() => {
+    if (user) {
+      router.push("/account");
+    }
+  }, [user, router]);
+
+  // مدیریت تغییر کد تأیید
   const handleCodeChange = (value, index) => {
-    const newCode = [...code];
-
-    // فقط اعداد مجاز
     if (!/^\d*$/.test(value)) return;
 
+    const newCode = [...code];
     newCode[index] = value;
     setCode(newCode);
 
-    // حرکت به جلو
-    if (value.length === 1 && index < 4) {
+    if (value.length === 1 && index < 5) {
       inputsRef.current[index + 1].focus();
     }
 
-    // حرکت به عقب هنگام پاک کردن
     if (value.length === 0 && index > 0) {
       inputsRef.current[index - 1].focus();
     }
+
+    // اگر کد کامل شد، تأیید خودکار
+    if (newCode.every(digit => digit !== "") && newCode.join("").length === 6) {
+      handleVerifyCode(newCode.join(""));
+    }
   };
 
-  // ارسال کد
-  const sendCode = async (data) => {
-    // منطق ارسال کد به سرور
-    setStep(2);
-    setTimer(120);
-    setIsResendDisabled(true);
+  // ارسال کد تأیید
+  const handleSendCode = async (data) => {
+    dispatch(clearError());
+    const result = await dispatch(requestOTP(data.phone));
+
+    if (!result.error) {
+      setStep(2);
+    }
   };
 
-  // تایید کد
-  // const verifyCode = async () => {
-  //   const fullCode = code.join("");
-  //   if (fullCode.length === 5) {
-  //     // منطق تایید کد
-  //     const result = await login({ phone: "09xxxxxxxxx" });
-  //     if (result) {
-  //       router.push(redirect || "/");
-  //     }
-  //   }
-  // };
+  // تأیید کد
+  const handleVerifyCode = async (verificationCode) => {
+    dispatch(clearError());
+    const phone = getValues("phone");
+    await dispatch(verifyOTP({ phone, code: verificationCode }));
+  };
+
+  // ارسال مجدد کد
+  const handleResendCode = async () => {
+    dispatch(clearError());
+    const phone = getValues("phone");
+    await dispatch(requestOTP(phone));
+  };
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
+    getValues,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
+  const watchedPhone = watch("phone");
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden ">
-      {[...Array(100)].map((_, i) => (
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br ">
+      {/* انیمیشن‌های پس‌زمینه */}
+      {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-2 h-2 bg-[#6ACF5A] rounded-full z-50 backdrop-blur-sm"
+          className="absolute w-2 h-2 bg-[#6ACF5A] rounded-full z-0"
           initial={{
-            top: `${Math.random() * -20 - 10}%`,
+            top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
             scale: 0,
             rotate: Math.random() * 360,
@@ -103,40 +130,54 @@ const Login = () => {
             rotate: Math.random() * 720 + 360,
           }}
           transition={{
-            duration: Math.random() * 3 + 7, // 7 تا 10 ثانیه
+            duration: Math.random() * 3 + 7,
             repeat: Infinity,
             repeatType: "loop",
             ease: "linear",
-            delay: Math.random() * 15, // تأخیر بیشتر برای پراکندگی بهتر
+            delay: Math.random() * 15,
           }}
           style={{
             filter: `blur(${Math.random() * 3}px)`,
-            boxShadow: `0 0 ${Math.random() * 15 + 5}px rgba(255,255,255,0.7)`,
+            boxShadow: `0 0 ${Math.random() * 15 + 5}px rgba(106, 207, 90, 0.7)`,
           }}
         />
       ))}
+
       <motion.form
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        onSubmit={handleSubmit(sendCode)}
+        onSubmit={handleSubmit(handleSendCode)}
         className="bg-white/95 p-8 rounded-3xl shadow-2xl border-2 border-[#7AE36A]/30 w-full max-w-md relative z-10 backdrop-blur-sm"
       >
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
+          transition={{ delay: 0.2 }}
           className="flex justify-center mb-8"
         >
-          <div className="bg-[#7AE36A] p-4 rounded-full">
+          <div className="bg-gradient-to-br from-[#7AE36A] to-[#4CAF50] p-4 rounded-full shadow-lg">
             <Lock className="text-white h-8 w-8" />
           </div>
         </motion.div>
 
-        <h2 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-[#7AE36A] to-[#4CAF50] bg-clip-text text-transparent">
-          {step === 1 ? "ورود با شماره موبایل" : "تایید کد یکبار مصرف"}
+        <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#7AE36A] to-[#4CAF50] bg-clip-text text-transparent">
+          {step === 1 ? "ورود به حساب کاربری" : "تأیید شماره موبایل"}
         </h2>
 
         <div className="space-y-6">
+          {/* نمایش خطاها */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative"
+              role="alert"
+            >
+              <span className="block sm:inline">{error}</span>
+            </motion.div>
+          )}
+
           {/* مرحله 1 - شماره موبایل */}
           <AnimatePresence mode="wait">
             {step === 1 && (
@@ -146,18 +187,23 @@ const Login = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.2 }}
+                className="space-y-4"
               >
+                <p className="text-gray-600 text-center">
+                  لطفاً شماره موبایل خود را وارد کنید
+                </p>
+
                 <div className="relative">
                   <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7AE36A]" />
                   <input
                     type="tel"
-                    placeholder="شماره موبایل"
-                    className="w-full pl-12 pr-4 py-3 bg-white/5 rounded-xl border border-[#7AE36A]/30 focus:outline-none text-gray-700 placeholder-gray-300"
+                    placeholder="0912 345 6789"
+                    className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7AE36A] focus:border-transparent transition-all text-gray-700 placeholder-gray-400"
                     {...register("phone")}
                   />
                 </div>
                 {errors.phone && (
-                  <span className="text-red-400 text-sm mt-2 block">
+                  <span className="text-red-500 text-sm block mt-1">
                     {errors.phone.message}
                   </span>
                 )}
@@ -165,7 +211,7 @@ const Login = () => {
             )}
           </AnimatePresence>
 
-          {/* مرحله 2 - کد تایید */}
+          {/* مرحله 2 - کد تأیید */}
           <AnimatePresence mode="wait">
             {step === 2 && (
               <motion.div
@@ -176,27 +222,32 @@ const Login = () => {
                 transition={{ duration: 0.2 }}
                 className="space-y-6"
               >
-                <div className="flex justify-center gap-2">
+                <p className="text-gray-600 text-center">
+                  کد تأیید برای شماره {watchedPhone} ارسال شد
+                </p>
+
+                <div dir="ltr" className="flex justify-center gap-3">
                   {code.map((digit, index) => (
                     <input
                       key={index}
-                      type="number"
+                      type="text"
                       inputMode="numeric"
                       maxLength="1"
                       value={digit}
                       onChange={(e) => handleCodeChange(e.target.value, index)}
                       ref={(el) => (inputsRef.current[index] = el)}
-                      className="w-12 h-12 text-center text-2xl border-2 border-[#7AE36A]/30 rounded-xl focus:outline-none focus:border-[#7AE36A]"
+                      className="w-12 h-12 text-center text-xl font-semibold border-2 border-[#7AE36A]/30 rounded-xl focus:outline-none focus:border-[#7AE36A] transition-all"
                     />
                   ))}
                 </div>
 
                 <div className="flex items-center justify-center gap-2 text-[#7AE36A]">
                   <Timer className="w-5 h-5" />
-                  <span>
+                  <span className="font-medium">
                     {Math.floor(timer / 60)}:{timer % 60 < 10 ? "0" : ""}
                     {timer % 60}
                   </span>
+                  <span className="text-gray-500">ثانیه تا ارسال مجدد کد</span>
                 </div>
               </motion.div>
             )}
@@ -204,28 +255,30 @@ const Login = () => {
 
           {/* دکمه اقدام */}
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type={step === 1 ? "submit" : "button"}
-            // onClick={step === 2 ? true : null}
-            disabled={isSubmitting || (step === 2 && isResendDisabled)}
-            className="w-full py-3 bg-gradient-to-r from-[#7AE36A] to-[#4CAF50] rounded-xl text-white font-semibold hover:shadow-lg transition-all relative overflow-hidden"
+            onClick={step === 2 ? () => handleVerifyCode(code.join("")) : null}
+            disabled={loading || (step === 2 && timer > 0 && code.join("").length !== 6)}
+            className="w-full py-3.5 bg-gradient-to-r from-[#7AE36A] to-[#4CAF50] rounded-xl text-white font-semibold shadow-md hover:shadow-lg transition-all relative overflow-hidden disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? (
-              <motion.div
-                initial={{ x: "-100%" }}
-                animate={{ x: "100%" }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 1.5,
-                  ease: "linear",
-                }}
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-              />
+            {loading ? (
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-center justify-center gap-2"
+              >
+                {step === 1 ? "در حال ارسال کد" : "در حال تأیید کد"}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"
+                />
+              </motion.span>
             ) : step === 1 ? (
-              "ارسال کد"
+              "دریافت کد تأیید"
             ) : (
-              "تایید کد"
+              "تأیید و ورود"
             )}
           </motion.button>
 
@@ -234,20 +287,51 @@ const Login = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
               className="text-center"
             >
               <button
                 type="button"
-                onClick={handleSubmit(sendCode)}
-                disabled={isResendDisabled}
-                className="text-[#7AE36A] hover:text-[#66d15e] disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleResendCode}
+                disabled={timer > 0 || loading}
+                className="text-[#7AE36A] hover:text-[#5bbd4e] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center mx-auto"
               >
-                <RotateCw className="inline-block ml-1 w-4 h-4" />
+                <RotateCw className="ml-1 w-4 h-4" />
                 ارسال مجدد کد
               </button>
             </motion.div>
           )}
+
+          {/* تغییر شماره موبایل */}
+          {step === 2 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="text-center"
+            >
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                disabled={loading}
+                className="text-gray-500 hover:text-gray-700 text-sm transition-all"
+              >
+                تغییر شماره موبایل
+              </button>
+            </motion.div>
+          )}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="mt-8 pt-6 border-t border-gray-100 text-center"
+        >
+          <p className="text-sm text-gray-500">
+            با ورود به حساب کاربری، شرایط و قوانین را می‌پذیرید
+          </p>
+        </motion.div>
       </motion.form>
     </div>
   );

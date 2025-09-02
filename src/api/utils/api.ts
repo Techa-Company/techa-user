@@ -41,7 +41,7 @@ export async function SP_fetch(
 
   const body: any = {
     ProcedureName: procedureName,
-    ProjectId: 3,
+    ProjectId: 1010,
     HasDataTable: true,
   };
 

@@ -1,14 +1,19 @@
-// app/store.js
+"use client"
 import { configureStore } from '@reduxjs/toolkit';
+import authReducer from '../features/auth/authSlice';
 import cartReducer from '../features/cart/cartSlice';
 
 export const store = configureStore({
     reducer: {
         cart: cartReducer,
-        // سایر reducerها را اینجا اضافه کنید
+        auth: authReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
-            serializableCheck: false,
+            serializableCheck: {
+                ignoredActions: ['persist/PERSIST'],
+            },
         }),
 });
+
+export default store;
