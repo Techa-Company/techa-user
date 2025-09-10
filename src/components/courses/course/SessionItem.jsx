@@ -9,13 +9,13 @@ const SessionItem = ({ session, sessionIndex, isSelected }) => {
     const [hoveredSession, setHoveredSession] = useState(null);
     const [isActive, setIsActive] = useState(false);
     const router = useRouter();
-    const params = useParams();
+    const { docId } = useParams();
     const pathname = usePathname();
 
     useEffect(() => {
-        const currentSessionPath = `/courses/${params.id}/${session.Id}/exercises`;
+        const currentSessionPath = `/docs/${docId}/exercises/${session.Id}`;
         setIsActive(pathname === currentSessionPath);
-    }, [pathname, params.id, session.Id]);
+    }, [pathname, docId, session.Id]);
 
     const handleMouseEnter = () => {
         setHoveredSession(session.Id);
@@ -26,7 +26,7 @@ const SessionItem = ({ session, sessionIndex, isSelected }) => {
     };
 
     const handleClick = () => {
-        router.push(`/courses/${params.id}/${session.Id}/exercises`);
+        router.push(`/docs/${docId}/exercises/${session.Id}`);
     };
 
     const SessionBadge = ({ progress }) => {
@@ -45,6 +45,13 @@ const SessionItem = ({ session, sessionIndex, isSelected }) => {
                         <span className="text-sm font-medium">در انتظار بررسی</span>
                     </div>
                 );
+            case "rejected":
+                return (
+                    <div className="flex items-center gap-2 text-red-600 bg-red-100 px-3 py-1 rounded-full">
+                        <AlertCircle size={16} />
+                        <span className="text-sm font-medium">نیاز به اصلاح</span>
+                    </div>
+                );
             default:
                 return (
                     <div className="flex items-center gap-2 text-sky-600 bg-sky-100 px-3 py-1 rounded-full">
@@ -60,7 +67,7 @@ const SessionItem = ({ session, sessionIndex, isSelected }) => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: sessionIndex * 0.1 }}
-            className={`group bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow border-2 ${isActive || isSelected
+            className={`group cursor-pointer bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow border-2 ${isActive || isSelected
                 ? "border-emerald-500 bg-emerald-50"
                 : "border-gray-100 hover:border-emerald-100"
                 }`}
@@ -91,12 +98,12 @@ const SessionItem = ({ session, sessionIndex, isSelected }) => {
                         )}
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-800">
+                        <h3 className="text-lg font-medium text-gray-800">
                             {session.Title}
                         </h3>
                         <p className="text-sm text-gray-500 mt-1">
                             {/* {session.Duration}  */}
-                            {session.Description}
+                            {/* {session.Description} */}
                         </p>
                     </div>
                 </div>
@@ -104,11 +111,9 @@ const SessionItem = ({ session, sessionIndex, isSelected }) => {
 
                     <SessionBadge
                         progress={
-                            sessionIndex % 3 === 0
-                                ? "completed"
-                                : sessionIndex % 3 === 1
-                                    ? "pending"
-                                    : null
+                            session.SessionStatus === 1 ? "pending"
+                                : session.sessionIndex === 2 ? "pending"
+                                    : session.SessionStatus === 3 ? "rejected" : "not_started"
                         }
                     />
                 </div>

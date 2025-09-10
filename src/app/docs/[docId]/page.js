@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import DocTitle from "../../../components/courses/course/CourseTitle";
 import DocInfo from "../../../components/docs/doc/DocInfo";
@@ -8,36 +8,65 @@ import VideoCourseAd from "../../../components/docs/doc/VideoCourseAd";
 import VideoCourseAdEnd from "../../../components/docs/doc/VideoCourseAdEnd";
 import { SP_fetch } from "../../../api/utils/api";
 
-export default function CourseDetail() {
+import CourseContent from "../../../components/courses/course/CourseContent";
+import Exercises from "../../../components/courses/course/Exercises";
+import Comments from "../../../components/courses/course/Comments";
+import TabButtons from "../../../components/courses/course/TabButtons";
+import TabButtonsSkeleton from "../../../components/courses/course/TabButtonsSkeleton";
+import TabContent from "../../../components/courses/course/TabContent";
+
+export default function DocDetailsPage() {
   const params = useParams();
   const { docId } = params;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [docDetails, setDocDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   if (docId) {
-  //     fetch(`https://api.techa.me/api/Course/${docId}`)
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         if (data.IsSuccess) {
-  //           setDocDetails(data.Data);
-  //         }
-  //         setLoading(false);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching course details:", error);
-  //         setLoading(false);
-  //       });
-  //   }
-  // }, [docId]);
 
+  const tabParam = searchParams.get("tab");
+  const initialTabIndex = tabParam ? parseInt(tabParam) : 0;
+  const [activeTab, setActiveTab] = useState(initialTabIndex);
 
+  // تب‌ها
+  const tabContent = [
+    {
+      id: 0,
+      title: "اطلاعات دوره",
+      content: <DocInfo docDetails={docDetails} />,
+    },
+    {
+      id: 1,
+      title: "تمرین‌ها",
+      content: <Exercises docId={docId} />,
+    },
+    {
+      id: 2,
+      title: "نظرات کاربران",
+      content: <Comments docId={docId} />,
+    },
+  ];
+
+  // تغییر تب
+  const handleTabChange = (index) => {
+    setActiveTab(index);
+    router.push(`${window.location.pathname}?tab=${index}`, { shallow: true });
+  };
+
+  // انیمیشن
+  const tabVariants = {
+    initial: { opacity: 0, x: 50 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -50 },
+  };
+
+  // گرفتن دیتای مستندات
   useEffect(() => {
     if (docId) {
-      const fetchCourses = async () => {
+      const fetchDocs = async () => {
         try {
-          const { Data, IsSuccess, Message, StatusCode } = await SP_fetch(
-            "Form_Courses", {
-            "@Id": docId
+          const { Data, IsSuccess } = await SP_fetch("Form_Courses", {
+            "@Id": docId,
           });
           const docs = Data.Dataset[0];
           if (IsSuccess) setDocDetails(docs);
@@ -47,27 +76,51 @@ export default function CourseDetail() {
           setLoading(false);
         }
       };
-
-      fetchCourses();
+      fetchDocs();
     }
   }, [docId]);
 
-
   return (
     <div className="space-y-10">
-      <div className="space-y-5">
-        {loading ? (
-          <DocTitleSkeleton />
-        ) : (
-          <DocTitle title={docDetails?.Title} />
-        )}
-        {/* بخش تبلیغاتی */}
-        {!loading && docDetails && <VideoCourseAd courseId={docId} title={docDetails?.Title} />}
+      {/* عنوان و تبلیغ اول */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 md:gap-10">
+        {/* عنوان دوره */}
+        <div className="flex-1">
+          {loading ? (
+            <DocTitleSkeleton />
+          ) : (
+            <DocTitle title={docDetails?.Title} />
+          )}
+          {/* {!loading && docDetails && (
+            <VideoCourseAd courseId={docId} title={docDetails?.Title} />
+          )} */}
+        </div>
+
+        {/* دکمه‌های تب */}
+        <div>
+          {loading ? <TabButtonsSkeleton /> : (
+            <TabButtons
+              tabs={tabContent}
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+            />
+          )}
+        </div>
       </div>
 
-      <DocInfo docDetails={docDetails} />
+      {/* محتوای تب‌ها */}
+      {!loading && (
+        <TabContent
+          activeTab={activeTab}
+          tabs={tabContent}
+          variants={tabVariants}
+        />
+      )}
 
-      {!loading && <VideoCourseAdEnd courseId={docId} title={docDetails?.Title} />}
+
+      {!loading && (
+        <VideoCourseAdEnd courseId={docId} title={docDetails?.Title} />
+      )}
     </div>
   );
 }

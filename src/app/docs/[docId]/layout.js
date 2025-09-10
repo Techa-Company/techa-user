@@ -3,14 +3,14 @@ export const metadata = {
   description: "تکا",
 };
 
-import Sidebar from "../../../components/layout/Sidebar";
+import ConditionalSidebar from "../../../components/layout/ConditionalSidebar";
 
 export default function Layout({ children }) {
   return (
     <div className="pt-32">
       <div className="container px-5 xl:px-20 mx-auto">
         <div className="flex 2xl:gap-10 gap-5">
-          <Sidebar />
+          <ConditionalSidebar />
           <main className="w-full">{children}</main>
         </div>
       </div>

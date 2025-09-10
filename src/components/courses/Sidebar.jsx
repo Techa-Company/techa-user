@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import React from 'react';
 import { RiQuestionAnswerLine } from 'react-icons/ri';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../../app/features/cart/cartSlice';
+import { addToCart } from "../../features/cart/cartSlice";
 const Sidebar = () => {
 
     const dispatch = useDispatch()

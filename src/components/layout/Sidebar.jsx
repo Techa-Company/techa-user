@@ -30,7 +30,7 @@ const Sidebar = () => {
         });
         const { Data, IsSuccess, Message, StatusCode } = res;
         const raw = Data.Dataset;
-        console.log(raw, "raw");
+        // console.log(raw, "raw");
         if (raw && Array.isArray(raw)) {
           setContents(raw);
         } else {
@@ -114,7 +114,7 @@ const Sidebar = () => {
 
 
 
-  console.log(groupedContents);
+  // console.log(groupedContents);
 
   return (
     <aside
@@ -154,7 +154,7 @@ const Sidebar = () => {
                           <p className="font-medium text-lg ">{child.Title}</p>
                         </div>
                         <span className="text-white lg:text-[#042A1B] opacity-50 font-light">
-                          {child.TimeToRead} دقیقه
+                          {child.EstimatedReadTime} دقیقه
                         </span>
                       </Link>
                       {content.children.indexOf(child) !==

@@ -9,34 +9,6 @@ import AccordionSkeleton from '../../common/AccordionSkeleton';
 import { Clock, Code2, GitBranch, Terminal } from 'lucide-react';
 import { formatDuration } from "../../../helper"
 
-const accordionContent = [
-    {
-        title: "مقدمه ای بر برنامه نویسی",
-        content:
-            "برنامه نویسی یکی از مهارت‌های اساسی در دنیای امروز است. با یادگیری برنامه نویسی، می‌توانید نرم‌افزارها و وب‌سایت‌های مختلفی را ایجاد کنید. این مهارت به شما امکان می‌دهد تا ایده‌های خود را به واقعیت تبدیل کنید و در دنیای دیجیتال نقش فعالی داشته باشید.",
-    },
-    {
-        title: "مفاهیم پیشرفته جاوا اسکریپت",
-        content:
-            "جاوا اسکریپت یکی از زبان‌های برنامه نویسی محبوب است که برای توسعه وب استفاده می‌شود. در این بخش، به مفاهیم پیشرفته جاوا اسکریپت می‌پردازیم. این مفاهیم شامل توابع، شیءگرایی، و مدیریت حافظه می‌شود.",
-    },
-    {
-        title: "آشنایی با React",
-        content:
-            "React یک کتابخانه جاوا اسکریپت برای ساخت رابط‌های کاربری است. با استفاده از React، می‌توانید برنامه‌های وب پیچیده و تعاملی ایجاد کنید. این کتابخانه به شما امکان می‌دهد تا کامپوننت‌های قابل استفاده مجدد بسازید و مدیریت حالت را بهبود بخشید.",
-    },
-    {
-        title: "مدیریت حالت با Redux",
-        content:
-            "Redux یک کتابخانه برای مدیریت حالت در برنامه‌های جاوا اسکریپت است. با استفاده از Redux، می‌توانید حالت برنامه خود را به صورت متمرکز مدیریت کنید. این کتابخانه به شما کمک می‌کند تا برنامه‌های بزرگ و پیچیده را به راحتی مدیریت کنید.",
-    },
-    {
-        title: "آشنایی با Node.js",
-        content:
-            "Node.js یک محیط اجرایی برای جاوا اسکریپت است که به شما امکان می‌دهد برنامه‌های سمت سرور را با استفاده از جاوا اسکریپت بنویسید. با استفاده از Node.js، می‌توانید برنامه‌های سریع و مقیاس‌پذیر ایجاد کنید.",
-    },
-];
-
 
 const DocInfo = ({ docDetails }) => {
     const [loading, setLoading] = useState(true);
@@ -84,7 +56,7 @@ const DocInfo = ({ docDetails }) => {
                 <DocInfoCard
                     icon={<Clock className='w-9 h-9 text-[#065F46]' />}
                     label="مدت زمان مطالعه"
-                    value={formatDuration(docDetails.Duration)}
+                    value={formatDuration(docDetails?.Duration)}
                 />
                 <DocInfoCard
                     icon={<GitBranch className='w-9 h-9 text-[#065F46]' />}
@@ -94,7 +66,7 @@ const DocInfo = ({ docDetails }) => {
                 <DocInfoCard
                     icon={<Terminal className='w-9 h-9 text-[#065F46]' />}
                     label="پیش نیاز"
-                    value={docDetails.Prerequisites || "ندارد"}
+                    value={docDetails?.Prerequisites || "ندارد"}
                 />
                 <DocInfoCard
                     icon={<Code2 className='w-9 h-9 text-[#065F46]' />}
@@ -110,7 +82,7 @@ const DocInfo = ({ docDetails }) => {
                 </h1>
                 <div className="mt-3">
                     <p className="text-[17.5px] text-[#042A1B] text-justify leading-7 font-normal">
-                        {docDetails.TargetAudience}     </p>
+                        {docDetails?.TargetAudience}     </p>
                 </div>
             </div>
 
