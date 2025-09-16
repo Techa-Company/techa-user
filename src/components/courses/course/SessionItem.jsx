@@ -1,61 +1,45 @@
-// components/SessionItem.js
 "use client";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PlayCircle, CheckCircle, AlertCircle } from "lucide-react";
-import { useParams, usePathname, useRouter } from "next/navigation";
 
-const SessionItem = ({ session, sessionIndex, isSelected }) => {
-    const [hoveredSession, setHoveredSession] = useState(null);
-    const [isActive, setIsActive] = useState(false);
-    const router = useRouter();
-    const { docId } = useParams();
-    const pathname = usePathname();
+const SessionItem = ({ session, sessionIndex, isSelected, onClick }) => {
 
-    useEffect(() => {
-        const currentSessionPath = `/docs/${docId}/exercises/${session.Id}`;
-        setIsActive(pathname === currentSessionPath);
-    }, [pathname, docId, session.Id]);
-
-    const handleMouseEnter = () => {
-        setHoveredSession(session.Id);
+    const getBadgeStatus = () => {
+        switch (session.SessionStatus) {
+            case 1: return "pending";
+            case 2: return "completed";
+            case 3: return "rejected";
+            default: return "not_started";
+        }
     };
 
-    const handleMouseLeave = () => {
-        setHoveredSession(null);
-    };
-
-    const handleClick = () => {
-        router.push(`/docs/${docId}/exercises/${session.Id}`);
-    };
-
-    const SessionBadge = ({ progress }) => {
-        switch (progress) {
+    const SessionBadge = ({ status }) => {
+        switch (status) {
             case "completed":
                 return (
                     <div className="flex items-center gap-2 text-emerald-600 bg-emerald-100 px-3 py-1 rounded-full">
                         <CheckCircle size={16} />
-                        <span className="text-sm font-medium">تکمیل شده</span>
+                        <span className="text-sm font-medium hidden md:inline-block">تکمیل شده</span>
                     </div>
                 );
             case "pending":
                 return (
                     <div className="flex items-center gap-2 text-amber-600 bg-amber-100 px-3 py-1 rounded-full">
                         <AlertCircle size={16} />
-                        <span className="text-sm font-medium">در انتظار بررسی</span>
+                        <span className="text-sm font-medium hidden md:inline-block">در انتظار بررسی</span>
                     </div>
                 );
             case "rejected":
                 return (
                     <div className="flex items-center gap-2 text-red-600 bg-red-100 px-3 py-1 rounded-full">
                         <AlertCircle size={16} />
-                        <span className="text-sm font-medium">نیاز به اصلاح</span>
+                        <span className="text-sm font-medium hidden md:inline-block">نیاز به اصلاح</span>
                     </div>
                 );
             default:
                 return (
                     <div className="flex items-center gap-2 text-sky-600 bg-sky-100 px-3 py-1 rounded-full">
-                        <span className="text-sm font-medium">شروع تمرین</span>
+                        <span className="text-sm font-medium hidden md:inline-block">شروع تمرین</span>
                         <PlayCircle size={16} />
                     </div>
                 );
@@ -67,55 +51,28 @@ const SessionItem = ({ session, sessionIndex, isSelected }) => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: sessionIndex * 0.1 }}
-            className={`group cursor-pointer bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow border-2 ${isActive || isSelected
+            className={`group cursor-pointer bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow border-2 ${isSelected
                 ? "border-emerald-500 bg-emerald-50"
                 : "border-gray-100 hover:border-emerald-100"
                 }`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={handleClick}
+            onClick={onClick}
         >
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <div className="relative">
-                        <div
-                            className={`w-10 h-10 rounded-lg flex items-center justify-center ${isActive || isSelected
-                                ? "bg-emerald-500 text-white"
-                                : hoveredSession === session.Id
-                                    ? "bg-emerald-100 text-emerald-600"
-                                    : "bg-emerald-50 text-emerald-500"
-                                }`}
-                        >
-                            <PlayCircle size={20} />
-                        </div>
-                        {hoveredSession === session.Id && (
-                            <motion.div
-                                className="absolute inset-0 border-2 border-emerald-200 rounded-lg"
-                                initial={{ scale: 0.8 }}
-                                animate={{ scale: 1 }}
-                                transition={{ type: "spring", stiffness: 300 }}
-                            />
-                        )}
+                    <div
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center ${isSelected
+                            ? "bg-emerald-500 text-white"
+                            : "bg-emerald-50 text-emerald-500"
+                            }`}
+                    >
+                        <PlayCircle size={20} />
                     </div>
                     <div>
-                        <h3 className="text-lg font-medium text-gray-800">
-                            {session.Title}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                            {/* {session.Duration}  */}
-                            {/* {session.Description} */}
-                        </p>
+                        <h3 className="text-lg font-medium text-gray-800">{session.Title}</h3>
                     </div>
                 </div>
                 <div className="min-w-fit">
-
-                    <SessionBadge
-                        progress={
-                            session.SessionStatus === 1 ? "pending"
-                                : session.sessionIndex === 2 ? "pending"
-                                    : session.SessionStatus === 3 ? "rejected" : "not_started"
-                        }
-                    />
+                    <SessionBadge status={getBadgeStatus()} />
                 </div>
             </div>
         </motion.div>

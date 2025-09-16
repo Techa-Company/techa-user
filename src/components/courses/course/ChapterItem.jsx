@@ -1,13 +1,9 @@
-// components/ChapterItem.js
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import SessionItem from "./SessionItem";
 
-const ChapterItem = ({ chapter, index, selectedSessionId, isOpen, onToggle }) => {
-
-    console.log(selectedSessionId)
-    console.log(isOpen)
+const ChapterItem = ({ chapter, index, selectedSessionId, isOpen, onToggle, onSelectSession }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -17,17 +13,26 @@ const ChapterItem = ({ chapter, index, selectedSessionId, isOpen, onToggle }) =>
         >
             {/* عنوان فصل */}
             <div
-                className="bg-white p-4 rounded-xl cursor-pointer shadow-sm border-2 border-gray-100 hover:border-emerald-400 transition-all duration-300"
+                className={`bg-white p-4 rounded-xl cursor-pointer shadow-sm border-2 transition-all duration-300 ${isOpen
+                        ? "border-emerald-500 bg-emerald-50"
+                        : "border-gray-100 hover:border-emerald-400"
+                    }`}
                 onClick={onToggle}
             >
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center">
-                            <span className="text-emerald-600 font-bold text-xl">
-                                {index}
-                            </span>
+                        <div
+                            className={`w-12 h-12 rounded-lg flex items-center justify-center ${isOpen
+                                    ? "bg-emerald-100 text-emerald-700 font-bold"
+                                    : "bg-emerald-50 text-emerald-600 font-bold"
+                                }`}
+                        >
+                            <span className="text-xl">{index}</span>
                         </div>
-                        <h2 className="text-xl font-semibold text-gray-800">
+                        <h2
+                            className={`text-xl font-semibold ${isOpen ? "text-emerald-700" : "text-gray-800"
+                                }`}
+                        >
                             {chapter.Title}
                         </h2>
                     </div>
@@ -53,7 +58,8 @@ const ChapterItem = ({ chapter, index, selectedSessionId, isOpen, onToggle }) =>
                                 key={session.Id}
                                 session={session}
                                 sessionIndex={sessionIndex}
-                                isSelected={selectedSessionId}
+                                isSelected={selectedSessionId === session.Id}
+                                onClick={() => onSelectSession(session.Id)}
                             />
                         ))}
                     </motion.div>
