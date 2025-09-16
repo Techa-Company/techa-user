@@ -86,8 +86,8 @@ export default function ExerciseCard({ exercise, index, onClick }) {
                 )
             };
             default: return {
-                text: "text-gray-700",
-                bg: "bg-gray-100",
+                text: "text-purple-700",
+                bg: "bg-purple-100",
                 icon: (
                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -159,7 +159,7 @@ export default function ExerciseCard({ exercise, index, onClick }) {
                         {getStatusText()}
                     </span>
 
-                    <div className="text-left flex items-center gap-1">
+                    {/* <div className="text-left flex items-center gap-1">
                         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -167,13 +167,13 @@ export default function ExerciseCard({ exercise, index, onClick }) {
                             <span className="text-xs text-gray-500 block">مهلت:</span>
                             <DueDate utcDate={exercise.UserDueDate} />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {exercise.UserScore !== null && (
                     <div className="mt-4 bg-white/50 backdrop-blur-sm rounded-xl p-3 border border-white/20">
                         <div className="flex justify-between items-center mb-2">
-                            <span className="text-xs text-gray-600">پیشرفت شما:</span>
+                            <span className="text-xs text-gray-600">نمره شما:</span>
                             <span className="text-xs font-bold text-gray-700">{exercise.UserScore} از 100</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">

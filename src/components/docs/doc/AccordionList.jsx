@@ -11,6 +11,10 @@ const AccordionList = ({ items }) => {
 
     console.log(items)
 
+    if (!items) {
+        return <h1>چیزی نداریم</h1>
+    }
+
     return (
         <div className="mt-5">
 

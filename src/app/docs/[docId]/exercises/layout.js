@@ -8,9 +8,9 @@ import { fetchContents } from "../../../../features/main/contents/contentsAction
 import { FiMenu, FiX, FiChevronRight } from "react-icons/fi";
 
 export default function Layout({ children }) {
-    const { docId, id } = useParams();
+    const { docId, lessonId } = useParams();
     const dispatch = useDispatch();
-
+    console.log("Id : ", lessonId)
     const { contents, loading, error } = useSelector((state) => state.contents);
 
     const [chapters, setChapters] = useState([]);
@@ -83,7 +83,7 @@ export default function Layout({ children }) {
                 let foundActive = false;
 
                 organizedChapters.forEach(chapter => {
-                    if (chapter.Sessions.some(s => s.Id === parseInt(id))) {
+                    if (chapter.Sessions.some(s => s.Id === parseInt(lessonId))) {
                         newExpandedChapters[chapter.Id] = true;
                         foundActive = true;
                     }
@@ -97,7 +97,7 @@ export default function Layout({ children }) {
                 }
             }
         }
-    }, [contents, id]);
+    }, [contents, lessonId]);
 
     const toggleChapter = (chapterId) => {
         setExpandedChapters(prev => ({
@@ -178,7 +178,7 @@ export default function Layout({ children }) {
                                             key={chapter.Id}
                                             index={chapter.SortIndex}
                                             chapter={chapter}
-                                            selectedSessionId={id}
+                                            selectedSessionId={lessonId}
                                             isOpen={expandedChapters[chapter.Id]}
                                             onToggle={() => toggleChapter(chapter.Id)}
                                         />

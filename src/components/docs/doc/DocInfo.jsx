@@ -8,19 +8,13 @@ import DocInfoCardSkeleton from './DocInfoCardSkeleton';
 import AccordionSkeleton from '../../common/AccordionSkeleton';
 import { Clock, Code2, GitBranch, Terminal } from 'lucide-react';
 import { formatDuration } from "../../../helper"
+import { useSelector } from 'react-redux';
 
 
 const DocInfo = ({ docDetails }) => {
-    const [loading, setLoading] = useState(true);
+    const { loading } = useSelector(state => state.docs)
 
-    useEffect(() => {
-        // شبیه‌سازی دریافت داده
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000);
-    }, []);
 
-    console.log(docDetails)
 
     const gregorianDate = docDetails?.LastContentModifiedDate;
     const faDate = new Date(gregorianDate).toLocaleDateString('fa-IR', {

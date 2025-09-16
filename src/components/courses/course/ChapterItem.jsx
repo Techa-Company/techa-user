@@ -5,6 +5,9 @@ import { ChevronDown } from "lucide-react";
 import SessionItem from "./SessionItem";
 
 const ChapterItem = ({ chapter, index, selectedSessionId, isOpen, onToggle }) => {
+
+    console.log(selectedSessionId)
+    console.log(isOpen)
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
