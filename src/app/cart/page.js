@@ -16,7 +16,7 @@ import {
     applyDiscount,
     selectPayment,
     clearCart
-} from '../features/cart/cartSlice';
+} from '../../features/cart/cartSlice';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -53,6 +53,8 @@ const CartPage = () => {
 
     const grandTotal = totalAmount - discountAmount;
 
+    console.log(totalAmount, discountAmount, grandTotal)
+
     const cartItemVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 },
@@ -60,7 +62,7 @@ const CartPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-50 pt-32">
+        <div className="min-h-screen pt-32">
             <div className="container mx-auto px-5 lg:px-0 xl:px-5 2xl:px-20">
                 {/* Header Section */}
                 <motion.div
@@ -92,17 +94,18 @@ const CartPage = () => {
                                     className="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center border-2 border-dashed border-emerald-100 hover:border-emerald-200 transition-colors"
                                 >
                                     <div className="max-w-xs mx-auto">
-                                        <Image
+                                        {/* <Image
                                             src="/images/empty-cart.png"
                                             width={400}
                                             height={300}
                                             alt="سبد خرید خالی"
                                             className="mx-auto w-3/4 md:w-full"
-                                        />
+                                        /> */}
+                                        {/* {doc} */}
                                     </div>
                                     <p className="text-gray-600 text-lg my-5">سبد خرید شما خالی است!</p>
                                     <Link
-                                        href="/courses"
+                                        href="/docs"
                                         className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl transition-colors inline-flex items-center gap-2"
                                     >
                                         <RiShoppingCartLine className="w-5 h-5" />
@@ -112,7 +115,7 @@ const CartPage = () => {
                             ) : (
                                 items.map((item, index) => (
                                     <motion.div
-                                        key={item.id}
+                                        key={item.Id}
                                         variants={cartItemVariants}
                                         initial="hidden"
                                         animate="visible"
@@ -123,8 +126,8 @@ const CartPage = () => {
                                         <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
                                             <div className="relative w-full md:w-32 h-32 shrink-0">
                                                 <Image
-                                                    src={item.image}
-                                                    alt={item.title}
+                                                    src={item.Image}
+                                                    alt={item.Title}
                                                     fill
                                                     className="rounded-xl object-cover border-2 border-emerald-100"
                                                     sizes="(max-width: 768px) 100vw, 150px"
@@ -132,14 +135,14 @@ const CartPage = () => {
                                             </div>
                                             <div className="flex-1 w-full">
                                                 <h3 className="font-dana-bold text-emerald-800 text-lg md:text-xl mb-2">
-                                                    {item.title}
+                                                    دوره {item.Title}
                                                 </h3>
                                                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                                                     <span className="text-emerald-600 font-dana-medium text-lg">
-                                                        {item.price.toLocaleString()} تومان
+                                                        {item.Price?.toLocaleString()} تومان
                                                     </span>
                                                     <button
-                                                        onClick={() => dispatch(removeFromCart(item.id))}
+                                                        onClick={() => dispatch(removeFromCart(item.Id))}
                                                         className="text-red-500 hover:text-red-600 flex items-center gap-2 transition-colors md:pr-4"
                                                     >
                                                         <RiDeleteBinLine className="w-5 h-5" />
@@ -191,7 +194,7 @@ const CartPage = () => {
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600">جمع کل:</span>
                                     <span className="font-dana-medium text-emerald-800">
-                                        {totalAmount.toLocaleString()} تومان
+                                        {totalAmount?.toLocaleString()} تومان
                                     </span>
                                 </div>
 

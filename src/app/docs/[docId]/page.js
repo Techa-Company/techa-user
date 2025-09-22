@@ -47,6 +47,7 @@ export default function DocDetailsPage() {
     },
   ];
 
+
   // تغییر تب
   const handleTabChange = (index) => {
     setActiveTab(index);
@@ -119,7 +120,7 @@ export default function DocDetailsPage() {
 
 
       {!loading && (
-        <VideoCourseAdEnd courseId={docId} title={docDetails?.Title} />
+        <VideoCourseAdEnd doc={docDetails} />
       )}
     </div>
   );

@@ -1,28 +1,46 @@
 "use client"
 import { motion } from "framer-motion"
+import { useState } from "react"
+import { useDispatch } from "react-redux"
+import { addToCart } from "../../../features/cart/cartSlice"
 
-const VideoCourseAdEnd = ({ onClose, courseId, title }) => {
+const VideoCourseAdEnd = ({ doc }) => {
+
+
+    const dispatch = useDispatch()
+
+
+    const features = [
+        { icon: '🤖', title: 'هوش مصنوعی پیشرفته', subtitle: 'ادیتور هوشمند با قابلیت تحلیل کد' },
+        { icon: '🎯', title: 'تمرینات تعاملی', subtitle: 'تمرین‌های عملی با نمره‌دهی خودکار' },
+        { icon: '📝', title: 'آزمون‌های دوره', subtitle: 'سنجش دانش با بازخورد دقیق' },
+        { icon: '👨‍🏫', title: 'پشتیبانی شخصی استاد', subtitle: 'رفع اشکال و پاسخ به سوالات' },
+        { icon: '🏆', title: 'مدرک معتبر', subtitle: 'گواهینامه پایان دوره با اعتبار بین‌المللی' },
+        { icon: '🔄', title: 'آپدیت مادام‌العمر', subtitle: 'دسترسی به همه به‌روزرسانی‌ها' },
+        // { icon: '📊', title: 'پنل پیشرفت شخصی', subtitle: 'ردیابی و تحلیل روند یادگیری' },
+    ]
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="relative bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-2xl mt-10 p-7 mb-8 shadow-xl shadow-emerald-100/30"
+            className="relative bg-gradient-to-br from-green-50 to-white border-2 border-green-200 rounded-2xl mt-10 p-7 mb-8 shadow-xl shadow-green-100/30 overflow-hidden"
         >
             {/* <button
-        onClick={onClose}
-        className="absolute top-1.5 right-1.5 text-gray-400 hover:text-emerald-600 transition-colors"
-      >
-        <motion.svg
-          whileHover={{ scale: 1.1, rotate: 90 }}
-          className="w-7 h-7"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-        </motion.svg>
-      </button> */}
+                onClick={onClose}
+                className="absolute top-3 right-3 text-gray-400 hover:text-green-600 transition-colors z-10"
+            >
+                <motion.svg
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </motion.svg>
+            </button> */}
 
             <div className="flex flex-col lg:flex-row gap-6">
                 {/* Content Section */}
@@ -30,84 +48,93 @@ const VideoCourseAdEnd = ({ onClose, courseId, title }) => {
                     <motion.div
                         initial={{ scale: 0.9 }}
                         animate={{ scale: 1 }}
-                        className="flex items-center gap-4 bg-white p-4 rounded-xl border border-emerald-200"
+                        className="flex items-center gap-4 bg-white p-4 rounded-xl border border-green-200 shadow-sm"
                     >
-                        <span className="text-3xl bg-emerald-100 p-3 rounded-full">🎓</span>
+                        <span className="text-3xl bg-green-100 p-3 rounded-full">🚀</span>
                         <div>
-                            <h3 className="text-xl font-black text-emerald-800">
-                                نسخه حرفه‌ای دوره {title}
+                            <h3 className="text-xl font-black text-green-800">
+                                ارتقاء به نسخه حرفه‌ای {doc.Title}
                             </h3>
-                            <p className="text-sm text-emerald-600 mt-1">شروع یادگیری فقط در ۳۰ ثانیه!</p>
+                            <p className="text-sm text-green-600 mt-1">تجربه یادگیری کاملاً جدید با قابلیت‌های پیشرفته</p>
                         </div>
                     </motion.div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {[
-                            { icon: '🎥', title: '۴۲ ساعت ویدیو HD', subtitle: 'آموزش جامع و پروژه‌محور' },
-                            { icon: '💬', title: 'پشتیبانی VIP', subtitle: 'پاسخگویی ۲۴ ساعته' },
-                            { icon: '🏆', title: 'گواهینامه معتبر', subtitle: 'بین‌المللی - قابل ارایه' },
-                            { icon: '📱', title: 'دسترسی دائمی', subtitle: 'همه دستگاه‌ها' },
-                        ].map((item, index) => (
+                        {features.map((item, index) => (
                             <motion.div
                                 key={index}
                                 whileHover={{ y: -3 }}
-                                className="flex items-center gap-3 p-3 bg-white rounded-lg border border-emerald-100 hover:border-emerald-200 transition-all"
+                                className="flex items-center gap-3 p-3 bg-white rounded-lg border border-green-100 hover:border-green-200 transition-all shadow-sm"
                             >
                                 <span className="text-2xl p-2">{item.icon}</span>
                                 <div>
-                                    <h4 className="font-semibold text-emerald-800">{item.title}</h4>
-                                    <p className="text-xs text-emerald-600">{item.subtitle}</p>
+                                    <h4 className="font-semibold text-green-800">{item.title}</h4>
+                                    <p className="text-xs text-green-600">{item.subtitle}</p>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
+
+
                 </div>
 
                 {/* CTA Section */}
                 <motion.div
                     initial={{ opacity: 0.8 }}
                     animate={{ opacity: 1 }}
-                    className="lg:w-80 shrink-0 bg-emerald-800 text-white p-5 rounded-xl border-2 border-emerald-900 space-y-5"
+                    className="lg:w-96 shrink-0 bg-gradient-to-b from-green-900 to-green-800 text-white p-5 rounded-xl border-2 border-green-700 space-y-5 shadow-lg"
                 >
                     <div className="text-center space-y-4">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-900/40 rounded-full text-sm">
-                            <span className="animate-pulse">🎁</span>
-                            <span>تخفیف فعال!</span>
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-700/50 rounded-full text-sm">
+                            <span className="animate-pulse">🔥</span>
+                            <span>پرفروش‌ترین پلن!</span>
                         </div>
 
                         <div className="space-y-2">
-                            <div className="text-3xl font-black">۲۹۹,۰۰۰ تومان</div>
-                            <div className="line-through text-emerald-300/80 text-sm">۴۹۹,۰۰۰ تومان</div>
+                            <div className="text-3xl font-black">۴۹۹,۰۰۰ تومان</div>
+                            <div className="line-through text-green-300/80 text-sm">۷۹۹,۰۰۰ تومان</div>
+                            <div className="text-xs text-green-200">پرداخت یکبار forever!</div>
                         </div>
 
-                        <motion.a
-                            whileHover={{ scale: 1.02 }}
+                        <motion.button
+                            whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(59, 246, 130, 0.4)" }}
                             whileTap={{ scale: 0.98 }}
-                            href={`/courses/${courseId}`}
-                            className="block w-full bg-white/95 text-emerald-800 px-5 py-3 rounded-lg font-bold hover:bg-white transition-colors shadow-lg"
+                            className="block w-full bg-white/95 text-green-800 px-5 py-3 rounded-lg font-bold hover:bg-white transition-colors shadow-lg"
+                            onClick={() => dispatch(addToCart(doc))}
                         >
-                            شروع فوری یادگیری →
-                        </motion.a>
+                            افزودن به سبد خرید
+                        </motion.button>
+
+                        <div className="text-xs text-green-200 flex justify-center items-center gap-1">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            <span>پرداخت امن از درگاه بانکی</span>
+                        </div>
                     </div>
 
-                    <div className="space-y-3 text-sm text-emerald-200">
+                    <div className="space-y-3 text-sm text-green-200">
                         <div className="flex items-center gap-2">
                             <span className="text-lg">✅</span>
-                            <span>ضمانت بازگشت وجه ۷ روزه</span>
+                            <span>ضمانت بازگشت وجه ۱۴ روزه بدون قید و شرط</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="text-lg">⏳</span>
-                            <span>آپدیت رایگان دوره</span>
+                            <span className="text-lg">🔄</span>
+                            <span>آپدیت رایگان مادام‌العمر</span>
                         </div>
-                        {/* <div className="flex items-center gap-2">
-              <span className="text-lg">📞</span>
-              <span>مشاوره رایگان پیش از خرید</span>
-            </div> */}
+                        <div className="flex items-center gap-2">
+                            <span className="text-lg">📞</span>
+                            <span>مشاوره رایگان پیش از خرید</span>
+                        </div>
                     </div>
                 </motion.div>
             </div>
-        </motion.div>
-    );
-};
 
-export default VideoCourseAdEnd;
+            {/* Floating Elements for Design */}
+            <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-green-200/20"></div>
+            <div className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-green-300/20"></div>
+        </motion.div>
+    )
+}
+
+export default VideoCourseAdEnd
