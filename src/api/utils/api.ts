@@ -1,6 +1,5 @@
 // utils/api.ts
-
-import { isStringObject } from "util/types";
+import Cookies from "js-cookie"; // npm install js-cookie
 
 export interface StoredProcedureParameter {
   Name: string;
@@ -22,45 +21,44 @@ interface Parameters {
   [key: `@${string}`]: string;
 }
 
-/**
- * Executes a stored procedure on the .NET backend and returns the parsed JSON response.
- * @param procedureName - The name of the stored procedure to execute.
- * @param parameters - Optional array of parameters.
- * @returns The JSON-decoded response object with a normalized Dataset array.
- * @throws Throws an error if network request fails or response is not OK.
- */
 export async function SP_fetch(
   procedureName: string,
   parameters: Parameters = {},
   hasDataTable: boolean = true
 ): Promise<StoredProcedureResponse> {
-  // const url = process.env.NEXT_PUBLIC_API_BASE_URL
-  //   ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ExecuteTSql/ExecuteStoredProcedure`
-  //   : "https://localhost:7180/api/ExecuteSqlCommand/ExecuteStoredProcedureWithDebugger";
   const url = "https://pool.techa.me/api/ExecuteTSql/ExecuteStoredProcedure";
 
   const body: any = {
     ProcedureName: procedureName,
     ProjectId: 1010,
-    HasDataTable: true,
+    HasDataTable: hasDataTable,
   };
 
   if (Object.keys(parameters).length > 0) {
-    // Create a new parameters object with properly formatted keys
     const formattedParams: Record<string, string> = {};
     for (const [key, value] of Object.entries(parameters)) {
-      // Ensure key starts with @ and is properly quoted
       const formattedKey = key.startsWith("@") ? key : `@${key}`;
       formattedParams[formattedKey] = value.toString();
     }
     body.Parameters = formattedParams;
   }
 
+  // خواندن توکن از کوکی
+  const token = Cookies.get("token");
+
+  console.log("Token : ", token)
+
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(body),
   });
 

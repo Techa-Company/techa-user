@@ -14,6 +14,7 @@ const DocCard = ({ index, doc }) => {
     const dispatch = useDispatch();
 
     console.log(doc)
+
     const truncateDescription = (description) => {
         if (!description) return "توضیحات در دسترس نیست.";
         const text = description.replace(/<[^>]*>/g, '');
@@ -135,17 +136,17 @@ const DocCard = ({ index, doc }) => {
                         <span className="text-2xl font-bold text-gray-900">
                             {price.toLocaleString()} تومان
                         </span>
-                        {discount > 0 && (
+                        {discount < 0 && (
                             <span className="text-sm text-gray-500 line-through">
-                                {originalPrice.toLocaleString()} تومان
+                                {originalPrice.toLocaleString()}400 تومان
                             </span>
                         )}
                     </div>
 
                     <div className="flex flex-col items-end">
                         <span className="text-xs text-gray-500">هزینه دوره</span>
-                        {discount > 0 && (
-                            <span className="text-xs text-amber-600 font-bold">صرفه‌جویی {((originalPrice - price) / 1000).toLocaleString()} هزار تومان</span>
+                        {discount < 0 && (
+                            <span className="text-xs text-amber-600 font-bold">صرفه‌جویی {((originalPrice - price) / 1000).toLocaleString()}1000 هزار تومان</span>
                         )}
                     </div>
                 </div>

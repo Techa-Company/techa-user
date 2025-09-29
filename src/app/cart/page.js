@@ -124,7 +124,7 @@ const CartPage = () => {
                                         className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-emerald-100 group hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                                     >
                                         <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-                                            <div className="relative w-full md:w-32 h-32 shrink-0">
+                                            {/* <div className="relative w-full md:w-32 h-32 shrink-0">
                                                 <Image
                                                     src={item.Image}
                                                     alt={item.Title}
@@ -132,7 +132,7 @@ const CartPage = () => {
                                                     className="rounded-xl object-cover border-2 border-emerald-100"
                                                     sizes="(max-width: 768px) 100vw, 150px"
                                                 />
-                                            </div>
+                                            </div> */}
                                             <div className="flex-1 w-full">
                                                 <h3 className="font-dana-bold text-emerald-800 text-lg md:text-xl mb-2">
                                                     دوره {item.Title}

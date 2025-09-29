@@ -23,8 +23,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../features/cart/cartSlice";
 import { nanoid } from "@reduxjs/toolkit";
+import { addToCart } from "../../features/cart/cartSlice";
 
 const Accordion = ({ title, content, isOpen, onClick }) => {
   return (
