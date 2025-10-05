@@ -90,22 +90,22 @@ export default function Lesson() {
           </Link>
         </div> */}
       </div>
-      <VideoCourseAd courseId={docId} />
+      {/* <VideoCourseAd courseId={docId} /> */}
       <div className="text-[17.5px] font-normal leading-7 text-justify mt-7 grid gap-5">
         <div
           className="
     prose 
     max-w-full
     prose-p:!text-[#2e2e2e] prose-p:!leading-relaxed prose-p:!text-justify prose-p:!text-base
-    prose-headings:!text-[#111111] prose-headings:!font-extrabold prose-headings:!mt-8 prose-headings:!mb-4
+    prose-headings:!text-[#111111] prose-headings:!font-semibold prose-headings:!mt-8 prose-headings:!mb-4
     prose-h1:!text-4xl prose-h2:!text-3xl prose-h3:!text-2xl prose-h4:!text-xl prose-h5:!text-lg prose-h6:!text-base
     prose-a:!text-[#2563eb] prose-a:!underline prose-a:!decoration-2 prose-a:!decoration-[#2563eb] prose-a:!transition prose-a:!duration-300 prose-a:!hover:text-[#1e40af]
     prose-code:!bg-gray-100 prose-code:!px-2 prose-code:!py-1 prose-code:!rounded-md prose-code:!font-mono prose-code:!text-sm 
     prose-pre:!bg-gray-100 prose-pre:!p-4 prose-pre:!rounded-md prose-pre:!overflow-x-auto prose-pre:!text-sm prose-pre:!font-mono
     prose-blockquote:!border-l-4 prose-blockquote:!border-[#2563eb] prose-blockquote:!bg-[#e0e7ff] prose-blockquote:!italic prose-blockquote:!px-4 prose-blockquote:!py-2 prose-blockquote:!rounded-md
     prose-ul:!list-disc prose-ul:!ml-6 prose-li:!text-[#2e2e2e] prose-li:!mb-2
-    prose-ol:!list-decimal prose-ol:!ml-6 prose-li:!text-[#2e2e2e] prose-li:!mb-2
-    prose-table:!w-full prose-table:!border prose-table:!border-gray-300 prose-table:!rounded-md prose-th:!bg-gray-100 prose-th:!px-3 prose-th:!py-2 prose-th:!text-left prose-th:!font-semibold prose-td:!px-3 prose-td:!py-2 prose-td:!border prose-td:!border-gray-300
+    prose-ol:!list-decimal prose-ol:!ml-6 
+    prose-table:!w-full prose-table:!border prose-table:!border-gray-300 prose-table:!rounded-md prose-th:!bg-gray-100 prose-th:!px-3 prose-th:!py-2 prose-th:!text-right prose-th:!font-semibold prose-td:!px-3 prose-td:!py-2 prose-td:!border prose-td:!border-gray-300 prose-td:!text-[#2e2e2e]
     prose-img:!rounded-md prose-img:!shadow-md prose-img:!my-4
     prose-hr:!border-t-2 prose-hr:!border-gray-300 prose-hr:!my-6
     prose-strong:!font-semibold prose-em:!italic prose-del:!line-through
@@ -135,7 +135,7 @@ export default function Lesson() {
           </span>
         </Link>
       </div>
-      <VideoCourseAdEnd courseId={docId} />
+      {/* <VideoCourseAdEnd doc={lessonData} /> */}
     </div>
   );
 }

@@ -6,7 +6,8 @@ import { useState } from "react";
 import { RiFeedbackFill, RiQuestionMark } from "react-icons/ri";
 
 const ModernFAQ = () => {
-    const [activeId, setActiveId] = useState(null);
+    const [activeQuestion, setActiveQuestion] = useState(null);
+    const [activeSection, setActiveSection] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const faqItems = [
         {
@@ -210,6 +211,24 @@ const ModernFAQ = () => {
         )
     })).filter(section => section.questions.length > 0);
 
+    const toggleSection = (sectionId) => {
+        if (activeSection === sectionId) {
+            setActiveSection(null);
+            setActiveQuestion(null);
+        } else {
+            setActiveSection(sectionId);
+            setActiveQuestion(null);
+        }
+    };
+
+    const toggleQuestion = (questionId) => {
+        if (activeQuestion === questionId) {
+            setActiveQuestion(null);
+        } else {
+            setActiveQuestion(questionId);
+        }
+    };
+
     return (
         <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 pt-32">
             <div className="max-w-5xl mx-auto">
@@ -255,7 +274,7 @@ const ModernFAQ = () => {
                 </div>
 
                 {/* FAQ Content */}
-                <div className="space-y-8">
+                <div className="space-y-4">
                     {filteredItems.map((section) => (
                         <motion.div
                             key={section.id}
@@ -263,57 +282,86 @@ const ModernFAQ = () => {
                             animate={{ opacity: 1, x: 0 }}
                             className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow group"
                         >
-                            <div className="p-8 border-b border-emerald-50">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-gradient-to-br from-emerald-500 to-cyan-400 rounded-xl text-white">
-                                        {section.icon}
-                                    </div>
-                                    <h2 className="text-2xl font-bold text-gray-800">
-                                        {section.title}
-                                    </h2>
-                                </div>
-                            </div>
-
-                            <div className="p-6 space-y-4">
-                                {section.questions.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="relative overflow-hidden rounded-xl bg-gradient-to-r from-white to-emerald-50 hover:to-emerald-100 transition-all"
+                            {/* Section Header - Clickable */}
+                            <button
+                                onClick={() => toggleSection(section.id)}
+                                className="w-full p-8 border-b border-emerald-50 text-right"
+                            >
+                                <div className="flex items-center justify-between gap-4">
+                                    <motion.div
+                                        animate={{ rotate: activeSection === section.id ? 180 : 0 }}
+                                        className="p-2 bg-emerald-100 rounded-lg"
                                     >
-                                        <button
-                                            onClick={() => setActiveId(activeId === item.id ? null : item.id)}
-                                            className="w-full flex items-center justify-between p-6 group"
-                                        >
-                                            <span className="text-right text-lg font-medium text-gray-700 group-hover:text-emerald-600 transition-colors">
-                                                {item.question}
-                                            </span>
-                                            <motion.div
-                                                animate={{ rotate: activeId === item.id ? 180 : 0 }}
-                                                className="p-2 bg-emerald-100 rounded-lg"
-                                            >
-                                                <ChevronDown className="w-6 h-6 text-emerald-600" />
-                                            </motion.div>
-                                        </button>
-
-                                        <AnimatePresence>
-                                            {activeId === item.id && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    animate={{ opacity: 1, height: "auto" }}
-                                                    exit={{ opacity: 0, height: 0 }}
-                                                    className="overflow-hidden"
-                                                >
-                                                    <div className="px-6 pb-6 text-gray-600 leading-relaxed  border-emerald-100">
-                                                        <div className="pr-4 border-r-4 border-emerald-400">
-                                                            {item.answer}
-                                                        </div>
-                                                    </div>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
+                                        <ChevronDown className="w-6 h-6 text-emerald-600" />
+                                    </motion.div>
+                                    <div className="flex items-center gap-4 flex-1">
+                                        <div className="p-3 bg-gradient-to-br from-emerald-500 to-cyan-400 rounded-xl text-white">
+                                            {section.icon}
+                                        </div>
+                                        <div className="flex-1 text-right">
+                                            <h2 className="text-2xl font-bold text-gray-800">
+                                                {section.title}
+                                            </h2>
+                                            <p className="text-gray-500 mt-1">
+                                                {section.questions.length} سوال
+                                            </p>
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            </button>
+
+                            {/* Section Questions - Animated */}
+                            <AnimatePresence>
+                                {activeSection === section.id && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="p-6 space-y-4">
+                                            {section.questions.map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    className="relative overflow-hidden rounded-xl bg-gradient-to-r from-white to-emerald-50 hover:to-emerald-100 transition-all"
+                                                >
+                                                    <button
+                                                        onClick={() => toggleQuestion(item.id)}
+                                                        className="w-full flex items-center justify-between p-6 group"
+                                                    >
+                                                        <span className="text-right text-lg font-medium text-gray-700 group-hover:text-emerald-600 transition-colors">
+                                                            {item.question}
+                                                        </span>
+                                                        <motion.div
+                                                            animate={{ rotate: activeQuestion === item.id ? 180 : 0 }}
+                                                            className="p-2 bg-emerald-100 rounded-lg"
+                                                        >
+                                                            <ChevronDown className="w-6 h-6 text-emerald-600" />
+                                                        </motion.div>
+                                                    </button>
+
+                                                    <AnimatePresence>
+                                                        {activeQuestion === item.id && (
+                                                            <motion.div
+                                                                initial={{ opacity: 0, height: 0 }}
+                                                                animate={{ opacity: 1, height: "auto" }}
+                                                                exit={{ opacity: 0, height: 0 }}
+                                                                className="overflow-hidden"
+                                                            >
+                                                                <div className="px-6 pb-6 text-gray-600 leading-relaxed border-emerald-100">
+                                                                    <div className="pr-4 border-r-4 border-emerald-400">
+                                                                        {item.answer}
+                                                                    </div>
+                                                                </div>
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </motion.div>
                     ))}
                 </div>

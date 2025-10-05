@@ -52,9 +52,9 @@ export async function SP_fetch(
     "Content-Type": "application/json",
   };
 
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
+  // if (token) {
+  //   headers["Authorization"] = `Bearer ${token}`;
+  // }
 
   const response = await fetch(url, {
     method: "POST",

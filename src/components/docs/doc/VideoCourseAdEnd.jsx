@@ -53,7 +53,7 @@ const VideoCourseAdEnd = ({ doc }) => {
                         <span className="text-3xl bg-green-100 p-3 rounded-full">🚀</span>
                         <div>
                             <h3 className="text-xl font-black text-green-800">
-                                ارتقاء به نسخه حرفه‌ای {doc.Title}
+                                ارتقاء به نسخه حرفه‌ای {doc?.Title}
                             </h3>
                             <p className="text-sm text-green-600 mt-1">تجربه یادگیری کاملاً جدید با قابلیت‌های پیشرفته</p>
                         </div>
