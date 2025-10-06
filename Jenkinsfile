@@ -22,8 +22,6 @@ stages {
         steps {
             script {
                 try {
-                    sh 'corepack enable'
-                    sh 'corepack prepare pnpm@latest --activate'
                     sh 'pnpm install --network-concurrency 1'
                 } catch (err) {
                     error("Install failed: ${err}")
