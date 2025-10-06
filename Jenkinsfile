@@ -34,7 +34,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'pnpm run build'
+                    sh 'sudo pnpm run build'
                 } catch (err) {
                     error("Build failed: ${err}")
                 }
@@ -46,7 +46,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'pnpm run start'
+                    sh 'sudo pnpm run start'
                     echo 'Run completed successfully ✅'
                 } catch (err) {
                     error("Run failed ❌: ${err}")
