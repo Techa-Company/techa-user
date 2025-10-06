@@ -9,7 +9,8 @@ properties([
 
 pipeline {
     agent any
-    
+
+stages {
     stage('Clone') {
         steps {
             git branch: 'main',
@@ -55,7 +56,7 @@ pipeline {
             }
         }
     }
-
+}
 
     post {
         success {
