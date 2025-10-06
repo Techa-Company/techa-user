@@ -26,7 +26,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'pnpm install --ignore-scripts --network-concurrency 1 || exit 1'
+                    sh 'npm install'
                 } catch (err) {
                     error("Install failed: ${err}")
                 }
