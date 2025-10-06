@@ -22,7 +22,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'pnpm install --legacy-peer-deps'
+                    sh 'pnpm install --strict-peer-dependencies=false --network-concurrency 1'
                 } catch (err) {
                     error("Install failed: ${err}")
                 }
