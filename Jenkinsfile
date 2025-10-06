@@ -22,6 +22,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        sh 'corepack use pnpm@latest'
                         sh 'pnpm install'
                     } catch (err) {
                         error("Install failed: ${err}")
