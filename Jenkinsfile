@@ -26,7 +26,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'npm install'
+                    sh 'npm install --legacy-peer-deps'
                 } catch (err) {
                     error("Install failed: ${err}")
                 }
