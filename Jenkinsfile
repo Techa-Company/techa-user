@@ -38,7 +38,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'pnpm run build'
+                    sh 'npm run build'
                 } catch (err) {
                     error("Build failed: ${err}")
                 }
