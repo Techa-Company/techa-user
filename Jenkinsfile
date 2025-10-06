@@ -10,10 +10,6 @@ properties([
 pipeline {
     agent any
 
-environment {
-  PNPM_SKIP_BUILD_CHECK = 'true'
-}
-
 stages {
     stage('Clone') {
         steps {
@@ -26,7 +22,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'npm install --legacy-peer-deps'
+                    sh 'pnpm install --legacy-peer-deps'
                 } catch (err) {
                     error("Install failed: ${err}")
                 }
@@ -38,7 +34,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'npm run build'
+                    sh 'pnpm run build'
                 } catch (err) {
                     error("Build failed: ${err}")
                 }
