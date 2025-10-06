@@ -23,6 +23,7 @@ import {
   ChevronDown,
   Link2,
   BookOpenText,
+  LayoutDashboard,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { RiShoppingCartLine } from "react-icons/ri";
@@ -410,13 +411,18 @@ const Header = () => {
                           { }
                           <ChevronDown className={`text-white w-5 group-hover:text-[#7AE36A] ${isProfileOpen ? 'rotate-180' : 'rotate-0'} transition-all duration-200`} />
                           <span className="hidden sm:block text-white font-medium group-hover:text-[#7AE36A] transition-colors text-sm">
-                            {user?.FirstName} {user?.LastName}
+                            {user?.FirstName && user?.LastName
+                              ? `${user.FirstName} ${user.LastName}`
+                              : "کاربر مهمان"}
                           </span>
+
                         </div>
                         <div className="relative w-12 h-12">
                           <Image
-                            src="/images/teacher.jpeg"
-                            alt="User Avatar"
+                            src={user?.avatarUrl ?? "/images/user.png"} // اگر avatar موجود نبود، پیش‌فرض
+                            alt={user?.FirstName && user?.LastName
+                              ? `${user.FirstName} ${user.LastName}`
+                              : "کاربر مهمان"}
                             fill
                             className="rounded-full object-cover border-2 border-[#7AE36A]"
                           />
@@ -435,16 +441,22 @@ const Header = () => {
                               <div className="flex items-center gap-3">
                                 <div className="relative w-12 h-12">
                                   <Image
-                                    src="/images/teacher.jpeg"
-                                    alt="User Avatar"
+                                    src={user?.avatarUrl ?? "/images/user.png"} // اگر avatar موجود نبود، پیش‌فرض
+                                    alt={user?.FirstName && user?.LastName
+                                      ? `${user.FirstName} ${user.LastName}`
+                                      : "کاربر مهمان"}
                                     fill
                                     className="rounded-full object-cover border-2 border-[#7AE36A]"
                                   />
+
                                 </div>
                                 <div>
                                   <p className="text-white font-medium">
-                                    {user.FirstName} {user.LastName}
+                                    {user?.FirstName && user?.LastName
+                                      ? `${user.FirstName} ${user.LastName}`
+                                      : "کاربر مهمان"}
                                   </p>
+
                                   <p className="text-[#7AE36A] text-sm">
                                     {user.Mobile}
                                   </p>
@@ -458,26 +470,26 @@ const Header = () => {
                                   href="/account"
                                   className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
                                 >
-                                  <User className="w-5 h-5 text-[#7AE36A]" />
-                                  پروفایل کاربری
+                                  <LayoutDashboard className="w-5 h-5 text-[#7AE36A]" />
+                                  حساب کاربری
                                 </Link>
                               </li>
                               <li>
                                 <Link
-                                  href="/my-courses"
+                                  href="/account/profile"
+                                  className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
+                                >
+                                  <User className="w-5 h-5 text-[#7AE36A]" />
+                                  پروفایل من
+                                </Link>
+                              </li>
+                              <li>
+                                <Link
+                                  href="/account/courses"
                                   className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
                                 >
                                   <Bookmark className="w-5 h-5 text-[#7AE36A]" />
                                   دوره‌های من
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="/settings"
-                                  className="px-4 py-3 hover:bg-[#7AE36A]/10 text-white flex items-center gap-3 transition-colors cursor-pointer"
-                                >
-                                  <Settings className="w-5 h-5 text-[#7AE36A]" />
-                                  تنظیمات
                                 </Link>
                               </li>
                               <li>

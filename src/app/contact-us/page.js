@@ -64,9 +64,9 @@ export default function ContactUs() {
                     <p className="text-[#042A1B] text-[16px] font-normal">
                       شماره تماس
                     </p>
-                    <h3 className="text-[#042A1B] text-[25px] font-bold">
+                    <a href="tel:+982182800003" className="text-[#042A1B] text-[25px] font-bold">
                       021-82800003
-                    </h3>
+                    </a>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -77,9 +77,9 @@ export default function ContactUs() {
                     <p className="text-[#042A1B] text-[16px] font-normal">
                       پست الکترونیک
                     </p>
-                    <h3 className="text-[#042A1B] text-xl font-semibold">
+                    <a href="mail:Support@Techa.me" className="text-[#042A1B] text-xl font-semibold">
                       Support@Techa.me
-                    </h3>
+                    </a>
                   </div>
                 </div>
               </div>

@@ -28,7 +28,7 @@ export default function ContactUs() {
                   <p className="text-[#042A1B] text-[16px] font-normal left-6">
                     دوره های ما
                   </p>
-                  <h3 className="text-[#042A1B] font-black text-3xl">+700</h3>
+                  <h3 className="text-[#042A1B] font-black text-3xl">+5</h3>
                 </div>
               </div>
               <div className="flex gap-3 items-center">
@@ -40,7 +40,7 @@ export default function ContactUs() {
                   <p className="text-[#042A1B] text-[16px] font-normal left-6">
                     کاربران ما
                   </p>
-                  <h3 className="text-[#042A1B] font-black text-3xl">+2.800</h3>
+                  <h3 className="text-[#042A1B] font-black text-3xl">+2</h3>
                 </div>
               </div>
               <div className="flex gap-3 items-center">
@@ -52,7 +52,7 @@ export default function ContactUs() {
                   <p className="text-[#042A1B] text-[16px] font-normal left-6">
                     ساعت آموزش
                   </p>
-                  <h3 className="text-[#042A1B] font-black text-3xl">+500</h3>
+                  <h3 className="text-[#042A1B] font-black text-3xl">+50</h3>
                 </div>
               </div>
             </div>
@@ -90,7 +90,7 @@ export default function ContactUs() {
                 مشاوره و تماس با ما
               </p>
             </div>
-            <h3 className="mt-5 text-white font-bold text-3xl">021-82800003</h3>
+            <a href="tel:+982182800003" className="mt-5 inline-block text-white font-bold text-3xl">021-82800003</a>
             <p className="text-white font-normal text-[16px]">
               کارشناسان ما در سریع‌ترین زمان ممکن پاسخگوی شما هستند
             </p>

@@ -5,13 +5,13 @@ export function middleware(req) {
     const { pathname } = req.nextUrl;
 
     // اگر لاگین نبود و خواست بره به /dashboard → بفرستش لاگین
-    if (!token && pathname.startsWith("/account")) {
+    if (!token && pathname.startsWith("/account/profile")) {
         return NextResponse.redirect(new URL("/auth/login", req.url));
     }
 
     // اگر لاگین بود و خواست بره به /login → بفرستش داشبورد
     if (token && pathname.startsWith("/auth/login")) {
-        return NextResponse.redirect(new URL("/account", req.url));
+        return NextResponse.redirect(new URL("/account/profile", req.url));
     }
 
     return NextResponse.next();

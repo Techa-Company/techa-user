@@ -1,33 +1,43 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Mail, Phone, Calendar, FileText, Edit, Camera, Lock, Eye, EyeOff, Palette, CheckCircle, Bell, Newsletter, Briefcase } from 'lucide-react';
+import { User, Mail, Phone, Calendar, FileText, Edit, Camera, Palette, CheckCircle, Bell, Shield, Globe, Send, Instagram, Twitter, Linkedin, Facebook } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
+import { FaWhatsapp } from "react-icons/fa6";
 
-export default function ProfileEditPage() {
+export default function Profile() {
     const [imagePreview, setImagePreview] = useState(null);
-    const [showPasswords, setShowPasswords] = useState({
-        old: false,
-        new: false,
-        confirm: false
-    });
     const [loading, setLoading] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [activeSection, setActiveSection] = useState('personal');
 
     const [formData, setFormData] = useState({
-        firstName: 'رامین',
-        lastName: 'جوشنگ',
-        phone: '09123456789',
-        email: 'ramin@gmail.com',
-        nationalId: '4312554125',
-        birthDate: '1382-07-18',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: '',
+        nationalId: '',
+        birthDate: '',
     });
 
-    const [passwordData, setPasswordData] = useState({
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: ''
+    const [emailVerification, setEmailVerification] = useState({
+        verified: false,
+        pending: false,
+        code: ''
+    });
+
+    const [socialMedia, setSocialMedia] = useState({
+        instagram: { enabled: false, value: '' },
+        twitter: { enabled: false, value: '' },
+        linkedin: { enabled: false, value: '' },
+        telegram: { enabled: false, value: '' },
+        whatsapp: { enabled: false, value: '' },
+        facebook: { enabled: false, value: '' },
+        aparat: { enabled: false, value: '' },
+        eitaa: { enabled: false, value: '' },
+        soroush: { enabled: false, value: '' },
+        bale: { enabled: false, value: '' },
+        website: { enabled: false, value: '' }
     });
 
     const [settings, setSettings] = useState({
@@ -56,13 +66,29 @@ export default function ProfileEditPage() {
         setTimeout(() => setFormSubmitted(false), 2000);
     };
 
-    const handlePasswordSubmit = (e) => {
-        e.preventDefault();
-        // Add password change logic here
+    const handleVerifyEmail = () => {
+        setEmailVerification(prev => ({ ...prev, pending: true }));
+        // Simulate sending verification code
+        setTimeout(() => {
+            setEmailVerification(prev => ({ ...prev, pending: false }));
+        }, 2000);
     };
 
-    const togglePasswordVisibility = (field) => {
-        setShowPasswords(prev => ({ ...prev, [field]: !prev[field] }));
+    const handleConfirmVerification = () => {
+        // Simulate verification process
+        setTimeout(() => {
+            setEmailVerification(prev => ({ ...prev, verified: true, code: '' }));
+        }, 1000);
+    };
+
+    const handleSocialMediaChange = (platform, field, value) => {
+        setSocialMedia(prev => ({
+            ...prev,
+            [platform]: {
+                ...prev[platform],
+                [field]: value
+            }
+        }));
     };
 
     const inputFields = [
@@ -72,6 +98,20 @@ export default function ProfileEditPage() {
         { key: 'email', icon: <Mail className="w-5 h-5" /> },
         { key: 'nationalId', icon: <FileText className="w-5 h-5" /> },
         { key: 'birthDate', icon: <Calendar className="w-5 h-5" /> },
+    ];
+
+    const socialPlatforms = [
+        { key: 'instagram', name: 'اینستاگرام', icon: <Instagram className="w-5 h-5" />, placeholder: 'آیدی اینستاگرام' },
+        { key: 'twitter', name: 'توییتر', icon: <Twitter className="w-5 h-5" />, placeholder: 'آیدی توییتر' },
+        { key: 'linkedin', name: 'لینکدین', icon: <Linkedin className="w-5 h-5" />, placeholder: 'لینک پروفایل' },
+        { key: 'telegram', name: 'تلگرام', icon: <User className="w-5 h-5" />, placeholder: 'آیدی تلگرام' },
+        { key: 'whatsapp', name: 'واتس اپ', icon: <FaWhatsapp className="w-5 h-5" />, placeholder: 'شماره واتس اپ' },
+        // { key: 'facebook', name: 'فیسبوک', icon: <Facebook className="w-5 h-5" />, placeholder: 'لینک پروفایل' },
+        // { key: 'aparat', name: 'آپارات', icon: <User className="w-5 h-5" />, placeholder: 'لینک کانال' },
+        // { key: 'eitaa', name: 'ایتا', icon: <Send className="w-5 h-5" />, placeholder: 'آیدی ایتا' },
+        // { key: 'soroush', name: 'سروش', icon: <Send className="w-5 h-5" />, placeholder: 'آیدی سروش' },
+        // { key: 'bale', name: 'بله', icon: <Send className="w-5 h-5" />, placeholder: 'آیدی بله' },
+        { key: 'website', name: 'وبسایت', icon: <Globe className="w-5 h-5" />, placeholder: 'آدرس وبسایت' }
     ];
 
     return (
@@ -92,11 +132,18 @@ export default function ProfileEditPage() {
                             اطلاعات شخصی
                         </button>
                         <button
-                            onClick={() => setActiveSection('password')}
-                            className={`w-full text-right p-4 rounded-xl flex items-center gap-2 ${activeSection === 'password' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
+                            onClick={() => setActiveSection('emailVerification')}
+                            className={`w-full text-right p-4 rounded-xl flex items-center gap-2 ${activeSection === 'emailVerification' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
                         >
-                            <Lock className="w-5 h-5" />
-                            تغییر رمز عبور
+                            <Shield className="w-5 h-5" />
+                            تایید ایمیل
+                        </button>
+                        <button
+                            onClick={() => setActiveSection('social')}
+                            className={`w-full text-right p-4 rounded-xl flex items-center gap-2 ${activeSection === 'social' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
+                        >
+                            <Globe className="w-5 h-5" />
+                            شبکه‌های اجتماعی
                         </button>
                         <button
                             onClick={() => setActiveSection('settings')}
@@ -142,7 +189,7 @@ export default function ProfileEditPage() {
                                                         </motion.div>
                                                     ) : (
                                                         <Image
-                                                            src={imagePreview || "/profile-placeholder.jpg"}
+                                                            src={imagePreview || "/images/user.png"}
                                                             alt="Profile"
                                                             width={160}
                                                             height={160}
@@ -211,103 +258,189 @@ export default function ProfileEditPage() {
                                 </motion.div>
                             )}
 
-                            {/* Password Change Section */}
-                            {activeSection === 'password' && (
+                            {/* Email Verification Section */}
+                            {activeSection === 'emailVerification' && (
                                 <motion.div
-                                    key="password"
+                                    key="emailVerification"
                                     initial={{ opacity: 0, x: 20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: -20 }}
                                     className="bg-white rounded-3xl shadow-2xl p-8"
                                 >
-                                    <form onSubmit={handlePasswordSubmit} className="space-y-8">
-                                        <div className="space-y-6">
-                                            <motion.div
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                className="space-y-2"
-                                            >
-                                                <label className="block text-sm font-medium text-emerald-700">
-                                                    رمز عبور فعلی
-                                                </label>
-                                                <div className="relative">
-                                                    <input
-                                                        type={showPasswords.old ? 'text' : 'password'}
-                                                        className="w-full pr-12 pl-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
-                                                        value={passwordData.oldPassword}
-                                                        onChange={(e) => setPasswordData({ ...passwordData, oldPassword: e.target.value })}
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => togglePasswordVisibility('old')}
-                                                        className="absolute right-3 top-3.5 text-emerald-400 hover:text-emerald-600"
-                                                    >
-                                                        {showPasswords.old ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                                    </button>
+                                    <div className="space-y-8">
+                                        {/* Current Email Status */}
+                                        <div className="bg-emerald-50 rounded-2xl p-6">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <Mail className="w-8 h-8 text-emerald-600" />
+                                                    <div>
+                                                        <h3 className="font-semibold text-emerald-800">ایمیل فعلی</h3>
+                                                        <p className="text-emerald-600">{formData.email}</p>
+                                                    </div>
                                                 </div>
-                                            </motion.div>
+                                                <div className={`px-4 py-2 rounded-full ${emailVerification.verified ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}`}>
+                                                    {emailVerification.verified ? (
+                                                        <span className="flex items-center gap-2">
+                                                            <CheckCircle className="w-4 h-4" />
+                                                            تایید شده
+                                                        </span>
+                                                    ) : (
+                                                        <span>تایید نشده</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                            <motion.div
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                className="space-y-2"
-                                            >
-                                                <label className="block text-sm font-medium text-emerald-700">
-                                                    رمز عبور جدید
-                                                </label>
-                                                <div className="relative">
-                                                    <input
-                                                        type={showPasswords.new ? 'text' : 'password'}
-                                                        className="w-full pr-12 pl-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
-                                                        value={passwordData.newPassword}
-                                                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => togglePasswordVisibility('new')}
-                                                        className="absolute right-3 top-3.5 text-emerald-400 hover:text-emerald-600"
-                                                    >
-                                                        {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                                    </button>
-                                                </div>
-                                            </motion.div>
+                                        {/* Verification Process */}
+                                        {!emailVerification.verified && (
+                                            <div className="space-y-6">
+                                                <motion.button
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.98 }}
+                                                    onClick={handleVerifyEmail}
+                                                    disabled={emailVerification.pending}
+                                                    className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
+                                                >
+                                                    {emailVerification.pending ? (
+                                                        <>
+                                                            <motion.div
+                                                                animate={{ rotate: 360 }}
+                                                                transition={{ repeat: Infinity, duration: 1 }}
+                                                                className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
+                                                            />
+                                                            در حال ارسال کد...
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Send className="w-5 h-5" />
+                                                            ارسال کد تایید
+                                                        </>
+                                                    )}
+                                                </motion.button>
 
-                                            <motion.div
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                className="space-y-2"
-                                            >
-                                                <label className="block text-sm font-medium text-emerald-700">
-                                                    تکرار رمز عبور جدید
-                                                </label>
-                                                <div className="relative">
-                                                    <input
-                                                        type={showPasswords.confirm ? 'text' : 'password'}
-                                                        className="w-full pr-12 pl-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
-                                                        value={passwordData.confirmPassword}
-                                                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => togglePasswordVisibility('confirm')}
-                                                        className="absolute right-3 top-3.5 text-emerald-400 hover:text-emerald-600"
+                                                {emailVerification.pending && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: 'auto' }}
+                                                        className="space-y-4"
                                                     >
-                                                        {showPasswords.confirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                                    </button>
-                                                </div>
+                                                        <div className="space-y-2">
+                                                            <label className="block text-sm font-medium text-emerald-700">
+                                                                کد تایید ارسال شده به ایمیل
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all text-center text-lg font-mono"
+                                                                placeholder="XXXXX"
+                                                                value={emailVerification.code}
+                                                                onChange={(e) => setEmailVerification(prev => ({ ...prev, code: e.target.value }))}
+                                                                maxLength={5}
+                                                            />
+                                                        </div>
+
+                                                        <motion.button
+                                                            whileHover={{ scale: 1.02 }}
+                                                            whileTap={{ scale: 0.98 }}
+                                                            onClick={handleConfirmVerification}
+                                                            className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
+                                                        >
+                                                            <CheckCircle className="w-5 h-5" />
+                                                            تایید ایمیل
+                                                        </motion.button>
+                                                    </motion.div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {/* Verified Success Message */}
+                                        {emailVerification.verified && (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                className="bg-emerald-100 border border-emerald-200 rounded-2xl p-6 text-center"
+                                            >
+                                                <CheckCircle className="w-16 h-16 text-emerald-600 mx-auto mb-4" />
+                                                <h3 className="text-xl font-semibold text-emerald-800 mb-2">ایمیل با موفقیت تایید شد!</h3>
+                                                <p className="text-emerald-600">حساب کاربری شما اکنون ایمن‌تر است.</p>
                                             </motion.div>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* Social Media Section */}
+                            {activeSection === 'social' && (
+                                <motion.div
+                                    key="social"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    className="bg-white rounded-3xl shadow-2xl p-8"
+                                >
+                                    <div className="space-y-8">
+                                        <div className="text-center mb-8">
+                                            <h2 className="text-2xl font-bold text-emerald-800 mb-2">شبکه‌های اجتماعی</h2>
+                                            <p className="text-emerald-600">حساب‌های کاربری خود در شبکه‌های اجتماعی را مدیریت کنید</p>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            {socialPlatforms.map((platform, index) => (
+                                                <motion.div
+                                                    key={platform.key}
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ delay: index * 0.1 }}
+                                                    className="bg-emerald-50 rounded-2xl p-4 space-y-4"
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="text-emerald-600">
+                                                                {platform.icon}
+                                                            </div>
+                                                            <span className="font-medium text-emerald-800">
+                                                                {platform.name}
+                                                            </span>
+                                                        </div>
+                                                        <label className="relative inline-flex items-center cursor-pointer">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="sr-only"
+                                                                checked={socialMedia[platform.key].enabled}
+                                                                onChange={(e) => handleSocialMediaChange(platform.key, 'enabled', e.target.checked)}
+                                                            />
+                                                            <div className={`w-11 h-6 rounded-full transition-colors ${socialMedia[platform.key].enabled ? 'bg-emerald-600' : 'bg-emerald-200'}`} />
+                                                            <div className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform ${socialMedia[platform.key].enabled ? 'translate-x-5' : ''}`} />
+                                                        </label>
+                                                    </div>
+
+                                                    {socialMedia[platform.key].enabled && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: 'auto' }}
+                                                            className="space-y-2"
+                                                        >
+                                                            <input
+                                                                type="text"
+                                                                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
+                                                                placeholder={platform.placeholder}
+                                                                value={socialMedia[platform.key].value}
+                                                                onChange={(e) => handleSocialMediaChange(platform.key, 'value', e.target.value)}
+                                                            />
+                                                        </motion.div>
+                                                    )}
+                                                </motion.div>
+                                            ))}
                                         </div>
 
                                         <motion.button
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
-                                            type="submit"
                                             className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
                                         >
-                                            <Lock className="w-5 h-5" />
-                                            تغییر رمز عبور
+                                            <CheckCircle className="w-5 h-5" />
+                                            ذخیره تغییرات
                                         </motion.button>
-                                    </form>
+                                    </div>
                                 </motion.div>
                             )}
 
@@ -323,7 +456,7 @@ export default function ProfileEditPage() {
                                     {/* Security Settings */}
                                     <div className="space-y-6">
                                         <h3 className="text-xl font-semibold text-emerald-800 flex items-center gap-2">
-                                            <Lock className="w-5 h-5" />
+                                            <Shield className="w-5 h-5" />
                                             تنظیمات امنیتی
                                         </h3>
                                         <div className="space-y-4">
