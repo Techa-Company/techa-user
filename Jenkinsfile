@@ -10,6 +10,10 @@ properties([
 pipeline {
     agent any
 
+environment {
+  PNPM_SKIP_BUILD_CHECK = 'true'
+}
+
 stages {
     stage('Clone') {
         steps {
@@ -22,7 +26,7 @@ stages {
         steps {
             script {
                 try {
-                    sh 'pnpm install --network-concurrency 1'
+                    sh 'pnpm install --network-concurrency 1 || exit 1'
                 } catch (err) {
                     error("Install failed: ${err}")
                 }
