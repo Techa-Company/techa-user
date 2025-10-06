@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm install'
+                        sh 'pnpm install'
                     } catch (err) {
                         error("Install failed: ${err}")
                     }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm run build'
+                        sh 'pnpm run build'
                     } catch (err) {
                         error("Build failed: ${err}")
                     }
@@ -46,7 +46,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm run start'
+                        sh 'pnpm run start'
                         echo 'Run completed successfully ✅'
                     } catch (err) {
                         error("Run failed ❌: ${err}")
