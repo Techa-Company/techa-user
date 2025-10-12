@@ -1,23 +1,26 @@
 'use client';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, frameData } from 'framer-motion';
 import { User, Mail, Phone, Calendar, FileText, Edit, Camera, Palette, CheckCircle, Bell, Shield, Globe, Send, Instagram, Twitter, Linkedin, Facebook } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaWhatsapp } from "react-icons/fa6";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserById, updateUser } from '../../../features/account/user/UserActions';
+import { toast } from 'react-toastify';
 
 export default function Profile() {
     const [imagePreview, setImagePreview] = useState(null);
-    const [loading, setLoading] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [activeSection, setActiveSection] = useState('personal');
+    const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        nationalId: '',
-        birthDate: '',
+        FirstName: '',
+        LastName: '',
+        Mobile: '',
+        Email: '',
+        NationalCode: '',
+        // birthDate: '',
     });
 
     const [emailVerification, setEmailVerification] = useState({
@@ -32,11 +35,11 @@ export default function Profile() {
         linkedin: { enabled: false, value: '' },
         telegram: { enabled: false, value: '' },
         whatsapp: { enabled: false, value: '' },
-        facebook: { enabled: false, value: '' },
-        aparat: { enabled: false, value: '' },
-        eitaa: { enabled: false, value: '' },
-        soroush: { enabled: false, value: '' },
-        bale: { enabled: false, value: '' },
+        // facebook: { enabled: false, value: '' },
+        // aparat: { enabled: false, value: '' },
+        // eitaa: { enabled: false, value: '' },
+        // soroush: { enabled: false, value: '' },
+        // bale: { enabled: false, value: '' },
         website: { enabled: false, value: '' }
     });
 
@@ -46,6 +49,10 @@ export default function Profile() {
         emailNotifications: true,
         twoFactorAuth: false
     });
+
+    const dispatch = useDispatch();
+    const { user, loading: userLoading, error } = useSelector((state) => state.user);
+    const userId = useSelector((state) => state.auth.user?.Id);
 
     const handleImageChange = (e) => {
         const file = e.target.files?.[0];
@@ -60,10 +67,73 @@ export default function Profile() {
         }
     };
 
-    const handleSubmit = (e) => {
+    // تابع ذخیره اطلاعات کاربر
+    const handleSaveUser = async (e) => {
         e.preventDefault();
-        setFormSubmitted(true);
-        setTimeout(() => setFormSubmitted(false), 2000);
+
+
+        if (!formData.FirstName || !formData.LastName || !formData.Email || !formData.NationalCode) {
+            toast.warn("لطفا تمامی اطلاعات را وارد نمایید.");
+            return;
+        }
+
+
+
+        const data = {
+            "@Id": userId,
+            "@FirstName": formData.FirstName,
+            "@LastName": formData.LastName,
+            "@Email": formData.Email,
+            "@Mobile": formData.Mobile,
+            "@NationalCode": formData.NationalCode,
+            "@IsActive": true,
+        };
+
+        console.log(data)
+
+        try {
+            await dispatch(updateUser(data)).unwrap();
+            toast.success('اطلاعات شما با موفقیت ویرایش شد');
+            dispatch(fetchUserById({ "@Id": userId }))
+        } catch (error) {
+            toast.error(`خطا در ویرایش اطلاعات: ${error.message}`);
+            console.error("Error creating doc:", error);
+
+        }
+    };
+
+    // تابع ذخیره شبکه‌های اجتماعی
+    const handleSaveSocialMedia = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const socialNetworks = {
+                Instagram: socialMedia.instagram.value,
+                Twitter: socialMedia.twitter.value,
+                Linkedin: socialMedia.linkedin.value,
+                Telegram: socialMedia.telegram.value,
+                Whatsapp: socialMedia.whatsapp.value,
+                // Facebook: socialMedia.facebook.value,
+                // Aparat: socialMedia.aparat.value,
+                // Eitaa: socialMedia.eitaa.value,
+                // Soroush: socialMedia.soroush.value,
+                // Bale: socialMedia.bale.value,
+                Website: socialMedia.website.value
+            };
+
+            await dispatch(updateUser({
+                Id: userId,
+                SocialNetworks: JSON.stringify(socialNetworks)
+            })).unwrap();
+
+            setFormSubmitted(true);
+            setTimeout(() => setFormSubmitted(false), 2000);
+        } catch (error) {
+            console.error('Error saving social media:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleVerifyEmail = () => {
@@ -92,12 +162,12 @@ export default function Profile() {
     };
 
     const inputFields = [
-        { key: 'firstName', icon: <User className="w-5 h-5" /> },
-        { key: 'lastName', icon: <User className="w-5 h-5" /> },
-        { key: 'phone', icon: <Phone className="w-5 h-5" /> },
-        { key: 'email', icon: <Mail className="w-5 h-5" /> },
-        { key: 'nationalId', icon: <FileText className="w-5 h-5" /> },
-        { key: 'birthDate', icon: <Calendar className="w-5 h-5" /> },
+        { key: 'FirstName', icon: <User className="w-5 h-5" /> },
+        { key: 'LastName', icon: <User className="w-5 h-5" /> },
+        { key: 'Mobile', icon: <Phone className="w-5 h-5" /> },
+        { key: 'Email', icon: <Mail className="w-5 h-5" /> },
+        { key: 'NationalCode', icon: <FileText className="w-5 h-5" /> },
+        // { key: 'birthDate', icon: <Calendar className="w-5 h-5" /> },
     ];
 
     const socialPlatforms = [
@@ -106,13 +176,60 @@ export default function Profile() {
         { key: 'linkedin', name: 'لینکدین', icon: <Linkedin className="w-5 h-5" />, placeholder: 'لینک پروفایل' },
         { key: 'telegram', name: 'تلگرام', icon: <User className="w-5 h-5" />, placeholder: 'آیدی تلگرام' },
         { key: 'whatsapp', name: 'واتس اپ', icon: <FaWhatsapp className="w-5 h-5" />, placeholder: 'شماره واتس اپ' },
-        // { key: 'facebook', name: 'فیسبوک', icon: <Facebook className="w-5 h-5" />, placeholder: 'لینک پروفایل' },
-        // { key: 'aparat', name: 'آپارات', icon: <User className="w-5 h-5" />, placeholder: 'لینک کانال' },
-        // { key: 'eitaa', name: 'ایتا', icon: <Send className="w-5 h-5" />, placeholder: 'آیدی ایتا' },
-        // { key: 'soroush', name: 'سروش', icon: <Send className="w-5 h-5" />, placeholder: 'آیدی سروش' },
-        // { key: 'bale', name: 'بله', icon: <Send className="w-5 h-5" />, placeholder: 'آیدی بله' },
+        // { key: 'facebook', name: 'فیسبوک', icon: <Facebook className="w-5 h-5" />, placeholder: 'آیدی فیسبوک' },
+        // { key: 'aparat', name: 'آپارات', icon: <User className="w-5 h-5" />, placeholder: 'آیدی آپارات' },
+        // { key: 'eitaa', name: 'ایتا', icon: <User className="w-5 h-5" />, placeholder: 'آیدی ایتا' },
+        // { key: 'soroush', name: 'سروش', icon: <User className="w-5 h-5" />, placeholder: 'آیدی سروش' },
+        // { key: 'bale', name: 'بله', icon: <User className="w-5 h-5" />, placeholder: 'آیدی بله' },
         { key: 'website', name: 'وبسایت', icon: <Globe className="w-5 h-5" />, placeholder: 'آدرس وبسایت' }
     ];
+
+    useEffect(() => {
+        if (userId) {
+            dispatch(fetchUserById({ "@Id": userId }));
+        }
+    }, [dispatch, userId]);
+
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                FirstName: user.FirstName || '',
+                LastName: user.LastName || '',
+                Mobile: user.Mobile || '',
+                Email: user.Email || '',
+                NationalCode: user.NationalCode || '',
+                birthDate: user.birthDate || '',
+            });
+
+            // بارگذاری شبکه‌های اجتماعی از کاربر
+            if (user.SocialNetworks) {
+                try {
+                    const socialNetworksArray = JSON.parse(user.SocialNetworks);
+
+                    // آرایه رو به آبجکت تبدیل می‌کنیم
+                    const socialNetworks = socialNetworksArray.reduce((acc, item) => {
+                        acc[item.Platform] = item.IsEnabled ? item.UrlOrId : '';
+                        return acc;
+                    }, {});
+
+                    console.log(socialNetworks.Instagram);
+
+                    setSocialMedia(prev => ({
+                        ...prev,
+                        instagram: { enabled: !!socialNetworks.Instagram, value: socialNetworks.Instagram || '' },
+                        twitter: { enabled: !!socialNetworks.Twitter, value: socialNetworks.Twitter || '' },
+                        linkedin: { enabled: !!socialNetworks.Linkedin, value: socialNetworks.Linkedin || '' },
+                        telegram: { enabled: !!socialNetworks.Telegram, value: socialNetworks.Telegram || '' },
+                        whatsapp: { enabled: !!socialNetworks.WhatsApp, value: socialNetworks.WhatsApp || '' },
+                        website: { enabled: !!socialNetworks.Website, value: socialNetworks.Website || '' }
+                    }));
+                } catch (error) {
+                    console.error('Error parsing social networks:', error);
+                }
+            }
+
+        }
+    }, [user]);
 
     return (
         <div className="min-h-screen bg-emerald-50/50">
@@ -132,25 +249,21 @@ export default function Profile() {
                             اطلاعات شخصی
                         </button>
                         <button
+                            disabled={true}
+
                             onClick={() => setActiveSection('emailVerification')}
-                            className={`w-full text-right p-4 rounded-xl flex items-center gap-2 ${activeSection === 'emailVerification' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
+                            className={`w-full text-right opacity-70 cursor-not-allowed p-4 rounded-xl flex items-center gap-2 ${activeSection === 'emailVerification' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
                         >
                             <Shield className="w-5 h-5" />
-                            تایید ایمیل
+                            تایید ایمیل <span className='text-red-500 text-xs'>به زودی</span>
                         </button>
                         <button
+                            disabled={true}
                             onClick={() => setActiveSection('social')}
-                            className={`w-full text-right p-4 rounded-xl flex items-center gap-2 ${activeSection === 'social' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
+                            className={`w-full text-right opacity-70 cursor-not-allowed p-4 rounded-xl flex items-center gap-2 ${activeSection === 'social' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
                         >
                             <Globe className="w-5 h-5" />
-                            شبکه‌های اجتماعی
-                        </button>
-                        <button
-                            onClick={() => setActiveSection('settings')}
-                            className={`w-full text-right p-4 rounded-xl flex items-center gap-2 ${activeSection === 'settings' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
-                        >
-                            <Palette className="w-5 h-5" />
-                            تنظیمات
+                            شبکه‌های اجتماعی <span className='text-red-500 text-xs'>به زودی</span>
                         </button>
                     </div>
 
@@ -210,7 +323,7 @@ export default function Profile() {
                                         </motion.label>
                                     </div>
 
-                                    <form onSubmit={handleSubmit} className="space-y-8">
+                                    <form onSubmit={handleSaveUser} className="space-y-8">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             {inputFields.map(({ key, icon }, index) => (
                                                 <motion.div
@@ -222,18 +335,20 @@ export default function Profile() {
                                                 >
                                                     <label className="block text-sm font-medium text-emerald-700">
                                                         {{
-                                                            firstName: 'نام',
-                                                            lastName: 'نام خانوادگی',
-                                                            phone: 'شماره تماس',
-                                                            email: 'ایمیل',
-                                                            nationalId: 'کد ملی',
-                                                            birthDate: 'تاریخ تولد'
+                                                            FirstName: 'نام',
+                                                            LastName: 'نام خانوادگی',
+                                                            Mobile: 'شماره تماس',
+                                                            Email: 'ایمیل',
+                                                            NationalCode: 'کد ملی',
+                                                            // birthDate: 'تاریخ تولد'
                                                         }[key]}
                                                     </label>
                                                     <div className="relative">
                                                         <input
+                                                            disabled={key == "Mobile"}
+                                                            dir={["Mobile", "Email", "NationalCode"].includes(key) ? "ltr" : "rtl"}
                                                             type="text"
-                                                            className="w-full pr-12 pl-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
+                                                            className="w-full pr-12 pl-4 py-3 rounded-xl border-2 border-emerald-100 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
                                                             value={formData[key]}
                                                             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
                                                         />
@@ -249,11 +364,32 @@ export default function Profile() {
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
                                             type="submit"
-                                            className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
+                                            disabled={loading}
+                                            className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
                                         >
-                                            <Edit className="w-5 h-5" />
-                                            ذخیره تغییرات
+                                            {loading ? (
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{ repeat: Infinity, duration: 1 }}
+                                                    className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
+                                                />
+                                            ) : (
+                                                <>
+                                                    <Edit className="w-5 h-5" />
+                                                    ذخیره تغییرات
+                                                </>
+                                            )}
                                         </motion.button>
+
+                                        {formSubmitted && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-center"
+                                            >
+                                                اطلاعات با موفقیت ذخیره شد!
+                                            </motion.div>
+                                        )}
                                     </form>
                                 </motion.div>
                             )}
@@ -275,7 +411,7 @@ export default function Profile() {
                                                     <Mail className="w-8 h-8 text-emerald-600" />
                                                     <div>
                                                         <h3 className="font-semibold text-emerald-800">ایمیل فعلی</h3>
-                                                        <p className="text-emerald-600">{formData.email}</p>
+                                                        <p className="text-emerald-600">{formData.Email}</p>
                                                     </div>
                                                 </div>
                                                 <div className={`px-4 py-2 rounded-full ${emailVerification.verified ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}`}>
@@ -330,7 +466,7 @@ export default function Profile() {
                                                             </label>
                                                             <input
                                                                 type="text"
-                                                                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all text-center text-lg font-mono"
+                                                                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all text-center text-lg font-mono"
                                                                 placeholder="XXXXX"
                                                                 value={emailVerification.code}
                                                                 onChange={(e) => setEmailVerification(prev => ({ ...prev, code: e.target.value }))}
@@ -421,7 +557,7 @@ export default function Profile() {
                                                         >
                                                             <input
                                                                 type="text"
-                                                                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
+                                                                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
                                                                 placeholder={platform.placeholder}
                                                                 value={socialMedia[platform.key].value}
                                                                 onChange={(e) => handleSocialMediaChange(platform.key, 'value', e.target.value)}
@@ -435,91 +571,33 @@ export default function Profile() {
                                         <motion.button
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
-                                            className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
+                                            onClick={handleSaveSocialMedia}
+                                            disabled={loading}
+                                            className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
                                         >
-                                            <CheckCircle className="w-5 h-5" />
-                                            ذخیره تغییرات
+                                            {loading ? (
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{ repeat: Infinity, duration: 1 }}
+                                                    className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
+                                                />
+                                            ) : (
+                                                <>
+                                                    <CheckCircle className="w-5 h-5" />
+                                                    ذخیره تغییرات
+                                                </>
+                                            )}
                                         </motion.button>
-                                    </div>
-                                </motion.div>
-                            )}
 
-                            {/* Settings Section */}
-                            {activeSection === 'settings' && (
-                                <motion.div
-                                    key="settings"
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className="bg-white rounded-3xl shadow-2xl p-8 space-y-8"
-                                >
-                                    {/* Security Settings */}
-                                    <div className="space-y-6">
-                                        <h3 className="text-xl font-semibold text-emerald-800 flex items-center gap-2">
-                                            <Shield className="w-5 h-5" />
-                                            تنظیمات امنیتی
-                                        </h3>
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-xl">
-                                                <div>
-                                                    <h4 className="font-medium text-emerald-800">احراز هویت دو مرحله‌ای</h4>
-                                                    <p className="text-sm text-emerald-600">امنیت حساب خود را افزایش دهید</p>
-                                                </div>
-                                                <label className="relative inline-flex items-center cursor-pointer">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="sr-only"
-                                                        checked={settings.twoFactorAuth}
-                                                        onChange={(e) => setSettings({ ...settings, twoFactorAuth: e.target.checked })}
-                                                    />
-                                                    <div className={`w-11 h-6 rounded-full transition-colors ${settings.twoFactorAuth ? 'bg-emerald-600' : 'bg-emerald-200'}`} />
-                                                    <div className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform ${settings.twoFactorAuth ? 'translate-x-5' : ''}`} />
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Notification Settings */}
-                                    <div className="space-y-6">
-                                        <h3 className="text-xl font-semibold text-emerald-800 flex items-center gap-2">
-                                            <Bell className="w-5 h-5" />
-                                            تنظیمات اطلاع رسانی
-                                        </h3>
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-xl">
-                                                <div>
-                                                    <h4 className="font-medium text-emerald-800">دریافت خبرنامه ایمیلی</h4>
-                                                    <p className="text-sm text-emerald-600">آخرین اخبار و به روزرسانی‌ها</p>
-                                                </div>
-                                                <label className="relative inline-flex items-center cursor-pointer">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="sr-only"
-                                                        checked={settings.newsletter}
-                                                        onChange={(e) => setSettings({ ...settings, newsletter: e.target.checked })}
-                                                    />
-                                                    <div className={`w-11 h-6 rounded-full transition-colors ${settings.newsletter ? 'bg-emerald-600' : 'bg-emerald-200'}`} />
-                                                    <div className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform ${settings.newsletter ? 'translate-x-5' : ''}`} />
-                                                </label>
-                                            </div>
-
-                                            <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-xl">
-                                                <div>
-                                                    <h4 className="font-medium text-emerald-800">نمایش عمومی رزومه</h4>
-                                                    <p className="text-sm text-emerald-600">قابل مشاهده برای همه کاربران</p>
-                                                </div>
-                                                <label className="relative inline-flex items-center cursor-pointer">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="sr-only"
-                                                        checked={settings.publicResume}
-                                                        onChange={(e) => setSettings({ ...settings, publicResume: e.target.checked })}
-                                                    />
-                                                    <div className={`w-11 h-6 rounded-full transition-colors ${settings.publicResume ? 'bg-emerald-600' : 'bg-emerald-200'}`} />
-                                                    <div className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform ${settings.publicResume ? 'translate-x-5' : ''}`} />
-                                                </label>
-                                            </div>
-                                        </div>
+                                        {formSubmitted && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-center"
+                                            >
+                                                شبکه‌های اجتماعی با موفقیت ذخیره شدند!
+                                            </motion.div>
+                                        )}
                                     </div>
                                 </motion.div>
                             )}
