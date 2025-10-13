@@ -5,7 +5,7 @@ export function middleware(req) {
     const { pathname } = req.nextUrl;
 
     // اگر لاگین نبود و خواست بره به /dashboard → بفرستش لاگین
-    if (!token && pathname.startsWith("/account/profile")) {
+    if (!token && pathname.startsWith("/account")) {
         return NextResponse.redirect(new URL("/auth/login", req.url));
     }
 

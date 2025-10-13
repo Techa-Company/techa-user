@@ -2,7 +2,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, GraduationCap, Clock, CheckCircle, AlertCircle, ChevronRight, BarChart, List, Bookmark, Search, Star, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDocs } from '../../../features/main/docs/docsActions';
+import { formatDuration } from '../../../helper';
 
 const courses = [
     {
@@ -32,8 +35,8 @@ const courses = [
     // بقیه دوره‌ها...
 ];
 
-const CourseCard = ({ course }) => (
-    <Link href={`/account/exercises/${course.id}`}>
+const DocCard = ({ doc }) => (
+    <Link href={`/account/exercises/${doc?.Id}`}>
         <motion.div
             whileHover={{ y: -5 }}
             className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl border border-gray-100 overflow-hidden cursor-pointer group transition-all duration-300"
@@ -42,17 +45,17 @@ const CourseCard = ({ course }) => (
             exit={{ opacity: 0, scale: 0.95 }}
         >
             {/* نشانگر وضعیت ویژه */}
-            {course.favorite && (
+            {/* {doc.favorite && (
                 <div className="absolute top-4 right-4 bg-amber-100 text-amber-700 px-3 py-1 rounded-full flex items-center gap-1 text-sm z-10">
                     <Star className="w-4 h-4 fill-current" />
                     <span>پیشنهاد ویژه</span>
                 </div>
-            )}
+            )} */}
 
             <div className="relative h-48 overflow-hidden">
                 <motion.img
-                    src={course.image}
-                    alt={course.title}
+                    src={doc.image}
+                    alt={doc.Title}
                     className="w-full h-full object-cover"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
@@ -61,40 +64,40 @@ const CourseCard = ({ course }) => (
 
                 {/* سطح دوره */}
                 <div className="absolute top-4 left-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-sm">
-                    {course.difficulty}
+                    {doc.Level}
                 </div>
             </div>
 
             <div className="p-4 space-y-4">
                 <div className="flex items-start justify-between">
-                    <h3 className="text-xl font-bold text-gray-800 leading-tight">{course.title}</h3>
+                    <h3 className="text-xl font-semibold text-gray-800 leading-tight">دوره {doc.Title}</h3>
                     <div className="bg-purple-100 text-purple-700 px-2 py-1 rounded-md text-sm">
-                        نمره: {course.grade}/20
+                        نمره: {doc.AverageScore}/20
                     </div>
                 </div>
 
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-emerald-600">
                         <BookOpen className="w-5 h-5" />
-                        <span className="font-medium">{course.lessons} جلسه</span>
+                        <span className="font-medium">{doc.Lessons} جلسه</span>
                     </div>
                     <div className="flex items-center gap-2 text-amber-600">
                         <Clock className="w-5 h-5" />
-                        <span className="font-medium">{course.duration}</span>
+                        <span className="font-medium text-sm">{formatDuration(doc.Duration)}</span>
                     </div>
                 </div>
 
                 <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">میزان پیشرفت:</span>
-                        <span className="font-medium text-emerald-600">{course.progress}%</span>
+                        <span className="font-medium text-emerald-600">{doc.progress}%</span>
                     </div>
                     <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full relative"
-                            style={{ width: `${course.progress}%` }}
+                            style={{ width: `${doc.progress}%` }}
                             initial={{ width: 0 }}
-                            animate={{ width: `${course.progress}%` }}
+                            animate={{ width: `${doc.progress}%` }}
                             transition={{ duration: 0.8 }}
                         >
                             <div className="absolute inset-0 bg-white/10 animate-pulse" />
@@ -104,15 +107,15 @@ const CourseCard = ({ course }) => (
 
                 <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                     <div className="flex items-center gap-2">
-                        {course.status === 'تکمیل شده' ? (
+                        {doc.CourseStatus === 'تکمیل شده' ? (
                             <div className="flex items-center gap-2 text-emerald-600">
                                 <CheckCircle className="w-5 h-5" />
-                                <span className="font-medium">{course.status}</span>
+                                <span className="font-medium">{doc.CourseStatus}</span>
                             </div>
                         ) : (
                             <div className="flex items-center gap-2 text-amber-600">
                                 <Zap className="w-5 h-5 animate-pulse" />
-                                <span className="font-medium">{course.status}</span>
+                                <span className="font-medium">{doc.CourseStatus}</span>
                             </div>
                         )}
                     </div>
@@ -133,6 +136,15 @@ export default function CoursesPage() {
         { title: 'تکمیل شده', value: '۹', icon: <CheckCircle className="w-6 h-6" />, color: 'bg-emerald-100 text-emerald-600' },
         { title: 'میانگین نمرات', value: '۱۸.۲', icon: <BarChart className="w-6 h-6" />, color: 'bg-amber-100 text-amber-600' },
     ];
+
+    const dispatch = useDispatch();
+    const { docs } = useSelector(state => state.docs);
+
+    useEffect(() => {
+        dispatch(fetchDocs({ "Disabled": false }))
+    }, []);
+
+    console.log(docs)
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -162,7 +174,7 @@ export default function CoursesPage() {
                 <div className="mb-8 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                     <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
                         <GraduationCap className="w-8 h-8 text-emerald-600" />
-                        دوره‌های من
+                        دوره های من
                     </h1>
 
                     <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
@@ -195,14 +207,14 @@ export default function CoursesPage() {
                     layout
                 >
                     <AnimatePresence>
-                        {courses.map(course => (
-                            <CourseCard key={course.id} course={course} />
+                        {docs.map(doc => (
+                            <DocCard key={doc.Id} doc={doc} />
                         ))}
                     </AnimatePresence>
                 </motion.div>
 
                 {/* حالت خالی */}
-                {courses.length === 0 && (
+                {docs.length === 0 && (
                     <motion.div
                         className="flex flex-col items-center justify-center py-24 text-center"
                         initial={{ opacity: 0 }}

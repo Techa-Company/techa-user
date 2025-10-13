@@ -8,9 +8,8 @@ const Footer = () => {
 
   return (
     <footer
-      className={`bg-[#042A1B] relative ${
-        pathname.includes("account") ? "hidden" : "block"
-      }`}
+      className={`bg-[#042A1B] relative ${pathname.includes("account") ? "hidden" : "block"
+        }`}
     >
       <img
         className="hidden md:block absolute -top-32 w-full h-32 rotate-180"
@@ -45,8 +44,8 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="pt-40 sm:pt-20 pb-14 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-10 lg:gap-20">
-          <div className="sm:col-span-2">
+        <div className="pt-40 sm:pt-20 pb-14 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-10 lg:gap-15">
+          <div className="">
             <Link href="/">
               <Image
                 src="/images/logo-light.svg"
@@ -66,7 +65,7 @@ const Footer = () => {
               باشد.{" "}
             </p>
           </div>
-          <div>
+          <div className="mx-auto">
             <h4 className="font-bold text-[15px] text-[#F6DC65] ">
               دسترسی سریع
             </h4>
@@ -224,23 +223,41 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+          {/* <div className="mx-auto flex items-center justify-center w-48 h-48 md:w-56 md:h-56 rounded-2xl border border-gray-300 bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
+            <a
+              referrerPolicy="origin"
+              target="_blank"
+              href="https://trustseal.enamad.ir/?id=653762&Code=zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
+              className="flex items-center justify-center"
+            >
+              <img
+                referrerPolicy="origin"
+                src="https://trustseal.enamad.ir/logo.aspx?id=653762&Code=zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
+                alt="نماد اعتماد الکترونیکی"
+                className="w-24 md:w-28 cursor-pointer select-none"
+                code="zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
+              />
+            </a>
+
+          </div> */}
+          <div className="mx-auto flex items-center justify-center w-48 h-48 md:w-56 md:h-56 rounded-2xl border border-gray-300 bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
+
+            <a
+              referrerPolicy="origin"
+              target="_blank"
+              href="https://trustseal.enamad.ir/?id=653762&Code=zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
+              className="flex items-center justify-center"
+            >
+              <img
+                referrerPolicy="origin"
+                src="https://trustseal.enamad.ir/logo.aspx?id=653762&Code=zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
+                alt="نماد اعتماد الکترونیکی"
+                className="w-24 md:w-28 cursor-pointer select-none"
+                code="zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
+              />
+            </a>
+          </div>
         </div>
-      </div>
-      <div className="border-2 border-gray-500 text-lg items-center text-center w-64 h-64 text-white">
-        لوگوی اینماد
-        <a
-          referrerPolicy="origin"
-          target="_blank"
-          href="https://trustseal.enamad.ir/?id=653762&Code=zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
-        >
-          <img
-            referrerPolicy="origin"
-            src="https://trustseal.enamad.ir/logo.aspx?id=653762&Code=zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
-            alt=""
-            style={{ cursor: "pointer" }}
-            code="zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
-          />
-        </a>
       </div>
       <div className="bg-[#183b2d] py-3">
         <div className="container px-5 xl:px-20 mx-auto">

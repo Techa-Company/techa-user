@@ -9,10 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import {
   clearError,
-  verifyOTP,
-  requestOTP,
   decrementTimer,
 } from "../../../features/auth/authSlice";
+import { requestOTP, verifyOTP } from "../../../features/auth/authActions";
 
 const schema = yup.object().shape({
   phone: yup
@@ -208,13 +207,15 @@ const Login = () => {
                 <div className="relative">
                   <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7AE36A]" />
                   <input
-                    type="number"
-                    maxLength="6"
+                    type="text"
                     inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength="6"
                     placeholder="کد ۶ رقمی را وارد کنید"
                     className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7AE36A] text-gray-700 tracking-widest text-center font-mono"
                     {...register("otp")}
                   />
+
                 </div>
                 {errors.otp && (
                   <span className="text-red-500 text-sm block mt-1">
