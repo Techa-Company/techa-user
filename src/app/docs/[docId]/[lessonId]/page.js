@@ -96,7 +96,7 @@ export default function Lesson() {
           className="
     prose 
     max-w-full
-    prose-p:!text-[#2e2e2e] prose-p:!leading-relaxed prose-p:!text-justify prose-p:!text-base
+    prose-p:!text-[#2e2e2e] prose-p:!leading-relaxed prose-p:!text-justify prose-p:!text-lg
     prose-headings:!text-[#111111] prose-headings:!font-semibold prose-headings:!mt-8 prose-headings:!mb-4
     prose-h1:!text-4xl prose-h2:!text-3xl prose-h3:!text-2xl prose-h4:!text-xl prose-h5:!text-lg prose-h6:!text-base
     prose-a:!text-[#2563eb] prose-a:!underline prose-a:!decoration-2 prose-a:!decoration-[#2563eb] prose-a:!transition prose-a:!duration-300 prose-a:!hover:text-[#1e40af]

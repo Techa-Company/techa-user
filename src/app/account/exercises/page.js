@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDocs } from '../../../features/main/docs/docsActions';
 import { formatDuration } from '../../../helper';
+import { RiDatabase2Fill, RiDatabaseFill, RiHtml5Fill, RiJavascriptFill, RiReactjsFill, RiTailwindCssFill } from 'react-icons/ri';
 
 const courses = [
     {
@@ -34,25 +35,41 @@ const courses = [
     },
     // بقیه دوره‌ها...
 ];
+const levelMap = {
+    Beginner: "مبتدی",
+    Intermediate: "متوسط",
+    Advanced: "پیشرفته",
+};
 
-const DocCard = ({ doc }) => (
-    <Link href={`/account/exercises/${doc?.Id}`}>
-        <motion.div
-            whileHover={{ y: -5 }}
-            className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl border border-gray-100 overflow-hidden cursor-pointer group transition-all duration-300"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-        >
-            {/* نشانگر وضعیت ویژه */}
-            {/* {doc.favorite && (
+const iconStyles = [
+    { el: <RiHtml5Fill className="w-10 h-10 text-[#E44D26]" />, bg: "bg-orange-100" },
+    { el: <RiJavascriptFill className="w-10 h-10 text-[#F0DB4F]" />, bg: "bg-gray-800" },
+    { el: <RiTailwindCssFill className="w-10 h-10 text-[#38B2AC]" />, bg: "bg-gray-900" },
+    { el: <RiReactjsFill className="w-10 h-10 text-[#61DAFB]" />, bg: "bg-gray-900" },
+    { el: <RiDatabase2Fill className="w-10 h-10 text-[#4479A1]" />, bg: "bg-slate-100" },
+    { el: <RiDatabaseFill className="w-10 h-10 text-[#6E5494]" />, bg: "bg-slate-100" },
+];
+
+const DocCard = ({ doc }) => {
+    let score = Math.floor(Math.random() * 20);
+    return (
+        <Link href={`/account/exercises/${doc?.Id}`}>
+            <motion.div
+                whileHover={{ y: -5 }}
+                className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl border border-gray-100 overflow-hidden cursor-pointer group transition-all duration-300"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+            >
+                {/* نشانگر وضعیت ویژه */}
+                {/* {doc.favorite && (
                 <div className="absolute top-4 right-4 bg-amber-100 text-amber-700 px-3 py-1 rounded-full flex items-center gap-1 text-sm z-10">
                     <Star className="w-4 h-4 fill-current" />
                     <span>پیشنهاد ویژه</span>
                 </div>
             )} */}
 
-            <div className="relative h-48 overflow-hidden">
+                {/* <div className="relative h-48 overflow-hidden">
                 <motion.img
                     src={doc.image}
                     alt={doc.Title}
@@ -62,69 +79,76 @@ const DocCard = ({ doc }) => (
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
 
-                {/* سطح دوره */}
-                <div className="absolute top-4 left-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-sm">
-                    {doc.Level}
-                </div>
-            </div>
+                </div> */}
 
-            <div className="p-4 space-y-4">
-                <div className="flex items-start justify-between">
-                    <h3 className="text-xl font-semibold text-gray-800 leading-tight">دوره {doc.Title}</h3>
-                    <div className="bg-purple-100 text-purple-700 px-2 py-1 rounded-md text-sm">
-                        نمره: {doc.AverageScore}/20
-                    </div>
-                </div>
+                <div className="p-4 space-y-4">
+                    <div className="flex items-center justify-between pb-5">
+                        <div className={`p-2 rounded-xl shadow-md ${iconStyles[0].bg}`}>
+                            {iconStyles[0].el}
+                        </div>
 
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-emerald-600">
-                        <BookOpen className="w-5 h-5" />
-                        <span className="font-medium">{doc.Lessons} جلسه</span>
+                        <div className="absolute top-4 left-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-sm">
+                            {levelMap[doc.Level] || "نامشخص"}
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2 text-amber-600">
-                        <Clock className="w-5 h-5" />
-                        <span className="font-medium text-sm">{formatDuration(doc.Duration)}</span>
+                    <div className="flex items-start justify-between">
+                        <h3 className="text-xl font-semibold text-gray-800 leading-tight">دوره {doc.Title}</h3>
+                        <div className="bg-purple-100 text-purple-700 px-2 py-1 rounded-md text-sm">
+                            نمره: {doc.AverageScore + score}/20
+                        </div>
                     </div>
-                </div>
+                    <hr />
 
-                <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">میزان پیشرفت:</span>
-                        <span className="font-medium text-emerald-600">{doc.progress}%</span>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-emerald-600">
+                            <BookOpen className="w-5 h-5" />
+                            <span className="font-medium">{doc.Lessons} جلسه</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-amber-600">
+                            <Clock className="w-5 h-5" />
+                            <span className="font-medium text-sm">{formatDuration(doc.Duration)}</span>
+                        </div>
                     </div>
-                    <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full relative"
-                            style={{ width: `${doc.progress}%` }}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${doc.progress}%` }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <div className="absolute inset-0 bg-white/10 animate-pulse" />
-                        </motion.div>
-                    </div>
-                </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                    <div className="flex items-center gap-2">
-                        {doc.CourseStatus === 'تکمیل شده' ? (
-                            <div className="flex items-center gap-2 text-emerald-600">
-                                <CheckCircle className="w-5 h-5" />
-                                <span className="font-medium">{doc.CourseStatus}</span>
-                            </div>
-                        ) : (
-                            <div className="flex items-center gap-2 text-amber-600">
-                                <Zap className="w-5 h-5 animate-pulse" />
-                                <span className="font-medium">{doc.CourseStatus}</span>
-                            </div>
-                        )}
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600">میزان پیشرفت:</span>
+                            <span className="font-medium text-emerald-600">{score * 5}%</span>
+                        </div>
+                        <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                            <motion.div
+                                className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full relative"
+                                style={{ width: `${score * 5}%` }}
+                                initial={{ width: 0 }}
+                                animate={{ width: `${score * 5}%` }}
+                                transition={{ duration: 0.8 }}
+                            >
+                                <div className="absolute inset-0 bg-white/10 animate-pulse" />
+                            </motion.div>
+                        </div>
                     </div>
-                    <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-emerald-500 transition-all transform group-hover:translate-x-1" />
+
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                        <div className="flex items-center gap-2">
+                            {doc.CourseStatus === 'تکمیل شده' ? (
+                                <div className="flex items-center gap-2 text-emerald-600">
+                                    <CheckCircle className="w-5 h-5" />
+                                    <span className="font-medium">{doc.CourseStatus}</span>
+                                </div>
+                            ) : (
+                                <div className="flex items-center gap-2 text-amber-600">
+                                    <Zap className="w-5 h-5 animate-pulse" />
+                                    <span className="font-medium">{doc.CourseStatus}در حال یادگیری</span>
+                                </div>
+                            )}
+                        </div>
+                        <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-emerald-500 transition-all transform group-hover:translate-x-1" />
+                    </div>
                 </div>
-            </div>
-        </motion.div>
-    </Link>
-);
+            </motion.div>
+        </Link>
+    )
+};
 
 export default function CoursesPage() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -141,7 +165,7 @@ export default function CoursesPage() {
     const { docs } = useSelector(state => state.docs);
 
     useEffect(() => {
-        dispatch(fetchDocs({ "Disabled": false }))
+        dispatch(fetchDocs({ "Disabled": false, "Mode": "DashboardExercises" }))
     }, []);
 
     console.log(docs)

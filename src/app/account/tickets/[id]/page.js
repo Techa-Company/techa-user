@@ -139,7 +139,7 @@ export default function TicketDetail() {
                 {/* اطلاعات تیکت */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
                     <InfoBox icon={<AlertCircle />} title="اولویت" value={ticket.priority} />
-                    <InfoBox icon={<User />} title="ارسال کننده" value="امیر محمدی" />
+                    <InfoBox icon={<User />} title="ارسال کننده" value="رامین جوشنگ" />
                     <InfoBox icon={<Clock />} title="زمان پاسخگویی" value="حداکثر ۲۴ ساعت" />
                 </div>
 
@@ -147,7 +147,7 @@ export default function TicketDetail() {
                 <div className="p-6 border-t border-emerald-100">
                     <h2 className="text-xl font-semibold text-emerald-800 mb-4">جزئیات تیکت</h2>
                     <div
-                        className="prose max-w-none text-emerald-700"
+                        className="prose max-w-none text-black"
                         dangerouslySetInnerHTML={{ __html: ticket.content }}
                     />
                 </div>
