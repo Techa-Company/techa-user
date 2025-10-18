@@ -3,28 +3,15 @@ import { useEffect, useState } from "react";
 import DocCard from "../../components/docs/DocCard";
 import DocsSkeleton from "../../components/common/DocsSkeleton";
 import { SP_fetch } from "../../api/utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDocs } from "../../features/main/docs/docsActions";
 
 export default function Docs() {
-  const [docs, setDocs] = useState([]);
-  const [loading, setLoading] = useState(true);
 
+  const { loading, docs } = useSelector(state => state.docs);
+  const dispatch = useDispatch();
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const { Data, IsSuccess, Message, StatusCode } = await SP_fetch(
-          "Report_Courses", {
-          "@Disabled": false,
-        });
-        const docs = Data.Dataset;
-        if (IsSuccess) setDocs(docs);
-      } catch (error) {
-        console.error("Error fetching docs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourses();
+    dispatch(fetchDocs({ "Mode": "CoursesList", "Disabled": false }));
   }, []);
 
   return (
@@ -34,7 +21,7 @@ export default function Docs() {
         {loading ? (
           <DocsSkeleton />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10 lg:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
             {docs.map((doc, index) => (
               <DocCard key={index} index={index} doc={doc} />
             ))}

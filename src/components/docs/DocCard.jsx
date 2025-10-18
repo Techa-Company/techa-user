@@ -1,42 +1,51 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
-import { ArrowLeft, BookText, Clock, GraduationCap, ShoppingCart, Star, Users, Zap, Shield, Heart } from 'lucide-react';
+import { ArrowLeft, BookText, Clock, GraduationCap, ShoppingCart, Star, Users, Zap } from 'lucide-react';
 import { RiDatabase2Fill, RiDatabaseFill, RiHtml5Fill, RiJavascriptFill, RiReactjsFill, RiTailwindCssFill } from 'react-icons/ri';
 import { formatDuration } from '../../helper';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../features/cart/cartSlice';
 
 const DocCard = ({ index, doc }) => {
     const [isAddingToCart, setIsAddingToCart] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
-
     const dispatch = useDispatch();
-
-    console.log(doc)
+    const cartItems = useSelector(state => state.cart.items);
+    const isInCart = cartItems.some(item => item.Id === doc.Id);
 
     const truncateDescription = (description) => {
         if (!description) return "توضیحات در دسترس نیست.";
         const text = description.replace(/<[^>]*>/g, '');
-        return text.split(" ").slice(0, 22).join(" ") + (text.split(" ").length > 10 ? "..." : "");
+        return text.split(" ").slice(0, 22).join(" ") + ".";
     };
 
-
-
-    const icons = [
-        <RiHtml5Fill className="w-10 h-10 text-[#E44D26]" />,     // نارنجی HTML5 (رنگ لوگوی رسمی)
-        <RiJavascriptFill className="w-10 h-10 text-[#F0DB4F]" />, // زرد JS
-        <RiTailwindCssFill className="w-10 h-10 text-[#38B2AC]" />, // آبی-سبز Tailwind
-        <RiReactjsFill className="w-10 h-10 text-[#61DAFB]" />,    // آبی روشن React
-        <RiDatabase2Fill className="w-10 h-10 text-[#4479A1]" />,  // آبی تیره Database
-        <RiDatabaseFill className="w-10 h-10 text-[#6E5494]" />   // بنفش Database دوم یا متفاوت
+    const iconStyles = [
+        { el: <RiHtml5Fill className="w-10 h-10 text-[#E44D26]" />, bg: "bg-orange-100" },
+        { el: <RiJavascriptFill className="w-10 h-10 text-[#F0DB4F]" />, bg: "bg-gray-800" },
+        { el: <RiTailwindCssFill className="w-10 h-10 text-[#38B2AC]" />, bg: "bg-gray-900" },
+        { el: <RiReactjsFill className="w-10 h-10 text-[#61DAFB]" />, bg: "bg-gray-900" },
+        { el: <RiDatabase2Fill className="w-10 h-10 text-[#4479A1]" />, bg: "bg-slate-100" },
+        { el: <RiDatabaseFill className="w-10 h-10 text-[#6E5494]" />, bg: "bg-slate-100" },
     ];
 
+    const levelMap = {
+        Beginner: "مبتدی",
+        Intermediate: "متوسط",
+        Advanced: "پیشرفته",
+    };
 
-    // محاسبه قیمت و تخفیف
-    const price = doc.Price || 299000;
-    const originalPrice = doc.OriginalPrice || 499000;
-    const discount = doc.Discount || Math.round(((originalPrice - price) / originalPrice) * 100);
+    const handleAddToCart = () => {
+        if (isInCart) return;
+        setIsAddingToCart(true);
+        setTimeout(() => {
+            // ذخیره نسخه نهایی قیمت با تخفیف
+            const finalPrice = doc.DiscountAmount
+                ? Math.round(doc.Price * (1 - doc.DiscountAmount / 100))
+                : doc.Price;
+            dispatch(addToCart({ ...doc, FinalPrice: finalPrice }));
+            setIsAddingToCart(false);
+        }, 500); // شبیه‌سازی لودینگ
+    };
 
     return (
         <motion.div
@@ -46,29 +55,30 @@ const DocCard = ({ index, doc }) => {
             whileHover={{ y: -5 }}
             className="group bg-gradient-to-br from-white to-emerald-50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-emerald-100 overflow-hidden flex flex-col h-full relative"
         >
-            {/* دکمه علاقه‌مندی */}
-            {/* <button
-                onClick={() => setIsLiked(!isLiked)}
-                className="absolute top-4 left-4 z-10 p-2 bg-white/80 rounded-full backdrop-blur-sm hover:bg-white transition-colors"
-            >
-                <Heart
-                    className={`w-5 h-5 ${isLiked ? 'fill-rose-500 text-rose-500' : 'text-gray-400'}`}
-                />
-            </button> */}
-
-            {/* هدر کارت با گرادیانت سبز */}
             <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 p-5 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
 
                 <div className="flex items-start justify-between relative z-10">
-                    <div className="p-2 bg-white/70 rounded-xl backdrop-blur-sm">
-                        {icons[index % icons.length]}
+                    <div className={`p-2 rounded-xl shadow-md ${iconStyles[index].bg}`}>
+                        {iconStyles[index].el}
                     </div>
-                    {discount < 0 && (
-                        <div className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                            {discount} % تخفیف
-                        </div>
+                    {doc.DiscountAmount > 0 && (
+                        <div className="absolute top-1 -left-1 cursor-pointer">
+                            {/* افکت درخشش */}
+                            <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg blur opacity-75 animate-pulse"></div> {/* تگ تخفیف اصلی */}
+                            <div className="relative bg-gradient-to-br from-orange-500 via-red-500 to-orange-600 text-white text-lg font-extrabold px-4 py-3 rounded-xl shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-300 hover:scale-110 border-2 border-white/30 backdrop-blur-sm">
+                                {/* آیکون ستاره */}
+                                <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full animate-bounce flex items-center justify-center">
+                                    <span className="text-xs">⭐</span>
+                                </div>
+                                {/* متن تخفیف */}
+                                <div className="flex items-center gap-2">
+                                    <span className="text-2xl drop-shadow-lg font-semibold">{doc.DiscountAmount}%</span>
+                                    <span className="text-sm whitespace-nowrap">تخفیف ویژه</span>
+                                </div>
+                                {/* خط زدن زیر متن */}
+                                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-white/50 rounded-full"></div> {/* افکت دانه‌دار */} <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20200%20200%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cfilter%20id%3D%22noise%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.65%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22/%3E%3C/filter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url%28%23noise%29%22%20opacity%3D%220.1%22/%3E%3C/svg%3E')] opacity-20 rounded-xl"></div> </div> </div>
                     )}
                 </div>
 
@@ -84,18 +94,16 @@ const DocCard = ({ index, doc }) => {
                     <span className="mx-2">•</span>
                     <div className="flex items-center">
                         <Users className="w-4 h-4" />
-                        <span className="text-sm mr-1">۱۲۵+ دانشجو</span>
+                        <span className="text-sm mr-1">{doc.StudentCount} دانشجو</span>
                     </div>
                 </div>
             </div>
 
             <div className="p-5 flex-grow">
-                {/* توضیحات */}
                 <p className="text-gray-600 text-sm leading-relaxed mb-5">
-                    {truncateDescription(doc.Description)}
+                    {truncateDescription(doc.Summary)}
                 </p>
 
-                {/* تگ‌ها */}
                 <div className="flex flex-wrap gap-2 mb-5">
                     {doc.Features?.split(",").slice(0, 3).map((tag, i) => (
                         <span
@@ -107,7 +115,6 @@ const DocCard = ({ index, doc }) => {
                     ))}
                 </div>
 
-                {/* اطلاعات دوره */}
                 <div className="grid grid-cols-2 text-sm text-gray-600 border-t border-emerald-100 gap-y-3 gap-x-2 pt-5">
                     <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-emerald-600" />
@@ -115,11 +122,11 @@ const DocCard = ({ index, doc }) => {
                     </div>
                     <div className="flex items-center gap-2">
                         <BookText className="w-4 h-4 text-emerald-600" />
-                        <span>درس‌ها: {doc.Lessons || '۲۴'} جلسه</span>
+                        <span>درس‌ها: {doc.Lessons || 0} جلسه</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <GraduationCap className="w-4 h-4 text-emerald-600" />
-                        <span>سطح: {doc.Level || 'متوسط'}</span>
+                        <span>سطح: {levelMap[doc.Level] || "نامشخص"}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Zap className="w-4 h-4 text-emerald-600" />
@@ -128,30 +135,25 @@ const DocCard = ({ index, doc }) => {
                 </div>
             </div>
 
-            {/* بخش قیمت و دکمه‌های اقدام */}
             <div className="p-5 pt-0 mt-auto">
-                {/* نمایش قیمت */}
                 <div className="flex items-center justify-between mb-4 bg-emerald-50 p-3 rounded-xl">
                     <div className="flex flex-col">
                         <span className="text-2xl font-bold text-gray-900">
-                            {price.toLocaleString()} تومان
+                            {doc.FinalPrice ? doc.FinalPrice.toLocaleString() : doc.Price.toLocaleString()} تومان
                         </span>
-                        {discount < 0 && (
-                            <span className="text-sm text-gray-500 line-through">
-                                {originalPrice.toLocaleString()}400 تومان
+                        {doc.DiscountAmount > 0 && (
+                            <span className=" text-gray-500 line-through">
+                                {doc.Price.toLocaleString()} تومان
                             </span>
                         )}
                     </div>
-
-                    <div className="flex flex-col items-end">
-                        <span className="text-xs text-gray-500">هزینه دوره</span>
-                        {discount < 0 && (
-                            <span className="text-xs text-amber-600 font-bold">صرفه‌جویی {((originalPrice - price) / 1000).toLocaleString()}1000 هزار تومان</span>
-                        )}
-                    </div>
+                    {doc.DiscountAmount > 0 && (
+                        <div className="bg-orange-100 text-rose-600 text-sm font-medium px-2 py-1 rounded-full">
+                            {doc.DiscountAmount}%
+                        </div>
+                    )}
                 </div>
 
-                {/* دکمه‌های اقدام */}
                 <div className="grid grid-cols-2 gap-3">
                     <Link
                         href={`docs/${doc.Id}`}
@@ -162,19 +164,26 @@ const DocCard = ({ index, doc }) => {
                     </Link>
 
                     <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => dispatch(addToCart(doc))}
-                        disabled={isAddingToCart}
-                        className={`py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium ${isAddingToCart
-                            ? 'bg-emerald-400 text-white'
-                            : 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white shadow-md hover:shadow-lg'
+                        whileHover={{ scale: isInCart ? 1 : 1.02 }}
+                        whileTap={{ scale: isInCart ? 1 : 0.98 }}
+                        onClick={handleAddToCart}
+                        disabled={isAddingToCart || isInCart}
+                        className={`py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium ${isInCart
+                            ? 'bg-gray-400 text-white cursor-not-allowed'
+                            : isAddingToCart
+                                ? 'bg-emerald-400 text-white'
+                                : 'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white shadow-md hover:shadow-lg'
                             }`}
                     >
                         {isAddingToCart ? (
                             <>
                                 <span>در حال افزودن...</span>
                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            </>
+                        ) : isInCart ? (
+                            <>
+                                <span>در سبد خرید</span>
+                                <ShoppingCart size={16} />
                             </>
                         ) : (
                             <>
@@ -184,32 +193,6 @@ const DocCard = ({ index, doc }) => {
                         )}
                     </motion.button>
                 </div>
-
-                {/* گارانتی و ویژگی‌های اضافی */}
-                {/* <div className="grid grid-cols-2 gap-3 mt-4 text-xs">
-                    <div className="flex items-center text-emerald-700">
-                        <Shield className="w-4 h-4 ml-1" />
-                        <span>ضمانت بازگشت وجه</span>
-                    </div>
-                    <div className="flex items-center text-emerald-700">
-                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                        <span>گواهینامه معتبر</span>
-                    </div>
-                    <div className="flex items-center text-emerald-700">
-                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        <span>آپدیت رایگان</span>
-                    </div>
-                    <div className="flex items-center text-emerald-700">
-                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        <span>پشتیبانی آنلاین</span>
-                    </div>
-                </div> */}
             </div>
         </motion.div>
     );
