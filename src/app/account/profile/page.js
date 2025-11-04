@@ -89,7 +89,7 @@ export default function Profile() {
             "@IsActive": true,
         };
 
-        console.log(data)
+        // console.log(data)
 
         try {
             await dispatch(updateUser(data)).unwrap();
@@ -212,7 +212,7 @@ export default function Profile() {
                         return acc;
                     }, {});
 
-                    console.log(socialNetworks.Instagram);
+                    // console.log(socialNetworks.Instagram);
 
                     setSocialMedia(prev => ({
                         ...prev,

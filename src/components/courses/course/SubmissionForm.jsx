@@ -31,7 +31,7 @@ const SubmissionForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submitting code:", code);
+        // console.log("Submitting code:", code);
         // TODO: ارسال کد به سرور
     };
 

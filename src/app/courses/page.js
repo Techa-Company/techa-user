@@ -36,7 +36,7 @@ const ModernCoursesPage = () => {
               ],
               Duration: Math.floor(Math.random() * 20) + 5,
             }));
-          console.log(enrichedCourses, "enriched");
+          // console.log(enrichedCourses, "enriched");
           setCourses(enrichedCourses);
         }
       } catch (error) {
@@ -66,17 +66,17 @@ const ModernCoursesPage = () => {
       priceFilter === "all"
         ? true
         : priceFilter === "free"
-        ? course.Price === 0
-        : course.Price > 0;
+          ? course.Price === 0
+          : course.Price > 0;
 
     const matchesDuration =
       durationFilter === "all"
         ? true
         : durationFilter === "short"
-        ? course.Duration <= 5
-        : durationFilter === "medium"
-        ? course.Duration <= 10
-        : course.Duration > 10;
+          ? course.Duration <= 5
+          : durationFilter === "medium"
+            ? course.Duration <= 10
+            : course.Duration > 10;
 
     return matchesSearch && matchesPrice && matchesDuration;
   });
@@ -225,11 +225,10 @@ const ModernCoursesPage = () => {
 const FilterChip = ({ label, active, onClick, icon }) => (
   <button
     onClick={onClick}
-    className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${
-      active
+    className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${active
         ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
         : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm"
-    }`}
+      }`}
   >
     {icon && <span>{icon}</span>}
     <span className="text-sm font-medium">{label}</span>
@@ -254,11 +253,10 @@ const DurationDropdown = ({ durationFilter, setDurationFilter }) => {
   return (
     <div className="relative">
       <button
-        className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${
-          durationFilter !== "all"
+        className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${durationFilter !== "all"
             ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
             : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm"
-        }`}
+          }`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <svg
@@ -276,9 +274,8 @@ const DurationDropdown = ({ durationFilter, setDurationFilter }) => {
         </svg>
         <span className="text-sm font-medium">{currentLabel}</span>
         <svg
-          className={`w-4 h-4 transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""
+            }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -301,11 +298,10 @@ const DurationDropdown = ({ durationFilter, setDurationFilter }) => {
                 setDurationFilter(option.value);
                 setIsOpen(false);
               }}
-              className={`px-4 py-3 cursor-pointer transition-colors ${
-                durationFilter === option.value
+              className={`px-4 py-3 cursor-pointer transition-colors ${durationFilter === option.value
                   ? "bg-emerald-50 text-emerald-600"
                   : "hover:bg-gray-50"
-              }`}
+                }`}
             >
               <span className="text-sm">{option.label}</span>
             </div>
@@ -408,9 +404,8 @@ const CourseCard = ({ course, image }) => (
       <div className="flex items-center justify-between mt-auto">
         {/* Price Tag */}
         <div
-          className={`flex items-center ${
-            course.Price > 0 ? "text-emerald-600" : "text-amber-500"
-          }`}
+          className={`flex items-center ${course.Price > 0 ? "text-emerald-600" : "text-amber-500"
+            }`}
         >
           <div className="relative">
             {course.Price > 0 && (
@@ -421,9 +416,9 @@ const CourseCard = ({ course, image }) => (
             <span className="font-bold text-lg">
               {course.Price > -1
                 ? `${(
-                    Math.floor(Math.random() * 8) * 500000 +
-                    1000000
-                  ).toLocaleString("fa-IR")} تومان`
+                  Math.floor(Math.random() * 8) * 500000 +
+                  1000000
+                ).toLocaleString("fa-IR")} تومان`
                 : "رایگان"}
             </span>
           </div>

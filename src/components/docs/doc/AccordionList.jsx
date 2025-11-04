@@ -9,7 +9,7 @@ const AccordionList = ({ items }) => {
         setOpenAccordion(openAccordion === index ? -1 : index);
     };
 
-    console.log(items)
+    // console.log(items)
 
     if (!items) {
         return <h1>چیزی نداریم</h1>

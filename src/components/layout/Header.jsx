@@ -46,7 +46,7 @@ const Header = () => {
   const user = useSelector(state => state.auth.user);
   const isLoggedIn = !!user;
 
-  console.log(user)
+  // console.log(user)
 
   const items = useSelector(state => state.cart.items);
 

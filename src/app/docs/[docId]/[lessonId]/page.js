@@ -5,48 +5,39 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { renderInlineSnippets } from "../../../../components/inline/utils/renderUtils";
 import LessonSkeleton from "../../../../components/docs/doc/lesson/LessonSkeleton";
-import VideoCourseAd from "../../../../components/docs/doc/VideoCourseAd";
-import VideoCourseAdEnd from "../../../../components/docs/doc/VideoCourseAdEnd";
 import { SP_fetch } from "../../../../api/utils/api";
+import next from "next";
+
 export default function Lesson() {
-  const [openAccordion, setOpenAccordion] = useState(0);
   const [lessonData, setLessonData] = useState(null);
+  const [allContents, setAllContents] = useState([]);
+  const [prevLesson, setPrevLesson] = useState(null);
+  const [nextLesson, setNextLesson] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const params = useParams();
   const docId = params.docId;
   const lessonId = params.lessonId;
 
-  console.log(docId, lessonId);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        /*  const response = await fetch(`https://api.techa.me/api/Content`);
-        const data = await response.json();
-*/
-        // const res = await SP_fetch("Report_Contents");
-        const res = await SP_fetch("Form_Contents", {
-          "@Id": lessonId,
+        // گرفتن همه محتواهای این دوره
+        const resAll = await SP_fetch("Report_Contents", {
+          "@GetAll": true,
+          "@CourseId": docId
         });
-        const { Data, IsSuccess, Message, StatusCode } = res;
-        const data = Data.Dataset;
-        console.log(data)
+        const all = resAll?.Data?.Dataset || [];
+        console.log(all)
 
-        if (data) {
-          // const filteredData = data.filter(
-          //   (item) =>
-          //     item.CourseId === parseInt(docId) &&
-          //     item.Id === parseInt(lessonId)
-          // );
-          // console.log(filteredData);
-          setLessonData(data[0]);
-        } else {
-          console.error("Invalid data format:", data);
-          setLessonData(null);
-        }
+        // گرفتن محتوای فعلی (جلسه)
+        const resLesson = await SP_fetch("Form_Contents", { "@Id": lessonId });
+        const lesson = resLesson?.Data?.Dataset?.[0] || null;
+
+        setAllContents(all);
+        setLessonData(lesson);
       } catch (error) {
-        console.error("Error fetching content:", error);
+        console.error("Error fetching lesson:", error);
         setLessonData(null);
       } finally {
         setLoading(false);
@@ -58,76 +49,113 @@ export default function Lesson() {
     }
   }, [docId, lessonId]);
 
+  // وقتی داده‌ها آماده شدند، دکمه‌های قبلی و بعدی را تعیین کن
+  useEffect(() => {
+    if (!lessonData || allContents.length === 0) return;
+
+    const parentId = lessonData.ParentId;
+    const currentSort = lessonData.SortIndex;
+
+    // همه‌ی فصل‌ها (ParentId = null)
+    const chapters = allContents
+      .filter((item) => item.ParentId === null)
+      .sort((a, b) => a.SortIndex - b.SortIndex);
+
+    // اگر خود فصل هست
+    if (!parentId) {
+      const currentIndex = lessonsOfChapter.findIndex(
+        (l) => Number(l.Id) === Number(lessonData.Id)
+      );
+
+      const prevChapter = chapters[currentIndex - 1];
+      const nextChapter = chapters[currentIndex + 1];
+
+      setPrevLesson(prevChapter || null);
+      setNextLesson(nextChapter || null);
+
+      return;
+    }
+
+    // لیست جلسات همین فصل
+    const lessonsOfChapter = allContents
+      .filter((item) => item.ParentId === parentId)
+      .sort((a, b) => a.SortIndex - b.SortIndex);
+
+    const currentIndex = lessonsOfChapter.findIndex(
+      (l) => l.Id === lessonData.Id
+    );
+    console.log(lessonsOfChapter)
+    let prev = lessonsOfChapter[currentIndex - 1];
+    let next = lessonsOfChapter[currentIndex + 1];
+
+    // اگر جلسه اول یا آخر فصل باشه، برو سراغ فصل قبلی یا بعدی
+    const chapterIndex = chapters.findIndex((ch) => ch.Id === parentId);
+
+    if (!prev && chapterIndex > 0) {
+      const prevChapter = chapters[chapterIndex - 1];
+      const lastLessonPrev = allContents
+        .filter((item) => item.ParentId === prevChapter.Id)
+        .sort((a, b) => a.SortIndex - b.SortIndex)
+        .at(-1);
+      prev = lastLessonPrev;
+    }
+
+    if (!next && chapterIndex < chapters.length - 1) {
+      const nextChapter = chapters[chapterIndex + 1];
+      const firstLessonNext = allContents
+        .filter((item) => item.ParentId === nextChapter.Id)
+        .sort((a, b) => a.SortIndex - b.SortIndex)
+        .at(0);
+      next = firstLessonNext;
+    }
+
+    setPrevLesson(prev || null);
+    setNextLesson(next || null);
+  }, [lessonData, allContents]);
   useEffect(() => {
     renderInlineSnippets();
   }, [lessonData]);
 
-  const toggleAccordion = (index) => {
-    setOpenAccordion(openAccordion === index ? -1 : index);
-  };
+  console.log(prevLesson, nextLesson)
+  console.log(allContents);
+  console.log(lessonData);
 
-  if (loading) {
-    return <LessonSkeleton />;
-  }
-
-  if (!lessonData) {
-    return <div>No lesson data available</div>;
-  }
+  if (loading) return <LessonSkeleton />;
+  if (!lessonData) return <div>هیچ داده‌ای برای این جلسه یافت نشد.</div>;
 
   return (
     <div>
+      {/* عنوان جلسه */}
       <div className="flex flex-col sm:flex-row gap-5 justify-between items-center">
-        <h1 className=" font-bold text-[#042A1B] text-3xl">
-          {lessonData.Title}
-        </h1>
-        {/* <div className="flex gap-4 items-center">
-          <Link
-            className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-2.5 px-6 transition-all duration-300 shadow-lg hover:shadow-xl"
-            href={`/courses/${docId}/${lessonId}/exercises`}
-          >
-            <BookOpen className="w-6 h-6" />
-            <p className="text-[18px] font-semibold">تمرین ها</p>
-          </Link>
-        </div> */}
+        <h1 className="font-bold text-[#042A1B] text-3xl">{lessonData.Title}</h1>
       </div>
-      {/* <VideoCourseAd courseId={docId} /> */}
+
+      {/* محتوای جلسه */}
       <div className="text-[17.5px] font-normal leading-7 text-justify mt-7 grid gap-5">
-        <div
-          className="
-    prose 
-    max-w-full
-    prose-p:!text-[#2e2e2e] prose-p:!leading-relaxed prose-p:!text-justify prose-p:!text-lg
-    prose-headings:!text-[#111111] prose-headings:!font-semibold prose-headings:!mt-8 prose-headings:!mb-4
-    prose-h1:!text-4xl prose-h2:!text-3xl prose-h3:!text-2xl prose-h4:!text-xl prose-h5:!text-lg prose-h6:!text-base
-    prose-a:!text-[#2563eb] prose-a:!underline prose-a:!decoration-2 prose-a:!decoration-[#2563eb] prose-a:!transition prose-a:!duration-300 prose-a:!hover:text-[#1e40af]
-    prose-code:!bg-gray-100 prose-code:!px-2 prose-code:!py-1 prose-code:!rounded-md prose-code:!font-mono prose-code:!text-sm 
-    prose-pre:!bg-gray-100 prose-pre:!p-4 prose-pre:!rounded-md prose-pre:!overflow-x-auto prose-pre:!text-sm prose-pre:!font-mono
-    prose-blockquote:!border-l-4 prose-blockquote:!border-[#2563eb] prose-blockquote:!bg-[#e0e7ff] prose-blockquote:!italic prose-blockquote:!px-4 prose-blockquote:!py-2 prose-blockquote:!rounded-md
-    prose-ul:!list-disc prose-ul:!ml-6 prose-li:!text-[#2e2e2e] prose-li:!mb-2
-    prose-ol:!list-decimal prose-ol:!ml-6 
-    prose-table:!w-full prose-table:!border prose-table:!border-gray-300 prose-table:!rounded-md prose-th:!bg-gray-100 prose-th:!px-3 prose-th:!py-2 prose-th:!text-right prose-th:!font-semibold prose-td:!px-3 prose-td:!py-2 prose-td:!border prose-td:!border-gray-300 prose-td:!text-[#2e2e2e]
-    prose-img:!rounded-md prose-img:!shadow-md prose-img:!my-4
-    prose-hr:!border-t-2 prose-hr:!border-gray-300 prose-hr:!my-6
-    prose-strong:!font-semibold prose-em:!italic prose-del:!line-through
-  "
-          dangerouslySetInnerHTML={{ __html: lessonData.Description }}
-        ></div>
-
-
+        <div className=" prose max-w-full prose-p:!text-[#2e2e2e] prose-p:!leading-relaxed prose-p:!text-justify prose-p:!text-lg prose-headings:!text-[#111111] prose-headings:!font-semibold prose-headings:!mt-8 prose-headings:!mb-4 prose-h1:!text-4xl prose-h2:!text-3xl prose-h3:!text-2xl prose-h4:!text-xl prose-h5:!text-lg prose-h6:!text-base prose-a:!text-[#2563eb] prose-a:!underline prose-a:!decoration-2 prose-a:!decoration-[#2563eb] prose-a:!transition prose-a:!duration-300 prose-a:!hover:text-[#1e40af] prose-code:!bg-gray-100 prose-code:!px-2 prose-code:!py-1 prose-code:!rounded-md prose-code:!font-mono prose-code:!text-sm prose-pre:!bg-gray-100 prose-pre:!p-4 prose-pre:!rounded-md prose-pre:!overflow-x-auto prose-pre:!text-sm prose-pre:!font-mono prose-blockquote:!border-l-4 prose-blockquote:!border-[#2563eb] prose-blockquote:!bg-[#e0e7ff] prose-blockquote:!italic prose-blockquote:!px-4 prose-blockquote:!py-2 prose-blockquote:!rounded-md prose-ul:!list-disc prose-ul:!ml-6 prose-li:!text-[#2e2e2e] prose-li:!mb-2 prose-ol:!list-decimal prose-ol:!ml-6 prose-table:!w-full prose-table:!border prose-table:!border-gray-300 prose-table:!rounded-md prose-th:!bg-gray-100 prose-th:!px-3 prose-th:!py-2 prose-th:!text-right prose-th:!font-semibold prose-td:!px-3 prose-td:!py-2 prose-td:!border prose-td:!border-gray-300 prose-td:!text-[#2e2e2e] prose-img:!rounded-md prose-img:!shadow-md prose-img:!my-4 prose-hr:!border-t-2 prose-hr:!border-gray-300 prose-hr:!my-6 prose-strong:!font-semibold prose-em:!italic prose-del:!line-through " dangerouslySetInnerHTML={{ __html: lessonData.Description }} ></div>
       </div>
+
+      {/* دکمه‌های قبلی / بعدی */}
       <div className="flex gap-4 items-center mt-10 justify-between">
         <Link
-          className="flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5"
-          href=""
+          href={prevLesson ? `/docs/${docId}/${prevLesson.Id}` : "#"}
+          className={`flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5 transition-all duration-300 ${!prevLesson
+            ? "opacity-40 pointer-events-none"
+            : "hover:bg-[#E6F2E7]"
+            }`}
         >
           <span className="w-4 h-4 flex justify-center items-center border border-[#042A1B] rounded-md">
             <ChevronRight />
           </span>
           <p className="text-[#042A1B] text-[16px] font-medium">قبلی</p>
         </Link>
+
         <Link
-          className="flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5"
-          href=""
+          href={nextLesson ? `/docs/${docId}/${nextLesson.Id}` : "#"}
+          className={`flex items-center gap-1.5 border border-[#D0DDD1] rounded-xl py-2.5 px-5 transition-all duration-300 ${!nextLesson
+            ? "opacity-40 pointer-events-none"
+            : "hover:bg-[#E6F2E7]"
+            }`}
         >
           <p className="text-[#042A1B] text-[16px] font-medium">بعدی</p>
           <span className="w-4 h-4 flex justify-center items-center border border-[#042A1B] rounded-md">
@@ -135,7 +163,6 @@ export default function Lesson() {
           </span>
         </Link>
       </div>
-      {/* <VideoCourseAdEnd doc={lessonData} /> */}
     </div>
   );
 }

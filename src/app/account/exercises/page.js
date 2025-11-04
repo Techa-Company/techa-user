@@ -168,7 +168,7 @@ export default function CoursesPage() {
         dispatch(fetchDocs({ "Disabled": false, "Mode": "DashboardExercises" }))
     }, []);
 
-    console.log(docs)
+    // console.log(docs)
 
     return (
         <div className="min-h-screen bg-gray-50">

@@ -39,7 +39,7 @@ const JavaScriptPreview = ({ code: initialCode }) => {
   const uniqueIdRef = useRef(
     `js-preview-${Math.random().toString(36).substring(2, 9)}`
   );
-
+  console.log(initialCode)
   useEffect(() => {
     if (initialCode) {
       setCode(initialCode);
@@ -245,21 +245,24 @@ const JavaScriptPreview = ({ code: initialCode }) => {
         toastClassName="font-sans"
       />
 
-      {/* Header - Light Theme */}
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-between bg-white px-4 py-5 border-b border-gray-200 shadow-sm">
+      {/* Header - Consistent with HtmlPreview */}
+      <div className="flex flex-col-reverse lg:flex-row items-center justify-between bg-white px-4 py-4 border-b border-gray-200">
         <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-start">
           <button
             onClick={() => setEditable(!isEditable)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-colors duration-200"
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isEditable
+              ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
           >
             {isEditable ? (
               <>
-                <span className="text-xs font-medium">قفل ویرایش</span>
+                <span className="text-sm font-medium">قفل ویرایش</span>
                 <Lock className="w-4 h-4" />
               </>
             ) : (
               <>
-                <span className="text-xs font-medium">ویرایش</span>
+                <span className="text-sm font-medium">ویرایش</span>
                 <Unlock className="w-4 h-4" />
               </>
             )}
@@ -268,9 +271,12 @@ const JavaScriptPreview = ({ code: initialCode }) => {
           <button
             onClick={handleAIModification}
             disabled={isAILoading}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white transition-all duration-200 disabled:opacity-50 shadow-sm"
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isAILoading
+              ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
+              }`}
           >
-            <span dir="rtl" className="text-xs font-medium">
+            <span className="text-sm font-medium">
               {isAILoading ? "در حال پردازش..." : "بهبود با AI"}
             </span>
             {isAILoading ? (
@@ -283,9 +289,12 @@ const JavaScriptPreview = ({ code: initialCode }) => {
           <button
             onClick={runCodeInIframe}
             disabled={isRunning}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-green-500 hover:bg-green-600 text-white transition-colors duration-200 disabled:opacity-50 shadow-sm"
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isRunning
+              ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100'
+              }`}
           >
-            <span className="text-xs font-medium">اجرا</span>
+            <span className="text-sm font-medium">اجرا</span>
             {isRunning ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
             ) : (
@@ -295,9 +304,12 @@ const JavaScriptPreview = ({ code: initialCode }) => {
 
           <button
             onClick={() => setIsPreviewVisible(!isPreviewVisible)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300 transition-colors duration-200"
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isPreviewVisible
+              ? 'bg-gray-100 border-gray-300 text-gray-700'
+              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
           >
-            <span className="text-xs font-medium">
+            <span className="text-sm font-medium">
               {isPreviewVisible ? "مخفی کردن" : "نمایش"} پیش‌نمایش
             </span>
             {isPreviewVisible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -305,18 +317,18 @@ const JavaScriptPreview = ({ code: initialCode }) => {
 
           <button
             onClick={resetCode}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-orange-50 hover:bg-orange-100 text-orange-600 border border-orange-200 transition-colors duration-200"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
           >
-            <span className="text-xs font-medium">بازنشانی</span>
+            <span className="text-sm font-medium">بازنشانی</span>
             <RefreshCw className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="flex items-center gap-2 mb-2 lg:mb-0">
-          <span className="text-gray-800 font-semibold !text-2xl" dir="rtl">
+        <div className="flex items-center gap-3 mb-3 lg:mb-0">
+          <span className="text-gray-800 font-bold text-xl" dir="rtl">
             اجرای برخط JavaScript
           </span>
-          <Terminal className="w-8 h-8 text-blue-500" />
+          <Terminal className="w-7 h-7 text-gray-600" />
         </div>
       </div>
 
@@ -365,9 +377,9 @@ const JavaScriptPreview = ({ code: initialCode }) => {
 
       {/* Preview Section */}
       {isPreviewVisible && (
-        <div className="mx-4 mb-4 rounded-lg overflow-hidden border border-gray-300 shadow-sm">
+        <div className="bg-white mx-4 mb-4 rounded-lg overflow-hidden border border-gray-300 shadow-sm">
           <div dir="rtl" className="p-5 bg-gray-50 border-b border-gray-300 flex justify-between items-center">
-            <span className="text-xl font-medium text-gray-700">
+            <span className="text-2xl font-medium text-gray-700">
               پیش‌نمایش زنده
             </span>
             {isRunning && (
@@ -377,7 +389,7 @@ const JavaScriptPreview = ({ code: initialCode }) => {
               </div>
             )}
           </div>
-          <div className="h-48 relative bg-white">
+          <div className="h-96 relative bg-white">
             <iframe
               key={iframeKey}
               ref={iframeRef}
@@ -391,9 +403,9 @@ const JavaScriptPreview = ({ code: initialCode }) => {
 
       {/* Console Section */}
       {isPreviewVisible && (
-        <div className="mx-4 mb-4 rounded-lg overflow-hidden border border-gray-300 shadow-sm">
+        <div className="bg-white mx-4 mb-4 rounded-lg overflow-hidden border border-gray-300 shadow-sm">
           <div dir="rtl" className="p-5 bg-gray-50 border-b border-gray-300 flex justify-between items-center">
-            <span className="text-xl font-medium text-gray-700">
+            <span className="text-2xl font-medium text-gray-700">
               خروجی کنسول
             </span>
             {consoleOutput.length > 0 && (
