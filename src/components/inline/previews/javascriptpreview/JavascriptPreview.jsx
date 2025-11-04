@@ -171,6 +171,18 @@ const JavaScriptPreview = ({ code: initialCode }) => {
   };
 
 
+  function detectCodeType(code) {
+    const hasHtmlTags = /<\/?[a-z][\s\S]*>/i.test(code); // وجود تگ HTML
+    const hasScript = /<script[\s\S]*?>[\s\S]*?<\/script>/i.test(code);
+
+    if (!hasHtmlTags) {
+      return "js"; // فقط جاوااسکریپت
+    }
+    if (hasScript) {
+      return "html"; // HTML که داخلش جاوااسکریپت هست
+    }
+    return "html"; // پیش‌فرض برای markup
+  }
 
   const handleAIModification = async () => {
     if (!code.trim()) {
@@ -180,8 +192,11 @@ const JavaScriptPreview = ({ code: initialCode }) => {
 
     setIsAILoading(true);
     try {
+      const type = detectCodeType(code); // تشخیص نوع کد
+      console.log("🔍 نوع کد تشخیص داده شد:", type);
+
       const response = await fetch(
-        `https://pool.techa.me/api/Modification/javascript?prompt=${encodeURIComponent(code)}`,
+        `https://pool.techa.me/api/Modification/${type}?prompt=${encodeURIComponent(code)}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -207,6 +222,7 @@ const JavaScriptPreview = ({ code: initialCode }) => {
       setIsAILoading(false);
     }
   };
+
 
   const resetCode = () => {
     setCode(initialCode || 'console.log("خوش آمدید!")');
