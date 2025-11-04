@@ -57,7 +57,6 @@ const JavaScriptPreview = ({ code: initialCode }) => {
     setIframeKey((prev) => prev + 1);
     setIsPreviewVisible(true);
 
-    // Use requestAnimationFrame for better timing
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
 
     const iframe = iframeRef.current;
@@ -74,97 +73,104 @@ const JavaScriptPreview = ({ code: initialCode }) => {
       }
 
       iframeDoc.open();
+
+      const isFullHTML =
+        code.includes("<html") ||
+        code.includes("<!DOCTYPE") ||
+        code.includes("<body>");
+
+      // ✅ قالب HTML یکسان برای هر دو حالت
       iframeDoc.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <style>
-              * { margin: 0; padding: 0; box-sizing: border-box; }
-              body { 
-                margin: 0; 
-                padding: 1rem; 
-                background: white; 
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                min-height: 100vh;
-              }
-            </style>
-            <script>
-              (function() {
-                const uniqueId = "${uniqueIdRef.current}";
-                const originalConsole = console;
-                window.console = {
-                  log: (...args) => {
-                    window.parent.postMessage({ 
-                      type: 'console-log', 
-                      id: uniqueId, 
-                      method: 'log', 
-                      message: args.map(arg => 
-                        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-                      ).join(' ') 
-                    }, '*');
-                    originalConsole.log(...args);
-                  },
-                  error: (...args) => {
-                    window.parent.postMessage({ 
-                      type: 'console-log', 
-                      id: uniqueId, 
-                      method: 'error', 
-                      message: args.map(arg => 
-                        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-                      ).join(' ') 
-                    }, '*');
-                    originalConsole.error(...args);
-                  },
-                  warn: (...args) => {
-                    window.parent.postMessage({ 
-                      type: 'console-log', 
-                      id: uniqueId, 
-                      method: 'warn', 
-                      message: args.map(arg => 
-                        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-                      ).join(' ') 
-                    }, '*');
-                    originalConsole.warn(...args);
-                  },
-                  info: (...args) => {
-                    window.parent.postMessage({ 
-                      type: 'console-log', 
-                      id: uniqueId, 
-                      method: 'info', 
-                      message: args.map(arg => 
-                        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-                      ).join(' ') 
-                    }, '*');
-                    originalConsole.info(...args);
-                  }
-                };
-              })();
-            </script>
-          </head>
-          <body>
-            <div id="app"></div>
-            <script>
-              try {
-                ${code}
-              } catch (error) {
-                console.error('خطا در اجرای کد:', error.message);
-              }
-            </script>
-          </body>
-        </html>
-      `);
+      <!DOCTYPE html>
+      <html lang="fa">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+              padding: 1rem;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              background: white;
+              min-height: 100vh;
+            }
+          </style>
+        </head>
+        <body>
+          ${isFullHTML
+          ? code // اگر کاربر HTML کامل داده، همونو بنویس
+          : `<script>${code}</script>` // در غیر این صورت فقط JS رو داخل <script> بنویس
+        }
+
+          <!-- ✅ تزریق همیشگی اسکریپت console -->
+          <script>
+            (function() {
+              const uniqueId = "${uniqueIdRef.current}";
+              const originalConsole = console;
+              window.console = {
+                log: (...args) => {
+                  window.parent.postMessage({
+                    type: 'console-log',
+                    id: uniqueId,
+                    method: 'log',
+                    message: args.map(a =>
+                      typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)
+                    ).join(' ')
+                  }, '*');
+                  originalConsole.log(...args);
+                },
+                error: (...args) => {
+                  window.parent.postMessage({
+                    type: 'console-log',
+                    id: uniqueId,
+                    method: 'error',
+                    message: args.map(a =>
+                      typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)
+                    ).join(' ')
+                  }, '*');
+                  originalConsole.error(...args);
+                },
+                warn: (...args) => {
+                  window.parent.postMessage({
+                    type: 'console-log',
+                    id: uniqueId,
+                    method: 'warn',
+                    message: args.map(a =>
+                      typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)
+                    ).join(' ')
+                  }, '*');
+                  originalConsole.warn(...args);
+                },
+                info: (...args) => {
+                  window.parent.postMessage({
+                    type: 'console-log',
+                    id: uniqueId,
+                    method: 'info',
+                    message: args.map(a =>
+                      typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)
+                    ).join(' ')
+                  }, '*');
+                  originalConsole.info(...args);
+                }
+              };
+            })();
+          </script>
+        </body>
+      </html>
+    `);
+
       iframeDoc.close();
 
-      // Fallback timeout for loading
-      setTimeout(() => setIsRunning(false), 1000);
+      // برای اطمینان از توقف وضعیت "در حال اجرا"
+      setTimeout(() => setIsRunning(false), 800);
     } catch (error) {
       console.error("Error running code:", error);
       setIsRunning(false);
       toast.error("خطا در اجرای کد");
     }
   };
+
+
 
   const handleAIModification = async () => {
     if (!code.trim()) {

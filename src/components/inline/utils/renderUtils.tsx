@@ -11,11 +11,17 @@ export function findPreviewElements(): HTMLPreElement[] {
   );
   return Array.from(elements);
 }
-
 export const renderInlineSnippets = () => {
   const elements = findPreviewElements();
 
+  console.log(`Found ${elements.length} preview elements`);
+
   elements.forEach((pre) => {
+    // اگر از قبل جایگزین شده، ردش کن
+    if (pre.style.display === "none" || pre.closest(".preview-container")) {
+      return;
+    }
+
     const codeElement = pre.querySelector("code");
     if (!codeElement) return;
 
@@ -23,7 +29,7 @@ export const renderInlineSnippets = () => {
 
     // ساخت کانتینر جایگزین
     const container = document.createElement("div");
-    container.className = "preview-container";
+    container.className = "preview-container my-4";
 
     pre.parentNode?.insertBefore(container, pre);
     pre.style.display = "none";
@@ -31,7 +37,12 @@ export const renderInlineSnippets = () => {
     const root = createRoot(container);
 
     if (pre.classList.contains("language-markup")) {
-      root.render(<HtmlPreview code={code} />);
+      if (code.includes("<script")) {
+        console.log(code.includes("<script"));
+        root.render(<JavaScriptPreview code={code} />);
+      } else {
+        root.render(<HtmlPreview code={code} />);
+      }
     } else if (pre.classList.contains("language-jsx")) {
       root.render(<ReactPreview code={code} />);
     } else if (pre.classList.contains("language-javascript")) {

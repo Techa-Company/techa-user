@@ -12,7 +12,6 @@ const HtmlPreview = ({ code: initialCode }) => {
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   const [isAILoading, setIsAILoading] = useState(false);
   const iframeRef = useRef(null);
-  console.log(initialCode)
   useEffect(() => {
     if (initialCode) {
       setCode(initialCode);
