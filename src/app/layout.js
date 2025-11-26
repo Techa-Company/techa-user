@@ -7,13 +7,28 @@ import { Bounce, ToastContainer } from "react-toastify";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
 export const metadata = {
-  title: "پلتفرم آموزشی تکا | Techa",
+  title: {
+    default: "پلتفرم آموزشی تکا | Techa",
+    template: "%s | Techa",
+  },
   description: "پلتفرم آموزشی تکا",
+  keywords: ["آموزش برنامه‌نویسی", "دوره آنلاین", "Techa"],
+  metadataBase: new URL("https://techa.me"),
+  openGraph: {
+    title: "پلتفرم آموزشی تکا | Techa",
+    description: "پلتفرم آموزشی برای یادگیری برنامه‌نویسی و تکنولوژی",
+    url: "https://techa.me",
+    siteName: "Techa",
+    locale: "fa_IR",
+    type: "website",
+  },
   other: {
     enamad: "61494690",
   },
 };
+
 
 import { Providers } from "./Providers";
 

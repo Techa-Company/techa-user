@@ -14,18 +14,15 @@ import {
   LogIn,
   LogOut,
   Bookmark,
-  Settings,
   Home,
   GraduationCap,
   Pen,
-  Users,
   PhoneCall,
   ChevronDown,
   Link2,
   BookOpenText,
   LayoutDashboard,
 } from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
@@ -42,11 +39,8 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // کاربر از Redux
   const user = useSelector(state => state.auth.user);
   const isLoggedIn = !!user;
-
-  // console.log(user)
 
   const items = useSelector(state => state.cart.items);
 
@@ -81,8 +75,8 @@ const Header = () => {
   }, [isMenuOpen, isProfileOpen, isSubMenuOpen]);
 
   const handleLogout = () => {
-    dispatch(logout());           // پاک کردن user و کوکی
-    router.replace("/auth/login");     // هدایت به لاگین
+    dispatch(logout());
+    router.replace("/auth/login");
   };
 
   return (
@@ -135,7 +129,7 @@ const Header = () => {
                     </Link>
                   </li>
 
-                  <li className="flex items-center gap-2 group">
+                  {/* <li className="flex items-center gap-2 group">
                     <span>
                       <GraduationCap className={`stroke-[#7AE36A] ${pathname.startsWith("/courses") ? "opacity-100" : "opacity-30"
                         } group-hover:opacity-100`} strokeWidth={1} />
@@ -148,7 +142,7 @@ const Header = () => {
                     >
                       دوره های ما
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="flex items-center gap-2 group">
                     <span>
                       <BookOpenText className={`stroke-[#7AE36A] ${pathname.startsWith("/docs") ? "opacity-100" : "opacity-30"
