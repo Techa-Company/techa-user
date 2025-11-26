@@ -6,6 +6,7 @@ import docsReducer from "../features/main/docs/docsSlice"
 import contentsReducer from "../features/main/contents/contentsSlice"
 import exercisesReducer from "../features/main/exercises/exercisesSlice"
 import userRedcer from "../features/account/user/UserSlice"
+import newsletterReducer from "../features/main/newsletter/newsletterSlice"
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
         docs: docsReducer,
         contents: contentsReducer,
         exercises: exercisesReducer,
+        newsletter: newsletterReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

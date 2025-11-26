@@ -14,7 +14,7 @@ import Pricing from "../components/landing/Pricing";
 
 export default function Home() {
   return (
-    <div>
+    <div className="overflow-hidden">
       <Banner />
       <Poster />
       <LevelAssessment />

@@ -4,10 +4,14 @@ import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { subscribeNewsletter } from "../../features/main/newsletter/newsletterActions";
 
 const Banner = () => {
     const [phone, setPhone] = useState('09')
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const dispatch = useDispatch()
 
     const handleSubmit = async () => {
         if (phone.length !== 11) {
@@ -16,27 +20,17 @@ const Banner = () => {
         }
 
         setIsSubmitting(true)
-        try {
-            const response = await fetch('http://45.139.10.84:7000/api/numbers', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ phone })
+        dispatch(subscribeNewsletter({ "Phone": phone }))
+            .unwrap()
+            .then((message) => {
+                toast.success(message);
+                setPhone('09');
+                setIsSubmitting(false)
             })
-
-            const data = await response.json()
-            if (response.ok) {
-                toast.success('درخواست با موفقیت ثبت شد!')
-                setPhone('09')
-            } else {
-                toast.error(data.message)
-            }
-        } catch (error) {
-            toast.error('خطا در ارتباط با سرور')
-        } finally {
-            setIsSubmitting(false)
-        }
+            .catch((error) => {
+                setIsSubmitting(false)
+                toast.error(error);
+            });
     }
 
 
@@ -123,10 +117,6 @@ const Banner = () => {
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="grid lg:grid-cols-2 gap-x-20 gap-5 items-center">
                     <div>
-                        {/* <h1 className="text-[#042A1B] text-4xl font-extrabold bg-[#F6DC66] py-3 px-5 rounded-xl w-fit ">
-                            اعتبار بگیر، مسلط شو، در آمد کسب کن
-                        </h1> */}
-
                         <div className="flex w-fit">
                             <div className="relative">
                                 <motion.div
@@ -198,9 +188,9 @@ const Banner = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="relative w-full pb-[105%] mt-10 lg:mt-0 overflow-hidden">
+                    <div className="relative w-full pb-[105%] mt-10 lg:mt-0 ">
                         <motion.div
-                            className="absolute inset-0"
+                            className="absolute inset-0 z-20"
                             animate={{
                                 rotate: [0, 20, -10, 20, 0], // چرخش ساعتگرد و پادساعتگرد
                             }}
