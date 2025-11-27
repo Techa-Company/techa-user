@@ -1,17 +1,19 @@
 "use client";
 
-import { Monaco, Editor as MonacoEditor } from "@monaco-editor/react";
 import { useEffect, useState } from "react";
+import MonacoEditor, { Monaco } from "@monaco-editor/react";
 import { configureMonacoTailwindcss } from "monaco-tailwindcss";
 
 interface MonacoEditorComponentProps {
   code: string;
   setCode: (code: string) => void;
+  language?: "javascript" | "typescript" | "css" | "html";
 }
 
 const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
   code,
   setCode,
+  language = "javascript",
 }) => {
   const [editorInstance, setEditorInstance] = useState<Monaco | null>(null);
 
@@ -30,6 +32,8 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
                 )
               );
             case "html":
+            case "handlebars":
+            case "razor":
               return new Worker(
                 new URL(
                   "monaco-editor/esm/vs/language/html/html.worker",
@@ -66,10 +70,8 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
     }
   }, []);
 
-  const onMountTailwindInject = (editor: Monaco) => {
-    // فقط configureMonacoTailwindcss را فراخوانی کن
-    configureMonacoTailwindcss(editor);
-
+  const handleEditorMount = (editor: Monaco) => {
+    configureMonacoTailwindcss(editor); // Tailwind autocomplete بدون ارور
     setEditorInstance(editor);
   };
 
@@ -77,16 +79,18 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
     <div className="w-full h-full relative">
       <MonacoEditor
         value={code}
+        language={language}
+        theme="vs-dark"
+        beforeMount={handleEditorMount}
+        onChange={(value) => setCode(value || "")}
         options={{
           quickSuggestions: { other: true, comments: true, strings: true },
           inlineSuggest: { enabled: true },
           contextmenu: true,
+          minimap: { enabled: false },
+          scrollBeyondLastLine: false,
         }}
-        onChange={(e) => setCode(e || "")}
-        beforeMount={onMountTailwindInject}
-        language="javascript"
-        theme="vs-dark"
-        className="h-full"
+        className="h-full w-full"
       />
     </div>
   );
