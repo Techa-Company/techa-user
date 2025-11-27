@@ -6,55 +6,55 @@ properties([
     ])
 ])
 
-
 pipeline {
     agent any
 
-stages {
-    stage('Clone') {
-        steps {
-            git branch: 'main',
-                url: 'https://gitea.techa.me/techa-gitea-admin/techa-user.git'
+    stages {
+        stage('Clone') {
+            steps {
+              git branch: 'master',
+                  url: 'https://github.com/Techa-Company/techa-user.git',
+                  credentialsId: 'github-cred'
+            }
         }
-    }
 
-    stage('Install') {
-        steps {
-            script {
-                try {
-                    sh 'sudo pnpm install --strict-peer-dependencies=false --network-concurrency 1'
-                } catch (err) {
-                    error("Install failed: ${err}")
+        stage('Install') {
+            steps {
+                script {
+                    try {
+                        sh 'sudo pnpm install --network-concurrency 1'
+                    } catch (err) {
+                        error("Install failed: ${err}")
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    try {
+                        sh 'sudo pnpm run build'
+                    } catch (err) {
+                        error("Build failed: ${err}")
+                    }
+                }
+            }
+        }
+
+        stage('Run') {
+            steps {
+                script {
+                    try {
+                        sh 'sudo pnpm run start'
+                        echo 'Run completed successfully ✅'
+                    } catch (err) {
+                        error("Run failed ❌: ${err}")
+                    }
                 }
             }
         }
     }
-
-    stage('Build') {
-        steps {
-            script {
-                try {
-                    sh 'sudo pnpm run build'
-                } catch (err) {
-                    error("Build failed: ${err}")
-                }
-            }
-        }
-    }
-
-    stage('Run') {
-        steps {
-            script {
-                try {
-                    sh 'sudo pnpm run start'
-                    echo 'Run completed successfully ✅'
-                } catch (err) {
-                    error("Run failed ❌: ${err}")
-                }
-            }
-        }
-    }
-}
 
     post {
         success {
