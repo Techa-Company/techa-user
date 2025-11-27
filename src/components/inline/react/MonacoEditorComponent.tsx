@@ -1,23 +1,24 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import MonacoEditor, { Monaco } from "@monaco-editor/react";
-import { configureMonacoTailwindcss } from "monaco-tailwindcss";
+import { Monaco, Editor as MonacoEditor } from "@monaco-editor/react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import {
+  configureMonacoTailwindcss,
+  tailwindcssData,
+} from "monaco-tailwindcss";
 
 interface MonacoEditorComponentProps {
   code: string;
   setCode: (code: string) => void;
-  language?: "javascript" | "typescript" | "css" | "html";
 }
 
 const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
   code,
   setCode,
-  language = "javascript",
 }) => {
   const [editorInstance, setEditorInstance] = useState<Monaco | null>(null);
 
   useEffect(() => {
+    // Client-side only code
     if (typeof window !== "undefined") {
       window.MonacoEnvironment = {
         getWorker(moduleId, label) {
@@ -31,8 +32,8 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
                   import.meta.url
                 )
               );
-            case "html":
             case "handlebars":
+            case "html":
             case "razor":
               return new Worker(
                 new URL(
@@ -70,27 +71,45 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
     }
   }, []);
 
-  const handleEditorMount = (editor: Monaco) => {
-    configureMonacoTailwindcss(editor); // Tailwind autocomplete بدون ارور
+  const onMountTailwindInject = (editor: Monaco) => {
+    console.log(editor);
+    editor.languages.css.cssDefaults.setOptions({
+      data: {
+        dataProviders: {
+          tailwindcssData,
+        },
+      },
+    });
+
+    configureMonacoTailwindcss(editor);
+
+    // Save the editor instance to state
     setEditorInstance(editor);
   };
 
   return (
-    <div className="w-full h-full relative">
+    <div className={`w-full relative block h-full`}>
       <MonacoEditor
         value={code}
-        language={language}
-        theme="vs-dark"
-        beforeMount={handleEditorMount}
-        onChange={(value) => setCode(value || "")}
         options={{
-          quickSuggestions: { other: true, comments: true, strings: true },
-          inlineSuggest: { enabled: true },
+          quickSuggestions: {
+            other: true,
+            comments: true,
+            strings: true,
+          },
+          inlineSuggest: {
+            enabled: true,
+          },
           contextmenu: true,
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
         }}
-        className="h-full w-full"
+        onChange={(e) => {
+          setCode(e as string);
+        }}
+        beforeMount={onMountTailwindInject}
+        language="javascript"
+        defaultLanguage="javascript"
+        theme="vs-dark"
+        className={" h-full"}
       />
     </div>
   );
