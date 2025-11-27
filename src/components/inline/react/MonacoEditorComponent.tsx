@@ -1,10 +1,7 @@
 "use client";
 import { Monaco, Editor as MonacoEditor } from "@monaco-editor/react";
-import { useEffect, useState, useCallback, useRef } from "react";
-import {
-  configureMonacoTailwindcss,
-  tailwindcssData,
-} from "monaco-tailwindcss";
+import { useEffect, useState } from "react";
+import { configureMonacoTailwindcss } from "monaco-tailwindcss";
 
 interface MonacoEditorComponentProps {
   code: string;
@@ -18,7 +15,6 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
   const [editorInstance, setEditorInstance] = useState<Monaco | null>(null);
 
   useEffect(() => {
-    // Client-side only code
     if (typeof window !== "undefined") {
       window.MonacoEnvironment = {
         getWorker(moduleId, label) {
@@ -73,22 +69,15 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
 
   const onMountTailwindInject = (editor: Monaco) => {
     console.log(editor);
-    editor.languages.css.cssDefaults.setOptions({
-      data: {
-        dataProviders: {
-          tailwindcssData,
-        },
-      },
-    });
 
+    // فقط این کافی هست، نیازی به cssDefaults نیست
     configureMonacoTailwindcss(editor);
 
-    // Save the editor instance to state
     setEditorInstance(editor);
   };
 
   return (
-    <div className={`w-full relative block h-full`}>
+    <div className="w-full relative block h-full">
       <MonacoEditor
         value={code}
         options={{
@@ -109,7 +98,7 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
         language="javascript"
         defaultLanguage="javascript"
         theme="vs-dark"
-        className={" h-full"}
+        className="h-full"
       />
     </div>
   );
