@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-              git branch: 'master',
+              git branch: 'main',
                   url: 'https://github.com/Techa-Company/techa-user.git',
                   credentialsId: 'github-cred'
             }
