@@ -23,6 +23,17 @@ const nextConfig = {
       },
     ];
   },
+   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'api.techa.me',
+        port: '',
+        pathname: '/staticfiles/**',
+      },
+    ],
+  },
+
 };
 
 export default nextConfig;

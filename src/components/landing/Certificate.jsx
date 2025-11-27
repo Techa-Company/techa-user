@@ -105,7 +105,7 @@ const Certificate = () => {
                         className="relative bg-white rounded-2xl shadow-xl border-8 border-white overflow-hidden"
                     >
                         <img
-                            src="/images/certificate.png"
+                            src="/images/Certificate.png"
                             alt="Certificate"
                             className="w-full h-auto"
                         />
