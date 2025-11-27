@@ -2,7 +2,7 @@ import React from 'react';
 
 const CourseBenefits = () => {
     return (
-        <div className="mt-28">
+        <div className="mb-20 mt-10">
             <div className="container mx-auto px-5 2xl:px-20">
                 <div className="text-[#042A1B] text-center">
                     <h1 className="font-extrabold text-4xl ">

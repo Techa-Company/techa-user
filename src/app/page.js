@@ -19,12 +19,12 @@ export default function Home() {
       <Poster />
       {/* <LevelAssessment /> */}
       {/* <LastCourses /> */}
-      {/* <Roadmap /> */}
+      <Roadmap />
       {/* <Pricing /> */}
       <DocumentationSection />
-      {/* <CourseBenefits /> */}
+      <CourseBenefits />
       <Certificate />
-      {/* <Internship /> */}
+      <Internship />
       {/* <Projects /> */}
       <SampleEditor />
       <LastArticles />

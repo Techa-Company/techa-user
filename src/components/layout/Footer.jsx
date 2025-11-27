@@ -2,9 +2,42 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { subscribeNewsletter } from "../../features/main/newsletter/newsletterActions";
 
 const Footer = () => {
   const pathname = usePathname();
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      toast.error('ایمیل وارد شده معتبر نیست');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    dispatch(subscribeNewsletter({ Email: email }))
+      .unwrap()
+      .then((message) => {
+        toast.success(message);
+        setEmail('');
+        setIsSubmitting(false);
+      })
+      .catch((error) => {
+        toast.error(error);
+        setIsSubmitting(false);
+      });
+  };
 
   return (
     <footer
@@ -26,19 +59,25 @@ const Footer = () => {
               </p>
             </div>
             <div>
-              <form className="p-2 bg-white rounded-xl flex gap-5">
+              <form className="p-2 bg-white rounded-xl flex gap-5"
+                onSubmit={handleSubmit}
+              >
                 <button
                   className="px-5 py-2.5 bg-[#042A1B] text-white rounded-lg text-xs "
                   type="submit"
+                  disabled={isSubmitting}
+
                 >
-                  عضویت
+                  {isSubmitting ? "در حال ارسال..." : "عضویت"}
                 </button>
                 <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full lg:min-w-80 px-3 text-[#042A1B] text-lg font-medium focus:outline-none"
-                  required
                   style={{ direction: "ltr" }}
                   type="email"
                   placeholder="Techa@gmail.com"
+                  required
                 />
               </form>
             </div>
@@ -223,23 +262,6 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          {/* <div className="mx-auto flex items-center justify-center w-48 h-48 md:w-56 md:h-56 rounded-2xl border border-gray-300 bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
-            <a
-              referrerPolicy="origin"
-              target="_blank"
-              href="https://trustseal.enamad.ir/?id=653762&Code=zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
-              className="flex items-center justify-center"
-            >
-              <img
-                referrerPolicy="origin"
-                src="https://trustseal.enamad.ir/logo.aspx?id=653762&Code=zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
-                alt="نماد اعتماد الکترونیکی"
-                className="w-24 md:w-28 cursor-pointer select-none"
-                code="zdshhdL8JuCwfWZNZRyUKtuLmz2T0HiU"
-              />
-            </a>
-
-          </div> */}
           <div className="mx-auto flex items-center justify-center w-48 h-48 md:w-56 md:h-56 rounded-2xl border border-gray-300 bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
 
             <a

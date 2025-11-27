@@ -32,22 +32,22 @@ const Poster = () => {
     }, [])
 
     const slides = [
-        {
-            title: 'بوت کمپ توسعه فرانت اند',
-            badge: 'پروژه محور',
-            description: 'آموزش عملی با پروژه‌های واقعی و مربیان حرفه‌ای - شامل تمرینات کدنویسی روزانه و ادیتور آنلاین',
-            link: "/front-boot-camp",
-            buttonText: 'شروع سفر یادگیری',
-            icon: <Rocket className="w-5 h-5" />
-        },
-        {
-            title: 'دوره کارآموزی حرفه‌ای',
-            badge: 'تجربه صنعتی',
-            description: 'همکاری با تیم‌های توسعه واقعی و ساخت محصولات قابل ارائه در رزومه',
-            link: "/internship",
-            buttonText: 'فرصت‌های شغلی را کشف کن',
-            icon: <Briefcase className="w-5 h-5" />
-        },
+        // {
+        //     title: 'بوت کمپ توسعه فرانت اند',
+        //     badge: 'پروژه محور',
+        //     description: 'آموزش عملی با پروژه‌های واقعی و مربیان حرفه‌ای - شامل تمرینات کدنویسی روزانه و ادیتور آنلاین',
+        //     link: "/front-boot-camp",
+        //     buttonText: 'شروع سفر یادگیری',
+        //     icon: <Rocket className="w-5 h-5" />
+        // },
+        // {
+        //     title: 'دوره کارآموزی حرفه‌ای',
+        //     badge: 'تجربه صنعتی',
+        //     description: 'همکاری با تیم‌های توسعه واقعی و ساخت محصولات قابل ارائه در رزومه',
+        //     link: "/internship",
+        //     buttonText: 'فرصت‌های شغلی را کشف کن',
+        //     icon: <Briefcase className="w-5 h-5" />
+        // },
         {
             title: 'مستندات آموزشی پیشرفته',
             badge: 'منابع تعاملی',
@@ -59,7 +59,7 @@ const Poster = () => {
     ];
 
     return (
-        <section className="mt-20 md:mt-60">
+        <section className="mt-20 md:mt-60 mb-20">
             <div className="container mx-auto px-5 xl:px-20">
                 <Swiper
                     modules={[Autoplay, Pagination]}
