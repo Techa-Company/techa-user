@@ -17,15 +17,15 @@ export default function Home() {
     <div className="overflow-hidden">
       <Banner />
       <Poster />
-      <LevelAssessment />
-      <LastCourses />
-      <Roadmap />
-      <Pricing />
+      {/* <LevelAssessment /> */}
+      {/* <LastCourses /> */}
+      {/* <Roadmap /> */}
+      {/* <Pricing /> */}
       <DocumentationSection />
-      <CourseBenefits />
+      {/* <CourseBenefits /> */}
       <Certificate />
-      <Internship />
-      <Projects />
+      {/* <Internship /> */}
+      {/* <Projects /> */}
       <SampleEditor />
       <LastArticles />
     </div>

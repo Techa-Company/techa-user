@@ -11,7 +11,7 @@ export default function Docs() {
   const { loading, docs } = useSelector(state => state.docs);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchDocs({ "Mode": "CoursesList", "Disabled": false }));
+    dispatch(fetchDocs());
   }, []);
 
   return (

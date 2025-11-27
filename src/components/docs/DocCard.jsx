@@ -139,7 +139,7 @@ const DocCard = ({ index, doc }) => {
                 <div className="flex items-center justify-between mb-4 bg-emerald-50 p-3 rounded-xl">
                     <div className="flex flex-col">
                         <span className="text-2xl font-bold text-gray-900">
-                            {doc.FinalPrice ? doc.FinalPrice.toLocaleString() : doc.Price.toLocaleString()} تومان
+                            {doc.FinalPrice ? doc.FinalPrice.toLocaleString() : doc.Price.toLocaleString()} تومانء
                         </span>
                         {doc.DiscountAmount > 0 && (
                             <span className=" text-gray-500 line-through">

@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react';
 import { SP_fetch } from '../../api/utils/api';
 import { formatDuration } from '../../helper';
 import { RiDatabase2Fill, RiDatabaseFill, RiHtml5Fill, RiJavascriptFill, RiReactjsFill, RiTailwindCssFill } from 'react-icons/ri';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDocs } from '../../features/main/docs/docsActions';
+import DocsSkeleton from '../common/DocsSkeleton';
+import DocCard from '../docs/DocCard';
 
 
 
@@ -13,44 +17,18 @@ import { RiDatabase2Fill, RiDatabaseFill, RiHtml5Fill, RiJavascriptFill, RiReact
 const DocumentationSection = () => {
 
 
-    const icons = [
-        <RiHtml5Fill className="w-6 h-6 text-emerald-600" />,
-        <RiJavascriptFill className="w-6 h-6 text-emerald-600" />,
-        <RiTailwindCssFill className="w-6 h-6 text-emerald-600" />,
-        <RiReactjsFill className="w-6 h-6 text-emerald-600" />,
-        <RiDatabase2Fill className="w-6 h-6 text-emerald-600" />,
-        <RiDatabaseFill className="w-6 h-6 text-emerald-600" />
-    ]
 
-    const [docs, setDocs] = useState([]);
-    const [loading, setLoading] = useState(true);
-
+    const { loading, docs } = useSelector(state => state.docs);
+    const dispatch = useDispatch();
     useEffect(() => {
-        const fetchDocs = async () => {
-            try {
-                const { Data, IsSuccess, Message, StatusCode } = await SP_fetch(
-                    "Report_courses", {
-                    "@Disabled": false,
-                    "@PageSize": "3"
-                });
-                const docs = Data.Dataset;
-                if (IsSuccess) setDocs(docs);
-            } catch (error) {
-                console.error("Error fetching docs:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchDocs();
+        dispatch(fetchDocs());
     }, []);
-
 
 
 
     return (
         <section className="bg-white py-16">
-            <div className="container mx-auto px-4">
+            <div className="container px-5 xl:px-20 mx-auto">
                 {/* عنوان بخش */}
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-3">
@@ -65,66 +43,15 @@ const DocumentationSection = () => {
                 </div>
 
                 {/* لیست دوره‌ها */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {docs.map((doc, index) => (
-                        <div
-                            key={index}
-                            className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 group"
-                        >
-                            <div className="p-6">
-                                {/* هدر کارت */}
-                                <div className="flex items-start gap-4 mb-4">
-                                    <div className="p-3 bg-emerald-50 rounded-xl">
-                                        {icons[index]}
-                                    </div>
-                                    <div>
-                                        <h3 className="text-xl font-bold text-gray-900">
-                                            {doc.Title}
-                                        </h3>
-                                        <p className="text-sm text-gray-600 mt-1">
-                                            {doc.Summary}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* تگ‌ها */}
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {docs.Features?.split("،").map((tag, i) => (
-                                        <span
-                                            key={i}
-                                            className="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs rounded-full"
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                {/* اطلاعات دوره */}
-                                <div className="space-y-3 text-sm text-gray-600">
-                                    <div className="flex items-center gap-2">
-                                        <Clock className="w-4 h-4 text-emerald-600" />
-                                        <span>مدت زمان: {formatDuration(doc.Duration)}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <BookText className="w-4 h-4 text-emerald-600" />
-                                        <span>تعداد درس‌ها: {doc.Lessons} جلسه</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <GraduationCap className="w-4 h-4 text-emerald-600" />
-                                        <span>سطح: {doc.Level}</span>
-                                    </div>
-                                </div>
-
-                                {/* دکمه اقدام */}
-                                <Link href={`/docs/${doc.Id}`} className="mt-4 w-full py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl transition-colors flex items-center justify-center gap-2">
-                                    <span>مشاهده سرفصل‌ها</span>
-                                    <ArrowLeft />
-
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                {loading ? (
+                    <DocsSkeleton />
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
+                        {docs.map((doc, index) => (
+                            <DocCard key={index} index={index} doc={doc} />
+                        ))}
+                    </div>
+                )}
 
                 {/* دکمه مشاهده بیشتر */}
                 <div className="text-center mt-10">

@@ -2,113 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 
+IranYekanX fonts are considered a proprietary software. To gain information about the laws 
+regarding the use of these fonts, please visit www.fontiran.com
+--------------------------------------------------------------------- 
+This set of fonts are used in this project under the license: (TRJC3OMS)
+--------------------------------------------------------------------- 
+*/
 @font-face {
-  font-family: "Yekan Bakh FaNum";
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Thin.eot");
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Thin.eot?#iefix")
-      format("embedded-opentype"),
-    url("../../public/fonts/yekan/woff2/YekanBakhFaNum-Thin.woff2")
-      format("woff2"),
-    url("../../public/fonts/yekan/woff/YekanBakhFaNum-Thin.woff") format("woff"),
-    url("../../public/fonts/yekan/ttf/YekanBakhFaNum-Thin.ttf")
-      format("truetype");
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
   font-weight: 100;
-  font-style: normal;
-  font-display: swap;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Thin.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Thin.woff2")
+      format("woff2");
 }
 
 @font-face {
-  font-family: "Yekan Bakh FaNum";
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Light.eot");
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Light.eot?#iefix")
-      format("embedded-opentype"),
-    url("../../public/fonts/yekan/woff2/YekanBakhFaNum-Light.woff2")
-      format("woff2"),
-    url("../../public/fonts/yekan/woff/YekanBakhFaNum-Light.woff")
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
+  font-weight: 200;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-UltraLight.woff")
       format("woff"),
-    url("../../public/fonts/yekan/ttf/YekanBakhFaNum-Light.ttf")
-      format("truetype");
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-UltraLight.woff2")
+      format("woff2");
+}
+
+@font-face {
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
   font-weight: 300;
-  font-style: normal;
-  font-display: swap;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Light.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Light.woff2")
+      format("woff2");
 }
 
 @font-face {
-  font-family: "Yekan Bakh FaNum";
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Regular.eot");
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Regular.eot?#iefix")
-      format("embedded-opentype"),
-    url("../../public/fonts/yekan/woff2/YekanBakhFaNum-Regular.woff2")
-      format("woff2"),
-    url("../../public/fonts/yekan/woff/YekanBakhFaNum-Regular.woff")
-      format("woff"),
-    url("../../public/fonts/yekan/ttf/YekanBakhFaNum-Regular.ttf")
-      format("truetype");
-  font-weight: normal;
+  font-family: IRANYekanXFaNum;
   font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Yekan Bakh FaNum";
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Medium.eot");
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Medium.eot?#iefix")
-      format("embedded-opentype"),
-    url("../../public/fonts/yekan/woff2/YekanBakhFaNum-Medium.woff2")
-      format("woff2"),
-    url("../../public/fonts/yekan/woff/YekanBakhFaNum-Medium.woff")
-      format("woff"),
-    url("../../public/fonts/yekan/ttf/YekanBakhFaNum-Medium.ttf")
-      format("truetype");
   font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Yekan Bakh FaNum";
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Bold.eot");
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Bold.eot?#iefix")
-      format("embedded-opentype"),
-    url("../../public/fonts/yekan/woff2/YekanBakhFaNum-Bold.woff2")
-      format("woff2"),
-    url("../../public/fonts/yekan/woff/YekanBakhFaNum-Bold.woff") format("woff"),
-    url("../../public/fonts/yekan/ttf/YekanBakhFaNum-Bold.ttf")
-      format("truetype");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Yekan Bakh FaNum";
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Heavy.eot");
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Heavy.eot?#iefix")
-      format("embedded-opentype"),
-    url("../../public/fonts/yekan/woff2/YekanBakhFaNum-Heavy.woff2")
-      format("woff2"),
-    url("../../public/fonts/yekan/woff/YekanBakhFaNum-Heavy.woff")
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Medium.woff")
       format("woff"),
-    url("../../public/fonts/yekan/ttf/YekanBakhFaNum-Heavy.ttf")
-      format("truetype");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Medium.woff2")
+      format("woff2");
 }
 
 @font-face {
-  font-family: "Yekan Bakh FaNum Fat";
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Fat.eot");
-  src: url("../../public/fonts/yekan/eot/YekanBakhFaNum-Fat.eot?#iefix")
-      format("embedded-opentype"),
-    url("../../public/fonts/yekan/woff2/YekanBakhFaNum-Fat.woff2")
-      format("woff2"),
-    url("../../public/fonts/yekan/woff/YekanBakhFaNum-Fat.woff") format("woff"),
-    url("../../public/fonts/yekan/ttf/YekanBakhFaNum-Fat.ttf")
-      format("truetype");
-  font-weight: 900;
+  font-family: IRANYekanXFaNum;
   font-style: normal;
-  font-display: swap;
+  font-weight: 600;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-DemiBold.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-DemiBold.woff2")
+      format("woff2");
+}
+
+@font-face {
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
+  font-weight: 800;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-ExtraBold.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-ExtraBold.woff2")
+      format("woff2");
+}
+
+@font-face {
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
+  font-weight: 900;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Black.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Black.woff2")
+      format("woff2");
+}
+@font-face {
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
+  font-weight: 950;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-ExtraBlack.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-ExtraBlack.woff2")
+      format("woff2");
+}
+
+@font-face {
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
+  font-weight: 1000;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Heavy.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Heavy.woff2")
+      format("woff2");
+}
+
+@font-face {
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
+  font-weight: bold;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Bold.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Bold.woff2")
+      format("woff2");
+}
+
+@font-face {
+  font-family: IRANYekanXFaNum;
+  font-style: normal;
+  font-weight: normal;
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Regular.woff")
+      format("woff"),
+    url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Regular.woff2")
+      format("woff2");
+}
+
+@font-face {
+  font-family: "IRANYekanXVFaNumVF";
+  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXVFaNumVF.woff")
+      format("woff-variations"),
+    /* will be the standard and works in Safari now */
+      url("../../public/fonts/IranYekanX/woff/IRANYekanXVFaNumVF.woff")
+      format("woff");
+  /* for the other supporting browsers */
+  font-weight: 100 1000;
+  font-display: fallback;
 }
 
 @font-face {
@@ -362,7 +381,7 @@
 }
 
 * {
-  font-family: "Yekan Bakh FaNum", Poppins !important;
+  font-family: IRANYekanXVFaNumVF, IRANYekanXFaNum, Poppins !important;
 }
 
 :root {

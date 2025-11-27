@@ -5,7 +5,7 @@ export const fetchDocs = createAsyncThunk(
     'docs/fetchDocs',
     async (parameters, thunkAPI) => {
         try {
-            const res = await SP_fetch('Report_Courses', parameters)
+            const res = await SP_fetch('Courses_List', parameters)
             console.log(res.Data.Dataset)
             return res.Data.Dataset
         } catch (err) {
