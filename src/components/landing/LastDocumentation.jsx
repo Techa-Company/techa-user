@@ -14,7 +14,7 @@ import DocCard from '../docs/DocCard';
 
 
 
-const DocumentationSection = () => {
+const LastDocumentation = () => {
 
 
 
@@ -77,4 +77,4 @@ const DocumentationSection = () => {
     )
 }
 
-export default DocumentationSection
+export default LastDocumentation

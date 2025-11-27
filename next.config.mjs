@@ -3,7 +3,7 @@ const nextConfig = {
   env: {
     TLS_REJECT_UNAUTHORIZED: "0",
   },
-   webpack: (config) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.worker\.js$/,
       use: { loader: "worker-loader" },
@@ -22,6 +22,9 @@ const nextConfig = {
         permanent: true,
       },
     ];
+  },
+  images: {
+    domains: ['api.techa.me'],
   },
 };
 

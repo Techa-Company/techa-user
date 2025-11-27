@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
 import cartReducer from '../features/cart/cartSlice';
 import docsReducer from "../features/main/docs/docsSlice"
+import blogsReducer from "../features/main/blog/blogsSlice"
 import contentsReducer from "../features/main/contents/contentsSlice"
 import exercisesReducer from "../features/main/exercises/exercisesSlice"
 import userRedcer from "../features/account/user/UserSlice"
@@ -14,6 +15,7 @@ export const store = configureStore({
         auth: authReducer,
         user: userRedcer,
         docs: docsReducer,
+        blogs: blogsReducer,
         contents: contentsReducer,
         exercises: exercisesReducer,
         newsletter: newsletterReducer,

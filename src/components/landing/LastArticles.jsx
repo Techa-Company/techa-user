@@ -11,118 +11,17 @@ import 'swiper/css/navigation';
 // import required modules
 import { Autoplay, Navigation } from 'swiper/modules';
 import { BlogCard } from '../blog/BlogCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBlogs } from '../../features/main/blog/blogsActions';
 
 const LastArticles = () => {
-    // const [courses, setCourses] = useState([]);
-    // const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
-    //     fetch("https://api.techa.me/api/Course")
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             if (data.IsSuccess) {
-    //                 setCourses(data.Data.filter(course => !course.Disabled));
-    //             }
-    //             setLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching courses:", error);
-    //             setLoading(false);
-    //         });
-    // }, []);
-
-    const posts = [
-
-        {
-            id: 1,
-            slug: 'react-optimization-tips',
-            title: 'تکنیک‌های بهینه‌سازی React.js',
-            excerpt: 'بهترین روش‌ها برای بهینه‌سازی عملکرد برنامه‌های React.js',
-            content: '...محتوا کامل مقاله...',
-            category: 'تکنولوژی',
-            author: 'رامین جوشنگ',
-            date: '1403/03/20',
-            imageUrl: '/images/blog-1.png',
-            likes: 30,
-            saves: 12,
-            shares: 5,
-            comments: [
-                { id: 1, user: 'کاربر۲', text: 'بسیار مفید بود!', date: '1403/03/21' }
-            ]
-        },
-        {
-            id: 2,
-            slug: 'introduction-to-graphql',
-            title: 'آشنایی با GraphQL',
-            excerpt: 'راهنمای جامع برای استفاده از GraphQL در برنامه‌های مدرن',
-            content: '...محتوا کامل مقاله...',
-            category: 'تکنولوژی',
-            author: 'رامین جوشنگ',
-            date: '1403/04/01',
-            imageUrl: '/images/blog-1.png',
-            likes: 45,
-            saves: 18,
-            shares: 10,
-            comments: [
-                { id: 1, user: 'کاربر۳', text: 'خیلی آموزنده بود.', date: '1403/04/02' }
-            ]
-        },
-        {
-            id: 3,
-            slug: 'best-javascript-libraries',
-            title: 'بهترین کتابخانه‌های JavaScript',
-            excerpt: 'معرفی کتابخانه‌های کاربردی و محبوب JavaScript',
-            content: '...محتوا کامل مقاله...',
-            category: 'تکنولوژی',
-            author: 'رامین جوشنگ',
-            date: '1403/05/10',
-            imageUrl: '/images/blog-1.png',
-            likes: 50,
-            saves: 20,
-            shares: 15,
-            comments: [
-                { id: 1, user: 'کاربر۴', text: 'عالی بود!', date: '1403/05/11' }
-            ]
-        },
-        {
-            id: 4,
-            slug: 'advanced-software-testing-methods',
-            title: 'روش‌های پیشرفته تست نرم‌افزار',
-            excerpt: 'راهنمای کامل برای تست نرم‌افزار با استفاده از ابزارهای پیشرفته',
-            content: '...محتوا کامل مقاله...',
-            category: 'تکنولوژی',
-            author: 'رامین جوشنگ',
-            date: '1403/06/05',
-            imageUrl: '/images/blog-1.png',
-            likes: 35,
-            saves: 15,
-            shares: 7,
-            comments: [
-                { id: 1, user: 'کاربر۵', text: 'خیلی خوب توضیح داده شده بود.', date: '1403/06/06' }
-            ]
-        },
-        {
-            id: 5,
-            slug: 'introduction-to-docker',
-            title: 'معرفی Docker و مزایای آن',
-            excerpt: 'راهنمای کامل برای استفاده از Docker در پروژه‌های نرم‌افزاری',
-            content: '...محتوا کامل مقاله...',
-            category: 'تکنولوژی',
-            author: 'رامین جوشنگ',
-            date: '1403/07/15',
-            imageUrl: '/images/blog-1.png',
-            likes: 40,
-            saves: 17,
-            shares: 8,
-            comments: [
-                { id: 1, user: 'کاربر۶', text: 'اطلاعات مفیدی بود.', date: '1403/07/16' }
-            ]
-        }
-
-
-    ];
-
-
+    const { loading, blogs } = useSelector(state => state.blogs);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchBlogs({ "Take": 6 }));
+    }, []);
+    console.log(blogs)
 
     return (
         <div className="mt-20">
@@ -144,7 +43,7 @@ const LastArticles = () => {
                         </span>
                     </div>
                 </div>
-                {posts.length === 0 ? (
+                {blogs.length === 0 ? (
                     <div className="flex justify-center items-center h-64">
                         <div className="loader"></div>
                     </div>
@@ -186,9 +85,9 @@ const LastArticles = () => {
                             modules={[Autoplay, Navigation]}
                             className="mySwiper"
                         >
-                            {posts.map((post, index) => {
+                            {blogs.map((post, index) => {
                                 return (
-                                    <SwiperSlide key={post.id} className="swiper-slide">
+                                    <SwiperSlide key={post.Id} className="swiper-slide">
                                         <BlogCard
                                             post={post}
                                             index={index}

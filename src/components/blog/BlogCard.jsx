@@ -24,8 +24,8 @@ export const BlogCard = ({ post, index }) => {
                 />
 
                 <Image
-                    src={post.imageUrl}
-                    alt={post.title}
+                    src={post.ThumbnailUrl}
+                    alt={post.Title}
                     fill
                     className="object-cover transform transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -39,7 +39,7 @@ export const BlogCard = ({ post, index }) => {
                 >
                     <span className="bg-emerald-500/90 backdrop-blur text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg flex items-center gap-2">
                         <div className="w-2 h-2 bg-white rounded-full" />
-                        {post.category}
+                        {post.CategoryName}
                     </span>
                 </motion.div>
             </div>
@@ -51,12 +51,18 @@ export const BlogCard = ({ post, index }) => {
                     <div className="flex items-center justify-between w-full gap-3">
                         <div className="flex items-center gap-2">
                             <User className="w-5 h-5 stroke-2" />
-                            <span className="font-medium">{post.author}</span>
+                            <span className="font-medium">{post.Author}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             {/* <div className="w-1 h-1 bg-current rounded-full" /> */}
                             <Clock className="w-5 h-5" />
-                            <span>{post.date}</span>
+                            <span>
+                                {new Date(post.PublishedAt).toLocaleDateString('fa-IR', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                })}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -66,18 +72,18 @@ export const BlogCard = ({ post, index }) => {
                     className="text-2xl font-bold text-slate-800 dark:text-white hover:text-emerald-500 transition-colors"
                     whileHover={{ x: 5 }}
                 >
-                    {post.title}
+                    {post.Title}
                 </motion.h3>
 
                 {/* Excerpt */}
                 <p className="text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">
-                    {post.excerpt}
+                    {post.Summary}
                 </p>
 
                 {/* Action Buttons */}
                 <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-5">
                     <Link
-                        href={`/blog/${post.slug}`}
+                        href={`https://blog.techa.me/blog/${post.Slug}`}
 
                     >
                         <motion.button

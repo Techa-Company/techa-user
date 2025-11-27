@@ -167,7 +167,7 @@ const Header = () => {
                       className={`font-normal text-sm ${pathname.startsWith("/blog") ? "text-[#7AE36A]" : "text-white"
                         }`}
                       onClick={() => setIsMenuOpen(false)}
-                      href="/blog"
+                      href="https://blog.techa.me"
                     >
                       بلاگ
                     </Link>

@@ -8,7 +8,7 @@ import Poster from "../components/landing/Poster";
 import SampleEditor from "../components/landing/SampleEditors";
 import Certificate from "../components/landing/Certificate";
 import Roadmap from "../components/landing/Roadmap";
-import DocumentationSection from "../components/landing/DocumentationSection";
+import LastDocumentation from "../components/landing/LastDocumentation";
 import LevelAssessment from "../components/landing/LevelAssessment";
 import Pricing from "../components/landing/Pricing";
 
@@ -21,7 +21,7 @@ export default function Home() {
       {/* <LastCourses /> */}
       <Roadmap />
       {/* <Pricing /> */}
-      <DocumentationSection />
+      <LastDocumentation />
       <CourseBenefits />
       <Certificate />
       <Internship />
