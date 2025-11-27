@@ -1,10 +1,8 @@
 "use client";
+
 import { Monaco, Editor as MonacoEditor } from "@monaco-editor/react";
-import { useEffect, useState, useCallback, useRef } from "react";
-import {
-  configureMonacoTailwindcss,
-  tailwindcssData,
-} from "monaco-tailwindcss";
+import { useEffect, useState } from "react";
+import { configureMonacoTailwindcss } from "monaco-tailwindcss";
 
 interface MonacoEditorComponentProps {
   code: string;
@@ -18,7 +16,6 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
   const [editorInstance, setEditorInstance] = useState<Monaco | null>(null);
 
   useEffect(() => {
-    // Client-side only code
     if (typeof window !== "undefined") {
       window.MonacoEnvironment = {
         getWorker(moduleId, label) {
@@ -32,9 +29,7 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
                   import.meta.url
                 )
               );
-            case "handlebars":
             case "html":
-            case "razor":
               return new Worker(
                 new URL(
                   "monaco-editor/esm/vs/language/html/html.worker",
@@ -72,44 +67,26 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
   }, []);
 
   const onMountTailwindInject = (editor: Monaco) => {
-    console.log(editor);
-    editor.languages.css.cssDefaults.setOptions({
-      data: {
-        dataProviders: {
-          tailwindcssData,
-        },
-      },
-    });
-
+    // فقط configureMonacoTailwindcss را فراخوانی کن
     configureMonacoTailwindcss(editor);
 
-    // Save the editor instance to state
     setEditorInstance(editor);
   };
 
   return (
-    <div className={`w-full relative block h-full`}>
+    <div className="w-full h-full relative">
       <MonacoEditor
         value={code}
         options={{
-          quickSuggestions: {
-            other: true,
-            comments: true,
-            strings: true,
-          },
-          inlineSuggest: {
-            enabled: true,
-          },
+          quickSuggestions: { other: true, comments: true, strings: true },
+          inlineSuggest: { enabled: true },
           contextmenu: true,
         }}
-        onChange={(e) => {
-          setCode(e as string);
-        }}
+        onChange={(e) => setCode(e || "")}
         beforeMount={onMountTailwindInject}
         language="javascript"
-        defaultLanguage="javascript"
         theme="vs-dark"
-        className={" h-full"}
+        className="h-full"
       />
     </div>
   );
