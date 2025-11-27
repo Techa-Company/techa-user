@@ -23,9 +23,6 @@ const nextConfig = {
       },
     ];
   },
-  images: {
-    domains: ['api.techa.me'],
-  },
 };
 
 export default nextConfig;
