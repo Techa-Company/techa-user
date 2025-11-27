@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const Internship = () => {
     return (
-        <div className="mt-28 bg-[#e0f5f5] py-10">
+        <div className="mt-10 bg-[#e0f5f5] py-10">
             <div className="container mx-auto px-5 xl:px-20">
                 <div className="grid lg:grid-cols-2 gap-20 items-center">
                     <div className='text-[#042A1B]'>

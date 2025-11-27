@@ -83,7 +83,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="pt-40 sm:pt-20 pb-14 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-10 lg:gap-15">
+        <div className="pt-40 sm:pt-20 pb-14 grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-10 lg:gap-15">
           <div className="">
             <Link href="/">
               <Image

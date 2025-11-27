@@ -21,7 +21,7 @@ const DocumentationSection = () => {
     const { loading, docs } = useSelector(state => state.docs);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchDocs());
+        dispatch(fetchDocs({ "Take": 3 }));
     }, []);
 
 
