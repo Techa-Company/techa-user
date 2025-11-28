@@ -49,36 +49,49 @@ jobs:
     needs: build
     runs-on: self-hosted
     
+    # اینجا مشخص می‌کنیم که از PowerShell استفاده کند
     defaults:
       run:
-        shell: bash
+        shell: pwsh
 
     steps:
+      # 1. پاک کردن فایل‌های قبلی (معادل rm -rf)
       - name: Clean working directory
-        run: rm -rf ./*
+        run: |
+          Get-ChildItem -Path . -Recurse | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+          Write-Host "Directory Cleaned"
 
+      # 2. دانلود فایل‌های بیلد شده
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: nextjs-build
           path: .
 
+      # 3. اجرای پروژه با PM2 (دستورات مخصوص پاورشل)
       - name: Restart PM2
         run: |
-          APP_NAME="next-app"
+          $appName = "next-app"
           
-          # نصب PM2 اگر وجود ندارد
-          if ! command -v pm2 &> /dev/null; then
+          # تنظیم پورت به روش پاورشل
+          $env:PORT = "3000"
+          
+          # نصب PM2 اگر نصب نیست
+          if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
+              Write-Host "Installing PM2..."
               npm install -g pm2
-          fi
+          }
 
-          if pm2 list | grep -q "$APP_NAME"; then
-            echo "App is running, reloading..."
-            pm2 reload $APP_NAME
-          else
-            echo "App is not running, starting..."
-            # پورت 3000
-            PORT=3000 pm2 start server.js --name "$APP_NAME"
-          fi
+          # چک کردن اینکه آیا برنامه از قبل در حال اجراست یا نه
+          $pm2List = pm2 list
+          if ($pm2List | Select-String $appName) {
+              Write-Host "App is running, reloading..."
+              pm2 reload $appName --update-env
+          } else {
+              Write-Host "App is not running, starting..."
+              # اجرای فایل server.js
+              pm2 start server.js --name $appName
+          }
           
+          # ذخیره وضعیت برای ریستارت سرور
           pm2 save
