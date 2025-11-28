@@ -45,21 +45,23 @@ jobs:
           path: deploy-package/
           retention-days: 1
 
-  deploy:
+    deploy:
     needs: build
     runs-on: self-hosted
     
-    # اینجا مشخص می‌کنیم که از PowerShell استفاده کند
+    # تغییر مهم: استفاده از powershell به جای pwsh
     defaults:
       run:
-        shell: pwsh
+        shell: powershell
 
     steps:
-      # 1. پاک کردن فایل‌های قبلی (معادل rm -rf)
+      # 1. پاک کردن فایل‌های قبلی
+      # نکته: اگر فایل‌ها توسط PM2 قفل شده باشند، ممکن است خطا بدهد
+      # دستور زیر سعی می‌کند پاک کند ولی اگر خطایی بود نادیده می‌گیرد تا پروسه متوقف نشود
       - name: Clean working directory
         run: |
-          Get-ChildItem -Path . -Recurse | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
-          Write-Host "Directory Cleaned"
+          Remove-Item * -Recurse -Force -ErrorAction SilentlyContinue
+          Write-Host "Cleaning attempted."
 
       # 2. دانلود فایل‌های بیلد شده
       - name: Download Build Artifact
@@ -68,30 +70,32 @@ jobs:
           name: nextjs-build
           path: .
 
-      # 3. اجرای پروژه با PM2 (دستورات مخصوص پاورشل)
+      # 3. اجرای پروژه با PM2
       - name: Restart PM2
         run: |
           $appName = "next-app"
-          
-          # تنظیم پورت به روش پاورشل
           $env:PORT = "3000"
           
-          # نصب PM2 اگر نصب نیست
+          # چک کردن نصب PM2
           if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
-              Write-Host "Installing PM2..."
+              Write-Host "PM2 not found. Installing..."
               npm install -g pm2
           }
 
-          # چک کردن اینکه آیا برنامه از قبل در حال اجراست یا نه
-          $pm2List = pm2 list
-          if ($pm2List | Select-String $appName) {
-              Write-Host "App is running, reloading..."
+          # چک کردن وضعیت برنامه
+          $pm2Status = pm2 list
+          # دستور Select-String در پاورشل معادل grep است
+          if ($pm2Status | Select-String $appName) {
+              Write-Host "App is running. Reloading..."
+              # ریلود بدون دان‌تایم
               pm2 reload $appName --update-env
           } else {
-              Write-Host "App is not running, starting..."
-              # اجرای فایل server.js
+              Write-Host "App is not running. Starting..."
+              # استارت اولیه
               pm2 start server.js --name $appName
           }
+          
+          pm2 save
           
           # ذخیره وضعیت برای ریستارت سرور
           pm2 save
