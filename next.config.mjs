@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',  
+  output: 'standalone', 
+
   env: {
     TLS_REJECT_UNAUTHORIZED: "0",
   },
@@ -9,7 +10,6 @@ const nextConfig = {
       test: /\.worker\.js$/,
       use: { loader: "worker-loader" },
     });
-
     return config;
   },
   eslint: {
@@ -24,9 +24,7 @@ const nextConfig = {
       },
     ];
   },
- images: {
-    unoptimized: true,
-    
+  images: {
     remotePatterns: [
       {
         protocol: 'https',
@@ -39,4 +37,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-
