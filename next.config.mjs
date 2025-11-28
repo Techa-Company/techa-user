@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',  
-  images: {
-    unoptimized: true,
-  },
   env: {
     TLS_REJECT_UNAUTHORIZED: "0",
   },
@@ -27,7 +24,9 @@ const nextConfig = {
       },
     ];
   },
-   images: {
+ images: {
+    unoptimized: true,
+    
     remotePatterns: [
       {
         protocol: 'https',
@@ -37,7 +36,7 @@ const nextConfig = {
       },
     ],
   },
-
 };
 
 export default nextConfig;
+
