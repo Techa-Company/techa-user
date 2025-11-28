@@ -49,6 +49,10 @@ jobs:
     needs: build
     runs-on: self-hosted
     
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Clean working directory
         run: rm -rf ./*
@@ -63,6 +67,7 @@ jobs:
         run: |
           APP_NAME="next-app"
           
+          # نصب PM2 اگر وجود ندارد
           if ! command -v pm2 &> /dev/null; then
               npm install -g pm2
           fi
