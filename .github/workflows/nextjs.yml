@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  # === مرحله اول: بیلد روی سرورهای گیت‌هاب ===
   build:
     runs-on: ubuntu-latest
     steps:
@@ -25,16 +24,20 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      # آماده‌سازی فایل‌ها برای انتقال به سرور شما
-      # در حالت standalone پوشه‌های static و public داخل پکیج نیستند و باید دستی کپی شوند
       - name: Prepare Artifacts
         run: |
-          mkdir deploy-package
+          # ساخت پوشه مقصد به صورت کامل
+          mkdir -p deploy-package/.next
+
+          # کپی فایل‌های اصلی سرور
           cp -r .next/standalone/* deploy-package/
+
+          # کپی فایل‌های استاتیک (نکته: -p در mkdir بالا باعث می‌شود ارور ندهد)
           cp -r .next/static deploy-package/.next/static
+
+          # کپی فایل‌های عمومی
           cp -r public deploy-package/public
 
-      # آپلود فایل‌های نهایی برای استفاده در مرحله بعد
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -42,30 +45,24 @@ jobs:
           path: deploy-package/
           retention-days: 1
 
-  # === مرحله دوم: دیپلوی روی سرور شما ===
   deploy:
-    needs: build # منتظر می‌ماند تا بیلد تمام شود
-    runs-on: self-hosted # روی رانر سرور خودتان اجرا می‌شود
+    needs: build
+    runs-on: self-hosted
     
     steps:
-      # پاک کردن فایل‌های قبلی (اختیاری ولی تمیزتر است)
       - name: Clean working directory
         run: rm -rf ./*
 
-      # دانلود فایل‌هایی که در مرحله قبل ساخته شد
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: nextjs-build
           path: .
 
-      # اجرای پروژه با PM2
-      # در حالت standalone فایل اصلی server.js است نه npm start
       - name: Restart PM2
         run: |
           APP_NAME="next-app"
           
-          # اگر PM2 نصب نیست، نصبش کن (فقط بار اول)
           if ! command -v pm2 &> /dev/null; then
               npm install -g pm2
           fi
@@ -75,7 +72,7 @@ jobs:
             pm2 reload $APP_NAME
           else
             echo "App is not running, starting..."
-            # پورت را اینجا مشخص کنید (مثلا 3000)
+            # پورت 3000
             PORT=3000 pm2 start server.js --name "$APP_NAME"
           fi
           
