@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',  
+  images: {
+    unoptimized: true,
+  },
   env: {
     TLS_REJECT_UNAUTHORIZED: "0",
   },
