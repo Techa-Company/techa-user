@@ -1,4 +1,4 @@
-name: Build on GitHub, Deploy to Self-Hosted
+name: Build Standalone and Deploy
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
+  # === مرحله ۱: ساخت نسخه Standalone در سرورهای گیت‌هاب ===
   build:
     runs-on: ubuntu-latest
     steps:
@@ -24,78 +25,71 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Prepare Artifacts
+      # چیدمان فایل‌ها طوری که در سرور آماده اجرا باشند
+      - name: Prepare Standalone Artifact
         run: |
-          # ساخت پوشه مقصد به صورت کامل
-          mkdir -p deploy-package/.next
+          # ساخت پوشه نهایی
+          mkdir -p final-deploy/.next
+          
+          # کپی کردن فایل اجرایی و وابستگی‌های ضروری (این فایل‌ها خیلی سبک‌تر از node_modules کامل هستند)
+          cp -r .next/standalone/* final-deploy/
+          
+          # کپی کردن فایل‌های استاتیک (CSS/JS) به جای درست
+          cp -r .next/static final-deploy/.next/static
+          
+          # کپی کردن پوشه public (عکس‌ها و فونت‌ها)
+          cp -r public final-deploy/public
 
-          # کپی فایل‌های اصلی سرور
-          cp -r .next/standalone/* deploy-package/
-
-          # کپی فایل‌های استاتیک (نکته: -p در mkdir بالا باعث می‌شود ارور ندهد)
-          cp -r .next/static deploy-package/.next/static
-
-          # کپی فایل‌های عمومی
-          cp -r public deploy-package/public
-
-      - name: Upload Build Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nextjs-build
-          path: deploy-package/
+          name: app-package
+          path: final-deploy/
           retention-days: 1
 
+  # === مرحله ۲: دیپلوی در سرور ویندوزی شما ===
   deploy:
     needs: build
     runs-on: self-hosted
     
-    # تغییر مهم: استفاده از powershell به جای pwsh
     defaults:
       run:
         shell: powershell
 
     steps:
-      # 1. پاک کردن فایل‌های قبلی
-      # نکته: اگر فایل‌ها توسط PM2 قفل شده باشند، ممکن است خطا بدهد
-      # دستور زیر سعی می‌کند پاک کند ولی اگر خطایی بود نادیده می‌گیرد تا پروسه متوقف نشود
-      - name: Clean working directory
+      # پاک کردن فایل‌های قبلی
+      - name: Clean Destination
         run: |
           Remove-Item * -Recurse -Force -ErrorAction SilentlyContinue
-          Write-Host "Cleaning attempted."
+          Write-Host "Cleaned previous files."
 
-      # 2. دانلود فایل‌های بیلد شده
-      - name: Download Build Artifact
+      # دانلود پکیج آماده (شامل server.js و فایل‌های لازم)
+      - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: nextjs-build
+          name: app-package
           path: .
 
-      # 3. اجرای پروژه با PM2
+      # اجرای برنامه (بدون npm install)
       - name: Restart PM2
         run: |
           $appName = "next-app"
           $env:PORT = "3000"
           
-          # چک کردن نصب PM2
+          # نصب PM2 (فقط بار اول نیاز است)
           if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
-              Write-Host "PM2 not found. Installing..."
               npm install -g pm2
           }
 
-          # چک کردن وضعیت برنامه
-          $pm2Status = pm2 list
-          # دستور Select-String در پاورشل معادل grep است
-          if ($pm2Status | Select-String $appName) {
-              Write-Host "App is running. Reloading..."
-              # ریلود بدون دان‌تایم
+          # استارت یا ریلود
+          if (pm2 list | Select-String $appName) {
+              Write-Host "Reloading app..."
               pm2 reload $appName --update-env
           } else {
-              Write-Host "App is not running. Starting..."
-              # استارت اولیه
+              Write-Host "Starting app..."
+              # نکته مهم: اینجا مستقیماً server.js را اجرا می‌کنیم
+              # چون تمام وابستگی‌ها داخلش باندل شده‌اند
               pm2 start server.js --name $appName
           }
           
-          pm2 save
-          
-          # ذخیره وضعیت برای ریستارت سرور
           pm2 save
