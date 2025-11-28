@@ -45,7 +45,7 @@ jobs:
           path: deploy-package/
           retention-days: 1
 
-    deploy:
+  deploy:
     needs: build
     runs-on: self-hosted
     
