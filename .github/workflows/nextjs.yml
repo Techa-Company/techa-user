@@ -57,38 +57,35 @@ jobs:
         shell: powershell
 
     steps:
-      # پاک کردن فایل‌های قبلی
       - name: Clean Destination
         run: |
           Remove-Item * -Recurse -Force -ErrorAction SilentlyContinue
           Write-Host "Cleaned previous files."
 
-      # دانلود پکیج آماده
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: app-package
           path: .
 
-      # اجرای برنامه با PM2
       - name: Restart PM2
         run: |
           $appName = "next-app"
           
-          # بررسی می‌کنیم آیا PM2 نصب است یا خیر (صرفا جهت اطلاع)
-          if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
-              Write-Error "PM2 is not installed on the server! Please install it manually using 'npm install -g pm2'."
-              exit 1
+          # تست می‌کنیم که آیا Node کلا نصب است یا نه
+          if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+             Write-Error "Node.js is NOT installed or not in PATH. Please install Node.js and Restart Runner Service."
+             exit 1
           }
 
-          # استارت یا ریلود
-          # نکته: در حالت Standalone فایل اصلی server.js است
-          if (pm2 list | Select-String $appName) {
+          # استفاده از npx به جای pm2 مستقیم
+          # npx به صورت خودکار pm2 را اجرا می‌کند حتی اگر در Path سراسری نباشد
+          if (npx pm2 list | Select-String $appName) {
               Write-Host "Reloading app..."
-              pm2 reload $appName --update-env
+              npx pm2 reload $appName --update-env
           } else {
               Write-Host "Starting app..."
-              pm2 start server.js --name $appName
+              npx pm2 start server.js --name $appName
           }
           
-          pm2 save
+          npx pm2 save
