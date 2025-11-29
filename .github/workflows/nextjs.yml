@@ -24,12 +24,26 @@ jobs:
       - name: Build Project
         run: npm run build
 
+      # اصلاح شده: کپی دقیق تمام فایل‌های مورد نیاز
       - name: Prepare Standalone Artifact
         run: |
-          mkdir -p final-deploy/.next
+          # ساخت پوشه نهایی
+          mkdir -p final-deploy
+          
+          # ۱. کپی کردن محتویات اصلی standalone (شامل server.js و node_modules)
           cp -r .next/standalone/* final-deploy/
+          
+          # ۲. اطمینان از وجود پوشه .next در مقصد
+          mkdir -p final-deploy/.next
+          
+          # ۳. کپی کردن فایل‌های استاتیک (CSS/JS)
           cp -r .next/static final-deploy/.next/static
+          
+          # ۴. کپی کردن پوشه public
           cp -r public final-deploy/public
+          
+          # ۵. (نکته کلیدی) کپی کردن فایل BUILD_ID که برای اجرای سرور ضروری است
+          cp .next/BUILD_ID final-deploy/.next/BUILD_ID
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
