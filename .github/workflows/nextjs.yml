@@ -90,7 +90,7 @@ jobs:
           Expand-Archive -Path $ZipPath -DestinationPath $TargetFolder -Force
 
           # 3. ساخت web.config
-          $webConfig = @"
+           $webConfig = @"
           <configuration>
             <system.webServer>
               <rewrite>
@@ -98,8 +98,9 @@ jobs:
                   <rule name="NextJS_Proxy" stopProcessing="true">
                     <match url="(.*)" />
                     <conditions logicalGrouping="MatchAll">
+                      <!-- فقط اگر فایل فیزیکی (مثل عکس یا CSS) بود بفرست سمت IIS -->
+                      <!-- در غیر این صورت (حتی اگر پوشه بود) بفرست سمت Next.js -->
                       <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
-                      <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
                     </conditions>
                     <action type="Rewrite" url="http://localhost:3000/{R:1}" />
                   </rule>
@@ -112,6 +113,13 @@ jobs:
                   </hiddenSegments>
                 </requestFiltering>
               </security>
+              <!-- این بخش را هم اضافه کنید تا IIS گیج نشود -->
+              <defaultDocument>
+                <files>
+                  <clear />
+                  <add value="server.js" />
+                </files>
+              </defaultDocument>
             </system.webServer>
           </configuration>
           "@
