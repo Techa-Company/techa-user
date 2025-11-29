@@ -24,26 +24,31 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      # === تغییر اساسی: آماده‌سازی و زیپ کردن ===
+      # === اصلاح شده: زیپ کردن صحیح ===
       - name: Prepare and Zip Artifact
         run: |
-          # 1. ساخت پوشه static در مسیر standalone (نکست این کار را خودکار نمی‌کند)
+          # 1. ساخت پوشه static در مسیر standalone
           mkdir -p .next/standalone/.next/static
           
-          # 2. کپی فایل‌های استاتیک و عمومی به مسیر standalone
+          # 2. کپی فایل‌های استاتیک و عمومی
           cp -r .next/static/* .next/standalone/.next/static/
           cp -r public .next/standalone/public
           
-          # 3. وارد پوشه standalone می‌شویم و محتویات را زیپ می‌کنیم
-          # اینطوری ساختار فایل‌ها دقیقاً حفظ می‌شود
+          # 3. وارد پوشه standalone می‌شویم و زیپ می‌کنیم
           cd .next/standalone
-          zip -r ../../../app-package.zip .
+          
+          # نکته مهم: اینجا باید 2 مرحله برگردیم عقب (../../) تا فایل زیپ در ریشه پروژه بیفتد
+          zip -r ../../deploy-package.zip .
+
+      # برای اطمینان لیست فایل‌ها را چاپ می‌کنیم تا ببینیم فایل زیپ ساخته شده یا نه
+      - name: Check Zip File Exists
+        run: ls -lh deploy-package.zip
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-package-zip
-          path: app-package.zip
+          name: deploy-package
+          path: deploy-package.zip
           retention-days: 1
 
   deploy:
@@ -59,16 +64,16 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: app-package-zip
+          name: deploy-package
           path: .
 
       - name: Deploy to Server
         run: |
-          # --- تنظیم مسیر سایت ---
+          # مسیر سایت در سرور (حتماً چک کنید درست باشد)
           $TargetFolder = "C:\inetpub\wwwroot\next-app"
-          $ZipPath = ".\app-package.zip"
+          $ZipPath = ".\deploy-package.zip"
           
-          # توقف پروسه قبلی (اگر در حال اجراست)
+          # توقف PM2
           Write-Host "Stopping PM2..."
           if (Get-Command npx -ErrorAction SilentlyContinue) {
               npx pm2 stop next-app --silent
@@ -80,15 +85,15 @@ jobs:
               New-Item -ItemType Directory -Path $TargetFolder -Force
           }
 
-          # پاک کردن فایل‌های قبلی در مقصد
+          # پاک کردن فایل‌های قبلی (به جز web.config اگر نخواهیم پاک شود، ولی اینجا همه را پاک می‌کنیم)
           Write-Host "Cleaning destination..."
           Remove-Item "$TargetFolder\*" -Recurse -Force -ErrorAction SilentlyContinue
 
-          # باز کردن فایل زیپ در مقصد
+          # باز کردن زیپ
           Write-Host "Extracting Zip..."
           Expand-Archive -Path $ZipPath -DestinationPath $TargetFolder -Force
 
-          # تنظیم وب کانفیگ IIS
+          # ساخت web.config
           $webConfig = @"
           <configuration>
             <system.webServer>
@@ -116,13 +121,18 @@ jobs:
           "@
           Set-Content -Path "$TargetFolder\web.config" -Value $webConfig
 
-          # رفتن به پوشه و اجرا
+          # رفتن به پوشه سایت و اجرا
           Set-Location $TargetFolder
           
           Write-Host "Starting app..."
           $env:PORT = 3000
           
-          # اجرا با PM2
+          # نصب وابستگی‌های احتمالی زمان اجرا (معمولاً در standalone نیاز نیست ولی محض اطمینان)
+          # npx pm2 start server.js --name "next-app"
+          # دستور زیر مطمئن‌تر است:
+          node server.js > app.log 2>&1 &
+          
+          # اما برای استفاده از PM2:
           npx pm2 start server.js --name "next-app"
           npx pm2 save
           
