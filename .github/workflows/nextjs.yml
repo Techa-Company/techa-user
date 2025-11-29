@@ -63,32 +63,31 @@ jobs:
           Remove-Item * -Recurse -Force -ErrorAction SilentlyContinue
           Write-Host "Cleaned previous files."
 
-      # دانلود پکیج آماده (شامل server.js و فایل‌های لازم)
+      # دانلود پکیج آماده
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: app-package
           path: .
 
-      # اجرای برنامه (بدون npm install)
+      # اجرای برنامه با PM2
       - name: Restart PM2
         run: |
           $appName = "next-app"
-          $env:PORT = "3000"
           
-          # نصب PM2 (فقط بار اول نیاز است)
+          # بررسی می‌کنیم آیا PM2 نصب است یا خیر (صرفا جهت اطلاع)
           if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
-              npm install -g pm2
+              Write-Error "PM2 is not installed on the server! Please install it manually using 'npm install -g pm2'."
+              exit 1
           }
 
           # استارت یا ریلود
+          # نکته: در حالت Standalone فایل اصلی server.js است
           if (pm2 list | Select-String $appName) {
               Write-Host "Reloading app..."
               pm2 reload $appName --update-env
           } else {
               Write-Host "Starting app..."
-              # نکته مهم: اینجا مستقیماً server.js را اجرا می‌کنیم
-              # چون تمام وابستگی‌ها داخلش باندل شده‌اند
               pm2 start server.js --name $appName
           }
           
