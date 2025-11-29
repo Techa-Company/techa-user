@@ -24,30 +24,26 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      # اصلاح شده: کپی دقیق تمام فایل‌های مورد نیاز
-      - name: Prepare Standalone Artifact
+      # === تغییر اساسی: آماده‌سازی و زیپ کردن ===
+      - name: Prepare and Zip Artifact
         run: |
-          # ساخت پوشه نهایی
-          mkdir -p final-deploy
+          # 1. ساخت پوشه static در مسیر standalone (نکست این کار را خودکار نمی‌کند)
+          mkdir -p .next/standalone/.next/static
           
-          # 1. کپی کردن کل محتویات standalone (با استفاده از /. همه فایل‌های مخفی مثل .next هم کپی می‌شوند)
-          cp -r .next/standalone/. final-deploy/
+          # 2. کپی فایل‌های استاتیک و عمومی به مسیر standalone
+          cp -r .next/static/* .next/standalone/.next/static/
+          cp -r public .next/standalone/public
           
-          # 2. کپی کردن فایل‌های استاتیک (چون در standalone نیستند)
-          # پوشه مقصد باید وجود داشته باشد (از مرحله قبل آمده)
-          mkdir -p final-deploy/.next/static
-          
-          # کپی محتویات استاتیک به جای درست
-          cp -r .next/static/* final-deploy/.next/static/
-          
-          # 3. کپی کردن پوشه public
-          cp -r public final-deploy/public
+          # 3. وارد پوشه standalone می‌شویم و محتویات را زیپ می‌کنیم
+          # اینطوری ساختار فایل‌ها دقیقاً حفظ می‌شود
+          cd .next/standalone
+          zip -r ../../../app-package.zip .
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-package
-          path: final-deploy/
+          name: app-package-zip
+          path: app-package.zip
           retention-days: 1
 
   deploy:
@@ -59,43 +55,41 @@ jobs:
         shell: powershell
 
     steps:
-      # 1. دانلود فایل‌ها در پوشه موقت رانر
+      # دانلود فایل زیپ
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: app-package
-          path: ./temp-artifact
+          name: app-package-zip
+          path: .
 
-      # 2. انتقال فایل‌ها به پوشه اصلی IIS و تنظیمات نهایی
-      - name: Deploy to IIS Folder
+      - name: Deploy to Server
         run: |
-          # --- تنظیمات: مسیر سایت در سرور را اینجا وارد کنید ---
-          $TargetFolder = "C:\inetpub\wwwroot\next-app" 
-          $AppName = "next-app"
+          # --- تنظیم مسیر سایت ---
+          $TargetFolder = "C:\inetpub\wwwroot\next-app"
+          $ZipPath = ".\app-package.zip"
           
-          # اگر پوشه مقصد وجود ندارد، آن را بساز
-          if (-not (Test-Path -Path $TargetFolder)) {
+          # توقف پروسه قبلی (اگر در حال اجراست)
+          Write-Host "Stopping PM2..."
+          if (Get-Command npx -ErrorAction SilentlyContinue) {
+              npx pm2 stop next-app --silent
+              npx pm2 delete next-app --silent
+          }
+
+          # ساخت پوشه اگر نیست
+          if (-not (Test-Path $TargetFolder)) {
               New-Item -ItemType Directory -Path $TargetFolder -Force
           }
 
-          # قبل از کپی، باید پروسه قبلی را متوقف کنیم تا فایل‌ها قفل نباشند
-          Write-Host "Stopping existing PM2 process..."
-          npx pm2 stop $AppName --silent
-          npx pm2 delete $AppName --silent
-          
-          # پاک کردن فایل‌های قدیمی در مقصد (به جز web.config اگر بخواهید بماند)
-          Write-Host "Cleaning destination folder..."
+          # پاک کردن فایل‌های قبلی در مقصد
+          Write-Host "Cleaning destination..."
           Remove-Item "$TargetFolder\*" -Recurse -Force -ErrorAction SilentlyContinue
 
-          # کپی کردن فایل‌های جدید از پوشه موقت به پوشه IIS
-          Write-Host "Copying new files to IIS folder..."
-          Copy-Item -Path ".\temp-artifact\*" -Destination $TargetFolder -Recurse -Force
+          # باز کردن فایل زیپ در مقصد
+          Write-Host "Extracting Zip..."
+          Expand-Archive -Path $ZipPath -DestinationPath $TargetFolder -Force
 
-          # رفتن به مسیر اصلی سایت
-          Set-Location $TargetFolder
-
-          # ساخت فایل web.config در مسیر اصلی
-          $content = @"
+          # تنظیم وب کانفیگ IIS
+          $webConfig = @"
           <configuration>
             <system.webServer>
               <rewrite>
@@ -120,13 +114,16 @@ jobs:
             </system.webServer>
           </configuration>
           "@
-          Set-Content -Path ".\web.config" -Value $content
-          Write-Host "web.config created."
+          Set-Content -Path "$TargetFolder\web.config" -Value $webConfig
 
-          # اجرای مجدد برنامه با PM2 از داخل پوشه اصلی
-          Write-Host "Starting app with PM2..."
-          $env:PORT = "3000"
-          npx pm2 start server.js --name $AppName
+          # رفتن به پوشه و اجرا
+          Set-Location $TargetFolder
+          
+          Write-Host "Starting app..."
+          $env:PORT = 3000
+          
+          # اجرا با PM2
+          npx pm2 start server.js --name "next-app"
           npx pm2 save
           
-          Write-Host "Deployment Completed Successfully!"
+          Write-Host "Done!"
