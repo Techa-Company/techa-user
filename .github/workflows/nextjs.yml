@@ -68,18 +68,43 @@ jobs:
           name: app-package
           path: .
 
+      # === بخش جدید: ساخت فایل web.config برای IIS ===
+      - name: Create web.config
+        run: |
+          $content = @"
+          <configuration>
+            <system.webServer>
+              <rewrite>
+                <rules>
+                  <rule name="NextJS_Proxy" stopProcessing="true">
+                    <match url="(.*)" />
+                    <conditions logicalGrouping="MatchAll">
+                      <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                      <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+                    </conditions>
+                    <action type="Rewrite" url="http://localhost:3000/{R:1}" />
+                  </rule>
+                </rules>
+              </rewrite>
+              <security>
+                <requestFiltering>
+                  <hiddenSegments>
+                    <add segment="node_modules" />
+                  </hiddenSegments>
+                </requestFiltering>
+              </security>
+            </system.webServer>
+          </configuration>
+          "@
+          Set-Content -Path ".\web.config" -Value $content
+          Write-Host "web.config created successfully."
+
+      # === اجرای برنامه با PM2 (npx) ===
       - name: Restart PM2
         run: |
           $appName = "next-app"
           
-          # تست می‌کنیم که آیا Node کلا نصب است یا نه
-          if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
-             Write-Error "Node.js is NOT installed or not in PATH. Please install Node.js and Restart Runner Service."
-             exit 1
-          }
-
-          # استفاده از npx به جای pm2 مستقیم
-          # npx به صورت خودکار pm2 را اجرا می‌کند حتی اگر در Path سراسری نباشد
+          # اگر PM2 در مسیر نبود با npx اجراش کن
           if (npx pm2 list | Select-String $appName) {
               Write-Host "Reloading app..."
               npx pm2 reload $appName --update-env
@@ -87,5 +112,4 @@ jobs:
               Write-Host "Starting app..."
               npx pm2 start server.js --name $appName
           }
-          
           npx pm2 save
