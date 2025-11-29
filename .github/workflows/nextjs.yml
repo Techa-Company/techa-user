@@ -30,20 +30,18 @@ jobs:
           # ساخت پوشه نهایی
           mkdir -p final-deploy
           
-          # ۱. کپی کردن محتویات اصلی standalone (شامل server.js و node_modules)
-          cp -r .next/standalone/* final-deploy/
+          # 1. کپی کردن کل محتویات standalone (با استفاده از /. همه فایل‌های مخفی مثل .next هم کپی می‌شوند)
+          cp -r .next/standalone/. final-deploy/
           
-          # ۲. اطمینان از وجود پوشه .next در مقصد
-          mkdir -p final-deploy/.next
+          # 2. کپی کردن فایل‌های استاتیک (چون در standalone نیستند)
+          # پوشه مقصد باید وجود داشته باشد (از مرحله قبل آمده)
+          mkdir -p final-deploy/.next/static
           
-          # ۳. کپی کردن فایل‌های استاتیک (CSS/JS)
-          cp -r .next/static final-deploy/.next/static
+          # کپی محتویات استاتیک به جای درست
+          cp -r .next/static/* final-deploy/.next/static/
           
-          # ۴. کپی کردن پوشه public
+          # 3. کپی کردن پوشه public
           cp -r public final-deploy/public
-          
-          # ۵. (نکته کلیدی) کپی کردن فایل BUILD_ID که برای اجرای سرور ضروری است
-          cp .next/BUILD_ID final-deploy/.next/BUILD_ID
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
