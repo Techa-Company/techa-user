@@ -71,30 +71,25 @@ jobs:
           $TargetFolder = "C:\inetpub\wwwroot\next-app"
           $ZipPath = ".\deploy-package.zip"
           
-          # 1. توقف PM2 اگر قبلاً اجرا شده
+          # 1. تلاش برای بستن PM2 های قبلی
+          # نکته: اگر با یوزر جدید سرویس را اجرا کنید، اینجا دیگه ارور نمیده
           Write-Host "Stopping PM2..."
           if (Get-Command npx -ErrorAction SilentlyContinue) {
-              npx pm2 stop next-app --silent
-              npx pm2 delete next-app --silent
+              npx pm2 kill --silent
           }
 
-          # 2. آماده‌سازی پوشه مقصد
+          # 2. آماده‌سازی پوشه
           if (-not (Test-Path $TargetFolder)) {
               New-Item -ItemType Directory -Path $TargetFolder -Force
           }
 
-          # 3. پاک‌سازی فایل‌های قدیمی
           Write-Host "Cleaning destination..."
           Remove-Item "$TargetFolder\*" -Recurse -Force -ErrorAction SilentlyContinue
 
-          # 4. اکسترکت کردن فایل زیپ
           Write-Host "Extracting Zip..."
           Expand-Archive -Path $ZipPath -DestinationPath $TargetFolder -Force
-          
-          Set-Location $TargetFolder
-          npm install sharp --platform=win32 --arch=x64
-          
-          # 5. ساخت فایل web.config برای IIS
+
+          # 3. ساخت web.config
           $webConfig = @"
           <configuration>
             <system.webServer>
@@ -122,14 +117,23 @@ jobs:
           "@
           Set-Content -Path "$TargetFolder\web.config" -Value $webConfig
 
-          # 6. اجرای برنامه با PM2
           Set-Location $TargetFolder
           
+          # 4. حل مشکل کتابخانه Sharp (مهم برای ویندوز)
+          Write-Host "Reinstalling Sharp for Windows..."
+          # پاک کردن نسخه لینوکسی
+          if (Test-Path "node_modules\sharp") {
+              Remove-Item "node_modules\sharp" -Recurse -Force
+          }
+          # نصب نسخه ویندوزی
+          npm install sharp
+
+          # 5. اجرای برنامه
           Write-Host "Starting app..."
           $env:PORT = 3000
           
-          # دستور صحیح اجرا
-          npx pm2 start server.js --name "next-app"
+          # استفاده از pm2
+          npx pm2 start server.js --name "next-app" --update-env
           npx pm2 save
           
-          Write-Host "Deployment Finished Successfully!"
+          Write-Host "Deployment Completed!"
