@@ -75,7 +75,7 @@ jobs:
           # نکته: اگر با یوزر جدید سرویس را اجرا کنید، اینجا دیگه ارور نمیده
           Write-Host "Stopping PM2..."
           if (Get-Command npx -ErrorAction SilentlyContinue) {
-              npx pm2 kill --silent
+               pm2 kill --silent
           }
 
           # 2. آماده‌سازی پوشه
@@ -133,7 +133,7 @@ jobs:
           $env:PORT = 3000
           
           # استفاده از pm2
-          npx pm2 start server.js --name "next-app" --update-env
-          npx pm2 save
+          pm2 start server.js --name "next-app" --update-env
+          pm2 save
           
           Write-Host "Deployment Completed!"
