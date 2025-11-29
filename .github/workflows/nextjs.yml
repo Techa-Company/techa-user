@@ -60,7 +60,6 @@ jobs:
         shell: powershell
 
     steps:
-      # دانلود فایل زیپ
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
@@ -69,31 +68,30 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          # مسیر سایت در سرور (حتماً چک کنید درست باشد)
           $TargetFolder = "C:\inetpub\wwwroot\next-app"
           $ZipPath = ".\deploy-package.zip"
           
-          # توقف PM2
+          # 1. توقف PM2 اگر قبلاً اجرا شده
           Write-Host "Stopping PM2..."
           if (Get-Command npx -ErrorAction SilentlyContinue) {
               npx pm2 stop next-app --silent
               npx pm2 delete next-app --silent
           }
 
-          # ساخت پوشه اگر نیست
+          # 2. آماده‌سازی پوشه مقصد
           if (-not (Test-Path $TargetFolder)) {
               New-Item -ItemType Directory -Path $TargetFolder -Force
           }
 
-          # پاک کردن فایل‌های قبلی (به جز web.config اگر نخواهیم پاک شود، ولی اینجا همه را پاک می‌کنیم)
+          # 3. پاک‌سازی فایل‌های قدیمی
           Write-Host "Cleaning destination..."
           Remove-Item "$TargetFolder\*" -Recurse -Force -ErrorAction SilentlyContinue
 
-          # باز کردن زیپ
+          # 4. اکسترکت کردن فایل زیپ
           Write-Host "Extracting Zip..."
           Expand-Archive -Path $ZipPath -DestinationPath $TargetFolder -Force
 
-          # ساخت web.config
+          # 5. ساخت فایل web.config برای IIS
           $webConfig = @"
           <configuration>
             <system.webServer>
@@ -121,19 +119,14 @@ jobs:
           "@
           Set-Content -Path "$TargetFolder\web.config" -Value $webConfig
 
-          # رفتن به پوشه سایت و اجرا
+          # 6. اجرای برنامه با PM2
           Set-Location $TargetFolder
           
           Write-Host "Starting app..."
           $env:PORT = 3000
           
-          # نصب وابستگی‌های احتمالی زمان اجرا (معمولاً در standalone نیاز نیست ولی محض اطمینان)
-          # npx pm2 start server.js --name "next-app"
-          # دستور زیر مطمئن‌تر است:
-          node server.js > app.log 2>&1 &
-          
-          # اما برای استفاده از PM2:
+          # دستور صحیح اجرا
           npx pm2 start server.js --name "next-app"
           npx pm2 save
           
-          Write-Host "Done!"
+          Write-Host "Deployment Finished Successfully!"
