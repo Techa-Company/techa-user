@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  # === مرحله ۱: ساخت نسخه Standalone در سرورهای گیت‌هاب ===
   build:
     runs-on: ubuntu-latest
     steps:
@@ -25,19 +24,11 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      # چیدمان فایل‌ها طوری که در سرور آماده اجرا باشند
       - name: Prepare Standalone Artifact
         run: |
-          # ساخت پوشه نهایی
           mkdir -p final-deploy/.next
-          
-          # کپی کردن فایل اجرایی و وابستگی‌های ضروری (این فایل‌ها خیلی سبک‌تر از node_modules کامل هستند)
           cp -r .next/standalone/* final-deploy/
-          
-          # کپی کردن فایل‌های استاتیک (CSS/JS) به جای درست
           cp -r .next/static final-deploy/.next/static
-          
-          # کپی کردن پوشه public (عکس‌ها و فونت‌ها)
           cp -r public final-deploy/public
 
       - name: Upload Artifact
@@ -47,7 +38,6 @@ jobs:
           path: final-deploy/
           retention-days: 1
 
-  # === مرحله ۲: دیپلوی در سرور ویندوزی شما ===
   deploy:
     needs: build
     runs-on: self-hosted
@@ -57,20 +47,42 @@ jobs:
         shell: powershell
 
     steps:
-      - name: Clean Destination
-        run: |
-          Remove-Item * -Recurse -Force -ErrorAction SilentlyContinue
-          Write-Host "Cleaned previous files."
-
+      # 1. دانلود فایل‌ها در پوشه موقت رانر
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: app-package
-          path: .
+          path: ./temp-artifact
 
-      # === بخش جدید: ساخت فایل web.config برای IIS ===
-      - name: Create web.config
+      # 2. انتقال فایل‌ها به پوشه اصلی IIS و تنظیمات نهایی
+      - name: Deploy to IIS Folder
         run: |
+          # --- تنظیمات: مسیر سایت در سرور را اینجا وارد کنید ---
+          $TargetFolder = "C:\inetpub\wwwroot\next-app" 
+          $AppName = "next-app"
+          
+          # اگر پوشه مقصد وجود ندارد، آن را بساز
+          if (-not (Test-Path -Path $TargetFolder)) {
+              New-Item -ItemType Directory -Path $TargetFolder -Force
+          }
+
+          # قبل از کپی، باید پروسه قبلی را متوقف کنیم تا فایل‌ها قفل نباشند
+          Write-Host "Stopping existing PM2 process..."
+          npx pm2 stop $AppName --silent
+          npx pm2 delete $AppName --silent
+          
+          # پاک کردن فایل‌های قدیمی در مقصد (به جز web.config اگر بخواهید بماند)
+          Write-Host "Cleaning destination folder..."
+          Remove-Item "$TargetFolder\*" -Recurse -Force -ErrorAction SilentlyContinue
+
+          # کپی کردن فایل‌های جدید از پوشه موقت به پوشه IIS
+          Write-Host "Copying new files to IIS folder..."
+          Copy-Item -Path ".\temp-artifact\*" -Destination $TargetFolder -Recurse -Force
+
+          # رفتن به مسیر اصلی سایت
+          Set-Location $TargetFolder
+
+          # ساخت فایل web.config در مسیر اصلی
           $content = @"
           <configuration>
             <system.webServer>
@@ -97,19 +109,12 @@ jobs:
           </configuration>
           "@
           Set-Content -Path ".\web.config" -Value $content
-          Write-Host "web.config created successfully."
+          Write-Host "web.config created."
 
-      # === اجرای برنامه با PM2 (npx) ===
-      - name: Restart PM2
-        run: |
-          $appName = "next-app"
-          
-          # اگر PM2 در مسیر نبود با npx اجراش کن
-          if (npx pm2 list | Select-String $appName) {
-              Write-Host "Reloading app..."
-              npx pm2 reload $appName --update-env
-          } else {
-              Write-Host "Starting app..."
-              npx pm2 start server.js --name $appName
-          }
+          # اجرای مجدد برنامه با PM2 از داخل پوشه اصلی
+          Write-Host "Starting app with PM2..."
+          $env:PORT = "3000"
+          npx pm2 start server.js --name $AppName
           npx pm2 save
+          
+          Write-Host "Deployment Completed Successfully!"
