@@ -6,7 +6,7 @@ export const fetchContents = createAsyncThunk(
     'docs/fetchContents',
     async (parameters, thunkAPI) => {
         try {
-            const res = await SP_fetch('Report_Contents', parameters)
+            const res = await SP_fetch('Contents_List', parameters)
             return res.Data.Dataset
         } catch (err) {
             return thunkAPI.rejectWithValue(err.message)

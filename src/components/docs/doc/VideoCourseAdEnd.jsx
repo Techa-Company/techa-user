@@ -1,15 +1,30 @@
 "use client"
 import { motion } from "framer-motion"
 import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { addToCart } from "../../../features/cart/cartSlice"
+import { ShoppingCart } from "lucide-react"
 
 const VideoCourseAdEnd = ({ doc }) => {
-
+    const cartItems = useSelector(state => state.cart.items);
+    const isInCart = cartItems.some(item => item.Id === doc.Id);
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
 
     const dispatch = useDispatch()
 
-
+    const handleAddToCart = () => {
+        if (isInCart) return;
+        setIsAddingToCart(true);
+        setTimeout(() => {
+            // ذخیره نسخه نهایی قیمت با تخفیف
+            const finalPrice = doc.DiscountAmount
+                ? Math.round(doc.Price * (1 - doc.DiscountAmount / 100))
+                : doc.Price;
+            dispatch(addToCart({ ...doc, FinalPrice: finalPrice }));
+            console.log(doc)
+            setIsAddingToCart(false);
+        }, 500); // شبیه‌سازی لودینگ
+    };
     const features = [
         { icon: '🤖', title: 'هوش مصنوعی پیشرفته', subtitle: 'ادیتور هوشمند با قابلیت تحلیل کد' },
         { icon: '🎯', title: 'تمرینات تعاملی', subtitle: 'تمرین‌های عملی با نمره‌دهی خودکار' },
@@ -91,19 +106,43 @@ const VideoCourseAdEnd = ({ doc }) => {
                         </div>
 
                         <div className="space-y-2">
-                            <div className="text-3xl font-black">۴۹۹,۰۰۰ تومان</div>
-                            <div className="line-through text-green-300/80 text-sm">۷۹۹,۰۰۰ تومان</div>
-                            <div className="text-xs text-green-200">پرداخت یکبار forever!</div>
+                            <div className="text-3xl font-black">{doc?.FinalPrice ? doc?.FinalPrice.toLocaleString() : doc?.Price.toLocaleString()} تومان</div>
+                            {doc.DiscountAmount > 0 && (
+                                <div className="line-through text-green-300/80 text-sm">
+                                    {doc.Price.toLocaleString()} تومان
+                                </div>
+                            )}
+                            <div className="text-xs text-green-200">پرداخت یکبار برای همیشه!</div>
                         </div>
 
                         <motion.button
                             whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(59, 246, 130, 0.4)" }}
                             whileTap={{ scale: 0.98 }}
-                            className="block w-full bg-white/95 text-green-800 px-5 py-3 rounded-lg font-bold hover:bg-white transition-colors shadow-lg"
-                            onClick={() => dispatch(addToCart(doc))}
+                            onClick={handleAddToCart}
+                            disabled={isAddingToCart || isInCart}
+                            className={`flex items-center justify-center gap-2 w-full px-5 py-3 rounded-lg font-bold transition-colors shadow-lg
+    ${isAddingToCart || isInCart
+                                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                    : "bg-white/95 text-green-800 hover:bg-white"}`}
                         >
-                            افزودن به سبد خرید
+                            {isAddingToCart ? (
+                                <>
+                                    <span>در حال افزودن...</span>
+                                    <div className="w-4 h-4 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+                                </>
+                            ) : isInCart ? (
+                                <>
+                                    <ShoppingCart size={16} />
+                                    <span>در سبد خرید</span>
+                                </>
+                            ) : (
+                                <>
+                                    <ShoppingCart size={16} />
+                                    <span>خرید دوره</span>
+                                </>
+                            )}
                         </motion.button>
+
 
                         <div className="text-xs text-green-200 flex justify-center items-center gap-1">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -6,19 +6,20 @@ import ChapterItem from "../../../../components/courses/course/ChapterItem";
 import ChapterSkeleton from "../../../../components/courses/course/ChapterSkeleton";
 import { fetchContents } from "../../../../features/main/contents/contentsActions";
 import { FiMenu, FiX } from "react-icons/fi";
+import { fetchContentsWithExercises } from "../../../../features/main/exercises/exercisesActions";
 
 export default function Layout({ children }) {
     const { docId, lessonId } = useParams();
     const router = useRouter();
     const dispatch = useDispatch();
-    const { contents, loading, error } = useSelector((state) => state.contents);
+    const { contents, loading, error } = useSelector((state) => state.exercises);
 
     const [chapters, setChapters] = useState([]);
     const [openChapterId, setOpenChapterId] = useState(null);
     const [selectedSessionId, setSelectedSessionId] = useState(lessonId ? parseInt(lessonId) : null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-
+    console.log(contents)
     // بررسی سایز صفحه برای موبایل
     useEffect(() => {
         const checkIsMobile = () => {
@@ -32,10 +33,9 @@ export default function Layout({ children }) {
 
     // دریافت محتوا
     useEffect(() => {
-        dispatch(fetchContents({
+        dispatch(fetchContentsWithExercises({
             "@CourseId": docId,
-            "@IncludeExercises": true,
-            "@GetAll": true,
+            // "Take": 1000
         }));
     }, [dispatch, docId]);
 
@@ -122,7 +122,7 @@ export default function Layout({ children }) {
                     )}
                     <div className="h-full flex flex-col overflow-hidden">
                         <div className="p-5 border-b border-gray-200 flex items-center justify-between">
-                            <h2 className="text-xl font-bold text-gray-800">فصل‌های دوره</h2>
+                            <h2 className="text-xl font-bold text-gray-800">تمرینات دوره</h2>
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-5">

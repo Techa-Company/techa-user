@@ -5,13 +5,16 @@ import ExerciseEditor from "./ExerciseEditor";
 import DueDate from "./DueDate";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { fetchExercises, sendExercise } from "../../features/main/exercises/exercisesActions";
+import { fetchContentsWithExercises, fetchExercises, sendExercise } from "../../features/main/exercises/exercisesActions";
 import { toast } from "react-toastify";
 import { redirect, useParams, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { fetchContents } from "../../features/main/contents/contentsActions";
 
 export default function ExerciseDetails({ exercise, onBack, courseId }) {
+
+
+
     const [submitting, setSubmitting] = useState(false);
     const [code, setCode] = useState("");
     const MySwal = withReactContent(Swal);
@@ -20,17 +23,17 @@ export default function ExerciseDetails({ exercise, onBack, courseId }) {
     const dispatch = useDispatch();
 
     const difficultyColors = {
-        0: 'text-green-600 bg-green-100',
-        1: 'text-yellow-600 bg-yellow-100',
-        2: 'text-red-600 bg-red-100',
-        3: 'text-purple-600 bg-purple-100',
+        1: 'text-green-600 bg-green-100',
+        2: 'text-yellow-600 bg-yellow-100',
+        3: 'text-red-600 bg-red-100',
+        4: 'text-purple-600 bg-purple-100',
     };
 
     const statusColors = {
-        0: 'text-gray-600 bg-gray-100',
-        1: 'text-blue-600 bg-blue-100',
-        2: 'text-green-600 bg-green-100',
-        3: 'text-red-600 bg-red-100',
+        1: 'text-gray-600 bg-gray-100',
+        2: 'text-blue-600 bg-blue-100',
+        3: 'text-green-600 bg-green-100',
+        4: 'text-red-600 bg-red-100',
     };
 
     const handleSubmit = async () => {
@@ -67,17 +70,18 @@ export default function ExerciseDetails({ exercise, onBack, courseId }) {
         setSubmitting(true);
 
         const data = {
-            "@Id": 0,
-            "@UserId": 5, // اگر UserId واقعی داری از state/context استفاده کن
-            "@ExerciseId": exercise.Id,
+            "Id": exercise.UserExerciseProgId || 0,
+            "UserId": 5,
+            "ExerciseId": exercise.Id,
+            "Answer": code,
+            "Status": 2
         };
 
         try {
             await dispatch(sendExercise(data)).unwrap();
-            dispatch(fetchContents({
+            dispatch(fetchContentsWithExercises({
                 "@CourseId": docId,
-                "@IncludeExercises": true,
-                "@GetAll": true,
+
             }));
             dispatch(fetchExercises({
                 "@ContentId": lessonId
@@ -138,9 +142,9 @@ export default function ExerciseDetails({ exercise, onBack, courseId }) {
                     <div>
                         <span className="text-sm block">سطح دشواری:</span>
                         <p className="font-medium">
-                            {exercise.Level === 0 ? "آسان" :
-                                exercise.Level === 1 ? "متوسط" :
-                                    exercise.Level === 2 ? "دشوار" : "چالش برانگیز"}
+                            {exercise.Level === 1 ? "آسان" :
+                                exercise.Level === 2 ? "متوسط" :
+                                    exercise.Level === 3 ? "دشوار" : "چالش برانگیز"}
                         </p>
                     </div>
                 </div>
@@ -157,9 +161,9 @@ export default function ExerciseDetails({ exercise, onBack, courseId }) {
                     <div>
                         <span className="text-sm block">وضعیت:</span>
                         <p className="font-medium">
-                            {exercise.UserStatus === 2 ? "تکمیل شده" :
-                                exercise.UserStatus === 1 ? "در انتظار تصحیح" :
-                                    exercise.UserStatus === 3 ? "نیاز به اصلاح" : "تکمیل نشده"}
+                            {exercise.UserStatus === 2 ? "در انتظار تصحیح" :
+                                exercise.UserStatus === 3 ? "تکمیل شده" :
+                                    exercise.UserStatus === 4 ? "نیاز به اصلاح" : "تکمیل نشده"}
                         </p>
                     </div>
                 </div>

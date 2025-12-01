@@ -6,7 +6,7 @@ import { ClockIcon } from '../../Icons/Icons';
 import DocDescriptionSkeleton from './DocDescriptionSkeleton';
 import DocInfoCardSkeleton from './DocInfoCardSkeleton';
 import AccordionSkeleton from '../../common/AccordionSkeleton';
-import { Clock, Code2, GitBranch, Terminal } from 'lucide-react';
+import { CalendarClock, Clock, Code2, GitBranch, Puzzle, Terminal, Timer, Users, UsersRound } from 'lucide-react';
 import { formatDuration } from "../../../helper"
 import { useSelector } from 'react-redux';
 
@@ -48,24 +48,27 @@ const DocInfo = ({ docDetails }) => {
             {/* اطلاعات دوره */}
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 2xl:gap-10 mt-5">
                 <DocInfoCard
-                    icon={<Clock className='w-9 h-9 text-[#065F46]' />}
+                    icon={<Timer className='w-9 h-9 text-[#065F46]' />}
                     label="مدت زمان مطالعه"
                     value={formatDuration(docDetails?.Duration)}
                 />
+
                 <DocInfoCard
-                    icon={<GitBranch className='w-9 h-9 text-[#065F46]' />}
+                    icon={<CalendarClock className='w-9 h-9 text-[#065F46]' />}
                     label="آخرین بروزرسانی"
                     value={faDate}
                 />
+
                 <DocInfoCard
-                    icon={<Terminal className='w-9 h-9 text-[#065F46]' />}
+                    icon={<Puzzle className='w-9 h-9 text-[#065F46]' />}
                     label="پیش نیاز"
                     value={docDetails?.Prerequisites || "ندارد"}
                 />
+
                 <DocInfoCard
-                    icon={<Code2 className='w-9 h-9 text-[#065F46]' />}
-                    label="ادیتور آنلاین"
-                    value="اجرای زنده مثال‌ها"
+                    icon={<Users className='w-9 h-9 text-[#065F46]' />}
+                    label="تعداد دانشجویان"
+                    value={docDetails?.StudentCount.toLocaleString() + " نفر"}
                 />
             </div>
 

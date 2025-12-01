@@ -18,7 +18,7 @@ export const fetchDocById = createAsyncThunk(
     'docs/fetchDocById',
     async (parameters, thunkAPI) => {
         try {
-            const res = await SP_fetch('Form_Courses', parameters)
+            const res = await SP_fetch('Course_Details', parameters)
             console.log(res.Data.Dataset[0])
             return res.Data.Dataset[0]
         } catch (err) {

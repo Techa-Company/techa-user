@@ -14,6 +14,8 @@ import Comments from "../../../components/courses/course/Comments";
 import TabButtons from "../../../components/courses/course/TabButtons";
 import TabButtonsSkeleton from "../../../components/courses/course/TabButtonsSkeleton";
 import TabContent from "../../../components/courses/course/TabContent";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDocById } from "../../../features/main/docs/docsActions";
 
 export default function DocDetailsPage() {
   const params = useParams();
@@ -21,19 +23,26 @@ export default function DocDetailsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [docDetails, setDocDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   const tabParam = searchParams.get("tab");
   const initialTabIndex = tabParam ? parseInt(tabParam) : 0;
   const [activeTab, setActiveTab] = useState(initialTabIndex);
+
+
+  const { loading, singleDoc: doc } = useSelector(state => state.docs);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDocById({ "Id": docId }));
+  }, []);
+  console.log(doc)
+
 
   // تب‌ها
   const tabContent = [
     {
       id: 0,
       title: "اطلاعات دوره",
-      content: <DocInfo docDetails={docDetails} />,
+      content: <DocInfo docDetails={doc} />,
     },
     {
       id: 1,
@@ -61,25 +70,7 @@ export default function DocDetailsPage() {
     exit: { opacity: 0, x: -50 },
   };
 
-  // گرفتن دیتای مستندات
-  useEffect(() => {
-    if (docId) {
-      const fetchDocs = async () => {
-        try {
-          const { Data, IsSuccess } = await SP_fetch("Form_Courses", {
-            "@Id": docId,
-          });
-          const docs = Data.Dataset[0];
-          if (IsSuccess) setDocDetails(docs);
-        } catch (error) {
-          console.error("Error fetching docs:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchDocs();
-    }
-  }, [docId]);
+
 
   return (
     <div className="space-y-10">
@@ -90,7 +81,7 @@ export default function DocDetailsPage() {
           {loading ? (
             <DocTitleSkeleton />
           ) : (
-            <DocTitle title={docDetails?.Title} />
+            <DocTitle title={doc?.Title} />
           )}
           {/* {!loading && docDetails && (
             <VideoCourseAd courseId={docId} title={docDetails?.Title} />
@@ -119,8 +110,8 @@ export default function DocDetailsPage() {
       )}
 
 
-      {!loading && (
-        <VideoCourseAdEnd doc={docDetails} />
+      {!loading && doc && (
+        <VideoCourseAdEnd doc={doc} />
       )}
     </div>
   );

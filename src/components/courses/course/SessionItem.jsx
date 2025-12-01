@@ -3,13 +3,13 @@ import { motion } from "framer-motion";
 import { PlayCircle, CheckCircle, AlertCircle } from "lucide-react";
 
 const SessionItem = ({ session, sessionIndex, isSelected, onClick }) => {
-
+    console.log("Sesstion", session)
     const getBadgeStatus = () => {
-        switch (session.SessionStatus) {
-            case 1: return "pending";
-            case 2: return "completed";
-            case 3: return "rejected";
-            default: return "not_started";
+        switch (session.ExerciseStatus) {
+            case 1: return "not_started";
+            case 2: return "pending";
+            case 3: return "completed";
+            case 4: return "rejected";
         }
     };
 

@@ -7,42 +7,23 @@ import SidebarSkeleton from "../../components/common/SidebarSkeleton";
 import Link from "next/link";
 import { CheckIcon } from "../Icons/Icons";
 import { SP_fetch } from "../../api/utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContents } from "../../features/main/contents/contentsActions";
 
 const Sidebar = () => {
   const [openAccordion, setOpenAccordion] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [topPosition, setTopPosition] = useState(72);
-  const [contents, setContents] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const params = useParams();
-  const docId = params.docId;
+  const { docId } = params;
 
+  const { loading, contents } = useSelector(state => state.contents);
+  const dispatch = useDispatch();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await SP_fetch("Report_Contents", {
-          "@CourseId": docId,
-          "@GetAll": true,
-          // "@UserId": 1, // شناسه کاربر را از context یا auth دریافت کنید
-        });
-        const { Data } = res;
-        const raw = Data.Dataset;
-        if (raw && Array.isArray(raw)) {
-          setContents(raw);
-        } else {
-          setContents([]);
-        }
-      } catch (error) {
-        console.error("Error fetching content:", error);
-        setContents([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (docId) fetchData();
-  }, [docId]);
+    dispatch(fetchContents({ "Take": 1000, CourseId: docId }));
+  }, []);
+  console.log(contents)
 
   const toggleAccordion = (index) => {
     setOpenAccordion(openAccordion === index ? -1 : index);
@@ -75,31 +56,15 @@ const Sidebar = () => {
   });
   const groupedArray = Array.from(groupedContents.values());
 
-  // تابع محاسبه وضعیت فصل
-  const getChapterStatus = (chapter) => {
-    if (!chapter.children || chapter.children.length === 0) return { status: 0, progress: 0 };
-
-    const statuses = chapter.children.map(c => c.SessionStatus ?? 0);
-    const completedCount = statuses.filter(s => s === 2).length;
-    const total = statuses.length;
-
-    if (completedCount === total) return { status: 2, progress: 100 }; // همه تکمیل شده
-    if (completedCount > 0) return { status: 1, progress: Math.round((completedCount / total) * 100) }; // حداقل یکی تکمیل شده
-    if (statuses.some(s => s === 1)) return { status: 1, progress: 0 }; // در حال مطالعه اما هیچ‌کدوم تکمیل نشده
-    return { status: 0, progress: 0 }; // همه شروع نشده
-  };
-
-
-
   // تابع تعیین آیکون برای جلسه
   const getSessionIcon = (status) => {
     const s = status ?? 0;
     switch (s) {
-      case 2: // تکمیل شده
+      case 3: // تکمیل شده
         return <CheckIcon className="text-green-500 w-6 h-6" />;
-      case 1: // در حال مطالعه
+      case 2: // در حال مطالعه
         return <BookOpen className="text-yellow-400 w-6 h-6" />;
-      case 0: // شروع نشده
+      case 1: // شروع نشده
       default:
         return <Circle className="text-[#D0DDD1] w-6 h-6" strokeWidth={2} />;
     }
@@ -107,45 +72,45 @@ const Sidebar = () => {
 
   // تابع تعیین آیکون برای فصل
   const getChapterIcon = (chapter) => {
-    const { status, progress } = getChapterStatus(chapter);
-
+    // console.log(object)
+    const { Status: status, ProgressPercent: progress } = chapter;
+    console.log(chapter, status, progress)
     switch (status) {
-      case 2: // همه جلسات تکمیل شده
+      case 3: // همه جلسات تکمیل شده
         return (
           <div className="relative w-12 h-12 flex items-center justify-center">
             <CheckIcon className="text-green-500 w-12 h-12" />
           </div>
         );
-      // case 1: // در حال مطالعه
-      //   return (
-      //     <div className="relative w-12 h-12 flex items-center justify-center">
-      //       <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 20 20">
-      //         <circle
-      //           cx="10"
-      //           cy="10"
-      //           r="9"
-      //           fill="none"
-      //           stroke="white"
-      //           strokeWidth="2"
-      //         />
-      //         <circle
-      //           cx="10"
-      //           cy="10"
-      //           r="9"
-      //           fill="none"
-      //           stroke="#FBBF24"
-      //           strokeWidth="2"
-      //           strokeDasharray={2 * Math.PI * 9}
-      //           strokeDashoffset={2 * Math.PI * 9 * (1 - progress / 100)}
-      //         />
-      //       </svg>
-      //       <span className="absolute text-xs font-medium text-yellow-700">
-      //         {progress}%
-      //       </span>
-      //     </div>
-      //   );
+      case 2: // در حال مطالعه
+        return (
+          <div className="relative w-12 h-12 flex items-center justify-center">
+            <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 20 20">
+              <circle
+                cx="10"
+                cy="10"
+                r="9"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+              />
+              <circle
+                cx="10"
+                cy="10"
+                r="9"
+                fill="none"
+                stroke="#FBBF24"
+                strokeWidth="2"
+                strokeDasharray={2 * Math.PI * 9}
+                strokeDashoffset={2 * Math.PI * 9 * (1 - progress / 100)}
+              />
+            </svg>
+            <span className="absolute text-xs font-medium text-yellow-700">
+              {progress}%
+            </span>
+          </div>
+        );
       case 1:
-      case 0: // شروع نشده
       default:
         return (
           <div className="relative w-12 h-12 flex items-center justify-center">
@@ -186,7 +151,7 @@ const Sidebar = () => {
                       >
                         <div className="flex items-center">
                           <span className="w-12 h-12 flex justify-center items-center">
-                            {getSessionIcon(child.SessionStatus)}
+                            {getSessionIcon(child.Status)}
                           </span>
                           <p className="font-medium text-lg ">{child.Title}</p>
                         </div>

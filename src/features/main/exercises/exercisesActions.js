@@ -6,7 +6,19 @@ export const fetchExercises = createAsyncThunk(
     'docs/fetchExercises',
     async (parameters, thunkAPI) => {
         try {
-            const res = await SP_fetch('Report_Exercises', parameters)
+            const res = await SP_fetch('Exercise_List', parameters)
+            console.log(res.Data.Dataset)
+            return res.Data.Dataset
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.message)
+        }
+    }
+)
+export const fetchContentsWithExercises = createAsyncThunk(
+    'docs/fetchContentsWithExercises',
+    async (parameters, thunkAPI) => {
+        try {
+            const res = await SP_fetch('ContentsWithExercises_List', parameters)
             console.log(res.Data.Dataset)
             return res.Data.Dataset
         } catch (err) {

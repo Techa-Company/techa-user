@@ -2,9 +2,11 @@ import { motion } from "framer-motion";
 import DueDate from "./DueDate";
 
 export default function ExerciseCard({ exercise, index, onClick }) {
+
+    console.log(exercise)
     const getStatusColor = () => {
         switch (exercise.UserStatus) {
-            case 1: return {
+            case 2: return {
                 bg: "bg-gradient-to-r from-amber-50 to-orange-50",
                 text: "text-amber-700",
                 border: "border-amber-200",
@@ -14,7 +16,7 @@ export default function ExerciseCard({ exercise, index, onClick }) {
                     </svg>
                 )
             };
-            case 2: return {
+            case 3: return {
                 bg: "bg-gradient-to-r from-green-50 to-emerald-50",
                 text: "text-green-700",
                 border: "border-green-200",
@@ -24,7 +26,7 @@ export default function ExerciseCard({ exercise, index, onClick }) {
                     </svg>
                 )
             };
-            case 3: return {
+            case 4: return {
                 bg: "bg-gradient-to-r from-red-50 to-rose-50",
                 text: "text-red-700",
                 border: "border-red-200",
@@ -49,25 +51,16 @@ export default function ExerciseCard({ exercise, index, onClick }) {
 
     const getStatusText = () => {
         switch (exercise.UserStatus) {
-            case 1: return "در انتظار تصحیح";
-            case 2: return "تکمیل شده";
-            case 3: return "نیاز به اصلاح";
+            case 2: return "در انتظار تصحیح";
+            case 3: return "تکمیل شده";
+            case 4: return "نیاز به اصلاح";
             default: return "تکمیل نشده";
         }
     };
 
     const getDifficultyColor = () => {
         switch (exercise.Level) {
-            case 0: return {
-                text: "text-green-700",
-                bg: "bg-green-100",
-                icon: (
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905a3.61 3.61 0 01-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                    </svg>
-                )
-            };
-            case 1: return {
+            case 2: return {
                 text: "text-blue-700",
                 bg: "bg-blue-100",
                 icon: (
@@ -76,7 +69,7 @@ export default function ExerciseCard({ exercise, index, onClick }) {
                     </svg>
                 )
             };
-            case 2: return {
+            case 3: return {
                 text: "text-red-700",
                 bg: "bg-red-100",
                 icon: (
@@ -85,12 +78,21 @@ export default function ExerciseCard({ exercise, index, onClick }) {
                     </svg>
                 )
             };
-            default: return {
+            case 4: return {
                 text: "text-purple-700",
                 bg: "bg-purple-100",
                 icon: (
                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                )
+            };
+            default: return {
+                text: "text-green-700",
+                bg: "bg-green-100",
+                icon: (
+                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905a3.61 3.61 0 01-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                     </svg>
                 )
             };
@@ -131,9 +133,9 @@ export default function ExerciseCard({ exercise, index, onClick }) {
                         <div className="flex items-center justify-between gap-2 mb-3">
                             <span className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center ${difficultyStyle.bg} ${difficultyStyle.text}`}>
                                 {difficultyStyle.icon}
-                                {exercise.Level === 0 ? "آسان" :
-                                    exercise.Level === 1 ? "متوسط" :
-                                        exercise.Level === 2 ? "دشوار" : "چالش برانگیز"}
+                                {exercise.Level === 1 ? "آسان" :
+                                    exercise.Level === 2 ? "متوسط" :
+                                        exercise.Level === 3 ? "دشوار" : "چالش برانگیز"}
                             </span>
 
                             {exercise.UserScore != null && (

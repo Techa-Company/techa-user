@@ -11,7 +11,7 @@ export default function ExerciseEditor({ exercise, courseId, code, setCode, onSu
     const [isSaved, setIsSaved] = useState(false);
     const editorRef = useRef(null);
 
-    const isDisabled = exercise.UserStatus === 1 || exercise.UserStatus === 2;
+    const isDisabled = exercise.UserStatus === 2 || exercise.UserStatus === 3;
 
     // بارگذاری کد اولیه از localStorage یا exercise.Code
     useEffect(() => {
