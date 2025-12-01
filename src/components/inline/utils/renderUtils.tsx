@@ -29,7 +29,7 @@ export const renderInlineSnippets = () => {
 
     // ساخت کانتینر جایگزین
     const container = document.createElement("div");
-    container.className = "preview-container my-4";
+    container.className = "preview-container my-4 no-reset";
 
     pre.parentNode?.insertBefore(container, pre);
     pre.style.display = "none";

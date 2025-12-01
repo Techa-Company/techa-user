@@ -57,7 +57,7 @@ const VideoCourseAdEnd = ({ doc }) => {
                 </motion.svg>
             </button> */}
 
-            <div className="flex flex-col lg:flex-row gap-6">
+            <div className="flex flex-col xl:flex-row gap-6">
                 {/* Content Section */}
                 <div className="flex-1 space-y-7">
                     <motion.div
@@ -97,7 +97,7 @@ const VideoCourseAdEnd = ({ doc }) => {
                 <motion.div
                     initial={{ opacity: 0.8 }}
                     animate={{ opacity: 1 }}
-                    className="lg:w-96 shrink-0 bg-gradient-to-b from-green-900 to-green-800 text-white p-5 rounded-xl border-2 border-green-700 space-y-5 shadow-lg"
+                    className="xl:w-96 shrink-0 bg-gradient-to-b from-green-900 to-green-800 text-white p-5 rounded-xl border-2 border-green-700 space-y-5 shadow-lg"
                 >
                     <div className="text-center space-y-4">
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-700/50 rounded-full text-sm">

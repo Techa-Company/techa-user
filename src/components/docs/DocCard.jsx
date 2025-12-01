@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import { ArrowLeft, BookText, Clock, GraduationCap, ShoppingCart, Star, Users, Zap } from 'lucide-react';
-import { RiDatabase2Fill, RiDatabaseFill, RiHtml5Fill, RiJavascriptFill, RiReactjsFill, RiTailwindCssFill } from 'react-icons/ri';
+import { RiCss3Fill, RiDatabase2Fill, RiDatabaseFill, RiHtml5Fill, RiJavascriptFill, RiReactjsFill, RiTailwindCssFill } from 'react-icons/ri';
 import { formatDuration } from '../../helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../features/cart/cartSlice';
@@ -21,6 +21,7 @@ const DocCard = ({ index, doc }) => {
 
     const iconStyles = [
         { el: <RiHtml5Fill className="w-10 h-10 text-[#E44D26]" />, bg: "bg-orange-100" },
+        { el: <RiCss3Fill className="w-10 h-10 text-[#264DE4]" />, bg: "bg-blue-100" }, // ✅ اضافه شد
         { el: <RiJavascriptFill className="w-10 h-10 text-[#F0DB4F]" />, bg: "bg-gray-800" },
         { el: <RiTailwindCssFill className="w-10 h-10 text-[#38B2AC]" />, bg: "bg-gray-900" },
         { el: <RiReactjsFill className="w-10 h-10 text-[#61DAFB]" />, bg: "bg-gray-900" },
@@ -60,7 +61,7 @@ const DocCard = ({ index, doc }) => {
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
 
                 <div className="flex items-start justify-between relative z-10">
-                    <div className={`p-2 rounded-xl shadow-md ${iconStyles[index].bg}`}>
+                    <div className={`p-2 rounded-xl shadow-md ${iconStyles[index]?.bg}`}>
                         {iconStyles[index].el}
                     </div>
                     {doc.DiscountAmount > 0 && (

@@ -122,7 +122,7 @@ const HtmlPreview = ({ code: initialCode }) => {
 
   return (
     <div
-      className="bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-200"
+      className="bg-white rounded-lg overflow-hidden border border-gray-200"
       dir="ltr"
     >
       <ToastContainer

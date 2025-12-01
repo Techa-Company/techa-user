@@ -75,7 +75,7 @@ export default function DocDetailsPage() {
   return (
     <div className="space-y-10">
       {/* عنوان و تبلیغ اول */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 md:gap-10">
+      <div className="flex flex-col xl:flex-row justify-between items-center gap-5 xl:gap-10">
         {/* عنوان دوره */}
         <div className="flex-1">
           {loading ? (

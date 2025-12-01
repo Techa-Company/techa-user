@@ -8,8 +8,8 @@ import ConditionalSidebar from "../../../components/layout/ConditionalSidebar";
 export default function Layout({ children }) {
   return (
     <div className="pt-32">
-      <div className="container px-5 xl:px-20 mx-auto">
-        <div className="flex 2xl:gap-10 gap-5">
+      <div className="container px-5 mx-auto">
+        <div className="flex gap-10">
           <ConditionalSidebar />
           <main className="w-full">{children}</main>
         </div>
