@@ -21,7 +21,7 @@ const ModernCoursesPage = () => {
         const { Data, IsSuccess, Message, StatusCode } = await SP_fetch(
           "Report_Courses"
         );
-        const raw = Data.Dataset;
+        const raw = Data;
 
         if (IsSuccess) {
           const enrichedCourses = raw
@@ -226,8 +226,8 @@ const FilterChip = ({ label, active, onClick, icon }) => (
   <button
     onClick={onClick}
     className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${active
-        ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
-        : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm"
+      ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
+      : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm"
       }`}
   >
     {icon && <span>{icon}</span>}
@@ -254,8 +254,8 @@ const DurationDropdown = ({ durationFilter, setDurationFilter }) => {
     <div className="relative">
       <button
         className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${durationFilter !== "all"
-            ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
-            : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm"
+          ? "bg-emerald-500 text-white shadow-lg shadow-emerald-100"
+          : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm"
           }`}
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -299,8 +299,8 @@ const DurationDropdown = ({ durationFilter, setDurationFilter }) => {
                 setIsOpen(false);
               }}
               className={`px-4 py-3 cursor-pointer transition-colors ${durationFilter === option.value
-                  ? "bg-emerald-50 text-emerald-600"
-                  : "hover:bg-gray-50"
+                ? "bg-emerald-50 text-emerald-600"
+                : "hover:bg-gray-50"
                 }`}
             >
               <span className="text-sm">{option.label}</span>

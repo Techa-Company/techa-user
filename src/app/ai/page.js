@@ -15,7 +15,7 @@ import {
   Database,
   Braces,
 } from "lucide-react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AIAssistedMultiLanguageEditor = () => {
@@ -203,19 +203,6 @@ const AIAssistedMultiLanguageEditor = () => {
 
   return (
     <div className="py-32">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        toastClassName="font-sans"
-      />
 
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-emerald-200">
         {/* هدر صفحه */}
@@ -241,9 +228,8 @@ const AIAssistedMultiLanguageEditor = () => {
           >
             <span>{editorTheme === "vs-light" ? "تم تیره" : "تم روشن"}</span>
             <div
-              className={`w-6 h-6 rounded-full ${
-                editorTheme === "vs-dark" ? "bg-gray-800" : "bg-yellow-400"
-              }`}
+              className={`w-6 h-6 rounded-full ${editorTheme === "vs-dark" ? "bg-gray-800" : "bg-yellow-400"
+                }`}
             />
           </button>
         </header>
@@ -255,11 +241,10 @@ const AIAssistedMultiLanguageEditor = () => {
               <button
                 key={lang.id}
                 onClick={() => setActiveTab(lang.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap mr-2 ${
-                  activeTab === lang.id
-                    ? "bg-emerald-600 text-white shadow-lg"
-                    : "bg-white text-emerald-800 hover:bg-emerald-100 border border-emerald-200"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap mr-2 ${activeTab === lang.id
+                  ? "bg-emerald-600 text-white shadow-lg"
+                  : "bg-white text-emerald-800 hover:bg-emerald-100 border border-emerald-200"
+                  }`}
               >
                 {renderLanguageIcon(lang.id)}
                 {lang.name}
@@ -274,11 +259,10 @@ const AIAssistedMultiLanguageEditor = () => {
           <div className="flex flex-wrap gap-3 mb-4">
             <button
               onClick={() => setIsEditable(!isEditable)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-                isEditable
-                  ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
-                  : "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
-              } transition-colors`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg ${isEditable
+                ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
+                : "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                } transition-colors`}
             >
               {isEditable ? (
                 <>

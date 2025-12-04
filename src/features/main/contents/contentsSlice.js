@@ -1,7 +1,7 @@
 // src/features/docs/contentsSlice.js
 
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchContentById, fetchContents } from './contentsActions'
+import { completeContent, fetchContentById, fetchContents } from './contentsActions'
 
 const initialState = {
     contents: [],
@@ -38,6 +38,17 @@ const contentsSlice = createSlice({
                 state.singleContent = action.payload
             })
             .addCase(fetchContentById.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(completeContent.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(completeContent.fulfilled, (state, action) => {
+                state.loading = false
+            })
+            .addCase(completeContent.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

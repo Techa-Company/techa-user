@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
       <html lang="fa">
         <head>
           <link rel="icon" href="/images/favicon.svg" sizes="any" />
-          <meta name="enamad" content="61494690" />{" "}
+          <meta name="enamad" content="61494690" />
         </head>
         <body>
           <AuthProvider>

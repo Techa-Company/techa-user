@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { PanelTopOpen, BookOpen, Circle } from "lucide-react";
+import { PanelTopOpen, BookOpen, Circle, Check } from "lucide-react";
 import { useParams } from "next/navigation";
 import Accordion from "../../components/sidebar/Accordion";
 import SidebarSkeleton from "../../components/common/SidebarSkeleton";
@@ -61,7 +61,7 @@ const Sidebar = () => {
     const s = status ?? 0;
     switch (s) {
       case 3: // تکمیل شده
-        return <CheckIcon className="text-green-500 w-6 h-6" />;
+        return <Check className="text-green-500 w-6 h-6" />;
       case 2: // در حال مطالعه
         return <BookOpen className="text-yellow-400 w-6 h-6" />;
       case 1: // شروع نشده
@@ -79,7 +79,7 @@ const Sidebar = () => {
       case 3: // همه جلسات تکمیل شده
         return (
           <div className="relative w-12 h-12 flex items-center justify-center">
-            <CheckIcon className="text-green-500 w-12 h-12" />
+            <Check className="text-green-500 w-9 h-9" />
           </div>
         );
       case 2: // در حال مطالعه

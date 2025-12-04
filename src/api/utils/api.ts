@@ -1,89 +1,95 @@
 // utils/api.ts
-import Cookies from "js-cookie"; // npm install js-cookie
+import axios from "axios";
+import Cookies from "js-cookie";
 
-export interface StoredProcedureParameter {
-  Name: string;
-  Type: string;
-  Value: string;
+// -----------------------------
+// تایپ پارامترهای ورودی برای SP
+// -----------------------------
+interface SPParameters {
+  [key: `@${string}`]: string | number | boolean;
 }
 
-export interface StoredProcedureResponse {
+// -----------------------------
+// تایپ خروجی نهایی
+// -----------------------------
+export interface SPResponse<T = any> {
   IsSuccess: boolean;
-  Message?: string;
-  Data: {
-    Dataset: any[];
-    [key: string]: any;
-  };
-  [key: string]: any;
+  StatusCode: number;
+  Message: string;
+  Data: T[];
 }
 
-interface Parameters {
-  [key: `@${string}`]: string;
-}
+// -----------------------------
+// Axios Instance
+// -----------------------------
+const api = axios.create({
+  baseURL: "https://pool.techa.me/api/ExecuteTSql",
+  headers: { "Content-Type": "application/json" },
+});
 
-export async function SP_fetch(
+// -----------------------------
+// Interceptor برای اضافه کردن توکن
+// -----------------------------
+api.interceptors.request.use((config) => {
+  const token = Cookies.get("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+// -----------------------------
+// تابع اجرای Stored Procedure
+// خروجی: Dataset + وضعیت درخواست
+// -----------------------------
+export async function SP_fetch<T = any>(
   procedureName: string,
-  parameters: Parameters = {},
+  parameters: SPParameters = {},
   hasDataTable: boolean = true
-): Promise<StoredProcedureResponse> {
-  const url = "https://pool.techa.me/api/ExecuteTSql/ExecuteStoredProcedure";
-
+): Promise<SPResponse<T>> {
   const body: any = {
     ProcedureName: procedureName,
-    ProjectId: 1016,
+    ProjectId: process.env.PROJECT_ID ?? 1016,
     HasDataTable: hasDataTable,
+    Parameters: Object.fromEntries(
+      Object.entries(parameters).map(([k, v]) => [k.startsWith("@") ? k : `@${k}`, String(v)])
+    ),
   };
 
-  if (Object.keys(parameters).length > 0) {
-    const formattedParams: Record<string, string> = {};
-    for (const [key, value] of Object.entries(parameters)) {
-      const formattedKey = key.startsWith("@") ? key : `@${key}`;
-      formattedParams[formattedKey] = value.toString();
+  try {
+    const { data } = await api.post("/ExecuteStoredProcedure", body);
+
+    let dataset: T[] = [];
+    if (typeof data.Data === "string") {
+      try { dataset = JSON.parse(data.Data); } catch { }
+    } else if (Array.isArray(data.Data)) {
+      dataset = data.Data;
     }
-    body.Parameters = formattedParams;
-  }
 
-  // خواندن توکن از کوکی
-  const token = Cookies.get("token");
+    return {
+      IsSuccess: data.IsSuccess ?? false,
+      StatusCode: data.StatusCode ?? -1,
+      Message: data.Message ?? "",
+      Data: Array.isArray(dataset) ? dataset : [],
+    };
+  } catch (error: any) {
+    const errData = error?.response?.data;
 
-  console.log("Token : ", token)
+    let msg = error.message;
 
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-  };
-
-  // if (token) {
-  //   headers["Authorization"] = `Bearer ${token}`;
-  // }
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-  });
-
-  if (!response.ok) {
-    const text = await response.text().catch(() => "");
-    throw new Error(`HTTP ${response.status} - ${text}`);
-  }
-
-  const data = await response.json();
-
-  let ds = data?.Data?.Dataset;
-  if (typeof ds === "string") {
-    try {
-      ds = JSON.parse(ds);
-    } catch {
-      ds = [];
+    // اگر API پیام SP را ارسال کرده باشد
+    if (errData?.Message) msg = errData.Message;
+    if (typeof errData?.Data === "string") {
+      try {
+        const parsed = JSON.parse(errData.Data);
+        if (parsed?.Message) msg = parsed.Message;
+      } catch { }
     }
-  }
-  if (!Array.isArray(ds)) ds = [];
 
-  return {
-    ...data,
-    Data: {
-      ...data.Data,
-      Dataset: ds,
-    },
-  };
+    return {
+      IsSuccess: false,
+      StatusCode: errData?.StatusCode ?? -1,
+      Message: msg,
+      Data: [],
+    };
+  }
 }
+

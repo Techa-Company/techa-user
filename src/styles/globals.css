@@ -537,13 +537,11 @@ code::before,
 code::after {
   content: "" !important;
 }
-/* ریست کل محتوا */
 .lesson-content *:not(.no-reset):not(.no-reset *) {
   all: revert;
   direction: rtl;
 }
 
-/* خود wrapper */
 .lesson-content {
   direction: rtl;
   font-family: inherit;

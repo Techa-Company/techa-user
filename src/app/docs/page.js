@@ -13,7 +13,7 @@ export default function Docs() {
   useEffect(() => {
     dispatch(fetchDocs());
   }, []);
-
+  console.log(docs)
   return (
     <div className="pt-32">
       <div className="container px-5 xl:px-20 mx-auto">

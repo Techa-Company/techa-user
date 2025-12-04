@@ -18,14 +18,19 @@ export const renderInlineSnippets = () => {
 
   elements.forEach((pre) => {
     // اگر از قبل جایگزین شده، ردش کن
+    console.log("Ok");
+    console.log(pre);
     if (pre.style.display === "none" || pre.closest(".preview-container")) {
+      console.log("Ok");
       return;
     }
 
     const codeElement = pre.querySelector("code");
+    console.log(codeElement);
     if (!codeElement) return;
 
     const code = codeElement.textContent?.trim() || "";
+    console.log(code);
 
     // ساخت کانتینر جایگزین
     const container = document.createElement("div");
@@ -41,6 +46,7 @@ export const renderInlineSnippets = () => {
         console.log(code.includes("<script"));
         root.render(<JavaScriptPreview code={code} />);
       } else {
+        console.log("HHHHHH");
         root.render(<HtmlPreview code={code} />);
       }
     } else if (pre.classList.contains("language-jsx")) {

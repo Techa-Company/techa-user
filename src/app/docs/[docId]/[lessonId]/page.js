@@ -1,203 +1,206 @@
 "use client";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle,
+  Clock,
+} from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { renderInlineSnippets } from "../../../../components/inline/utils/renderUtils";
 import LessonSkeleton from "../../../../components/docs/doc/lesson/LessonSkeleton";
-import { SP_fetch } from "../../../../api/utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import { completeContent, fetchContentById, fetchContents } from "../../../../features/main/contents/contentsActions";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
 export default function Lesson() {
-  const [lessonData, setLessonData] = useState(null);
-  const [allContents, setAllContents] = useState([]);
   const [prevLesson, setPrevLesson] = useState(null);
   const [nextLesson, setNextLesson] = useState(null);
-  const [lessonIndexInfo, setLessonIndexInfo] = useState({ index: 0, total: 0 }); // ⭐ اضافه شد
-  const [loading, setLoading] = useState(true);
+  const [lessonIndexInfo, setLessonIndexInfo] = useState({
+    index: 0,
+    total: 0,
+  });
+  // const [loading, setLoading] = useState(true);
 
   const contentRef = useRef(null);
   const isRenderingRef = useRef(false);
-  const observerRef = useRef(null);
+
+  const { loading, singleContent: content, contents } = useSelector(state => state.contents)
 
   const params = useParams();
+  const dispatch = useDispatch();
+
   const docId = params.docId;
   const lessonId = params.lessonId;
 
-  // ================================
-  //  دریافت همه محتواها + جلسه فعلی
-  // ================================
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const resAll = await SP_fetch("Report_Contents", {
-          CourseId: docId,
-          Take: 1000,
-        });
-        const all = resAll?.Data?.Dataset || [];
-
-        const resLesson = await SP_fetch("Form_Contents", { "@Id": lessonId });
-        const lesson = resLesson?.Data?.Dataset?.[0] || null;
-
-        setAllContents(all);
-        setLessonData(lesson);
-      } catch (error) {
-        console.error("Error fetching lesson:", error);
-        setLessonData(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (docId && lessonId) fetchData();
+    dispatch(fetchContentById({ Id: lessonId, UserId: 5, }))
+    dispatch(fetchContents({ Take: 1000, CourseId: docId }));
   }, [docId, lessonId]);
 
-  // ================================
-  //  محاسبه جلسه قبل/بعد + شماره درس
-  // ================================
+
+
+
   useEffect(() => {
-    if (!lessonData || allContents.length === 0) return;
+    if (!content || contents.length === 0) return;
 
-    const parentId = lessonData.ParentId;
+    const parentId = content.ParentId;
 
-    // فصل‌ها
-    const chapters = allContents
-      .filter((item) => item.ParentId === null)
+    const chapters = contents
+      .filter((i) => i.ParentId === null)
       .sort((a, b) => a.SortIndex - b.SortIndex);
 
-    // ---------------------------
-    // اگر خود فصل هست
-    // ---------------------------
     if (!parentId) {
-      setLessonIndexInfo({ index: 1, total: 1 }); // فصل درس نیست
+      setLessonIndexInfo({ index: 1, total: 1 });
       return;
     }
 
-    // ---------------------------
-    // جلسات این فصل
-    // ---------------------------
-    const lessonsOfChapter = allContents
-      .filter((item) => item.ParentId === parentId)
+    const lessons = contents
+      .filter((i) => i.ParentId === parentId)
       .sort((a, b) => a.SortIndex - b.SortIndex);
 
-    const currentIndex = lessonsOfChapter.findIndex(
-      (l) => Number(l.Id) === Number(lessonData.Id)
+    const currentIndex = lessons.findIndex(
+      (l) => Number(l.Id) === Number(content.Id)
     );
 
-    // ⭐ ذخیره شماره درس
     setLessonIndexInfo({
       index: currentIndex + 1,
-      total: lessonsOfChapter.length,
+      total: lessons.length,
     });
 
-    // ---------------------------
-    // جلسه قبلی/بعدی
-    // ---------------------------
-    let prev = lessonsOfChapter[currentIndex - 1];
-    let next = lessonsOfChapter[currentIndex + 1];
+    setPrevLesson(lessons[currentIndex - 1] || null);
+    setNextLesson(lessons[currentIndex + 1] || null);
+  }, [content, contents]);
 
-    const chapterIndex = chapters.findIndex((ch) => ch.Id === parentId);
-
-    if (!prev && chapterIndex > 0) {
-      const prevChapter = chapters[chapterIndex - 1];
-      prev = allContents
-        .filter((item) => item.ParentId === prevChapter.Id)
-        .sort((a, b) => a.SortIndex - b.SortIndex)
-        .at(-1);
-    }
-
-    if (!next && chapterIndex < chapters.length - 1) {
-      const nextChapter = chapters[chapterIndex + 1];
-      next = allContents
-        .filter((item) => item.ParentId === nextChapter.Id)
-        .sort((a, b) => a.SortIndex - b.SortIndex)
-        .at(0);
-    }
-
-    setPrevLesson(prev || null);
-    setNextLesson(next || null);
-  }, [lessonData, allContents]);
-
-  // ================================
-  //  رندر Snippet‌ها
-  // ================================
-  useEffect(() => {
-    renderInlineSnippets();
-  }, [lessonData]);
 
   useEffect(() => {
-    if (!lessonData || !contentRef.current) return;
-    if (isRenderingRef.current) return;
+    if (!content) return;
 
-    isRenderingRef.current = true;
+    // کمی تاخیر برای اینکه DOM آماده بشه
+    setTimeout(() => {
+      renderInlineSnippets();
+      console.log("Editor loaded");
+    }, 50);
+  }, [content]);
 
-    const renderSnippetsWithRetry = (attempt = 0) => {
-      if (attempt > 5) {
-        isRenderingRef.current = false;
-        return;
-      }
 
-      setTimeout(() => {
-        const hasPreElements = contentRef.current.querySelectorAll(
-          "pre.language-jsx, pre.language-sql, pre.language-markup, pre.language-javascript"
-        ).length > 0;
 
-        if (hasPreElements) {
-          renderInlineSnippets();
-          isRenderingRef.current = false;
-        } else {
-          renderSnippetsWithRetry(attempt + 1);
-        }
-      }, 300 * (attempt + 1));
-    };
+  // ================================
+  //  ثبت‌کردن جلسه به عنوان خوانده شده
+  // ================================
+  const toggleCompletionStatus = async () => {
 
-    renderSnippetsWithRetry();
-    return () => (isRenderingRef.current = false);
-  }, [lessonData]);
+    try {
+      await dispatch(completeContent({
+        Id: lessonId,
+        UserId: 5,
+      })).unwrap();
+      toast.success("جلسه با موفقیت علامت‌گذاری شد");
 
+      dispatch(fetchContentById({ Id: lessonId, UserId: 5, }))
+      dispatch(fetchContents({ Take: 1000, CourseId: docId }));
+    } catch (err) {
+      toast.error(err);
+    }
+  };
+
+  if (!content && !loading) return <div>جلسه یافت نشد</div>;
   if (loading) return <LessonSkeleton />;
-  if (!lessonData) return <div>جلسه یافت نشد</div>;
 
   return (
-    <div>
-      {/* ========================================================= */}
-      {/*          عنوان + درس X از Y                               */}
-      {/* ========================================================= */}
-      <div className="flex gap-5 justify-between sm:items-center border-b-2 pb-5 border-[#2ECC71]">
-        <h1 className="font-black text-[#042A1B] text-xl sm:text-3xl">{lessonData.Title}</h1>
+    <div className="relative">
 
-        {lessonIndexInfo.total > 0 && (
-          <span className="text-black text-xl sm:text-3xl font-black">
-            درس {lessonIndexInfo.index} از {lessonIndexInfo.total}
-          </span>
-        )}
-      </div>
+      {/* هدر */}
+      <div className="flex flex-col gap-4 pb-5 border-b-2 border-[#2ECC71]">
+        <div className="flex justify-between items-start">
+          <h1 className="font-black text-3xl">{content.Title}</h1>
 
-      {/* محتوای جلسه */}
-      <div
-        ref={contentRef}
-        className="text-[17.5px] font-normal leading-7 text-justify grid gap-5 pb-5 border-b-2 border-[#2ECC71]"
-      >
-        <div className="lesson-content">
-          <div className="prose prose-p:!text-xl prose-p:!font-normal prose-p:!leading-9 prose-p:!text-justify  prose-strong:!font-semibold" dangerouslySetInnerHTML={{ __html: lessonData.Description }} />
+          {lessonIndexInfo.total > 0 && (
+            <span className="text-2xl font-bold bg-gray-100 px-3 py-1 rounded-lg">
+              درس {lessonIndexInfo.index} از {lessonIndexInfo.total}
+            </span>
+          )}
+        </div>
+
+        {/* متادیتا */}
+        <div className="flex flex-wrap justify-between items-center gap-4 text-gray-600">
+          {content.EstimatedReadTime > 0 && (
+            <div className="flex items-center gap-2 bg-teal-50 px-3 py-1.5 rounded-lg">
+              <Clock className="text-teal-700" />
+              <span className="text-teal-700">زمان مطالعه:</span>
+              <span className="font-bold text-teal-800">
+                {content.EstimatedReadTime} دقیقه
+              </span>
+            </div>
+          )}
+
+          {content.Status === 3 ? (
+            // حالت خوانده شده
+            <button
+              disabled
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border 
+               bg-green-100 text-green-700 border-green-300 cursor-not-allowed"
+            >
+              <CheckCircle className="w-5 h-5 text-green-500" />
+              <span className="text-sm font-medium">خوانده شده</span>
+            </button>
+          ) : content.HasExercise === 1 ? (
+            <Link
+              href={`/docs/${docId}/exercises/${content.Id}`} // لینک به صفحه تمرینات
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border 
+               bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200"
+            >
+              <CheckCircle className="w-5 h-5 text-blue-500" />
+              <span className="text-sm font-medium">مشاهده تمرینات</span>
+            </Link>
+          ) : (
+            // حالت خوانده‌ام
+            <button
+              onClick={toggleCompletionStatus}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border 
+               bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+            >
+              <CheckCircle className="w-5 h-5 text-gray-400" />
+              <span className="text-sm font-medium">خوانده‌ام</span>
+            </button>
+          )}
+
         </div>
       </div>
 
-      {/* دکمه قبلی/بعدی */}
-      <div className="flex gap-4 items-center mt-5 justify-between">
+      {/* محتوای متن */}
+      <div
+        ref={contentRef}
+        className="text-[17.5px] leading-7 text-justify grid gap-5 pb-5 border-b-2 border-[#2ECC71] mt-5"
+      >
+        <div className="lesson-content">
+          <div
+            className="prose prose-p:!text-xl prose-p:!leading-10 prose-p:!text-justify"
+            dangerouslySetInnerHTML={{ __html: content.Description }}
+          />
+        </div>
+      </div>
+
+      {/* دکمه‌های قبل/بعد */}
+      <div className="flex justify-between items-center mt-5">
         <Link
           href={prevLesson ? `/docs/${docId}/${prevLesson.Id}` : "#"}
-          className={`w-11 h-11 flex items-center justify-center cursor-pointer bg-[#2ECC71] text-white rounded-[4px] transition-all duration-300 ${!prevLesson ? "opacity-40 pointer-events-none" : ""
+          className={`flex items-center gap-2 px-4 py-3 bg-[#2ECC71] text-white rounded-lg hover:bg-[#27ae60] ${!prevLesson ? "opacity-40 pointer-events-none" : ""
             }`}
         >
-          <ArrowRight className="w-[18px] h-[18px]" />
+          <ArrowRight className="w-5 h-5" />
+          <span className="text-sm font-medium">درس قبلی</span>
         </Link>
 
         <Link
           href={nextLesson ? `/docs/${docId}/${nextLesson.Id}` : "#"}
-          className={`w-11 h-11 flex items-center justify-center cursor-pointer bg-[#2ECC71] text-white rounded-[4px] transition-all duration-300 ${!nextLesson ? "opacity-40 pointer-events-none" : ""
+          className={`flex items-center gap-2 px-4 py-3 bg-[#2ECC71] text-white rounded-lg hover:bg-[#27ae60] ${!nextLesson ? "opacity-40 pointer-events-none" : ""
             }`}
         >
-          <ArrowLeft className="w-[18px] h-[18px]" />
+          <span className="text-sm font-medium">درس بعدی</span>
+          <ArrowLeft className="w-5 h-5" />
         </Link>
       </div>
     </div>
