@@ -75,21 +75,35 @@ jobs:
           $TargetFolder = "C:\inetpub\wwwroot\$AppName"
           $ZipPath = ".\deploy-package.zip"
           
-          # === 1. اطمینان از دسترسی به PM2 گلوبال ===
-          # این خط حیاتی است چون در گیت‌هاب اکشن، مسیر گلوبال NPM معمولا در Path نیست
-          $env:Path += ";$env:APPDATA\npm"
-
-          Write-Host "Checking PM2 availability..."
+          # === 1. اصلاح مسیر PM2 (هوشمند و قطعی) ===
+          Write-Host "Locating NPM Global binaries..."
+          
+          # از خود NPM می‌پرسیم پکیج‌ها کجا نصب شده‌اند (این روی هر رانری جواب می‌دهد)
+          $NpmPrefix = (npm config get prefix).Trim()
+          Write-Host "NPM Prefix found at: $NpmPrefix"
+          
+          # اضافه کردن مسیر به Session جاری
+          $env:Path += ";$NpmPrefix"
+          
+          # بررسی وجود PM2 و ساخت Alias در صورت نیاز
           if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
-              Write-Error "PM2 is not installed globally or not found. Run 'npm install -g pm2' on the server."
-              exit 1
+              $PM2Path = Join-Path $NpmPrefix "pm2.cmd"
+              if (Test-Path $PM2Path) {
+                  Write-Host "Setting alias for PM2..."
+                  Set-Alias pm2 $PM2Path
+              } else {
+                  Write-Warning "Global PM2 cmd not found. Using local fallback to npx."
+                  function pm2 { npx pm2 $args }
+              }
           }
+          # -------------------------------------------------------
 
-          # === 2. حذف پروسه قبلی (به جای Kill کردن کل سرور) ===
-          Write-Host "Removing old process for $AppName..."
-          # از kill استفاده نکنید چون همه سایت‌ها را دان می‌کند. فقط همین اپ را پاک کنید.
+          # === 2. حذف پروسه قبلی ===
+          Write-Host "Managing PM2 Process for $AppName..."
+          
+          # استفاده از delete به جای kill (امن‌تر)
           pm2 delete $AppName --silent
-          # اگر اپ وجود نداشت (بار اول)، ارور نده و ادامه بده:
+          # جلوگیری از ارور اگر بار اول است
           $LASTEXITCODE = 0 
 
           # === 3. پاکسازی پوشه مقصد ===
@@ -144,18 +158,17 @@ jobs:
           if (Test-Path "node_modules\sharp") {
               Remove-Item "node_modules\sharp" -Recurse -Force
           }
-          # نصب مستقیم بدون سیو در پکیج جیسون برای سرعت بیشتر
+          # نصب سریع بدون تغییر package.json
           npm install sharp --no-save
 
           # === 6. اجرای نهایی با PM2 ===
           Write-Host "Starting app on port $AppPort..."
           $env:PORT = $AppPort
           
-          # --cwd: مهم‌ترین بخش برای ایزوله کردن پروژه
-          # باعث می‌شود PM2 دقیقا در همین پوشه اجرا شود و با پروژه‌های دیگر قاطی نکند
+          # --cwd: اجرای پروژه به صورت ایزوله در پوشه خودش
           pm2 start server.js --name "$AppName" --cwd "$TargetFolder" --time --force
           
-          # ذخیره لیست پروسه‌ها برای اینکه اگر سرور ریست شد، برنامه بالا بیاید
+          # ذخیره لیست پروسه‌ها
           pm2 save --force | Out-Null
           
           Write-Host "Deployment Completed Successfully!"
