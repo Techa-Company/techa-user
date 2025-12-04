@@ -24,23 +24,19 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      # === اصلاح شده: زیپ کردن صحیح ===
       - name: Prepare and Zip Artifact
         run: |
-          # 1. ساخت پوشه static در مسیر standalone
+          # 1. ساخت ساختار پوشه‌ها
           mkdir -p .next/standalone/.next/static
           
-          # 2. کپی فایل‌های استاتیک و عمومی
+          # 2. کپی فایل‌های استاتیک
           cp -r .next/static/* .next/standalone/.next/static/
           cp -r public .next/standalone/public
           
-          # 3. وارد پوشه standalone می‌شویم و زیپ می‌کنیم
+          # 3. زیپ کردن از داخل پوشه standalone
           cd .next/standalone
-          
-          # نکته مهم: اینجا باید 2 مرحله برگردیم عقب (../../) تا فایل زیپ در ریشه پروژه بیفتد
           zip -r ../../deploy-package.zip .
 
-      # برای اطمینان لیست فایل‌ها را چاپ می‌کنیم تا ببینیم فایل زیپ ساخته شده یا نه
       - name: Check Zip File Exists
         run: ls -lh deploy-package.zip
 
@@ -53,13 +49,18 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: self-hosted # مطمئن شوید لیبل‌های رانر درست است (مثلا [self-hosted, windows])
     
     defaults:
       run:
         shell: powershell
 
     steps:
+      - name: Setup Node on Windows
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
@@ -68,41 +69,52 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          $TargetFolder = "C:\inetpub\wwwroot\next-app"
+          # === تنظیمات متغیرها ===
+          $AppName = "next-app"
+          $AppPort = 3000
+          $TargetFolder = "C:\inetpub\wwwroot\$AppName"
           $ZipPath = ".\deploy-package.zip"
           
-          # 1. تلاش برای بستن PM2 های قبلی
-          # نکته: اگر با یوزر جدید سرویس را اجرا کنید، اینجا دیگه ارور نمیده
-          Write-Host "Stopping PM2..."
-          if (Get-Command npx -ErrorAction SilentlyContinue) {
-               pm2 kill --silent
+          # === 1. اطمینان از دسترسی به PM2 گلوبال ===
+          # این خط حیاتی است چون در گیت‌هاب اکشن، مسیر گلوبال NPM معمولا در Path نیست
+          $env:Path += ";$env:APPDATA\npm"
+
+          Write-Host "Checking PM2 availability..."
+          if (-not (Get-Command pm2 -ErrorAction SilentlyContinue)) {
+              Write-Error "PM2 is not installed globally or not found. Run 'npm install -g pm2' on the server."
+              exit 1
           }
 
-          # 2. آماده‌سازی پوشه
+          # === 2. حذف پروسه قبلی (به جای Kill کردن کل سرور) ===
+          Write-Host "Removing old process for $AppName..."
+          # از kill استفاده نکنید چون همه سایت‌ها را دان می‌کند. فقط همین اپ را پاک کنید.
+          pm2 delete $AppName --silent
+          # اگر اپ وجود نداشت (بار اول)، ارور نده و ادامه بده:
+          $LASTEXITCODE = 0 
+
+          # === 3. پاکسازی پوشه مقصد ===
           if (-not (Test-Path $TargetFolder)) {
               New-Item -ItemType Directory -Path $TargetFolder -Force
           }
 
-          Write-Host "Cleaning destination..."
+          Write-Host "Cleaning destination folder..."
           Remove-Item "$TargetFolder\*" -Recurse -Force -ErrorAction SilentlyContinue
 
           Write-Host "Extracting Zip..."
           Expand-Archive -Path $ZipPath -DestinationPath $TargetFolder -Force
 
-          # 3. ساخت web.config
-           $webConfig = @"
+          # === 4. تنظیم Web.Config ===
+          $webConfig = @"
           <configuration>
             <system.webServer>
               <rewrite>
                 <rules>
-                  <rule name="NextJS_Proxy" stopProcessing="true">
+                  <rule name="NextJS_Proxy_$AppName" stopProcessing="true">
                     <match url="(.*)" />
                     <conditions logicalGrouping="MatchAll">
-                      <!-- فقط اگر فایل فیزیکی (مثل عکس یا CSS) بود بفرست سمت IIS -->
-                      <!-- در غیر این صورت (حتی اگر پوشه بود) بفرست سمت Next.js -->
                       <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
                     </conditions>
-                    <action type="Rewrite" url="http://localhost:3000/{R:1}" />
+                    <action type="Rewrite" url="http://localhost:$AppPort/{R:1}" />
                   </rule>
                 </rules>
               </rewrite>
@@ -113,7 +125,6 @@ jobs:
                   </hiddenSegments>
                 </requestFiltering>
               </security>
-              <!-- این بخش را هم اضافه کنید تا IIS گیج نشود -->
               <defaultDocument>
                 <files>
                   <clear />
@@ -125,23 +136,27 @@ jobs:
           "@
           Set-Content -Path "$TargetFolder\web.config" -Value $webConfig
 
+          # رفتن به داخل پوشه برای نصب ماژول‌ها
           Set-Location $TargetFolder
           
-          # 4. حل مشکل کتابخانه Sharp (مهم برای ویندوز)
+          # === 5. حل مشکل Sharp ===
           Write-Host "Reinstalling Sharp for Windows..."
-          # پاک کردن نسخه لینوکسی
           if (Test-Path "node_modules\sharp") {
               Remove-Item "node_modules\sharp" -Recurse -Force
           }
-          # نصب نسخه ویندوزی
-          npm install sharp
+          # نصب مستقیم بدون سیو در پکیج جیسون برای سرعت بیشتر
+          npm install sharp --no-save
 
-          # 5. اجرای برنامه
-          Write-Host "Starting app..."
-          $env:PORT = 3000
+          # === 6. اجرای نهایی با PM2 ===
+          Write-Host "Starting app on port $AppPort..."
+          $env:PORT = $AppPort
           
-          # استفاده از pm2
-          pm2 start server.js --name "next-app" --update-env
-          pm2 save
+          # --cwd: مهم‌ترین بخش برای ایزوله کردن پروژه
+          # باعث می‌شود PM2 دقیقا در همین پوشه اجرا شود و با پروژه‌های دیگر قاطی نکند
+          pm2 start server.js --name "$AppName" --cwd "$TargetFolder" --time --force
           
-          Write-Host "Deployment Completed!"
+          # ذخیره لیست پروسه‌ها برای اینکه اگر سرور ریست شد، برنامه بالا بیاید
+          pm2 save --force | Out-Null
+          
+          Write-Host "Deployment Completed Successfully!"
+          pm2 show "$AppName"
