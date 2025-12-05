@@ -15,7 +15,7 @@ const AccordionItem = ({ title, content, isOpen, onClick }) => {
             <div
                 className={`overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-screen' : 'max-h-0'}`}
             >
-                <div className="mt-5 pr-5 pl-10">
+                <div className="mt-5 pr-5">
                     <p className="text-[16px] font-medium text-[#042A1B] leading-7 text-justify">
                         {content}
                     </p>

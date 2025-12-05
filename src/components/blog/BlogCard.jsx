@@ -14,7 +14,7 @@ export const BlogCard = ({ post, index }) => {
                 type: "spring",
                 stiffness: 120
             }}
-            className="group relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 overflow-hidden"
+            className="group relative bg-white dark:bg-slate-800 rounded-3xl shadow-xl hover:shadow-3xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 overflow-hidden"
         >
             {/* Image Container */}
             <div className="relative h-48 overflow-hidden">

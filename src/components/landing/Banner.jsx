@@ -44,9 +44,9 @@ const Banner = () => {
     }
 
     const phrases = [
-        "اعتبار بگیر",
-        "مسلط شو",
-        "درآمد کسب کن",
+        // "اعتبار بگیر",
+        // "مسلط شو",
+        // "درآمد کسب کن",
         "اعتبار بگیر، مسلط شو، درآمد کسب کن"
     ];
 
@@ -115,14 +115,14 @@ const Banner = () => {
     return (
         <div className="pt-32 pb-20 md:pb-10 bg-[#042A1B] h-fit relative">
             <div className="container mx-auto px-5 xl:px-20">
-                <div className="grid lg:grid-cols-2 gap-x-20 gap-5 items-center">
+                <div className="grid lg:grid-cols-2 gap-x-10 gap-5 items-center">
                     <div>
                         <div className="flex w-fit">
                             <div className="relative">
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="text-xl sm:text-4xl font-extrabold text-[#042A1B] bg-[#F6DC66] px-6 py-4 rounded-xl min-h-[60px] sm:min-h-[72px]"
+                                    className="text-xl sm:text-2xl xl:text-3xl  2xl:text-4xl font-extrabold text-[#042A1B] bg-[#F6DC66] px-4 sm:px-6 py-4 rounded-xl min-h-[60px] sm:min-h-[72px]"
                                 >
                                     {currentText}
                                     <motion.span
@@ -147,7 +147,7 @@ const Banner = () => {
                                 />
                             </div>
                         </div>
-                        <div className="pr-3 font-semibold text-white text-lg sm:text-[26px] mt-7 leading-[50px] w-fit">
+                        <div className="pr-3 font-semibold text-white text-lg text-justify sm:text-[26px] mt-7 leading-[50px] w-fit">
                             پلتفرم آموزشی و کارآموزی تکا مجموعه ای در بدنه دانشگاه، با هدف توانمند سازی دانشجویان و جوانان برای ورود به بازار کار و درآمدزایی مستقل در حوزه توسعه سامانه های نرم افزاری می باشد                            <div className="relative w-full h-3 mt-2">
                                 <Image
                                     src="/images/line.svg"
@@ -157,7 +157,7 @@ const Banner = () => {
                                 />
                             </div>
                         </div>
-                        <div className="pr-3 mt-10 flex items-center">
+                        <div className="pr-3 mt-5 flex items-center">
                             {/* <div className="w-2 h-2 rotate-45 bg-[#7AE36A]"></div>
                             <div className="w-32 h-0.5 bg-[#7AE36A] rounded-full"></div> */}
                         </div>

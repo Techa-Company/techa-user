@@ -11,12 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchContents } from "../../features/main/contents/contentsActions";
 
 const Sidebar = () => {
-  const [openAccordion, setOpenAccordion] = useState(0);
+  const [openAccordion, setOpenAccordion] = useState();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [topPosition, setTopPosition] = useState(72);
 
   const params = useParams();
-  const { docId } = params;
+  const { docId, lessonId } = params;
 
   const { loading, contents } = useSelector(state => state.contents);
   const dispatch = useDispatch();
@@ -43,6 +43,23 @@ const Sidebar = () => {
   useEffect(() => {
     document.body.style.overflow = isSidebarOpen ? "hidden" : "auto";
   }, [isSidebarOpen]);
+  useEffect(() => {
+    if (contents && contents.length > 0) {
+      // پیدا کردن فصلی که جلسه‌ی جاری داخلشه
+      const parentIndex = groupedArray.findIndex(content =>
+        content.children.some(child => String(child.Id) === String(lessonId))
+
+      );
+      console.log(groupedArray)
+
+      console.log(parentIndex)
+      if (parentIndex !== -1) {
+        setOpenAccordion(parentIndex);
+      }
+    }
+
+  }, [contents, docId]);
+
 
   // گروه‌بندی داده‌ها بر اساس ParentId
   const groupedContents = new Map();
@@ -91,7 +108,7 @@ const Sidebar = () => {
                 cy="10"
                 r="9"
                 fill="none"
-                stroke="white"
+                stroke="#eee"
                 strokeWidth="2"
               />
               <circle
@@ -99,13 +116,13 @@ const Sidebar = () => {
                 cy="10"
                 r="9"
                 fill="none"
-                stroke="#FBBF24"
+                stroke="#7AE36A"
                 strokeWidth="2"
                 strokeDasharray={2 * Math.PI * 9}
                 strokeDashoffset={2 * Math.PI * 9 * (1 - progress / 100)}
               />
             </svg>
-            <span className="absolute text-xs font-medium text-yellow-700">
+            <span className="absolute text-[15px] font-medium text-white lg:text-black">
               {progress}%
             </span>
           </div>
@@ -115,7 +132,7 @@ const Sidebar = () => {
         return (
           <div className="relative w-12 h-12 flex items-center justify-center">
             <Circle className="!text-[#D0DDD1] w-12 h-12" strokeWidth={1} />
-            <span className="absolute text-xs font-medium text-yellow-700">
+            <span className="absolute text-xs font-medium text-[#7AE36A]">
               {progress}%
             </span>
           </div>
@@ -125,10 +142,10 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`min-w-96 max-w-96 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none bottom-0 py-10 lg:py-0 transition-all duration-200 ${isSidebarOpen ? "right-0" : "-right-96"}`}
+      className={`min-w-[330px] max-w-[330px] lg:min-w-96 lg:max-w-96 px-4 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none bottom-0 py-10 lg:py-0 transition-all duration-200 ${isSidebarOpen ? "right-0" : "-right-[330px]"}`}
       style={{ top: `${topPosition}px` }}
     >
-      <h1 className="font-bold text-white lg:text-[#042A1B] text-3xl">سرفصل‌ها</h1>
+      <h1 className="font-bold text-white lg:text-[#042A1B] text-3xl">سر فصل های دوره</h1>
 
       <div className="mt-8 overflow-y-auto no-scrollbar" style={{ maxHeight: "calc(100vh - 72px)" }}>
         {loading ? (
@@ -155,12 +172,12 @@ const Sidebar = () => {
                           </span>
                           <p className="font-medium text-lg ">{child.Title}</p>
                         </div>
-                        <span className="text-white lg:text-[#042A1B] opacity-50 font-light">
+                        <span className="text-white lg:text-[#042A1B]  font-light">
                           {child.EstimatedReadTime} دقیقه
                         </span>
                       </Link>
                       {content.children.indexOf(child) !== content.children.length - 1 && (
-                        <span className="absolute right-8 top-14 border-r-2 border-dashed h-7 border-gray-300"></span>
+                        <span className="absolute right-8 top-14 border-r-2 border-dashed h-7 border-white lg:border-gray-300"></span>
                       )}
                     </li>
                   ))}
@@ -174,7 +191,7 @@ const Sidebar = () => {
       </div>
 
       <div
-        className="w-12 h-12 lg:hidden absolute -left-9 top-16 flex justify-center items-center bg-[#042A1B] rounded-l-lg cursor-pointer"
+        className="w-10 h-10 lg:hidden absolute -left-10 top-4 flex justify-center items-center bg-[#042A1B] rounded-l-lg cursor-pointer"
         onClick={toggleSidebar}
       >
         <PanelTopOpen

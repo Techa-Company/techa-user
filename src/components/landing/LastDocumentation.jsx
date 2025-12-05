@@ -28,7 +28,7 @@ const LastDocumentation = () => {
 
     return (
         <section className="bg-white py-16">
-            <div className="container px-5 xl:px-20 mx-auto">
+            <div className="container px-5 2xl:px-20 mx-auto">
                 {/* عنوان بخش */}
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-3">
@@ -46,7 +46,7 @@ const LastDocumentation = () => {
                 {loading ? (
                     <DocsSkeleton />
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:gap-10 mt-10">
                         {docs.map((doc, index) => (
                             <DocCard key={index} index={index} doc={doc} />
                         ))}

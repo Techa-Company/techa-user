@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import { ArrowLeft, BookText, Clock, GraduationCap, ShoppingCart, Star, Users, Zap } from 'lucide-react';
 import { RiCss3Fill, RiDatabase2Fill, RiDatabaseFill, RiHtml5Fill, RiJavascriptFill, RiReactjsFill, RiTailwindCssFill } from 'react-icons/ri';
-import { formatDuration } from '../../helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../features/cart/cartSlice';
+import { formatDuration } from '../../helper';
 
 const DocCard = ({ index, doc }) => {
     const [isAddingToCart, setIsAddingToCart] = useState(false);

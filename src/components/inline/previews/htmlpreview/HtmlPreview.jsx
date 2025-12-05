@@ -134,10 +134,10 @@ const HtmlPreview = ({ code: initialCode }) => {
 
       {/* Header - Light Theme */}
       <div className="flex flex-col-reverse lg:flex-row items-center justify-between bg-white px-4 py-4 border-b border-gray-200">
-        <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-start">
+        <div className="flex items-center gap-5 flex-wrap justify-center lg:justify-start">
           <button
             onClick={() => setEditable(!isEditable)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isEditable
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer ${isEditable
               ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
               : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
@@ -158,7 +158,7 @@ const HtmlPreview = ({ code: initialCode }) => {
           <button
             onClick={handleAIModification}
             disabled={isAILoading}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isAILoading
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer ${isAILoading
               ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
               : 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
               }`}
@@ -176,7 +176,7 @@ const HtmlPreview = ({ code: initialCode }) => {
           <button
             onClick={runCodeInIframe}
             disabled={isRunning}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isRunning
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer ${isRunning
               ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
               : 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100'
               }`}
@@ -191,7 +191,7 @@ const HtmlPreview = ({ code: initialCode }) => {
 
           <button
             onClick={() => setIsPreviewVisible(!isPreviewVisible)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isPreviewVisible
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer ${isPreviewVisible
               ? 'bg-gray-100 border-gray-300 text-gray-700'
               : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
@@ -204,7 +204,7 @@ const HtmlPreview = ({ code: initialCode }) => {
         </div>
 
         <div className="flex items-center gap-3 mb-3 lg:mb-0">
-          <span className="text-gray-800 font-bold text-xl" dir="rtl">
+          <span className="text-gray-800 font-bold text-2xl" dir="rtl">
             اجرای برخط HTML
           </span>
           <Terminal className="w-7 h-7 text-gray-600" />

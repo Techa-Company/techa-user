@@ -19,8 +19,8 @@ const Certificate = () => {
     ];
 
     return (
-        <div className="relative bg-gradient-to-b from-gray-50 to-white py-16 sm:py-20 px-4">
-            <div className="container mx-auto px-4 sm:px-10 lg:px-20">
+        <div className="relative bg-gradient-to-b from-gray-50 to-white py-16 sm:py-20">
+            <div className="container mx-auto px-5 2xl:px-20">
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-start">
 
@@ -40,7 +40,7 @@ const Certificate = () => {
                                 <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
                             </motion.div>
 
-                            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-snug">
+                            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-snug">
                                 <span className="text-emerald-600 block mb-2">پس از دوره آموزشی</span>
                                 گواهینامه معتبر دریافت کنید
                             </h2>
@@ -66,7 +66,7 @@ const Certificate = () => {
                             </ul>
                         </motion.div>
 
-                        <motion.div
+                        {/* <motion.div
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             transition={{ delay: 0.5 }}
@@ -86,7 +86,7 @@ const Certificate = () => {
                                     <span>نسخه دیجیتال تعاملی</span>
                                 </div>
                             </div>
-                        </motion.div>
+                        </motion.div> */}
 
                         <motion.button
                             whileHover={{ scale: 1.02 }}

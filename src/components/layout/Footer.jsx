@@ -49,7 +49,7 @@ const Footer = () => {
         src="/images/banner.png"
         alt="banner"
       />
-      <div className="container mx-auto px-5 xl:px-20">
+      <div className="container mx-auto px-5 2xl:px-20">
         <div className="w-full absolute -top-20 sm:-top-12 md:-top-32 xl:-top-36 2xl:-top-44 right-1/2 translate-x-1/2 px-5 lg:px-10">
           <div className="md:w-fit mx-auto flex flex-col sm:flex-row items-center justify-between gap-5 md:gap-10 lg:gap-20 rounded-3xl py-5 md:py-10 px-5 sm:px-10 md:px-20 bg-[#7AE36A]">
             <div className="text-[#042A1B] whitespace-nowrap text-center md:text-start">
@@ -83,7 +83,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="pt-40 sm:pt-20 pb-14 grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-10 lg:gap-15">
+        <div className="pt-40 sm:pt-20 pb-14 grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-10 lg:gap-15 justify-start">
           <div className="">
             <Link href="/">
               <Image
@@ -104,7 +104,7 @@ const Footer = () => {
               باشد.{" "}
             </p>
           </div>
-          <div className="mx-auto">
+          <div className="sm:mx-auto">
             <h4 className="font-bold text-[15px] text-[#F6DC65] ">
               دسترسی سریع
             </h4>
@@ -283,8 +283,8 @@ const Footer = () => {
       </div>
       <div className="bg-[#183b2d] py-3">
         <div className="container px-5 xl:px-20 mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between items-center text-[#ffffffB2]  font-light text-sm">
-            <div className="text-center sm:text-start">
+          <div className="flex flex-col sm:flex-row justify-between items-center text-[#ffffffB2]  font-light text-xs sm:text-lg">
+            <div className="text-center sm:text-start mb-2 sm:mb-0">
               کلیه حقوق مادی و معنوی این وبسایت متعلق به شرکت تکا می باشد.
             </div>
             <div>

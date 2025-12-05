@@ -5,9 +5,9 @@ import { ChevronDown } from 'lucide-react';
 
 const Accordion = ({ title, subtitle, content, isOpen, onClick, icon }) => {
     return (
-        <div className='border lg:border-[#D0DDD1] border-white rounded-2xl mb-5 overflow-hidden'>
+        <div className='border lg:border-[#D0DDD1] border-white rounded-2xl mb-5 overflow-hidden cursor-pointer'>
             <div
-                className={`flex items-center justify-between py-3 transition-colors duration-300 cursor-pointer px-3 lg:px-5 rounded-2xl ${isOpen ? 'lg:bg-[#D0DDD140]' : 'bg-transparent'} hover:lg:bg-[#D0DDD140]`}
+                className={`flex items-center justify-between py-3 transition-colors duration-300 cursor-pointer px-5 rounded-2xl ${isOpen ? 'lg:bg-[#D0DDD140]' : 'bg-transparent'} hover:lg:bg-[#D0DDD140]`}
                 onClick={onClick}
             >
                 <div className='flex items-center gap-3'>

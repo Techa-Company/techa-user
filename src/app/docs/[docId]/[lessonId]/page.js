@@ -129,7 +129,7 @@ export default function Lesson() {
           {content.EstimatedReadTime > 0 && (
             <div className="flex items-center gap-2 bg-teal-50 px-3 py-1.5 rounded-lg">
               <Clock className="text-teal-700" />
-              <span className="text-teal-700">زمان مطالعه:</span>
+              <span className="text-teal-700">مدت زمان:</span>
               <span className="font-bold text-teal-800">
                 {content.EstimatedReadTime} دقیقه
               </span>
@@ -137,7 +137,6 @@ export default function Lesson() {
           )}
 
           {content.Status === 3 ? (
-            // حالت خوانده شده
             <button
               disabled
               className="flex items-center gap-2 px-3 py-2 rounded-lg border 
@@ -153,7 +152,7 @@ export default function Lesson() {
                bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200"
             >
               <CheckCircle className="w-5 h-5 text-blue-500" />
-              <span className="text-sm font-medium">مشاهده تمرینات</span>
+              <span className="text-sm font-medium">لیست تمرینات</span>
             </Link>
           ) : (
             // حالت خوانده‌ام
