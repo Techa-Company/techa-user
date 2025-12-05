@@ -10,7 +10,7 @@ export default function Layout({ children }) {
   return (
     <div className="pt-32">
       <div className="container px-5 mx-auto">
-        <div className="flex lg:gap-10">
+        <div className="flex lg:gap-5">
           <ConditionalSidebar />
           <main className="w-full">{children}</main>
           <ToastContainer

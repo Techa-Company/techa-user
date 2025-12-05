@@ -7,6 +7,7 @@ import ChapterSkeleton from "../../../../components/courses/course/ChapterSkelet
 import { fetchContents } from "../../../../features/main/contents/contentsActions";
 import { FiMenu, FiX } from "react-icons/fi";
 import { fetchContentsWithExercises } from "../../../../features/main/exercises/exercisesActions";
+import Link from "next/link";
 
 export default function Layout({ children }) {
     const { docId, lessonId } = useParams();
@@ -121,9 +122,17 @@ export default function Layout({ children }) {
                         </button>
                     )}
                     <div className="h-full flex flex-col overflow-hidden">
+
                         <div className="p-5 border-b border-gray-200 flex items-center justify-between">
                             <h2 className="text-xl font-bold text-gray-800">تمرینات دوره</h2>
+                            <Link
+                                href={`/docs/${docId}`}
+                                className="bg-[#10B981] hover:bg-[#059669] text-white font-semibold px-4 py-2 rounded-lg shadow-md transition-colors duration-200"
+                            >
+                                برگشت به دوره
+                            </Link>
                         </div>
+
 
                         <div className="flex-1 overflow-y-auto p-5">
                             {loading ? (

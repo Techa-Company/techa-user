@@ -8,12 +8,15 @@ const AccordionList = ({ items }) => {
     const toggleAccordion = (index) => {
         setOpenAccordion(openAccordion === index ? -1 : index);
     };
+    if (items) {
 
-    // console.log(items)
+        console.log(JSON.parse(items))
+    }
 
     if (!items) {
         return <h1>چیزی نداریم</h1>
     }
+
 
     return (
         <div className="mt-5">
@@ -25,7 +28,7 @@ const AccordionList = ({ items }) => {
                     JSON.parse(items)?.map((item, index) => (
                         <>
                             <AccordionItem
-                                key={index}
+                                key={item.Id}
                                 title={item.Question}
                                 content={item.Answer}
                                 isOpen={openAccordion === index}

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",  
+  output: "standalone",
 
   env: {
     TLS_REJECT_UNAUTHORIZED: "0",
@@ -28,7 +28,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'api.techa.me',
+        hostname: 'pool.techa.me',
         port: '',
         pathname: '/staticfiles/**',
       },

@@ -11,7 +11,7 @@ const Exercises = () => {
                 {/* هدر صفحه با انیمیشن */}
                 <div className="text-center mb-16 relative">
                     <div className="absolute -inset-4  blur-4xl opacity-10 rounded-full"></div>
-                    <h1 className="text-5xl md:text-5xl font-extrabold text-green-900 mb-6 relative z-10">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-green-900 mb-6 relative z-10">
                         سیستم <span className="text-emerald-600">تمرینات تعاملی</span>
                     </h1>
                     <p className="text-xl md:text-2xl text-[#2f2f2f] mx-auto leading-relaxed">
@@ -97,11 +97,11 @@ const Exercises = () => {
                 </div>
 
                 {/* آمار و اطلاعات */}
-                <div className="bg-gradient-to-r from-green-600 to-emerald-700 rounded-3xl shadow-2xl p-10 text-white mb-16 relative overflow-hidden">
+                <div className="bg-gradient-to-r from-green-600 to-emerald-700 rounded-3xl shadow-2xl px-5 py-10 text-white mb-16 relative overflow-hidden">
                     <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full"></div>
                     <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-white/5 rounded-full"></div>
 
-                    <h2 className="text-3xl font-bold mb-10 text-center relative z-10">تمرینات دوره در یک نگاه</h2>
+                    <h2 className="text-2xl sm:text-4xl font-bold mb-10 text-center relative z-10">تمرینات دوره در یک نگاه</h2>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative z-10">
                         <div className="bg-white/10 p-6 rounded-2xl backdrop-blur-sm">

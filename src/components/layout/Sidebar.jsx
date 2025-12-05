@@ -142,7 +142,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`min-w-[330px] max-w-[330px] lg:min-w-96 lg:max-w-96 px-4 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none bottom-0 py-10 lg:py-0 transition-all duration-200 ${isSidebarOpen ? "right-0" : "-right-[330px]"}`}
+      className={`min-w-[330px] max-w-[330px] lg:min-w-[450px] lg:max-w-[450px] px-4 fixed lg:static z-30 lg:z-0 bg-[#042A1B] lg:bg-transparent shadow-xl lg:shadow-none bottom-0 py-10 lg:py-0 transition-all duration-200 ${isSidebarOpen ? "right-0" : "-right-[330px]"}`}
       style={{ top: `${topPosition}px` }}
     >
       <h1 className="font-bold text-white lg:text-[#042A1B] text-3xl">سر فصل های دوره</h1>
@@ -162,7 +162,7 @@ const Sidebar = () => {
                   {content.children.map((child) => (
                     <li className="relative" key={child.Id}>
                       <Link
-                        className="flex items-center justify-between gap-3 hover:bg-[#D0DDD110] p-2 rounded-lg transition-colors duration-200"
+                        className="flex items-center justify-between gap-3 hover:bg-[#D0DDD110] py-2 rounded-lg transition-colors duration-200"
                         href={`/docs/${docId}/${child.Id}`}
                         onClick={() => setIsSidebarOpen(false)}
                       >
@@ -177,7 +177,7 @@ const Sidebar = () => {
                         </span>
                       </Link>
                       {content.children.indexOf(child) !== content.children.length - 1 && (
-                        <span className="absolute right-8 top-14 border-r-2 border-dashed h-7 border-white lg:border-gray-300"></span>
+                        <span className="absolute right-6 top-14 border-r-2 border-dashed h-7 border-white lg:border-gray-300"></span>
                       )}
                     </li>
                   ))}
