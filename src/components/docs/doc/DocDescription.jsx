@@ -5,15 +5,23 @@ import { ChevronDown } from 'lucide-react';
 const DocDescription = ({ description }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
 
+    const formatted = description
+        ?.split('$')
+        .map(p => p.trim())
+        .filter(p => p.length > 0)
+        .map(p => `<p class="mb-2.5">${p}.</p>`)
+        .join('');
+
+
     return (
         <div>
             <div
-                className={`overflow-hidden text-[17.5px] text-[#042A1B] text-justify leading-7 font-normal transition-all duration-500 relative ${showFullDescription ? 'max-h-screen' : 'max-h-40'
+                className={`overflow-hidden text-[19px] leading-9 text-black text-justify font-normal transition-all duration-500 relative ${showFullDescription ? 'max-h-screen' : 'max-h-40'
                     }`}
             >
                 <div
                     dangerouslySetInnerHTML={{
-                        __html: description || '',
+                        __html: formatted || description,
                     }}
                 ></div>
                 {!showFullDescription && (

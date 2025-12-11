@@ -34,7 +34,7 @@ export const renderInlineSnippets = () => {
 
     // ساخت کانتینر جایگزین
     const container = document.createElement("div");
-    container.className = "preview-container my-4 no-reset";
+    container.className = "preview-container my-4 no-reset max-w-w";
 
     pre.parentNode?.insertBefore(container, pre);
     pre.style.display = "none";

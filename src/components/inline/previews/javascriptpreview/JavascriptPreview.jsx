@@ -257,7 +257,7 @@ const JavaScriptPreview = ({ code: initialCode }) => {
 
   return (
     <div
-      className="bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-200"
+      className="bg-white rounded-lg  overflow-hidden border border-gray-200"
       dir="ltr"
     >
       <ToastContainer
@@ -347,7 +347,7 @@ const JavaScriptPreview = ({ code: initialCode }) => {
         </div>
 
         <div className="flex items-center gap-3 mb-3 lg:mb-0">
-          <span className="text-gray-800 font-bold text-xl" dir="rtl">
+          <span className="text-gray-800 font-bold text-2xl" dir="rtl">
             اجرای برخط JavaScript
           </span>
           <Terminal className="w-7 h-7 text-gray-600" />

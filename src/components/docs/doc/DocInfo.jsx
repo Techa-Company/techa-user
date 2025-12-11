@@ -74,18 +74,18 @@ const DocInfo = ({ docDetails }) => {
 
             {/* بخش مناسب بودن دوره */}
             <div className="mt-10">
-                <h1 className="font-extrabold text-[#042A1B] text-2xl">
+                <h1 className="font-black text-[#042A1B] text-3xl">
                     این داکیومنت برای چه کسانی مناسب است؟
                 </h1>
                 <div className="mt-3">
-                    <p className="text-[17.5px] text-[#042A1B] text-justify leading-7 font-normal">
+                    <p className="text-[19px] text-black text-justify leading-9 font-normal">
                         {docDetails?.TargetAudience}     </p>
                 </div>
             </div>
 
             {/* سوالات متداول */}
             <div className="mt-14">
-                <h1 className="font-extrabold text-[#042A1B] text-2xl">
+                <h1 className="font-extrabold text-black text-3xl">
                     سوالات متداول
                 </h1>
                 <AccordionList items={docDetails?.FAQs} />

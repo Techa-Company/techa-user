@@ -1,8 +1,8 @@
 "use client"
 const CourseTitle = ({ title }) => {
     return (
-        <h1 className="font-extrabold text-[#042A1B] text-3xl">
-            دوره آموزشی <span className="font-bold">{title}</span>
+        <h1 className="font-extrabold text-black text-3xl">
+            دوره آموزشی <span className="font-black">{title}</span>
         </h1>
     );
 };

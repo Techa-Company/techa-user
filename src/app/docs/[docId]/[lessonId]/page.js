@@ -77,8 +77,6 @@ export default function Lesson() {
 
   useEffect(() => {
     if (!content) return;
-
-    // کمی تاخیر برای اینکه DOM آماده بشه
     setTimeout(() => {
       renderInlineSnippets();
       console.log("Editor loaded");
@@ -115,11 +113,11 @@ export default function Lesson() {
       {/* هدر */}
       <div className="flex flex-col gap-4 pb-5 border-b-2 border-[#2ECC71]">
         <div className="flex justify-between items-start">
-          <h1 className="font-black text-3xl">{content.Title}</h1>
+          <h1 className="font-black text-2xl md:text-3xl">{content.Title}</h1>
 
           {lessonIndexInfo.total > 0 && (
-            <span className="text-2xl font-bold bg-gray-100 px-3 py-1 rounded-lg">
-              درس {lessonIndexInfo.index} از {lessonIndexInfo.total}
+            <span className="text-2xl font-bold bg-gray-100 px-3 py-1 rounded-lg whitespace-nowrap">
+              <span className="hidden md:inline-block">درس</span> {lessonIndexInfo.index} از {lessonIndexInfo.total}
             </span>
           )}
         </div>
@@ -172,13 +170,14 @@ export default function Lesson() {
       {/* محتوای متن */}
       <div
         ref={contentRef}
-        className="text-[17.5px] leading-7 text-justify grid gap-5 pb-5 border-b-2 border-[#2ECC71] mt-5"
+        className="grid gap-5 pb-5 border-b-2 border-[#2ECC71] mt-5"
       >
         <div className="lesson-content">
           <div
-            className="prose prose-p:!text-xl prose-p:!leading-10 prose-p:!text-justify"
+            className="max-w-w prose prose-p:!text-[19px] prose-p:!leading-9 prose-p:!text-justify prose-h1:!text-3xl  overflow-hidden break-words"
             dangerouslySetInnerHTML={{ __html: content.Description }}
           />
+
         </div>
       </div>
 
