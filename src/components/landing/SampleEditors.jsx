@@ -16,13 +16,13 @@ const SampleEditor = () => {
 </ul>
 <footer>Footer content here.</footer>`;
 
-    const jsCode = `console.log('Hello from JavaScript!');
+    const jsCode = `
 const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
 items.forEach((item, index) => {
-    console.log(\`Item \${index + 1}: \${item}\`);
+    
 });
 const sum = (a, b) => a + b;
-console.log('Sum of 5 and 10 is:', sum(5, 10));`;
+`;
 
     const reactCode = `const MyComponent = () => {
     const [count, setCount] = useState(0);

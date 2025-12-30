@@ -17,7 +17,7 @@ export const compileAndRenderJSX = (jsCode: string): any => {
     const compiledCode = Babel.transform(modifiedCode, {
       presets: ["react"],
     }).code;
-    console.log(compiledCode);
+
 
     // Evaluates the compiled code and returns the component
     if (compiledCode) {

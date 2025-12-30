@@ -97,7 +97,6 @@ const CartPage = () => {
         exit: { opacity: 0, x: 50 }
     };
 
-    // console.log(items)
 
     const DynamicIcon = ({ iconName, className }) => {
         const IconComponent = RiIcons[iconName];

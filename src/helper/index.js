@@ -13,6 +13,5 @@ export const formatDuration = minutes => {
         // نزدیک به ساعت بعد
         return `حدود ${hours + 1} ساعت`;
     }
-    console.log(`${hours} ساعت${minuteText ? ' ' + minuteText : ''}`)
     return `${hours} ساعت${minuteText ? ' ' + minuteText : ''}`;
 };

@@ -34,7 +34,6 @@ export default function DocDetailsPage() {
   useEffect(() => {
     dispatch(fetchDocById({ "Id": docId }));
   }, []);
-  console.log(doc)
 
 
   // تب‌ها

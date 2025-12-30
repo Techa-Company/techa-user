@@ -1,36 +1,33 @@
-// components/Comments.js
 "use client";
 import { useState, useEffect } from 'react';
-// import CommentForm from './CommentForm';
 import CommentList from './CommentList';
-import CommentSkeleton from './CommentSkeleton';
 import CommentForm from './CommentForm';
+import { Loader2 } from 'lucide-react';
 
 const Comments = () => {
     const [comments, setComments] = useState([]);
-    const [replyContent, setReplyContent] = useState("");
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // شبیه‌سازی دریافت نظرات از API
+        // شبیه‌سازی دریافت داده
         const fetchComments = async () => {
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            await new Promise((resolve) => setTimeout(resolve, 800));
             const fakeComments = [
                 {
                     id: 1,
                     userName: "علی جوشنگ",
                     userAvatar: "https://i.pravatar.cc/150?img=65",
-                    rating: 4.5,
+                    rating: 4,
                     date: "2023-10-12",
-                    comment:
-                        "این دوره بسیار عالی بود و مطالب به خوبی توضیح داده شده بودند. واقعا راضی هستم.",
+                    comment: "این دوره واقعاً دید من رو نسبت به برنامه‌نویسی تغییر داد. ممنون از تیم خوبتون.",
                     replies: [
                         {
                             id: 11,
-                            userName: "مدیر سایت",
-                            userAvatar: "https://i.pravatar.cc/150?img=63",
+                            userName: "پشتیبانی سایت",
+                            userAvatar: "https://i.pravatar.cc/150?img=33",
                             date: "2023-10-13",
-                            comment: "خوشحالیم که دوره مورد پسند شما بوده است.",
+                            comment: "خوشحالیم که براتون مفید بوده علی جان! موفق باشید.",
+                            role: "admin" // برای استایل دهی خاص به ادمین
                         },
                     ],
                 },
@@ -40,21 +37,9 @@ const Comments = () => {
                     userAvatar: "https://i.pravatar.cc/150?img=47",
                     rating: 5,
                     date: "2023-10-10",
-                    comment:
-                        "مدرس بسیار مسلط بود و پاسخ سوالات را با حوصله می‌داد. توصیه می‌کنم حتما این دوره را بگذرانید.",
+                    comment: "کیفیت صدا و تصویر عالی بود. فقط ای کاش بخش پروژه‌ها کمی بیشتر بود.",
                     replies: [],
                 },
-                {
-                    id: 3,
-                    userName: "محمد کاظمی",
-                    userAvatar: "https://i.pravatar.cc/150?img=68",
-                    rating: 4,
-                    date: "2023-10-08",
-                    comment:
-                        "دوره خوبی بود اما می‌شد برخی مباحث را بیشتر توضیح داد. در کل رضایت‌بخش بود.",
-                    replies: [],
-                },
-                // نظرات بیشتر...
             ];
             setComments(fakeComments);
             setLoading(false);
@@ -63,71 +48,55 @@ const Comments = () => {
     }, []);
 
     const handleAddComment = (newComment, resetForm) => {
-        if (newComment.userName && newComment.comment && newComment.rating > 0) {
-            const commentToAdd = {
-                ...newComment,
-                id: comments.length + 1,
-                date: new Date().toISOString().split("T")[0],
-                userAvatar: "/images/default-avatar.jpg", // تصویر پیش‌فرض
-                replies: [],
-            };
-            setComments([commentToAdd, ...comments]);
-            resetForm({
-                userName: "",
-                userAvatar: "",
-                rating: 0,
-                comment: "",
-                date: "",
-            });
-        } else {
-            alert("لطفاً تمامی فیلدها را پر کنید.");
-        }
+        const commentToAdd = {
+            ...newComment,
+            id: Date.now(),
+            date: new Date().toISOString().split("T")[0],
+            userAvatar: `https://i.pravatar.cc/150?u=${Date.now()}`, // آواتار رندوم
+            replies: [],
+        };
+        setComments([commentToAdd, ...comments]);
+        resetForm();
     };
 
-    const handleAddReply = (commentId) => {
-        if (replyContent) {
-            const replyToAdd = {
-                id: Date.now(),
-                userName: "شما",
-                userAvatar: "/images/default-avatar.jpg",
-                date: new Date().toISOString().split("T")[0],
-                comment: replyContent,
-            };
-            setComments((prevComments) =>
-                prevComments.map((comment) =>
-                    comment.id === commentId
-                        ? {
-                            ...comment,
-                            replies: [...comment.replies, replyToAdd],
-                        }
-                        : comment
-                )
-            );
-            setReplyContent("");
-        } else {
-            alert("لطفاً پاسخ خود را بنویسید.");
-        }
+    const handleAddReply = (commentId, text) => {
+        const replyToAdd = {
+            id: Date.now(),
+            userName: "کاربر مهمان",
+            userAvatar: "/images/default-avatar.jpg",
+            date: new Date().toISOString().split("T")[0],
+            comment: text,
+        };
+        setComments((prevComments) =>
+            prevComments.map((comment) =>
+                comment.id === commentId
+                    ? { ...comment, replies: [...comment.replies, replyToAdd] }
+                    : comment
+            )
+        );
     };
 
     return (
-        <div className="mt-8">
-            <h2 className="text-2xl font-bold text-[#042A1B] mb-6">نظرات کاربران</h2>
-            {/* فرم ارسال نظر جدید */}
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6">
+            <div className="flex items-center gap-3 mb-8">
+                <div className="h-8 w-1 bg-emerald-500 rounded-full"></div>
+                <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">
+                    نظرات <span className="text-emerald-500">دانشجویان</span>
+                </h2>
+                <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full mr-2">
+                    {comments.length} نظر
+                </span>
+            </div>
+
             <CommentForm handleAddComment={handleAddComment} />
-            {/* لیست نظرات */}
+
             {loading ? (
-                <div className="space-y-6">
-                    {[...Array(3)].map((_, index) => (
-                        <CommentSkeleton key={index} />
-                    ))}
+                <div className="flex flex-col items-center justify-center py-12 text-slate-400">
+                    <Loader2 className="w-10 h-10 animate-spin mb-3 text-emerald-500" />
+                    <p>در حال بارگذاری نظرات...</p>
                 </div>
             ) : (
-                <CommentList
-                    comments={comments}
-                    handleAddReply={handleAddReply}
-                    replyContent={replyContent}
-                    setReplyContent={setReplyContent}
-                />
+                <CommentList comments={comments} handleAddReply={handleAddReply} />
             )}
         </div>
     );

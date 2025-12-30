@@ -83,7 +83,7 @@ const ExerciseJSEditor = ({ tutorialID, onCodeChange, editable }) => {
                     method: 'log', 
                     message: args.join(' ') 
                   }, '*');
-                  originalConsole.log(...args);
+                  original
                 },
                 error: (...args) => {
                   window.parent.postMessage({ 

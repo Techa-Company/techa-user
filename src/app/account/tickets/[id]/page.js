@@ -1,337 +1,193 @@
 "use client";
+import { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, Clock, User, ChevronLeft, Paperclip, Send, CheckCircle } from 'lucide-react';
+import {
+    ChevronRight, Clock, AlertCircle, Hash, User,
+    Paperclip, Send, MoreVertical, ShieldCheck
+} from 'lucide-react';
 
-// دیتای نمونه پیشرفته
-const sampleTicket = {
-    id: 1,
-    title: 'مشکل در اجرای کدهای ری‌اکت در نسخه موبایل',
-    category: 'فنی',
+const mockTicket = {
+    id: 2045,
+    title: 'عدم اعمال کد تخفیف در سبد خرید',
     status: 'در حال بررسی',
     priority: 'بالا',
-    createdAt: '۱۴۰۳/۰۳/۲۰ - ۱۴:۳۰',
-    content: `
-        <h2>شرح مشکل:</h2>
-        <p>پس از آپدیت به نسخه ۱۸ ری‌اکت، کامپوننت‌ها در دستگاه‌های موبایل به درستی رندر نمیشوند.</p>
-        <ul>
-            <li>خطای مرورگر: Uncaught ReferenceError</li>
-            <li>شماره خطا: ۱۲۷۸</li>
-            <li>ورژن ری‌اکت: ۱۸.۲.۰</li>
-        </ul>
-        <p>ضمیمه‌ها:</p>
-        <ol>
-            <li>تصویر خطا</li>
-            <li>فایل کد</li>
-        </ol>
-    `,
+    department: 'مالی',
+    createdAt: '۱۴۰۳/۱۰/۰۹ - ۱۰:۳۰',
     messages: [
         {
             id: 1,
-            sender: 'پشتیبانی تکا',
-            role: 'کارشناس فنی',
-            avatar: '/images/teacher.jpeg',
-            content: 'سلام وقت بخیر، مشکالتون رو بررسی میکنیم. لطفا نسخه مرورگر و نمونه کد رو ارسال کنید.',
-            date: '۱۴۰۳/۰۳/۲۰ - ۱۵:۰۰',
-            attachments: ['error-screenshot.jpg'],
-            systemMessage: true
+            isUser: true,
+            sender: 'رامین جوشنگ',
+            avatar: null,
+            content: '<p>سلام، من کد تخفیف YALDA1403 رو میزنم ولی مبلغ کسر نمیشه. لطفا بررسی کنید.</p>',
+            date: '۱۰:۳۰',
+            role: 'کاربر'
         },
         {
             id: 2,
-            sender: 'شما',
-            role: 'کاربر',
-            avatar: '/images/teacher.jpeg',
-            content: 'مرورگر: Chrome 123<br/>کد نمونه:<br/><code>npm create vite@latest</code>',
-            date: '۱۴۰۳/۰۳/۲۰ - ۱۵:۳۰',
-            attachments: ['sample-code.jsx']
+            isUser: false,
+            sender: 'پشتیبانی فنی',
+            avatar: '/images/support-avatar.jpg',
+            content: '<p>سلام رامین عزیز،<br>کد تخفیف رو بررسی کردم. این کد فقط برای دوره‌های فرانت‌اند فعال هست. سبد خرید شما شامل دوره پایتون میشه.</p>',
+            date: '۱۰:۴۵',
+            role: 'کارشناس پشتیبانی'
         }
     ]
 };
 
 export default function TicketDetail() {
-    const { id } = useParams();
-    const [replyContent, setReplyContent] = useState('');
-    const [attachments, setAttachments] = useState([]);
-    const [ticket, setTicket] = useState(sampleTicket);
+    const [reply, setReply] = useState('');
+    const [messages, setMessages] = useState(mockTicket.messages);
 
-    const handleReply = () => {
-        if (!replyContent.trim()) return;
-
-        const newMessage = {
+    const handleSend = () => {
+        if (!reply) return;
+        const newMsg = {
             id: Date.now(),
+            isUser: true,
             sender: 'شما',
-            role: 'کاربر',
-            avatar: '/user-avatar.png',
-            content: replyContent,
-            date: new Date().toLocaleString('fa-IR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-            }),
-            attachments: [...attachments]
+            content: reply,
+            date: new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' }),
+            role: 'کاربر'
         };
-
-        setTicket(prev => ({
-            ...prev,
-            messages: [...prev.messages, newMessage],
-            status: 'در حال بررسی'
-        }));
-
-        setReplyContent('');
-        setAttachments([]);
+        setMessages([...messages, newMsg]);
+        setReply('');
     };
-
-    const handleFileUpload = (e) => {
-        const files = Array.from(e.target.files);
-        setAttachments(prev => [...prev, ...files]);
-    };
-
-    const StatusBadge = ({ status }) => (
-        <motion.span
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 ${getStatusColor(status)}`}
-        >
-            {status === 'در حال بررسی' && <Clock className="w-4 h-4" />}
-            {status === 'بسته' && <CheckCircle className="w-4 h-4" />}
-            {status === 'پاسخ داده شده' && <Send className="w-4 h-4" />}
-            {status}
-        </motion.span>
-    );
 
     return (
-        <div className="max-w-5xl mx-auto p-4 lg:p-8">
-            <Link
-                href="/account/tickets"
-                className="mb-6 flex items-center gap-2 text-emerald-600 hover:text-emerald-700 transition-colors"
-            >
-                <ChevronLeft className="w-5 h-5" />
-                بازگشت به لیست تیکت‌ها
-            </Link>
+        <div className="min-h-screen bg-[#F0F2F5] p-4 sm:p-6 font-sans" dir="rtl">
+            <div className="max-w-5xl mx-auto h-[calc(100vh-3rem)] flex flex-col">
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl shadow-lg border border-emerald-50 overflow-hidden"
-            >
-                {/* هدر تیکت */}
-                <div className="p-6 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-emerald-100">
-                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                        <div>
-                            <h1 className="text-2xl lg:text-3xl font-bold text-emerald-800">
-                                {ticket.title}
-                            </h1>
-                            <div className="mt-2 flex items-center gap-3 text-emerald-600">
-                                <span className="text-sm">#{ticket.id}</span>
-                                <span>•</span>
-                                <span className="text-sm">{ticket.createdAt}</span>
+                {/* Navbar Breadcrumb */}
+                <div className="flex items-center gap-2 mb-4 text-slate-500 text-sm">
+                    <Link href="/account/tickets" className="hover:text-emerald-600 transition-colors">تیکت‌ها</Link>
+                    <ChevronRight className="w-4 h-4" />
+                    <span className="text-slate-800 font-medium">جزئیات تیکت #{mockTicket.id}</span>
+                </div>
+
+                <div className="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden">
+
+                    {/* Main Chat Area */}
+                    <div className="flex-1 flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+
+                        {/* Header */}
+                        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-white z-10">
+                            <div>
+                                <h1 className="font-bold text-slate-800 text-lg">{mockTicket.title}</h1>
+                                <div className="flex items-center gap-3 text-xs text-slate-500 mt-1">
+                                    <span className="bg-amber-100 text-amber-700 px-2 py-0.5 rounded flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        {mockTicket.status}
+                                    </span>
+                                    <span>{mockTicket.department}</span>
+                                    <span>•</span>
+                                    <span>{mockTicket.createdAt}</span>
+                                </div>
                             </div>
+                            <button className="p-2 hover:bg-slate-100 rounded-full text-slate-400">
+                                <MoreVertical className="w-5 h-5" />
+                            </button>
                         </div>
-                        <StatusBadge status={ticket.status} />
-                    </div>
-                </div>
 
-                {/* اطلاعات تیکت */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
-                    <InfoBox icon={<AlertCircle />} title="اولویت" value={ticket.priority} />
-                    <InfoBox icon={<User />} title="ارسال کننده" value="رامین جوشنگ" />
-                    <InfoBox icon={<Clock />} title="زمان پاسخگویی" value="حداکثر ۲۴ ساعت" />
-                </div>
-
-                {/* محتوای اصلی */}
-                <div className="p-6 border-t border-emerald-100">
-                    <h2 className="text-xl font-semibold text-emerald-800 mb-4">جزئیات تیکت</h2>
-                    <div
-                        className="prose max-w-none text-black"
-                        dangerouslySetInnerHTML={{ __html: ticket.content }}
-                    />
-                </div>
-
-                {/* تاریخچه مکاتبات */}
-                <div className="p-6 bg-gray-50 border-t border-emerald-100">
-                    <h2 className="text-xl font-semibold text-emerald-800 mb-6">تاریخچه مکاتبات</h2>
-
-                    <div className="space-y-8">
-                        <AnimatePresence>
-                            {ticket.messages.map((message) => (
+                        {/* Messages List (Scrollable) */}
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/50">
+                            {messages.map((msg) => (
                                 <motion.div
-                                    key={message.id}
-                                    initial={{ opacity: 0, x: message.systemMessage ? 20 : -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0 }}
-                                    className={`flex gap-4 ${message.systemMessage ? 'flex-row-reverse' : ''}`}
+                                    key={msg.id}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className={`flex gap-4 ${msg.isUser ? 'flex-row-reverse' : 'flex-row'}`}
                                 >
-                                    <div className="flex-shrink-0">
-                                        <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
-                                            <img
-                                                src={message.avatar}
-                                                alt={message.sender}
-                                                className="w-10 h-10 rounded-full object-cover"
-                                            />
-                                        </div>
+                                    {/* Avatar */}
+                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border-2 ${msg.isUser ? 'bg-indigo-100 border-indigo-200 text-indigo-600' : 'bg-emerald-100 border-emerald-200 text-emerald-600'}`}>
+                                        {msg.isUser ? <User className="w-5 h-5" /> : <ShieldCheck className="w-5 h-5" />}
                                     </div>
 
-                                    <div className={`flex-1 ${message.systemMessage ? 'text-left' : 'text-right'}`}>
-                                        <div className={`p-4 rounded-2xl ${message.systemMessage
-                                            ? 'bg-white border border-emerald-100 shadow-sm'
-                                            : 'bg-emerald-50'}`}
-                                        >
-                                            <div className="flex items-center justify-between mb-2">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="font-semibold text-emerald-800">
-                                                        {message.sender}
-                                                    </span>
-                                                    <span className="text-xs text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">
-                                                        {message.role}
-                                                    </span>
-                                                </div>
-                                                <span className="text-sm text-emerald-600">
-                                                    {message.date}
-                                                </span>
-                                            </div>
-
-                                            <div
-                                                className={`prose max-w-none ${message.systemMessage
-                                                    ? 'text-gray-700'
-                                                    : 'text-emerald-800'}`}
-                                                dangerouslySetInnerHTML={{ __html: message.content }}
-                                            />
-
-                                            {message.attachments?.length > 0 && (
-                                                <div className="mt-4 border-t border-emerald-100 pt-4">
-                                                    <h3 className="text-sm font-medium text-emerald-800 mb-2">
-                                                        ضمیمه‌ها:
-                                                    </h3>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {message.attachments.map((file, index) => (
-                                                            <a
-                                                                key={index}
-                                                                href="#"
-                                                                className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 text-sm"
-                                                            >
-                                                                <Paperclip className="w-4 h-4" />
-                                                                {file}
-                                                            </a>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
+                                    {/* Bubble */}
+                                    <div className={`flex flex-col max-w-[80%] ${msg.isUser ? 'items-end' : 'items-start'}`}>
+                                        <div className="flex items-center gap-2 mb-1 px-1">
+                                            <span className="text-xs font-bold text-slate-700">{msg.sender}</span>
+                                            <span className="text-[10px] text-slate-400">{msg.date}</span>
+                                        </div>
+                                        <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.isUser
+                                                ? 'bg-indigo-600 text-white rounded-tr-none'
+                                                : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
+                                            }`}>
+                                            <div dangerouslySetInnerHTML={{ __html: msg.content }} className={msg.isUser ? '[&_p]:text-white' : ''} />
                                         </div>
                                     </div>
                                 </motion.div>
                             ))}
-                        </AnimatePresence>
-                    </div>
-                </div>
-
-                {/* بخش پاسخ‌دهی */}
-                <div className="p-6 bg-white border-t border-emerald-100">
-                    <h3 className="text-lg font-semibold text-emerald-800 mb-4">پاسخ جدید</h3>
-
-                    <Editor
-                        apiKey='v12ld4fyiekikay5d5tuv6j4578f6daxybv4qrm2a0oymp5j'
-                        init={{
-                            height: 300,
-                            menubar: false,
-                            plugins: [
-                                'advlist lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                            toolbar: `undo redo | formatselect | bold italic underline | 
-                                     alignright aligncenter alignleft alignjustify | 
-                                     bullist numlist outdent indent | link image media | 
-                                     code help`,
-                            directionality: 'rtl',
-                            content_style: `
-                                body { 
-                                    font-family: Vazir, Tahoma, sans-serif; 
-                                    font-size: 14px; 
-                                    line-height: 1.6;
-                                }
-                                ul, ol { 
-                                    margin-right: 20px; 
-                                }
-                            `,
-                            images_upload_handler: async (blobInfo) => {
-                                // آپلود عکس به سرور
-                                return new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve(`https://example.com/uploads/${blobInfo.filename()}`);
-                                    }, 2000);
-                                });
-                            }
-                        }}
-                        value={replyContent}
-                        onEditorChange={setReplyContent}
-                    />
-
-                    <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-2">
-                            <label className="cursor-pointer text-emerald-600 hover:text-emerald-700">
-                                <input
-                                    type="file"
-                                    multiple
-                                    onChange={handleFileUpload}
-                                    className="hidden"
-                                />
-                                <Paperclip className="w-5 h-5" />
-                                <span className="text-sm">افزودن ضمیمه</span>
-                            </label>
-                            {attachments.length > 0 && (
-                                <span className="text-sm text-emerald-600">
-                                    ({attachments.length} فایل انتخاب شده)
-                                </span>
-                            )}
                         </div>
 
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={handleReply}
-                            className="px-6 py-3 bg-emerald-600 text-white rounded-xl 
-                                     hover:bg-emerald-700 flex items-center gap-2 w-full sm:w-auto 
-                                     justify-center"
-                        >
-                            <Send className="w-5 h-5" />
-                            ارسال پاسخ
-                        </motion.button>
+                        {/* Reply Area */}
+                        <div className="p-4 bg-white border-t border-slate-200">
+                            <div className="border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500/20 transition-all">
+                                <Editor
+                                    apiKey='v12ld4fyiekikay5d5tuv6j4578f6daxybv4qrm2a0oymp5j'
+                                    init={{
+                                        height: 150,
+                                        menubar: false,
+                                        plugins: 'link image code',
+                                        toolbar: 'bold italic | bullist numlist | link',
+                                        content_style: 'body { font-family:Vazir, sans-serif; font-size:14px; direction: rtl; }',
+                                        directionality: 'rtl',
+                                        statusbar: false,
+                                    }}
+                                    value={reply}
+                                    onEditorChange={setReply}
+                                />
+                                <div className="bg-slate-50 p-2 flex justify-between items-center border-t border-slate-100">
+                                    <button className="p-2 hover:bg-slate-200 rounded-lg text-slate-500 transition-colors">
+                                        <Paperclip className="w-5 h-5" />
+                                    </button>
+                                    <button
+                                        onClick={handleSend}
+                                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+                                    >
+                                        <Send className="w-4 h-4" />
+                                        ارسال پاسخ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
+                    {/* Sidebar Info (Desktop) */}
+                    <div className="hidden lg:block w-80 space-y-4">
+                        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <h3 className="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-3">اطلاعات تیکت</h3>
+                            <div className="space-y-4">
+                                <InfoRow icon={Hash} label="شناسه تیکت" value={`#${mockTicket.id}`} />
+                                <InfoRow icon={AlertCircle} label="اولویت" value={mockTicket.priority} valueClass="text-rose-600 font-medium" />
+                                <InfoRow icon={User} label="دپارتمان" value={mockTicket.department} />
+                                <InfoRow icon={Clock} label="آخرین بروزرسانی" value="۵ دقیقه پیش" />
+                            </div>
+                        </div>
+
+                        <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
+                            <p className="text-emerald-800 text-sm font-medium mb-2">رضایت از پاسخگویی؟</p>
+                            <p className="text-emerald-600 text-xs mb-4">پس از اتمام گفتگو می‌توانید به نحوه پاسخگویی امتیاز دهید.</p>
+                            <button className="w-full bg-white border border-emerald-200 text-emerald-600 py-2 rounded-xl text-sm hover:bg-emerald-600 hover:text-white transition-colors">
+                                بستن تیکت
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 }
 
-// کامپوننت جعبه اطلاعات
-const InfoBox = ({ icon, title, value }) => (
-    <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-emerald-100">
-        <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
-            {icon}
+const InfoRow = ({ icon: Icon, label, value, valueClass = "text-slate-800" }) => (
+    <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2 text-slate-500">
+            <Icon className="w-4 h-4" />
+            <span>{label}</span>
         </div>
-        <div>
-            <h3 className="text-sm text-emerald-600 mb-1">{title}</h3>
-            <p className="font-medium text-emerald-800">{value}</p>
-        </div>
+        <span className={valueClass}>{value}</span>
     </div>
 );
-
-// تابع helper برای رنگ وضعیت
-const getStatusColor = (status) => {
-    switch (status) {
-        case 'باز':
-        case 'در حال بررسی':
-            return 'bg-amber-100 text-amber-800';
-        case 'پاسخ داده شده':
-            return 'bg-emerald-100 text-emerald-800';
-        case 'بسته':
-            return 'bg-gray-100 text-gray-800';
-        default:
-            return 'bg-gray-100 text-gray-800';
-    }
-};

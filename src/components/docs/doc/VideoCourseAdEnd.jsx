@@ -21,7 +21,6 @@ const VideoCourseAdEnd = ({ doc }) => {
                 ? Math.round(doc.Price * (1 - doc.DiscountAmount / 100))
                 : doc.Price;
             dispatch(addToCart({ ...doc, FinalPrice: finalPrice }));
-            console.log(doc)
             setIsAddingToCart(false);
         }, 500); // شبیه‌سازی لودینگ
     };

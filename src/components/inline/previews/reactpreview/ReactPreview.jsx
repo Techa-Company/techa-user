@@ -120,7 +120,7 @@ const ReactPreview = ({ code: initialCode }) => {
                         typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
                       ).join(' ') 
                     }, '*');
-                    originalConsole.log(...args);
+                    original
                   },
                   error: (...args) => {
                     window.parent.postMessage({ 
@@ -266,8 +266,8 @@ const ReactPreview = ({ code: initialCode }) => {
           <button
             onClick={() => setEditable(!isEditable)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isEditable
-                ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+              ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
           >
             {isEditable ? (
@@ -287,8 +287,8 @@ const ReactPreview = ({ code: initialCode }) => {
             onClick={handleAIModification}
             disabled={isAILoading}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isAILoading
-                ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
+              ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
               }`}
           >
             <span className="text-sm font-medium">
@@ -305,8 +305,8 @@ const ReactPreview = ({ code: initialCode }) => {
             onClick={runCodeInIframe}
             disabled={isRunning}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isRunning
-                ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100'
+              ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100'
               }`}
           >
             <span className="text-sm font-medium">اجرا</span>
@@ -320,8 +320,8 @@ const ReactPreview = ({ code: initialCode }) => {
           <button
             onClick={() => setIsPreviewVisible(!isPreviewVisible)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${isPreviewVisible
-                ? 'bg-gray-100 border-gray-300 text-gray-700'
-                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+              ? 'bg-gray-100 border-gray-300 text-gray-700'
+              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
           >
             <span className="text-sm font-medium">

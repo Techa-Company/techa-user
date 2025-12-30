@@ -6,7 +6,6 @@ export const fetchBlogs = createAsyncThunk(
     async (parameters, thunkAPI) => {
         try {
             const res = await SP_fetch('Blog_List', parameters)
-            console.log(res.Data)
             return res.Data
         } catch (err) {
             return thunkAPI.rejectWithValue(err.message)

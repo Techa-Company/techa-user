@@ -20,7 +20,6 @@ export default function Layout({ children }) {
     const [selectedSessionId, setSelectedSessionId] = useState(lessonId ? parseInt(lessonId) : null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-    console.log(contents)
     // بررسی سایز صفحه برای موبایل
     useEffect(() => {
         const checkIsMobile = () => {

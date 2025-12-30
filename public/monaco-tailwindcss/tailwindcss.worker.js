@@ -556,7 +556,7 @@ var picocolors_default = {
 };
 
 // src/stubs/tailwindcss/utils/log.ts
-function log() {}
+function log() { }
 function dim(input) {
   return input;
 }
@@ -1341,10 +1341,10 @@ function createUtilityPlugin(
           ...options,
           values: filterDefault
             ? Object.fromEntries(
-                Object.entries(theme(themeKey) ?? {}).filter(
-                  ([modifier]) => modifier !== "DEFAULT"
-                )
+              Object.entries(theme(themeKey) ?? {}).filter(
+                ([modifier]) => modifier !== "DEFAULT"
               )
+            )
             : theme(themeKey),
         }
       );
@@ -1459,10 +1459,10 @@ var flattenColorPalette = (colors) =>
     ...Object.entries(colors ?? {}).flatMap(([color2, values]) =>
       typeof values == "object"
         ? Object.entries(flattenColorPalette(values)).map(
-            ([number2, hex2]) => ({
-              [color2 + (number2 === "DEFAULT" ? "" : `-${number2}`)]: hex2,
-            })
-          )
+          ([number2, hex2]) => ({
+            [color2 + (number2 === "DEFAULT" ? "" : `-${number2}`)]: hex2,
+          })
+        )
         : [{ [`${color2}`]: values }]
     )
   );
@@ -4157,9 +4157,9 @@ var corePlugins = {
             ...(value2 === "none"
               ? {}
               : {
-                  "transition-timing-function": defaultTimingFunction,
-                  "transition-duration": defaultDuration,
-                }),
+                "transition-timing-function": defaultTimingFunction,
+                "transition-duration": defaultDuration,
+              }),
           };
         },
       },
@@ -5024,8 +5024,8 @@ function buildPluginApi(
             args?.value === NONE
               ? options.values.DEFAULT
               : // Falling back to args if it is a string, otherwise '' for older intellisense
-                // (JetBrains) plugins.
-                args?.value ?? (typeof args === "string" ? args : ""),
+              // (JetBrains) plugins.
+              args?.value ?? (typeof args === "string" ? args : ""),
             modifiersEnabled
               ? { modifier: args?.modifier, container }
               : { container }
@@ -5191,36 +5191,36 @@ function registerPlugins(plugins, context) {
       for (let util of classList) {
         let utils = Array.isArray(util)
           ? (() => {
-              let [utilName, options] = util;
-              let values = Object.keys(options?.values ?? {});
-              let classes = values.map((value2) =>
-                formatClass(utilName, value2)
-              );
-              if (options?.supportsNegativeValues) {
-                classes = [...classes, ...classes.map((cls) => "-" + cls)];
-                classes = [
-                  ...classes,
-                  ...classes.map(
-                    (cls) =>
-                      cls.slice(0, prefixLength) + "-" + cls.slice(prefixLength)
-                  ),
-                ];
-              }
-              if (options.types.some(({ type }) => type === "color")) {
-                classes = [
-                  ...classes,
-                  ...classes.flatMap((cls) =>
-                    Object.keys(context.tailwindConfig.theme.opacity).map(
-                      (opacity) => `${cls}/${opacity}`
-                    )
-                  ),
-                ];
-              }
-              if (checkImportantUtils && options?.respectImportant) {
-                classes = [...classes, ...classes.map((cls) => "!" + cls)];
-              }
-              return classes;
-            })()
+            let [utilName, options] = util;
+            let values = Object.keys(options?.values ?? {});
+            let classes = values.map((value2) =>
+              formatClass(utilName, value2)
+            );
+            if (options?.supportsNegativeValues) {
+              classes = [...classes, ...classes.map((cls) => "-" + cls)];
+              classes = [
+                ...classes,
+                ...classes.map(
+                  (cls) =>
+                    cls.slice(0, prefixLength) + "-" + cls.slice(prefixLength)
+                ),
+              ];
+            }
+            if (options.types.some(({ type }) => type === "color")) {
+              classes = [
+                ...classes,
+                ...classes.flatMap((cls) =>
+                  Object.keys(context.tailwindConfig.theme.opacity).map(
+                    (opacity) => `${cls}/${opacity}`
+                  )
+                ),
+              ];
+            }
+            if (checkImportantUtils && options?.respectImportant) {
+              classes = [...classes, ...classes.map((cls) => "!" + cls)];
+            }
+            return classes;
+          })()
           : [util];
         for (let util2 of utils) {
           for (let { pattern: pattern2, variants = [] } of checks) {
@@ -5618,14 +5618,14 @@ function applyVariant(variant, matches, context) {
         containerFromArray,
       ] of variantFunctionTuples) {
         let prepareBackup = function () {
-            if (clone.raws.neededBackup) {
-              return;
-            }
-            clone.raws.neededBackup = true;
-            clone.walkRules(
-              (rule2) => (rule2.raws.originalSelector = rule2.selector)
-            );
-          },
+          if (clone.raws.neededBackup) {
+            return;
+          }
+          clone.raws.neededBackup = true;
+          clone.walkRules(
+            (rule2) => (rule2.raws.originalSelector = rule2.selector)
+          );
+        },
           modifySelectors = function (modifierFunction) {
             prepareBackup();
             clone.each((rule2) => {
@@ -6454,8 +6454,8 @@ function processApply(root, context, localCache) {
             let isGenerated = parent.raws.tailwind !== void 0;
             let parentSelector =
               isGenerated &&
-              importantSelector &&
-              parent.selector.indexOf(importantSelector) === 0
+                importantSelector &&
+                parent.selector.indexOf(importantSelector) === 0
                 ? parent.selector.slice(importantSelector.length)
                 : parent.selector;
             rule.selector = replaceSelector(
@@ -6720,11 +6720,11 @@ function* buildRegExps(context) {
       prefix3,
       variantGroupingEnabled
         ? any([
-            // Or any of those things but grouped separated by commas
-            pattern([/\(/, utility, zeroOrMore([/,/, utility]), /\)/]),
-            // Arbitrary properties, constrained utilities, arbitrary values, etc…
-            utility,
-          ])
+          // Or any of those things but grouped separated by commas
+          pattern([/\(/, utility, zeroOrMore([/,/, utility]), /\)/]),
+          // Arbitrary properties, constrained utilities, arbitrary values, etc…
+          utility,
+        ])
         : utility,
     ]);
   }
@@ -6882,12 +6882,12 @@ function expandTailwindAtRules(context) {
     let sortedCandidates = void 0
       ? candidates
       : new Set(
-          [...candidates].sort((a, z) => {
-            if (a === z) return 0;
-            if (a < z) return -1;
-            return 1;
-          })
-        );
+        [...candidates].sort((a, z) => {
+          if (a === z) return 0;
+          if (a < z) return -1;
+          return 1;
+        })
+      );
     generateRules(sortedCandidates, context);
     if (
       context.stylesheetCache === null ||
@@ -6967,8 +6967,8 @@ function expandTailwindAtRules(context) {
       ]);
     }
     if (void 0) {
-      console.log("Potential classes: ", candidates.size);
-      console.log("Active contexts: ", contextSourcesMap.size);
+
+
     }
     context.changedContent = [];
     root.walkAtRules("layer", (rule) => {
@@ -7762,20 +7762,20 @@ function configurePlugins_default(pluginConfig, plugins) {
   const pluginNames = Array.isArray(pluginConfig)
     ? pluginConfig
     : [
-        ...new Set(
-          plugins
-            .filter((pluginName) => {
-              return (
-                pluginConfig !== false && pluginConfig[pluginName] !== false
-              );
+      ...new Set(
+        plugins
+          .filter((pluginName) => {
+            return (
+              pluginConfig !== false && pluginConfig[pluginName] !== false
+            );
+          })
+          .concat(
+            Object.keys(pluginConfig).filter((pluginName) => {
+              return pluginConfig[pluginName] !== false;
             })
-            .concat(
-              Object.keys(pluginConfig).filter((pluginName) => {
-                return pluginConfig[pluginName] !== false;
-              })
-            )
-        ),
-      ];
+          )
+      ),
+    ];
   return pluginNames;
 }
 
@@ -9762,122 +9762,122 @@ var so = "\\s*";
 var s = "\\s+";
 var rgb_num_old = new RegExp(
   "^rgba?\\(\\s*" +
-    num +
-    c +
-    num +
-    c +
-    num +
-    "\\s*(?:,\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  num +
+  c +
+  num +
+  c +
+  num +
+  "\\s*(?:,\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var rgb_per_old = new RegExp(
   "^rgba?\\(\\s*" +
-    per +
-    c +
-    per +
-    c +
-    per +
-    "\\s*(?:,\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  per +
+  c +
+  per +
+  c +
+  per +
+  "\\s*(?:,\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var rgb_num_new = new RegExp(
   "^rgba?\\(\\s*" +
-    num +
-    s +
-    num +
-    s +
-    num +
-    "\\s*(?:\\/\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  num +
+  s +
+  num +
+  s +
+  num +
+  "\\s*(?:\\/\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var rgb_per_new = new RegExp(
   "^rgba?\\(\\s*" +
-    per +
-    s +
-    per +
-    s +
-    per +
-    "\\s*(?:\\/\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  per +
+  s +
+  per +
+  s +
+  per +
+  "\\s*(?:\\/\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var hsl_old = new RegExp(
   "^hsla?\\(\\s*" +
-    hue$2 +
-    c +
-    per +
-    c +
-    per +
-    "\\s*(?:,\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  hue$2 +
+  c +
+  per +
+  c +
+  per +
+  "\\s*(?:,\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var hsl_new = new RegExp(
   "^hsla?\\(\\s*" +
-    hue$2 +
-    s +
-    per +
-    s +
-    per +
-    "\\s*(?:\\/\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  hue$2 +
+  s +
+  per +
+  s +
+  per +
+  "\\s*(?:\\/\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var hex = /^#?([0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{4}|[0-9a-f]{3})$/i;
 var hwb$1 = new RegExp(
   "^hwb\\(\\s*" +
-    hue$2 +
-    s +
-    per +
-    s +
-    per +
-    "\\s*(?:\\/\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  hue$2 +
+  s +
+  per +
+  s +
+  per +
+  "\\s*(?:\\/\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var lab$1 = new RegExp(
   "^lab\\(\\s*" +
-    num +
-    "%?" +
-    s +
-    num +
-    s +
-    num +
-    "\\s*(?:\\/\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  num +
+  "%?" +
+  s +
+  num +
+  s +
+  num +
+  "\\s*(?:\\/\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var lch$1 = new RegExp(
   "^lch\\(\\s*" +
-    num +
-    "%?" +
-    s +
-    num +
-    s +
-    hue$2 +
-    "\\s*(?:\\/\\s*" +
-    num_per +
-    "\\s*)?\\)$"
+  num +
+  "%?" +
+  s +
+  num +
+  s +
+  hue$2 +
+  "\\s*(?:\\/\\s*" +
+  num_per +
+  "\\s*)?\\)$"
 );
 var profiled = new RegExp(
   "^color\\(" +
-    so +
-    "([a-z0-9\\-]+)" +
-    s +
-    num_per +
-    s +
-    num_per +
-    s +
-    num_per +
-    so +
-    "(?:\\/" +
-    so +
-    num_per +
-    so +
-    ")?\\)$"
+  so +
+  "([a-z0-9\\-]+)" +
+  s +
+  num_per +
+  s +
+  num_per +
+  s +
+  num_per +
+  so +
+  "(?:\\/" +
+  so +
+  num_per +
+  so +
+  ")?\\)$"
 );
 var parseHex = function (color2) {
   var match;
@@ -10070,8 +10070,8 @@ var convertXyz65ToA98 = function (ref) {
     ),
     b: gamma$2(
       x * 0.013444280632031142 -
-        y * 0.11836239223101838 +
-        1.0151749943912054 * z
+      y * 0.11836239223101838 +
+      1.0151749943912054 * z
     ),
   };
   if (alpha !== void 0) {
@@ -10308,8 +10308,8 @@ var convertXyz65ToRec2020 = function (ref) {
     ),
     b: gamma(
       x * 0.017639857445310783 -
-        y * 0.042770613257808524 +
-        0.9421031212354738 * z
+      y * 0.042770613257808524 +
+      0.9421031212354738 * z
     ),
   };
   if (alpha !== void 0) {
@@ -10421,8 +10421,8 @@ function convertRgbToHsl(ref) {
       (M2 === r2
         ? (g - b) / (M2 - m) + (g < b) * 6
         : M2 === g
-        ? (b - r2) / (M2 - m) + 2
-        : (r2 - g) / (M2 - m) + 4) * 60;
+          ? (b - r2) / (M2 - m) + 2
+          : (r2 - g) / (M2 - m) + 4) * 60;
   }
   if (alpha !== void 0) {
     res.alpha = alpha;
@@ -10574,33 +10574,33 @@ var prepare = function (color2, mode) {
   return color2 === void 0
     ? void 0
     : typeof color2 !== "object"
-    ? parse(color2)
-    : color2.mode !== void 0
-    ? color2
-    : mode
-    ? Object.assign({}, color2, { mode })
-    : void 0;
+      ? parse(color2)
+      : color2.mode !== void 0
+        ? color2
+        : mode
+          ? Object.assign({}, color2, { mode })
+          : void 0;
 };
 var converter = function (target_mode) {
   if (target_mode === void 0) target_mode = "rgb";
   return function (color2) {
     return (color2 = prepare(color2, target_mode)) !== void 0
       ? // if the color's mode corresponds to our target mode
-        color2.mode === target_mode
+      color2.mode === target_mode
         ? // then just return the color
-          color2
+        color2
         : // otherwise check to see if we have a dedicated
         // converter for the target mode
         converters[color2.mode][target_mode]
-        ? // and return its result...
+          ? // and return its result...
           converters[color2.mode][target_mode](color2)
-        : // ...otherwise pass through RGB as an intermediary step.
-        // if the target mode is RGB...
-        target_mode === "rgb"
-        ? // just return the RGB
-          converters[color2.mode].rgb(color2)
-        : // otherwise convert color.mode -> RGB -> target_mode
-          converters.rgb[target_mode](converters[color2.mode].rgb(color2))
+          : // ...otherwise pass through RGB as an intermediary step.
+          // if the target mode is RGB...
+          target_mode === "rgb"
+            ? // just return the RGB
+            converters[color2.mode].rgb(color2)
+            : // otherwise convert color.mode -> RGB -> target_mode
+            converters.rgb[target_mode](converters[color2.mode].rgb(color2))
       : void 0;
   };
 };
@@ -10739,8 +10739,8 @@ function convertRgbToHsv(ref) {
       (M2 === r2
         ? (g - b) / (M2 - m) + (g < b) * 6
         : M2 === g
-        ? (b - r2) / (M2 - m) + 2
-        : (r2 - g) / (M2 - m) + 4) * 60;
+          ? (b - r2) / (M2 - m) + 2
+          : (r2 - g) / (M2 - m) + 4) * 60;
   }
   if (alpha !== void 0) {
     res.alpha = alpha;
@@ -10851,8 +10851,8 @@ function convertRgbToHsi(ref) {
       (M2 === r2
         ? (g - b) / (M2 - m) + (g < b) * 6
         : M2 === g
-        ? (b - r2) / (M2 - m) + 2
-        : (r2 - g) / (M2 - m) + 4) * 60;
+          ? (b - r2) / (M2 - m) + 2
+          : (r2 - g) / (M2 - m) + 4) * 60;
   }
   if (alpha !== void 0) {
     res.alpha = alpha;
@@ -12350,8 +12350,8 @@ var interpolateWith = function (premap, postmap) {
     var it = interpolate_fn(colors, mode, overrides, premap);
     return post
       ? function (t) {
-          return post(it(t));
-        }
+        return post(it(t));
+      }
       : it;
   };
 };
@@ -12537,7 +12537,7 @@ function getClassNameParts(state, className) {
   return possibilities.find((key) => {
     if (
       dlv3(state.classNames.classNames, [...key, "__info", "__rule"]) ===
-        true ||
+      true ||
       Array.isArray(dlv3(state.classNames.classNames, [...key, "__info"]))
     ) {
       return true;
@@ -12725,9 +12725,9 @@ function getColorFromDecls(decls) {
       typeof color2 === "string"
         ? color2
         : formatRgb({
-            ...color2,
-            alpha: void 0,
-          })
+          ...color2,
+          alpha: void 0,
+        })
     )
   );
   if (colorStrings.length !== 1) {
@@ -13319,9 +13319,9 @@ function findClassListsInCssRange(doc, range) {
   const globalStart = range
     ? range.start
     : {
-        line: 0,
-        character: 0,
-      };
+      line: 0,
+      character: 0,
+    };
   return matches.map((match) => {
     const start = indexToPosition(text2, match.index + match[1].length);
     const end = indexToPosition(
@@ -13392,7 +13392,7 @@ async function findCustomClassLists(state, doc, range) {
           });
         }
       }
-    } catch (_) {}
+    } catch (_) { }
   }
   return result;
 }
@@ -13417,7 +13417,7 @@ async function findClassListsInHtmlRange(state, doc, type, range) {
     const subtext = text2.substr(match.index + match[0].length - 1);
     let lexer =
       match[0][0] === ":" ||
-      (match[1].startsWith("[") && match[1].endsWith("]"))
+        (match[1].startsWith("[") && match[1].endsWith("]"))
         ? getComputedClassAttributeLexer()
         : getClassAttributeLexer();
     lexer.reset(subtext);
@@ -13444,7 +13444,7 @@ async function findClassListsInHtmlRange(state, doc, type, range) {
           currentClassList = void 0;
         }
       }
-    } catch (_) {}
+    } catch (_) { }
     if (currentClassList) {
       classLists.push({
         value: currentClassList.value,
@@ -13469,11 +13469,11 @@ async function findClassListsInHtmlRange(state, doc, type, range) {
           const end = indexToPosition(
             text2,
             match.index +
-              match[0].length -
-              1 +
-              offset +
-              value2.length +
-              afterOffset
+            match[0].length -
+            1 +
+            offset +
+            value2.length +
+            afterOffset
           );
           return {
             classList: value2.substr(beforeOffset, value2.length + afterOffset),
@@ -13897,10 +13897,10 @@ function getLanguageBoundaries(state, doc, text2) {
   let defaultType = isVueDoc(doc)
     ? "none"
     : isHtmlDoc(state, doc) || isSvelteDoc(doc)
-    ? "html"
-    : isJs
-    ? "jsx"
-    : null;
+      ? "html"
+      : isJs
+        ? "jsx"
+        : null;
   if (defaultType === null) {
     cache2.set(cacheKey, null);
     return null;
@@ -14036,9 +14036,8 @@ function stringifyCss(className, obj, settings) {
         const px = settings.tailwindCSS.showPixelEquivalents
           ? remToPx(val, settings.tailwindCSS.rootFontSize)
           : void 0;
-        return `${indentStr + indent}${curr}: ${val}${
-          px ? `/* ${px} */` : ""
-        };`;
+        return `${indentStr + indent}${curr}: ${val}${px ? `/* ${px} */` : ""
+          };`;
       })
       .join("\n");
     return `${acc}${i === 0 ? "" : "\n"}${propStr}`;
@@ -14375,8 +14374,8 @@ function completionsFromClassList(
           )) == null
             ? void 0
             : (_state$classList$find2 = _state$classList$find[1]) == null
-            ? void 0
-            : _state$classList$find2.modifiers;
+              ? void 0
+              : _state$classList$find2.modifiers;
       } else {
         let testClass = beforeSlash + "/[0]";
         let { rules } = generateRules2(state, [testClass]);
@@ -14403,7 +14402,7 @@ function completionsFromClassList(
                 if (
                   typeof color2 !== "string" &&
                   ((_color$alpha = color2.alpha) != null ? _color$alpha : 1) !==
-                    0
+                  0
                 ) {
                   documentation = formatRgb(color2);
                 }
@@ -14412,8 +14411,8 @@ function completionsFromClassList(
                 label: className,
                 ...(documentation
                   ? {
-                      documentation,
-                    }
+                    documentation,
+                  }
                   : {}),
                 kind,
                 sortText: naturalExpand(index),
@@ -14449,9 +14448,9 @@ function completionsFromClassList(
             item.insertTextFormat === 2
               ? void 0
               : {
-                  title: "",
-                  command: "editor.action.triggerSuggest",
-                },
+                title: "",
+                command: "editor.action.triggerSuggest",
+              },
           sortText: "-" + naturalExpand(variantOrder++),
           ...item,
         };
@@ -14465,9 +14464,8 @@ function completionsFromClassList(
               variantItem({
                 label: `${variant.name}${variant.hasDash ? "-" : ""}[]${sep}`,
                 insertTextFormat: 2,
-                textEditText: `${variant.name}${
-                  variant.hasDash ? "-" : ""
-                }[\${1}]${sep}\${0}`,
+                textEditText: `${variant.name}${variant.hasDash ? "-" : ""
+                  }[\${1}]${sep}\${0}`,
               })
             );
           } else if (!existingVariants.includes(variant.name)) {
@@ -14491,25 +14489,25 @@ function completionsFromClassList(
                 additionalTextEdits:
                   shouldSortVariants && resultingVariants.length > 1
                     ? [
-                        {
-                          newText:
-                            resultingVariants
-                              .slice(0, resultingVariants.length - 1)
-                              .join(sep) + sep,
-                          range: {
-                            start: {
-                              ...classListRange.start,
-                              character:
-                                classListRange.end.character -
-                                partialClassName.length,
-                            },
-                            end: {
-                              ...replacementRange.start,
-                              character: replacementRange.start.character,
-                            },
+                      {
+                        newText:
+                          resultingVariants
+                            .slice(0, resultingVariants.length - 1)
+                            .join(sep) + sep,
+                        range: {
+                          start: {
+                            ...classListRange.start,
+                            character:
+                              classListRange.end.character -
+                              partialClassName.length,
+                          },
+                          end: {
+                            ...replacementRange.start,
+                            character: replacementRange.start.character,
                           },
                         },
-                      ]
+                      },
+                    ]
                     : [],
               })
             );
@@ -14526,9 +14524,8 @@ function completionsFromClassList(
                     label:
                       value2 === "DEFAULT"
                         ? `${variant.name}${sep}`
-                        : `${variant.name}${
-                            variant.hasDash ? "-" : ""
-                          }${value2}${sep}`,
+                        : `${variant.name}${variant.hasDash ? "-" : ""
+                        }${value2}${sep}`,
                     detail: variant
                       .selectors({
                         value: value2,
@@ -14560,8 +14557,8 @@ function completionsFromClassList(
                 kind,
                 ...(documentation
                   ? {
-                      documentation,
-                    }
+                    documentation,
+                  }
                   : {}),
                 sortText: naturalExpand(index, state.classList.length),
               };
@@ -14575,8 +14572,8 @@ function completionsFromClassList(
               : {}),
             ...(important
               ? {
-                  important,
-                }
+                important,
+              }
               : {}),
             variants: existingVariants,
           },
@@ -14619,8 +14616,8 @@ function completionsFromClassList(
                   kind,
                   ...(documentation
                     ? {
-                        documentation,
-                      }
+                      documentation,
+                    }
                     : {}),
                   sortText: naturalExpand(index, classNames2.length),
                 };
@@ -14645,8 +14642,8 @@ function completionsFromClassList(
           variants: existingVariants,
           ...(important
             ? {
-                important,
-              }
+              important,
+            }
             : {}),
         },
       },
@@ -14730,8 +14727,8 @@ function completionsFromClassList(
                 kind,
                 ...(documentation
                   ? {
-                      documentation,
-                    }
+                    documentation,
+                  }
                   : {}),
                 sortText: naturalExpand(index, classNames2.length),
               };
@@ -14816,7 +14813,7 @@ async function provideClassAttributeCompletions(
         context
       );
     }
-  } catch (_) {}
+  } catch (_) { }
   return null;
 }
 async function provideCustomClassNameCompletions(
@@ -14879,7 +14876,7 @@ async function provideCustomClassNameCompletions(
           );
         }
       }
-    } catch (_) {}
+    } catch (_) { }
   }
   return null;
 }
@@ -14917,13 +14914,13 @@ function provideAtApplyCompletions(state, document, position2, context) {
       let variants =
         (_item$data$variants =
           (_item$data = item.data) == null ? void 0 : _item$data.variants) !=
-        null
+          null
           ? _item$data$variants
           : [];
       let className =
         (_item$data$className =
           (_item$data2 = item.data) == null ? void 0 : _item$data2.className) !=
-        null
+          null
           ? _item$data$className
           : item.label;
       let validated = validateApply(state, [...variants, className]);
@@ -15065,30 +15062,30 @@ function provideCssHelperCompletions(state, document, position2) {
                 ? `${detail} `
                 : detail,
             ...(color2 &&
-            typeof color2 !== "string" &&
-            ((_color$alpha4 = color2.alpha) != null ? _color$alpha4 : 1) !== 0
+              typeof color2 !== "string" &&
+              ((_color$alpha4 = color2.alpha) != null ? _color$alpha4 : 1) !== 0
               ? {
-                  documentation: formatRgb(color2),
-                }
+                documentation: formatRgb(color2),
+              }
               : {}),
             ...(insertClosingBrace
               ? {
-                  textEditText: `${item}]`,
-                }
+                textEditText: `${item}]`,
+              }
               : {}),
             additionalTextEdits: replaceDot
               ? [
-                  {
-                    newText: "[",
-                    range: {
-                      start: {
-                        ...editRange.start,
-                        character: editRange.start.character - 1,
-                      },
-                      end: editRange.start,
+                {
+                  newText: "[",
+                  range: {
+                    start: {
+                      ...editRange.start,
+                      character: editRange.start.character - 1,
                     },
+                    end: editRange.start,
                   },
-                ]
+                },
+              ]
               : [],
           };
         }),
@@ -15122,29 +15119,29 @@ function provideTailwindDirectiveCompletions(state, document, position2) {
   let items = [
     gte(state.version, "1.0.0-beta.1")
       ? {
-          label: "base",
-          documentation: {
-            kind: "markdown",
-            value: `This injects Tailwind\u2019s base styles and any base styles registered by plugins.
+        label: "base",
+        documentation: {
+          kind: "markdown",
+          value: `This injects Tailwind\u2019s base styles and any base styles registered by plugins.
 
 [Tailwind CSS Documentation](${docsUrl(
-              state.version,
-              "functions-and-directives/#tailwind"
-            )})`,
-          },
-        }
-      : {
-          label: "preflight",
-          documentation: {
-            kind: "markdown",
-            value: `This injects Tailwind\u2019s base styles, which is a combination of Normalize.css and some additional base styles.
-
-[Tailwind CSS Documentation](${docsUrl(
-              state.version,
-              "functions-and-directives/#tailwind"
-            )})`,
-          },
+            state.version,
+            "functions-and-directives/#tailwind"
+          )})`,
         },
+      }
+      : {
+        label: "preflight",
+        documentation: {
+          kind: "markdown",
+          value: `This injects Tailwind\u2019s base styles, which is a combination of Normalize.css and some additional base styles.
+
+[Tailwind CSS Documentation](${docsUrl(
+            state.version,
+            "functions-and-directives/#tailwind"
+          )})`,
+        },
+      },
     {
       label: "components",
       documentation: {
@@ -15171,33 +15168,33 @@ function provideTailwindDirectiveCompletions(state, document, position2) {
     },
     state.jit && gte(state.version, "2.1.99")
       ? {
-          label: "variants",
-          documentation: {
-            kind: "markdown",
-            value: `Use this directive to control where Tailwind injects the utility variants.
+        label: "variants",
+        documentation: {
+          kind: "markdown",
+          value: `Use this directive to control where Tailwind injects the utility variants.
 
 This directive is considered an advanced escape hatch and it is recommended to omit it whenever possible. If omitted, Tailwind will append these classes to the very end of your stylesheet by default.
 
 [Tailwind CSS Documentation](${docsUrl(
-              state.version,
-              "just-in-time-mode#variants-are-inserted-at-tailwind-variants"
-            )})`,
-          },
-        }
+            state.version,
+            "just-in-time-mode#variants-are-inserted-at-tailwind-variants"
+          )})`,
+        },
+      }
       : {
-          label: "screens",
-          documentation: {
-            kind: "markdown",
-            value: `Use this directive to control where Tailwind injects the responsive variations of each utility.
+        label: "screens",
+        documentation: {
+          kind: "markdown",
+          value: `Use this directive to control where Tailwind injects the responsive variations of each utility.
 
 If omitted, Tailwind will append these classes to the very end of your stylesheet by default.
 
 [Tailwind CSS Documentation](${docsUrl(
-              state.version,
-              "functions-and-directives/#tailwind"
-            )})`,
-          },
+            state.version,
+            "functions-and-directives/#tailwind"
+          )})`,
         },
+      },
   ];
   return withDefaults(
     {
@@ -15341,46 +15338,46 @@ function withDefaults(completionList, defaults3, supportedDefaults) {
     ...completionList,
     ...(defaultData || defaultRange
       ? {
-          itemDefaults: {
-            ...(defaultData && defaults3.data
-              ? {
-                  data: defaults3.data,
-                }
-              : {}),
-            ...(defaultRange && defaults3.range
-              ? {
-                  editRange: defaults3.range,
-                }
-              : {}),
-          },
-        }
+        itemDefaults: {
+          ...(defaultData && defaults3.data
+            ? {
+              data: defaults3.data,
+            }
+            : {}),
+          ...(defaultRange && defaults3.range
+            ? {
+              editRange: defaults3.range,
+            }
+            : {}),
+        },
+      }
       : {}),
     items:
       defaultData && defaultRange
         ? completionList.items
         : completionList.items.map((_ref3) => {
-            let { textEditText, ...item } = _ref3;
-            return {
-              ...item,
-              ...(defaultData || !defaults3.data || item.data
-                ? {}
-                : {
-                    data: defaults3.data,
-                  }),
-              ...(defaultRange || !defaults3.range
-                ? textEditText
-                  ? {
-                      textEditText,
-                    }
-                  : {}
-                : {
-                    textEdit: {
-                      newText: textEditText != null ? textEditText : item.label,
-                      range: defaults3.range,
-                    },
-                  }),
-            };
-          }),
+          let { textEditText, ...item } = _ref3;
+          return {
+            ...item,
+            ...(defaultData || !defaults3.data || item.data
+              ? {}
+              : {
+                data: defaults3.data,
+              }),
+            ...(defaultRange || !defaults3.range
+              ? textEditText
+                ? {
+                  textEditText,
+                }
+                : {}
+              : {
+                textEdit: {
+                  newText: textEditText != null ? textEditText : item.label,
+                  range: defaults3.range,
+                },
+              }),
+          };
+        }),
   };
 }
 function provideScreenDirectiveCompletions(state, document, position2) {
@@ -15449,14 +15446,13 @@ function provideCssDirectiveCompletions(state, document, position2) {
       label: "@tailwind",
       documentation: {
         kind: "markdown",
-        value: `Use the \`@tailwind\` directive to insert Tailwind\u2019s \`base\`, \`components\`, \`utilities\` and \`${
-          state.jit && gte(state.version, "2.1.99") ? "variants" : "screens"
-        }\` styles into your CSS.
+        value: `Use the \`@tailwind\` directive to insert Tailwind\u2019s \`base\`, \`components\`, \`utilities\` and \`${state.jit && gte(state.version, "2.1.99") ? "variants" : "screens"
+          }\` styles into your CSS.
 
 [Tailwind CSS Documentation](${docsUrl(
-          state.version,
-          "functions-and-directives/#tailwind"
-        )})`,
+            state.version,
+            "functions-and-directives/#tailwind"
+          )})`,
       },
     },
     {
@@ -15485,63 +15481,63 @@ function provideCssDirectiveCompletions(state, document, position2) {
     },
     ...(gte(state.version, "1.8.0")
       ? [
-          {
-            label: "@layer",
-            documentation: {
-              kind: "markdown",
-              value: `Use the \`@layer\` directive to tell Tailwind which "bucket" a set of custom styles belong to. Valid layers are \`base\`, \`components\`, and \`utilities\`.
+        {
+          label: "@layer",
+          documentation: {
+            kind: "markdown",
+            value: `Use the \`@layer\` directive to tell Tailwind which "bucket" a set of custom styles belong to. Valid layers are \`base\`, \`components\`, and \`utilities\`.
 
 [Tailwind CSS Documentation](${docsUrl(
-                state.version,
-                "functions-and-directives/#layer"
-              )})`,
-            },
+              state.version,
+              "functions-and-directives/#layer"
+            )})`,
           },
-        ]
+        },
+      ]
       : []),
     ...(gte(state.version, "2.99.0")
       ? []
       : [
-          {
-            label: "@variants",
-            documentation: {
-              kind: "markdown",
-              value: `You can generate \`responsive\`, \`hover\`, \`focus\`, \`active\`, and other variants of your own utilities by wrapping their definitions in the \`@variants\` directive.
+        {
+          label: "@variants",
+          documentation: {
+            kind: "markdown",
+            value: `You can generate \`responsive\`, \`hover\`, \`focus\`, \`active\`, and other variants of your own utilities by wrapping their definitions in the \`@variants\` directive.
 
 [Tailwind CSS Documentation](${docsUrl(
-                state.version,
-                "functions-and-directives/#variants"
-              )})`,
-            },
+              state.version,
+              "functions-and-directives/#variants"
+            )})`,
           },
-          {
-            label: "@responsive",
-            documentation: {
-              kind: "markdown",
-              value: `You can generate responsive variants of your own classes by wrapping their definitions in the \`@responsive\` directive.
+        },
+        {
+          label: "@responsive",
+          documentation: {
+            kind: "markdown",
+            value: `You can generate responsive variants of your own classes by wrapping their definitions in the \`@responsive\` directive.
 
 [Tailwind CSS Documentation](${docsUrl(
-                state.version,
-                "functions-and-directives/#responsive"
-              )})`,
-            },
+              state.version,
+              "functions-and-directives/#responsive"
+            )})`,
           },
-        ]),
+        },
+      ]),
     ...(gte(state.version, "3.2.0")
       ? [
-          {
-            label: "@config",
-            documentation: {
-              kind: "markdown",
-              value: `Use the \`@config\` directive to specify which config file Tailwind should use when compiling that CSS file.
+        {
+          label: "@config",
+          documentation: {
+            kind: "markdown",
+            value: `Use the \`@config\` directive to specify which config file Tailwind should use when compiling that CSS file.
 
 [Tailwind CSS Documentation](${docsUrl(
-                state.version,
-                "functions-and-directives/#config"
-              )})`,
-            },
+              state.version,
+              "functions-and-directives/#config"
+            )})`,
           },
-        ]
+        },
+      ]
       : []),
   ];
   return withDefaults(
@@ -15609,9 +15605,9 @@ async function provideConfigDirectiveCompletions(state, document, position2) {
             kind: type.isDirectory ? 19 : 17,
             command: type.isDirectory
               ? {
-                  command: "editor.action.triggerSuggest",
-                  title: "",
-                }
+                command: "editor.action.triggerSuggest",
+                title: "",
+              }
               : void 0,
           };
         }),
@@ -15759,7 +15755,7 @@ async function resolveCompletionItem(state, item) {
   let className =
     (_item$data$className2 =
       (_item$data5 = item.data) == null ? void 0 : _item$data5.className) !=
-    null
+      null
       ? _item$data$className2
       : item.label;
   if ((_item$data6 = item.data) != null && _item$data6.important) {
@@ -15955,13 +15951,12 @@ async function getCssConflictDiagnostics(state, document, settings) {
           otherClassNames: conflictingClassNames2,
           range: className.range,
           severity: severity === "error" ? 1 : 2,
-          message: `'${
-            className.className
-          }' applies the same CSS properties as ${joinWithAnd(
-            conflictingClassNames2.map(
-              (conflictingClassName) => `'${conflictingClassName.className}'`
-            )
-          )}.`,
+          message: `'${className.className
+            }' applies the same CSS properties as ${joinWithAnd(
+              conflictingClassNames2.map(
+                (conflictingClassName) => `'${conflictingClassName.className}'`
+              )
+            )}.`,
           relatedInformation: conflictingClassNames2.map(
             (conflictingClassName) => {
               return {
@@ -16001,13 +15996,12 @@ async function getCssConflictDiagnostics(state, document, settings) {
         otherClassNames: conflictingClassNames,
         range: className.range,
         severity: severity === "error" ? 1 : 2,
-        message: `'${className.className}' applies the same CSS ${
-          properties.length === 1 ? "property" : "properties"
-        } as ${joinWithAnd(
-          conflictingClassNames.map(
-            (conflictingClassName) => `'${conflictingClassName.className}'`
-          )
-        )}.`,
+        message: `'${className.className}' applies the same CSS ${properties.length === 1 ? "property" : "properties"
+          } as ${joinWithAnd(
+            conflictingClassNames.map(
+              (conflictingClassName) => `'${conflictingClassName.className}'`
+            )
+          )}.`,
         relatedInformation: conflictingClassNames.map(
           (conflictingClassName) => {
             return {
@@ -16484,7 +16478,7 @@ async function getRecommendedVariantOrderDiagnostics(
       let sortedVariants = [...variants].sort((a, b) =>
         bigSign2(
           state.jitContext.variantOrder.get(b) -
-            state.jitContext.variantOrder.get(a)
+          state.jitContext.variantOrder.get(a)
         )
       );
       if (!equalExact(variants, sortedVariants)) {
@@ -16520,32 +16514,32 @@ async function doValidate(state, document, only) {
   const settings = await state.editor.getConfiguration(document.uri);
   return settings.tailwindCSS.validate
     ? [
-        ...(only.includes(DiagnosticKind.CssConflict)
-          ? await getCssConflictDiagnostics(state, document, settings)
-          : []),
-        ...(only.includes(DiagnosticKind.InvalidApply)
-          ? await getInvalidApplyDiagnostics(state, document, settings)
-          : []),
-        ...(only.includes(DiagnosticKind.InvalidScreen)
-          ? getInvalidScreenDiagnostics(state, document, settings)
-          : []),
-        ...(only.includes(DiagnosticKind.InvalidVariant)
-          ? getInvalidVariantDiagnostics(state, document, settings)
-          : []),
-        ...(only.includes(DiagnosticKind.InvalidConfigPath)
-          ? getInvalidConfigPathDiagnostics(state, document, settings)
-          : []),
-        ...(only.includes(DiagnosticKind.InvalidTailwindDirective)
-          ? getInvalidTailwindDirectiveDiagnostics(state, document, settings)
-          : []),
-        ...(only.includes(DiagnosticKind.RecommendedVariantOrder)
-          ? await getRecommendedVariantOrderDiagnostics(
-              state,
-              document,
-              settings
-            )
-          : []),
-      ]
+      ...(only.includes(DiagnosticKind.CssConflict)
+        ? await getCssConflictDiagnostics(state, document, settings)
+        : []),
+      ...(only.includes(DiagnosticKind.InvalidApply)
+        ? await getInvalidApplyDiagnostics(state, document, settings)
+        : []),
+      ...(only.includes(DiagnosticKind.InvalidScreen)
+        ? getInvalidScreenDiagnostics(state, document, settings)
+        : []),
+      ...(only.includes(DiagnosticKind.InvalidVariant)
+        ? getInvalidVariantDiagnostics(state, document, settings)
+        : []),
+      ...(only.includes(DiagnosticKind.InvalidConfigPath)
+        ? getInvalidConfigPathDiagnostics(state, document, settings)
+        : []),
+      ...(only.includes(DiagnosticKind.InvalidTailwindDirective)
+        ? getInvalidTailwindDirectiveDiagnostics(state, document, settings)
+        : []),
+      ...(only.includes(DiagnosticKind.RecommendedVariantOrder)
+        ? await getRecommendedVariantOrderDiagnostics(
+          state,
+          document,
+          settings
+        )
+        : []),
+    ]
     : [];
 }
 async function doHover(state, document, position2) {

@@ -21,7 +21,6 @@ const LastArticles = () => {
     useEffect(() => {
         dispatch(fetchBlogs({ "Take": 6 }));
     }, []);
-    console.log(blogs)
 
     return (
         <div className="mt-20">

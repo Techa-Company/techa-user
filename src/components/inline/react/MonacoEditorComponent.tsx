@@ -68,8 +68,6 @@ const MonacoEditorComponent: React.FC<MonacoEditorComponentProps> = ({
   }, []);
 
   const onMountTailwindInject = (editor: any) => {
-    console.log(editor);
-
     // فقط این کافی هست، نیازی به cssDefaults نیست
     configureMonacoTailwindcss(editor);
 

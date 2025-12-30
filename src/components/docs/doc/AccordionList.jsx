@@ -10,7 +10,6 @@ const AccordionList = ({ items }) => {
     };
     if (items) {
 
-        console.log(JSON.parse(items))
     }
 
     if (!items) {

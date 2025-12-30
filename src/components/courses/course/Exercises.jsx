@@ -17,12 +17,9 @@ const Exercises = () => {
     const { docId } = useParams();
 
     return (
-        <div className="min-h-screen bg-slate-50 relative overflow-hidden font-sans">
-            {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-100 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-green-100 rounded-full blur-3xl opacity-50 translate-y-1/3 -translate-x-1/3"></div>
+        <div className="min-h-screen  relative overflow-hidden font-sans">
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 relative z-10">
+            <div className=" relative z-10">
 
                 {/* --- HERO SECTION: دکمه و توضیحات اصلی بالا --- */}
                 <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
@@ -36,9 +33,9 @@ const Exercises = () => {
                             سیستم هوشمند تمرینات
                         </div>
 
-                        <h1 className="text-4xl lg:text-6xl font-black text-slate-900 leading-tight">
+                        <h1 className="text-4xl lg:text-5xl 3xl:text-6xl font-black text-slate-900 leading-10">
                             کدنویسی را با <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">
+                            <span className="text-transparent  inline-block py-3 bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">
                                 چالش‌های واقعی
                             </span> <br />
                             یاد بگیرید
@@ -53,7 +50,7 @@ const Exercises = () => {
                                 href={`/docs/${docId}/exercises`}
                                 className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-emerald-600 rounded-2xl hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-200 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600"
                             >
-                                <Terminal className="w-6 h-6 ml-2" />
+                                {/* <Terminal className="w-6 h-6 ml-2" /> */}
                                 ورود به پنل تمرینات
                                 <ArrowLeft className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" />
                             </Link>
@@ -71,8 +68,8 @@ const Exercises = () => {
 
                     {/* Left Side: Visual Stats/Card */}
                     <div className="relative hidden lg:block">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-[2rem] rotate-3 opacity-20 blur-xl"></div>
-                        <div className="relative bg-white border border-slate-100 rounded-[2rem] shadow-2xl p-8 overflow-hidden">
+                        {/* <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-[2rem] rotate-3 opacity-20 blur-xl"></div> */}
+                        <div className="relative bg-white border border-slate-100 rounded-[2rem] shadow-xl p-8 overflow-hidden">
                             {/* Decorative Header */}
                             <div className="flex items-center justify-between mb-8 border-b border-slate-100 pb-4">
                                 <div className="flex gap-2">

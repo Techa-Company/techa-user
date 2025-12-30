@@ -1,84 +1,128 @@
 'use client';
-import { motion, AnimatePresence, frameData } from 'framer-motion';
-import { User, Mail, Phone, Calendar, FileText, Edit, Camera, Palette, CheckCircle, Bell, Shield, Globe, Send, Instagram, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+    User, Mail, Phone, FileText, Camera, CheckCircle,
+    Globe, Instagram, Twitter, Linkedin, Edit3,
+    ShieldCheck, Lock, ChevronLeft, Save, Loader2, Send
+} from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { FaWhatsapp } from "react-icons/fa6";
+import { useEffect, useState, useRef } from 'react';
+import { FaWhatsapp, FaTelegram } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserById, updateUser } from '../../../features/account/user/UserActions';
 import { toast } from 'react-toastify';
 
+// انیمیشن‌ها
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+};
+
 export default function Profile() {
+    const dispatch = useDispatch();
+    const { user, loading: userLoading } = useSelector((state) => state.user);
+    const userId = useSelector((state) => state.auth.user?.Id);
+
     const [imagePreview, setImagePreview] = useState(null);
-    const [formSubmitted, setFormSubmitted] = useState(false);
     const [activeSection, setActiveSection] = useState('personal');
     const [loading, setLoading] = useState(false);
+    const fileInputRef = useRef(null);
 
+    // وضعیت فرم اطلاعات شخصی
     const [formData, setFormData] = useState({
         FirstName: '',
         LastName: '',
         Mobile: '',
         Email: '',
         NationalCode: '',
-        // birthDate: '',
     });
 
+    // وضعیت شبکه‌های اجتماعی
+    const [socialMedia, setSocialMedia] = useState({
+        Instagram: { enabled: false, value: '', icon: <Instagram />, color: 'text-pink-600', bg: 'bg-pink-50' },
+        Twitter: { enabled: false, value: '', icon: <Twitter />, color: 'text-sky-500', bg: 'bg-sky-50' },
+        Linkedin: { enabled: false, value: '', icon: <Linkedin />, color: 'text-blue-700', bg: 'bg-blue-50' },
+        Telegram: { enabled: false, value: '', icon: <FaTelegram />, color: 'text-blue-500', bg: 'bg-blue-50' },
+        Whatsapp: { enabled: false, value: '', icon: <FaWhatsapp />, color: 'text-green-500', bg: 'bg-green-50' },
+        Website: { enabled: false, value: '', icon: <Globe />, color: 'text-slate-600', bg: 'bg-slate-50' }
+    });
+
+    // وضعیت تایید ایمیل
     const [emailVerification, setEmailVerification] = useState({
         verified: false,
         pending: false,
         code: ''
     });
 
-    const [socialMedia, setSocialMedia] = useState({
-        instagram: { enabled: false, value: '' },
-        twitter: { enabled: false, value: '' },
-        linkedin: { enabled: false, value: '' },
-        telegram: { enabled: false, value: '' },
-        whatsapp: { enabled: false, value: '' },
-        // facebook: { enabled: false, value: '' },
-        // aparat: { enabled: false, value: '' },
-        // eitaa: { enabled: false, value: '' },
-        // soroush: { enabled: false, value: '' },
-        // bale: { enabled: false, value: '' },
-        website: { enabled: false, value: '' }
-    });
+    // بارگذاری اولیه اطلاعات
+    useEffect(() => {
+        if (userId) {
+            dispatch(fetchUserById({ "@Id": userId }));
+        }
+    }, [dispatch, userId]);
 
-    const [settings, setSettings] = useState({
-        newsletter: true,
-        publicResume: false,
-        emailNotifications: true,
-        twoFactorAuth: false
-    });
+    // پر کردن فرم‌ها پس از دریافت اطلاعات کاربر
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                FirstName: user.FirstName || '',
+                LastName: user.LastName || '',
+                Mobile: user.Mobile || '',
+                Email: user.Email || '',
+                NationalCode: user.NationalCode || '',
+            });
 
-    const dispatch = useDispatch();
-    const { user, loading: userLoading, error } = useSelector((state) => state.user);
-    const userId = useSelector((state) => state.auth.user?.Id);
+            if (user.SocialNetworks) {
+                try {
+                    const savedNetworks = JSON.parse(user.SocialNetworks).reduce((acc, item) => {
+                        acc[item.Platform] = { enabled: item.IsEnabled, value: item.UrlOrId };
+                        return acc;
+                    }, {});
 
+                    setSocialMedia(prev => {
+                        const newState = { ...prev };
+                        Object.keys(newState).forEach(key => {
+                            if (savedNetworks[key]) {
+                                newState[key] = { ...newState[key], ...savedNetworks[key] };
+                            }
+                        });
+                        return newState;
+                    });
+                } catch (e) {
+                    console.error("Error parsing social networks", e);
+                }
+            }
+        }
+    }, [user]);
+
+    // هندل تغییر عکس
     const handleImageChange = (e) => {
         const file = e.target.files?.[0];
         if (file) {
-            setLoading(true);
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-                setLoading(false);
-            };
+            reader.onloadend = () => setImagePreview(reader.result);
             reader.readAsDataURL(file);
+            // اینجا می‌توانید تابع آپلود عکس را صدا بزنید
         }
     };
 
-    // تابع ذخیره اطلاعات کاربر
+    // ذخیره اطلاعات کاربری
     const handleSaveUser = async (e) => {
         e.preventDefault();
-
-
-        if (!formData.FirstName || !formData.LastName || !formData.Email || !formData.NationalCode) {
-            toast.warn("لطفا تمامی اطلاعات را وارد نمایید.");
+        if (!formData.FirstName || !formData.LastName || !formData.NationalCode) {
+            toast.warn("لطفا نام، نام خانوادگی و کد ملی را وارد نمایید.");
             return;
         }
 
-
-
+        setLoading(true);
         const data = {
             "@Id": userId,
             "@FirstName": formData.FirstName,
@@ -89,522 +133,367 @@ export default function Profile() {
             "@IsActive": true,
         };
 
-        // console.log(data)
-
         try {
             await dispatch(updateUser(data)).unwrap();
-            toast.success('اطلاعات شما با موفقیت ویرایش شد');
-            dispatch(fetchUserById({ "@Id": userId }))
+            toast.success('اطلاعات با موفقیت بروزرسانی شد');
+            dispatch(fetchUserById({ "@Id": userId }));
         } catch (error) {
-            toast.error(`خطا در ویرایش اطلاعات: ${error.message}`);
-            console.error("Error creating doc:", error);
-
-        }
-    };
-
-    // تابع ذخیره شبکه‌های اجتماعی
-    const handleSaveSocialMedia = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-
-        try {
-            const socialNetworks = {
-                Instagram: socialMedia.instagram.value,
-                Twitter: socialMedia.twitter.value,
-                Linkedin: socialMedia.linkedin.value,
-                Telegram: socialMedia.telegram.value,
-                Whatsapp: socialMedia.whatsapp.value,
-                // Facebook: socialMedia.facebook.value,
-                // Aparat: socialMedia.aparat.value,
-                // Eitaa: socialMedia.eitaa.value,
-                // Soroush: socialMedia.soroush.value,
-                // Bale: socialMedia.bale.value,
-                Website: socialMedia.website.value
-            };
-
-            await dispatch(updateUser({
-                Id: userId,
-                SocialNetworks: JSON.stringify(socialNetworks)
-            })).unwrap();
-
-            setFormSubmitted(true);
-            setTimeout(() => setFormSubmitted(false), 2000);
-        } catch (error) {
-            console.error('Error saving social media:', error);
+            toast.error(`خطا: ${error.message}`);
         } finally {
             setLoading(false);
         }
     };
 
+    // ذخیره شبکه‌های اجتماعی
+    const handleSaveSocialMedia = async () => {
+        setLoading(true);
+        try {
+            const socialNetworksArray = Object.keys(socialMedia).map(key => ({
+                Platform: key,
+                UrlOrId: socialMedia[key].value,
+                IsEnabled: socialMedia[key].enabled
+            }));
+
+            await dispatch(updateUser({
+                Id: userId,
+                SocialNetworks: JSON.stringify(socialNetworksArray)
+            })).unwrap();
+
+            toast.success('شبکه‌های اجتماعی ذخیره شدند');
+        } catch (error) {
+            toast.error('خطا در ذخیره سازی');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // شبیه‌سازی تایید ایمیل
     const handleVerifyEmail = () => {
         setEmailVerification(prev => ({ ...prev, pending: true }));
-        // Simulate sending verification code
-        setTimeout(() => {
-            setEmailVerification(prev => ({ ...prev, pending: false }));
-        }, 2000);
+        toast.info("کد تایید ارسال شد");
+        setTimeout(() => setEmailVerification(prev => ({ ...prev, pending: false })), 2000);
     };
 
-    const handleConfirmVerification = () => {
-        // Simulate verification process
-        setTimeout(() => {
-            setEmailVerification(prev => ({ ...prev, verified: true, code: '' }));
-        }, 1000);
-    };
-
-    const handleSocialMediaChange = (platform, field, value) => {
-        setSocialMedia(prev => ({
-            ...prev,
-            [platform]: {
-                ...prev[platform],
-                [field]: value
-            }
-        }));
-    };
-
-    const inputFields = [
-        { key: 'FirstName', icon: <User className="w-5 h-5" /> },
-        { key: 'LastName', icon: <User className="w-5 h-5" /> },
-        { key: 'Mobile', icon: <Phone className="w-5 h-5" /> },
-        { key: 'Email', icon: <Mail className="w-5 h-5" /> },
-        { key: 'NationalCode', icon: <FileText className="w-5 h-5" /> },
-        // { key: 'birthDate', icon: <Calendar className="w-5 h-5" /> },
+    const navItems = [
+        { id: 'personal', label: 'اطلاعات شخصی', icon: <User className="w-5 h-5" /> },
+        { id: 'social', label: 'شبکه‌های اجتماعی', icon: <Globe className="w-5 h-5" /> },
+        { id: 'security', label: 'امنیت و ایمیل', icon: <ShieldCheck className="w-5 h-5" /> },
     ];
-
-    const socialPlatforms = [
-        { key: 'instagram', name: 'اینستاگرام', icon: <Instagram className="w-5 h-5" />, placeholder: 'آیدی اینستاگرام' },
-        { key: 'twitter', name: 'توییتر', icon: <Twitter className="w-5 h-5" />, placeholder: 'آیدی توییتر' },
-        { key: 'linkedin', name: 'لینکدین', icon: <Linkedin className="w-5 h-5" />, placeholder: 'لینک پروفایل' },
-        { key: 'telegram', name: 'تلگرام', icon: <User className="w-5 h-5" />, placeholder: 'آیدی تلگرام' },
-        { key: 'whatsapp', name: 'واتس اپ', icon: <FaWhatsapp className="w-5 h-5" />, placeholder: 'شماره واتس اپ' },
-        // { key: 'facebook', name: 'فیسبوک', icon: <Facebook className="w-5 h-5" />, placeholder: 'آیدی فیسبوک' },
-        // { key: 'aparat', name: 'آپارات', icon: <User className="w-5 h-5" />, placeholder: 'آیدی آپارات' },
-        // { key: 'eitaa', name: 'ایتا', icon: <User className="w-5 h-5" />, placeholder: 'آیدی ایتا' },
-        // { key: 'soroush', name: 'سروش', icon: <User className="w-5 h-5" />, placeholder: 'آیدی سروش' },
-        // { key: 'bale', name: 'بله', icon: <User className="w-5 h-5" />, placeholder: 'آیدی بله' },
-        { key: 'website', name: 'وبسایت', icon: <Globe className="w-5 h-5" />, placeholder: 'آدرس وبسایت' }
-    ];
-
-    useEffect(() => {
-        if (userId) {
-            dispatch(fetchUserById({ "@Id": userId }));
-        }
-    }, [dispatch, userId]);
-
-    useEffect(() => {
-        if (user) {
-            setFormData({
-                FirstName: user.FirstName || '',
-                LastName: user.LastName || '',
-                Mobile: user.Mobile || '',
-                Email: user.Email || '',
-                NationalCode: user.NationalCode || '',
-                birthDate: user.birthDate || '',
-            });
-
-            // بارگذاری شبکه‌های اجتماعی از کاربر
-            if (user.SocialNetworks) {
-                try {
-                    const socialNetworksArray = JSON.parse(user.SocialNetworks);
-
-                    // آرایه رو به آبجکت تبدیل می‌کنیم
-                    const socialNetworks = socialNetworksArray.reduce((acc, item) => {
-                        acc[item.Platform] = item.IsEnabled ? item.UrlOrId : '';
-                        return acc;
-                    }, {});
-
-                    // console.log(socialNetworks.Instagram);
-
-                    setSocialMedia(prev => ({
-                        ...prev,
-                        instagram: { enabled: !!socialNetworks.Instagram, value: socialNetworks.Instagram || '' },
-                        twitter: { enabled: !!socialNetworks.Twitter, value: socialNetworks.Twitter || '' },
-                        linkedin: { enabled: !!socialNetworks.Linkedin, value: socialNetworks.Linkedin || '' },
-                        telegram: { enabled: !!socialNetworks.Telegram, value: socialNetworks.Telegram || '' },
-                        whatsapp: { enabled: !!socialNetworks.WhatsApp, value: socialNetworks.WhatsApp || '' },
-                        website: { enabled: !!socialNetworks.Website, value: socialNetworks.Website || '' }
-                    }));
-                } catch (error) {
-                    console.error('Error parsing social networks:', error);
-                }
-            }
-
-        }
-    }, [user]);
 
     return (
-        <div className="min-h-screen bg-emerald-50/50">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="max-w-4xl mx-auto px-4 py-12"
-            >
-                <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Navigation Sidebar */}
-                    <div className="lg:w-64 space-y-2">
-                        <button
-                            onClick={() => setActiveSection('personal')}
-                            className={`w-full text-right p-4 rounded-xl flex items-center gap-2 ${activeSection === 'personal' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
-                        >
-                            <User className="w-5 h-5" />
-                            اطلاعات شخصی
-                        </button>
-                        <button
-                            disabled={true}
+        <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8 font-sans" dir="rtl">
 
-                            onClick={() => setActiveSection('emailVerification')}
-                            className={`w-full text-right opacity-70 cursor-not-allowed p-4 rounded-xl flex items-center gap-2 ${activeSection === 'emailVerification' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
-                        >
-                            <Shield className="w-5 h-5" />
-                            تایید ایمیل <span className='text-red-500 text-xs'>به زودی</span>
-                        </button>
-                        <button
-                            disabled={true}
-                            onClick={() => setActiveSection('social')}
-                            className={`w-full text-right opacity-70 cursor-not-allowed p-4 rounded-xl flex items-center gap-2 ${activeSection === 'social' ? 'bg-emerald-600 text-white' : 'bg-white hover:bg-emerald-50'}`}
-                        >
-                            <Globe className="w-5 h-5" />
-                            شبکه‌های اجتماعی <span className='text-red-500 text-xs'>به زودی</span>
-                        </button>
+            {/* هدر پس‌زمینه */}
+            <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-800 rounded-b-[3rem] shadow-lg -z-10"></div>
+
+            <div className="max-w-6xl mx-auto mt-16">
+
+                {/* کارت اصلی پروفایل (خلاصه وضعیت) */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-6 mb-8 flex flex-col md:flex-row items-center gap-6 border border-white/50"
+                >
+                    <div className="relative group">
+                        <div className="w-32 h-32 rounded-full p-1 bg-gradient-to-tr from-emerald-400 to-cyan-400">
+                            <div className="w-full h-full rounded-full overflow-hidden border-4 border-white relative">
+                                <Image
+                                    src={imagePreview || "/images/user.png"}
+                                    alt="Profile"
+                                    width={128}
+                                    height={128}
+                                    className="object-cover w-full h-full"
+                                />
+                                <div
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+                                >
+                                    <Camera className="text-white w-8 h-8" />
+                                </div>
+                            </div>
+                        </div>
+                        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                     </div>
 
-                    {/* Main Content */}
-                    <div className="flex-1">
+                    <div className="text-center md:text-right flex-1">
+                        <h1 className="text-3xl font-bold text-slate-800 mb-1">
+                            {user?.FirstName && user?.LastName ? `${user.FirstName} ${user.LastName}` : 'کاربر مهمان'}
+                        </h1>
+                        <p className="text-slate-500 flex items-center justify-center md:justify-start gap-2">
+                            <Phone className="w-4 h-4" /> {user?.Mobile || '---'}
+                        </p>
+                    </div>
+
+                    <div className="flex gap-3">
+                        <div className="text-center px-6 py-2 bg-emerald-50 rounded-2xl border border-emerald-100">
+                            <span className="block text-xl font-bold text-emerald-600">فعال</span>
+                            <span className="text-xs text-emerald-400">وضعیت حساب</span>
+                        </div>
+                    </div>
+                </motion.div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                    {/* منوی کناری */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="lg:col-span-3 space-y-4"
+                    >
+                        <div className="bg-white rounded-3xl shadow-lg p-4 sticky top-8">
+                            {navItems.map((item) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setActiveSection(item.id)}
+                                    className={`w-full flex items-center justify-between p-4 rounded-xl mb-2 transition-all duration-300 group ${activeSection === item.id
+                                            ? 'bg-emerald-600 text-white shadow-emerald-500/30 shadow-lg'
+                                            : 'text-slate-600 hover:bg-slate-50 hover:text-emerald-600'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-2 rounded-lg ${activeSection === item.id ? 'bg-white/20' : 'bg-slate-100 group-hover:bg-emerald-100'}`}>
+                                            {item.icon}
+                                        </div>
+                                        <span className="font-medium">{item.label}</span>
+                                    </div>
+                                    {activeSection === item.id && <ChevronLeft className="w-5 h-5" />}
+                                </button>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    {/* محتوای اصلی */}
+                    <div className="lg:col-span-9">
                         <AnimatePresence mode='wait'>
-                            {/* Personal Information Section */}
+
+                            {/* --- بخش اطلاعات شخصی --- */}
                             {activeSection === 'personal' && (
                                 <motion.div
                                     key="personal"
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className="bg-white rounded-3xl shadow-2xl p-8"
+                                    variants={containerVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit={{ opacity: 0, y: -20 }}
+                                    className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100"
                                 >
-                                    <div className="flex flex-col items-center mb-10">
-                                        <motion.label
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="group relative w-40 h-40 cursor-pointer"
-                                        >
-                                            <div className="relative w-full h-full rounded-full overflow-hidden shadow-xl border-4 border-emerald-100 hover:border-emerald-200 transition-all">
-                                                <AnimatePresence mode='wait'>
-                                                    {loading ? (
-                                                        <motion.div
-                                                            initial={{ opacity: 0 }}
-                                                            animate={{ opacity: 1 }}
-                                                            exit={{ opacity: 0 }}
-                                                            className="absolute inset-0 bg-emerald-50 flex items-center justify-center"
-                                                        >
-                                                            <motion.div
-                                                                animate={{ rotate: 360 }}
-                                                                transition={{ repeat: Infinity, duration: 1 }}
-                                                                className="h-8 w-8 border-4 border-emerald-500 border-t-transparent rounded-full"
-                                                            />
-                                                        </motion.div>
-                                                    ) : (
-                                                        <Image
-                                                            src={imagePreview || "/images/user.png"}
-                                                            alt="Profile"
-                                                            width={160}
-                                                            height={160}
-                                                            className="rounded-full object-cover w-full h-full"
-                                                        />
-                                                    )}
-                                                </AnimatePresence>
-                                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-emerald-100/50">
-                                                    <Camera className="w-8 h-8 text-emerald-700 animate-pulse" />
-                                                </div>
-                                            </div>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={handleImageChange}
-                                                className="hidden"
-                                            />
-                                        </motion.label>
+                                    <div className="flex items-center gap-3 mb-8 pb-4 border-b border-slate-100">
+                                        <div className="p-3 bg-emerald-100 text-emerald-600 rounded-2xl">
+                                            <Edit3 className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-xl font-bold text-slate-800">ویرایش اطلاعات شخصی</h2>
+                                            <p className="text-sm text-slate-500">مشخصات فردی خود را بروز نگه دارید</p>
+                                        </div>
                                     </div>
 
-                                    <form onSubmit={handleSaveUser} className="space-y-8">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            {inputFields.map(({ key, icon }, index) => (
-                                                <motion.div
-                                                    key={key}
-                                                    initial={{ opacity: 0, x: 20 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ delay: index * 0.1 }}
-                                                    className="space-y-2"
-                                                >
-                                                    <label className="block text-sm font-medium text-emerald-700">
-                                                        {{
-                                                            FirstName: 'نام',
-                                                            LastName: 'نام خانوادگی',
-                                                            Mobile: 'شماره تماس',
-                                                            Email: 'ایمیل',
-                                                            NationalCode: 'کد ملی',
-                                                            // birthDate: 'تاریخ تولد'
-                                                        }[key]}
-                                                    </label>
-                                                    <div className="relative">
-                                                        <input
-                                                            disabled={key == "Mobile"}
-                                                            dir={["Mobile", "Email", "NationalCode"].includes(key) ? "ltr" : "rtl"}
-                                                            type="text"
-                                                            className="w-full pr-12 pl-4 py-3 rounded-xl border-2 border-emerald-100 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
-                                                            value={formData[key]}
-                                                            onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                                                        />
-                                                        <div className="absolute right-3 top-3.5 text-emerald-400">
-                                                            {icon}
-                                                        </div>
+                                    <form onSubmit={handleSaveUser} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {[
+                                            { id: 'FirstName', label: 'نام', icon: <User />, type: 'text' },
+                                            { id: 'LastName', label: 'نام خانوادگی', icon: <User />, type: 'text' },
+                                            { id: 'NationalCode', label: 'کد ملی', icon: <FileText />, type: 'text', dir: 'ltr' },
+                                            { id: 'Mobile', label: 'شماره موبایل', icon: <Phone />, type: 'tel', disabled: true, dir: 'ltr' },
+                                            { id: 'Email', label: 'ایمیل', icon: <Mail />, type: 'email', dir: 'ltr' },
+                                        ].map((field, idx) => (
+                                            <motion.div variants={itemVariants} key={field.id} className="space-y-2">
+                                                <label className="text-sm font-medium text-slate-700 block">{field.label}</label>
+                                                <div className="relative group">
+                                                    <div className="absolute top-3 right-3 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+                                                        {field.icon}
                                                     </div>
-                                                </motion.div>
-                                            ))}
-                                        </div>
-
-                                        <motion.button
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            type="submit"
-                                            disabled={loading}
-                                            className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
-                                        >
-                                            {loading ? (
-                                                <motion.div
-                                                    animate={{ rotate: 360 }}
-                                                    transition={{ repeat: Infinity, duration: 1 }}
-                                                    className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
-                                                />
-                                            ) : (
-                                                <>
-                                                    <Edit className="w-5 h-5" />
-                                                    ذخیره تغییرات
-                                                </>
-                                            )}
-                                        </motion.button>
-
-                                        {formSubmitted && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                className="bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-center"
-                                            >
-                                                اطلاعات با موفقیت ذخیره شد!
+                                                    <input
+                                                        type={field.type}
+                                                        disabled={field.disabled}
+                                                        dir={field.dir || 'rtl'}
+                                                        value={formData[field.id]}
+                                                        onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
+                                                        className={`w-full pr-12 pl-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all ${field.disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
+                                                    />
+                                                </div>
                                             </motion.div>
-                                        )}
+                                        ))}
+
+                                        <motion.div variants={itemVariants} className="md:col-span-2 pt-6">
+                                            <button
+                                                disabled={loading}
+                                                className="w-full sm:w-auto px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                                            >
+                                                {loading ? <Loader2 className="animate-spin" /> : <Save className="w-5 h-5" />}
+                                                <span>ذخیره تغییرات</span>
+                                            </button>
+                                        </motion.div>
                                     </form>
                                 </motion.div>
                             )}
 
-                            {/* Email Verification Section */}
-                            {activeSection === 'emailVerification' && (
-                                <motion.div
-                                    key="emailVerification"
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className="bg-white rounded-3xl shadow-2xl p-8"
-                                >
-                                    <div className="space-y-8">
-                                        {/* Current Email Status */}
-                                        <div className="bg-emerald-50 rounded-2xl p-6">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-3">
-                                                    <Mail className="w-8 h-8 text-emerald-600" />
-                                                    <div>
-                                                        <h3 className="font-semibold text-emerald-800">ایمیل فعلی</h3>
-                                                        <p className="text-emerald-600">{formData.Email}</p>
-                                                    </div>
-                                                </div>
-                                                <div className={`px-4 py-2 rounded-full ${emailVerification.verified ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}`}>
-                                                    {emailVerification.verified ? (
-                                                        <span className="flex items-center gap-2">
-                                                            <CheckCircle className="w-4 h-4" />
-                                                            تایید شده
-                                                        </span>
-                                                    ) : (
-                                                        <span>تایید نشده</span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Verification Process */}
-                                        {!emailVerification.verified && (
-                                            <div className="space-y-6">
-                                                <motion.button
-                                                    whileHover={{ scale: 1.02 }}
-                                                    whileTap={{ scale: 0.98 }}
-                                                    onClick={handleVerifyEmail}
-                                                    disabled={emailVerification.pending}
-                                                    className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
-                                                >
-                                                    {emailVerification.pending ? (
-                                                        <>
-                                                            <motion.div
-                                                                animate={{ rotate: 360 }}
-                                                                transition={{ repeat: Infinity, duration: 1 }}
-                                                                className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
-                                                            />
-                                                            در حال ارسال کد...
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Send className="w-5 h-5" />
-                                                            ارسال کد تایید
-                                                        </>
-                                                    )}
-                                                </motion.button>
-
-                                                {emailVerification.pending && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, height: 0 }}
-                                                        animate={{ opacity: 1, height: 'auto' }}
-                                                        className="space-y-4"
-                                                    >
-                                                        <div className="space-y-2">
-                                                            <label className="block text-sm font-medium text-emerald-700">
-                                                                کد تایید ارسال شده به ایمیل
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all text-center text-lg font-mono"
-                                                                placeholder="XXXXX"
-                                                                value={emailVerification.code}
-                                                                onChange={(e) => setEmailVerification(prev => ({ ...prev, code: e.target.value }))}
-                                                                maxLength={5}
-                                                            />
-                                                        </div>
-
-                                                        <motion.button
-                                                            whileHover={{ scale: 1.02 }}
-                                                            whileTap={{ scale: 0.98 }}
-                                                            onClick={handleConfirmVerification}
-                                                            className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
-                                                        >
-                                                            <CheckCircle className="w-5 h-5" />
-                                                            تایید ایمیل
-                                                        </motion.button>
-                                                    </motion.div>
-                                                )}
-                                            </div>
-                                        )}
-
-                                        {/* Verified Success Message */}
-                                        {emailVerification.verified && (
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                className="bg-emerald-100 border border-emerald-200 rounded-2xl p-6 text-center"
-                                            >
-                                                <CheckCircle className="w-16 h-16 text-emerald-600 mx-auto mb-4" />
-                                                <h3 className="text-xl font-semibold text-emerald-800 mb-2">ایمیل با موفقیت تایید شد!</h3>
-                                                <p className="text-emerald-600">حساب کاربری شما اکنون ایمن‌تر است.</p>
-                                            </motion.div>
-                                        )}
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {/* Social Media Section */}
+                            {/* --- بخش شبکه‌های اجتماعی --- */}
                             {activeSection === 'social' && (
                                 <motion.div
                                     key="social"
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className="bg-white rounded-3xl shadow-2xl p-8"
+                                    variants={containerVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit={{ opacity: 0, y: -20 }}
+                                    className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100"
                                 >
-                                    <div className="space-y-8">
-                                        <div className="text-center mb-8">
-                                            <h2 className="text-2xl font-bold text-emerald-800 mb-2">شبکه‌های اجتماعی</h2>
-                                            <p className="text-emerald-600">حساب‌های کاربری خود در شبکه‌های اجتماعی را مدیریت کنید</p>
+                                    <div className="flex items-center gap-3 mb-8 pb-4 border-b border-slate-100">
+                                        <div className="p-3 bg-blue-100 text-blue-600 rounded-2xl">
+                                            <Globe className="w-6 h-6" />
                                         </div>
+                                        <div>
+                                            <h2 className="text-xl font-bold text-slate-800">شبکه‌های اجتماعی</h2>
+                                            <p className="text-sm text-slate-500">لینک‌های ارتباطی خود را مدیریت کنید</p>
+                                        </div>
+                                    </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            {socialPlatforms.map((platform, index) => (
-                                                <motion.div
-                                                    key={platform.key}
-                                                    initial={{ opacity: 0, y: 20 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    transition={{ delay: index * 0.1 }}
-                                                    className="bg-emerald-50 rounded-2xl p-4 space-y-4"
-                                                >
-                                                    <div className="flex items-center justify-between">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="text-emerald-600">
-                                                                {platform.icon}
-                                                            </div>
-                                                            <span className="font-medium text-emerald-800">
-                                                                {platform.name}
-                                                            </span>
+                                    <div className="grid grid-cols-1 gap-6">
+                                        {Object.entries(socialMedia).map(([key, data], idx) => (
+                                            <motion.div
+                                                variants={itemVariants}
+                                                key={key}
+                                                className={`p-5 rounded-2xl border transition-all duration-300 ${data.enabled ? 'border-emerald-200 bg-emerald-50/30' : 'border-slate-100 bg-white'}`}
+                                            >
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`p-2.5 rounded-xl ${data.bg} ${data.color}`}>
+                                                            {data.icon}
                                                         </div>
-                                                        <label className="relative inline-flex items-center cursor-pointer">
-                                                            <input
-                                                                type="checkbox"
-                                                                className="sr-only"
-                                                                checked={socialMedia[platform.key].enabled}
-                                                                onChange={(e) => handleSocialMediaChange(platform.key, 'enabled', e.target.checked)}
-                                                            />
-                                                            <div className={`w-11 h-6 rounded-full transition-colors ${socialMedia[platform.key].enabled ? 'bg-emerald-600' : 'bg-emerald-200'}`} />
-                                                            <div className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform ${socialMedia[platform.key].enabled ? 'translate-x-5' : ''}`} />
-                                                        </label>
+                                                        <span className="font-bold text-slate-700 capitalize">{key}</span>
                                                     </div>
 
-                                                    {socialMedia[platform.key].enabled && (
+                                                    <label className="relative inline-flex items-center cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="sr-only peer"
+                                                            checked={data.enabled}
+                                                            onChange={(e) => setSocialMedia(prev => ({
+                                                                ...prev,
+                                                                [key]: { ...prev[key], enabled: e.target.checked }
+                                                            }))}
+                                                        />
+                                                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                                    </label>
+                                                </div>
+
+                                                <AnimatePresence>
+                                                    {data.enabled && (
                                                         <motion.div
                                                             initial={{ opacity: 0, height: 0 }}
                                                             animate={{ opacity: 1, height: 'auto' }}
-                                                            className="space-y-2"
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            className="overflow-hidden"
                                                         >
                                                             <input
+                                                                dir="ltr"
                                                                 type="text"
-                                                                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"
-                                                                placeholder={platform.placeholder}
-                                                                value={socialMedia[platform.key].value}
-                                                                onChange={(e) => handleSocialMediaChange(platform.key, 'value', e.target.value)}
+                                                                placeholder={`لینک یا آیدی ${key} خود را وارد کنید`}
+                                                                value={data.value}
+                                                                onChange={(e) => setSocialMedia(prev => ({
+                                                                    ...prev,
+                                                                    [key]: { ...prev[key], value: e.target.value }
+                                                                }))}
+                                                                className="w-full px-4 py-2 text-sm rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
                                                             />
                                                         </motion.div>
                                                     )}
-                                                </motion.div>
-                                            ))}
-                                        </div>
+                                                </AnimatePresence>
+                                            </motion.div>
+                                        ))}
+                                    </div>
 
-                                        <motion.button
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
+                                    <div className="mt-8 flex justify-end">
+                                        <button
                                             onClick={handleSaveSocialMedia}
                                             disabled={loading}
-                                            className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg transition-all"
+                                            className="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-lg shadow-emerald-600/30 transition-all flex items-center gap-2"
                                         >
-                                            {loading ? (
-                                                <motion.div
-                                                    animate={{ rotate: 360 }}
-                                                    transition={{ repeat: Infinity, duration: 1 }}
-                                                    className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
-                                                />
-                                            ) : (
-                                                <>
-                                                    <CheckCircle className="w-5 h-5" />
-                                                    ذخیره تغییرات
-                                                </>
-                                            )}
-                                        </motion.button>
-
-                                        {formSubmitted && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                className="bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-center"
-                                            >
-                                                شبکه‌های اجتماعی با موفقیت ذخیره شدند!
-                                            </motion.div>
-                                        )}
+                                            {loading ? <Loader2 className="animate-spin" /> : <Save className="w-5 h-5" />}
+                                            ذخیره تنظیمات
+                                        </button>
                                     </div>
                                 </motion.div>
                             )}
+
+                            {/* --- بخش امنیت و ایمیل --- */}
+                            {activeSection === 'security' && (
+                                <motion.div
+                                    key="security"
+                                    variants={containerVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit={{ opacity: 0, y: -20 }}
+                                    className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100"
+                                >
+                                    <div className="flex items-center gap-3 mb-8 pb-4 border-b border-slate-100">
+                                        <div className="p-3 bg-amber-100 text-amber-600 rounded-2xl">
+                                            <ShieldCheck className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-xl font-bold text-slate-800">امنیت حساب</h2>
+                                            <p className="text-sm text-slate-500">تایید هویت و ایمیل</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 mb-6">
+                                        <div className="flex justify-between items-center flex-wrap gap-4">
+                                            <div className="flex items-center gap-4">
+                                                <div className="bg-white p-3 rounded-full shadow-sm text-slate-600">
+                                                    <Mail className="w-6 h-6" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-bold text-slate-700">وضعیت ایمیل</h3>
+                                                    <p className="text-sm text-slate-500 font-mono mt-1">{formData.Email || 'ایمیلی ثبت نشده'}</p>
+                                                </div>
+                                            </div>
+                                            <div className={`px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 ${emailVerification.verified ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+                                                {emailVerification.verified ? <CheckCircle className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                                                {emailVerification.verified ? 'تایید شده' : 'تایید نشده'}
+                                            </div>
+                                        </div>
+
+                                        {!emailVerification.verified && (
+                                            <motion.div
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                className="mt-6 pt-6 border-t border-slate-200"
+                                            >
+                                                <div className="flex flex-col sm:flex-row gap-4">
+                                                    <button
+                                                        onClick={handleVerifyEmail}
+                                                        disabled={emailVerification.pending}
+                                                        className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
+                                                    >
+                                                        {emailVerification.pending ? <Loader2 className="animate-spin w-5 h-5" /> : <Send className="w-4 h-4" />}
+                                                        ارسال کد تایید
+                                                    </button>
+                                                    <div className="flex-[2] relative">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="کد تایید را اینجا وارد کنید"
+                                                            className="w-full h-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:border-blue-500 focus:outline-none text-center tracking-widest font-mono"
+                                                            maxLength={6}
+                                                        />
+                                                    </div>
+                                                    <button className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors">
+                                                        تایید نهایی
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </div>
+
+                                    <div className="bg-orange-50 p-4 rounded-xl text-orange-800 text-sm flex items-start gap-3">
+                                        <Lock className="w-5 h-5 shrink-0 mt-0.5" />
+                                        <p>جهت حفظ امنیت حساب کاربری خود، از به اشتراک گذاشتن کد تایید با دیگران جداً خودداری کنید. پشتیبانی سایت هرگز از شما کد تایید نمی‌خواهد.</p>
+                                    </div>
+
+                                </motion.div>
+                            )}
+
                         </AnimatePresence>
                     </div>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 }

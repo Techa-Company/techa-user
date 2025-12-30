@@ -36,7 +36,6 @@ const ModernCoursesPage = () => {
               ],
               Duration: Math.floor(Math.random() * 20) + 5,
             }));
-          // console.log(enrichedCourses, "enriched");
           setCourses(enrichedCourses);
         }
       } catch (error) {

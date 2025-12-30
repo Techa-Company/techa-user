@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { PlayCircle, CheckCircle, AlertCircle } from "lucide-react";
 
 const SessionItem = ({ session, sessionIndex, isSelected, onClick }) => {
-    console.log("Sesstion", session)
     const getBadgeStatus = () => {
         switch (session.ExerciseStatus) {
             case 1: return "not_started";

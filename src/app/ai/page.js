@@ -32,7 +32,7 @@ const AIAssistedMultiLanguageEditor = () => {
 
   const defaultCodes = {
     sql: "SELECT * FROM users;",
-    js: "function greet() {\n  console.log('Hello World!');\n}\ngreet();",
+    js: "function greet() {\n  ",
     react:
       "function App() {\n  return (\n    <div>\n      <h1>Hello React</h1>\n    </div>\n  );\n}",
     html: "<div>\n  <h1>Hello HTML</h1>\n  <p>Edit this code to see changes</p>\n</div>",
