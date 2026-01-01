@@ -1,7 +1,7 @@
 // src/features/docs/userSlice.js
 
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchUserById, updateUser } from './UserActions'
+import { fetchUserById, updateUser, updateUserSocialMedia } from './UserActions'
 
 const initialState = {
     user: null,
@@ -36,6 +36,17 @@ const userSlice = createSlice({
                 state.loading = false
             })
             .addCase(updateUser.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(updateUserSocialMedia.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(updateUserSocialMedia.fulfilled, (state, action) => {
+                state.loading = false
+            })
+            .addCase(updateUserSocialMedia.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

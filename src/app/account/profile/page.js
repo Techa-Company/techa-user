@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import { FaWhatsapp, FaTelegram } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserById, updateUser } from '../../../features/account/user/UserActions';
+import { fetchUserById, updateUser, updateUserSocialMedia } from '../../../features/account/user/UserActions';
 import { toast } from 'react-toastify';
 
 // انیمیشن‌ها
@@ -29,7 +29,7 @@ const itemVariants = {
 export default function Profile() {
     const dispatch = useDispatch();
     const { user, loading: userLoading } = useSelector((state) => state.user);
-    const userId = useSelector((state) => state.auth.user?.Id);
+    const userId = useSelector((state) => state.auth.user?.Id) || 9;
 
     const [imagePreview, setImagePreview] = useState(null);
     const [activeSection, setActiveSection] = useState('personal');
@@ -64,7 +64,9 @@ export default function Profile() {
 
     // بارگذاری اولیه اطلاعات
     useEffect(() => {
+        console.log("hi")
         if (userId) {
+
             dispatch(fetchUserById({ "@Id": userId }));
         }
     }, [dispatch, userId]);
@@ -154,12 +156,13 @@ export default function Profile() {
                 IsEnabled: socialMedia[key].enabled
             }));
 
-            await dispatch(updateUser({
+            await dispatch(updateUserSocialMedia({
                 Id: userId,
                 SocialNetworks: JSON.stringify(socialNetworksArray)
             })).unwrap();
-
             toast.success('شبکه‌های اجتماعی ذخیره شدند');
+            dispatch(fetchUserById({ "@Id": userId }));
+
         } catch (error) {
             toast.error('خطا در ذخیره سازی');
         } finally {
@@ -181,12 +184,11 @@ export default function Profile() {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8 font-sans" dir="rtl">
+        <div className=" pb-10" dir="rtl">
 
             {/* هدر پس‌زمینه */}
-            <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-800 rounded-b-[3rem] shadow-lg -z-10"></div>
 
-            <div className="max-w-6xl mx-auto mt-16">
+            <div className="max-w-7xl mx-auto ">
 
                 {/* کارت اصلی پروفایل (خلاصه وضعیت) */}
                 <motion.div
@@ -225,10 +227,26 @@ export default function Profile() {
                     </div>
 
                     <div className="flex gap-3">
-                        <div className="text-center px-6 py-2 bg-emerald-50 rounded-2xl border border-emerald-100">
-                            <span className="block text-xl font-bold text-emerald-600">فعال</span>
-                            <span className="text-xs text-emerald-400">وضعیت حساب</span>
+                        <div
+                            className={`text-center px-6 py-2 rounded-2xl border 
+    ${user.IsActive
+                                    ? "bg-emerald-50 border-emerald-100"
+                                    : "bg-red-50 border-red-100"}`}
+                        >
+                            <span
+                                className={`block text-xl font-bold 
+      ${user.IsActive ? "text-emerald-600" : "text-red-600"}`}
+                            >
+                                {user.IsActive ? "فعال" : "غیرفعال"}
+                            </span>
+                            <span
+                                className={`text-xs 
+      ${user.IsActive ? "text-emerald-400" : "text-red-400"}`}
+                            >
+                                وضعیت حساب
+                            </span>
                         </div>
+
                     </div>
                 </motion.div>
 
@@ -247,8 +265,8 @@ export default function Profile() {
                                     key={item.id}
                                     onClick={() => setActiveSection(item.id)}
                                     className={`w-full flex items-center justify-between p-4 rounded-xl mb-2 transition-all duration-300 group ${activeSection === item.id
-                                            ? 'bg-emerald-600 text-white shadow-emerald-500/30 shadow-lg'
-                                            : 'text-slate-600 hover:bg-slate-50 hover:text-emerald-600'
+                                        ? 'bg-emerald-600 text-white shadow-emerald-500/30 shadow-lg'
+                                        : 'text-slate-600 hover:bg-slate-50 hover:text-emerald-600'
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -346,7 +364,7 @@ export default function Profile() {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 gap-6">
+                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                                         {Object.entries(socialMedia).map(([key, data], idx) => (
                                             <motion.div
                                                 variants={itemVariants}
