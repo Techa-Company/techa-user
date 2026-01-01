@@ -34,7 +34,7 @@ export default function Lesson() {
 
   // 1. فچ کردن دیتا
   useEffect(() => {
-    dispatch(fetchContentById({ Id: lessonId, UserId: 5 }));
+    dispatch(fetchContentById({ Id: lessonId, UserId: 9 }));
     dispatch(fetchContents({ Take: 1000, CourseId: docId }));
   }, [docId, lessonId, dispatch]);
 
@@ -92,11 +92,11 @@ export default function Lesson() {
     try {
       await dispatch(completeContent({
         Id: lessonId,
-        UserId: 5,
+        UserId: 9,
       })).unwrap();
       toast.success("جلسه با موفقیت علامت‌گذاری شد");
 
-      dispatch(fetchContentById({ Id: lessonId, UserId: 5 }));
+      dispatch(fetchContentById({ Id: lessonId, UserId: 9 }));
       dispatch(fetchContents({ Take: 1000, CourseId: docId }));
     } catch (err) {
       toast.error(err.message || "خطایی رخ داد");

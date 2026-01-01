@@ -71,7 +71,7 @@ export default function ExerciseDetails({ exercise, onBack, courseId }) {
 
         const data = {
             "Id": exercise.UserExerciseProgId || 0,
-            "UserId": 5,
+            "UserId": 9,
             "ExerciseId": exercise.Id,
             "Answer": code,
             "Status": 2

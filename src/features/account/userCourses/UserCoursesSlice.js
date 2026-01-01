@@ -1,14 +1,12 @@
-// src/features/docs/userCoursesSlice.js
-
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchUserById, fetchUserCourses, updateUser, updateUserSocialMedia } from './UserCoursesActions'
+import { fetchUserById, fetchUserCourses, fetchUserCoursesDashboard, updateUser, updateUserSocialMedia } from './UserCoursesActions'
 
 const initialState = {
-    courses: null,
+    summary: null,
+    courses: [],
     loading: false,
     error: null,
 }
-
 
 const userCoursesSlice = createSlice({
     name: 'userCourses',
@@ -28,7 +26,18 @@ const userCoursesSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
             })
-
+            .addCase(fetchUserCoursesDashboard.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchUserCoursesDashboard.fulfilled, (state, action) => {
+                state.loading = false
+                state.summary = action.payload
+            })
+            .addCase(fetchUserCoursesDashboard.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
     },
 })
 
