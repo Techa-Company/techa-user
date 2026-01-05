@@ -25,7 +25,7 @@ export const metadata = {
     type: "website",
   },
   other: {
-    enamad: "61494690",
+    enamad: "696095",
   },
 };
 
@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
       <html lang="fa">
         <head>
           <link rel="icon" href="/images/favicon.svg" sizes="any" />
-          <meta name="enamad" content="61494690" />
+          <meta name="enamad" content="696095" />
         </head>
         <body>
           <AuthProvider>
