@@ -229,19 +229,19 @@ export default function Profile() {
                     <div className="flex gap-3">
                         <div
                             className={`text-center px-6 py-2 rounded-2xl border 
-    ${user.IsActive
+    ${user?.IsActive
                                     ? "bg-emerald-50 border-emerald-100"
                                     : "bg-red-50 border-red-100"}`}
                         >
                             <span
                                 className={`block text-xl font-bold 
-      ${user.IsActive ? "text-emerald-600" : "text-red-600"}`}
+      ${user?.IsActive ? "text-emerald-600" : "text-red-600"}`}
                             >
-                                {user.IsActive ? "فعال" : "غیرفعال"}
+                                {user?.IsActive ? "فعال" : "غیرفعال"}
                             </span>
                             <span
                                 className={`text-xs 
-      ${user.IsActive ? "text-emerald-400" : "text-red-400"}`}
+      ${user?.IsActive ? "text-emerald-400" : "text-red-400"}`}
                             >
                                 وضعیت حساب
                             </span>
