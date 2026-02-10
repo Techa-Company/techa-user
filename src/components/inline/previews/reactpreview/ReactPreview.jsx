@@ -190,7 +190,7 @@ const ReactPreview = ({ code: initialCode }) => {
     setIsAILoading(true);
     try {
       const response = await fetch(
-        `https://pool.techa.me/api/Modification/react?prompt=${encodeURIComponent(code)}`,
+        `https://pool.techa.ir/api/Modification/react?prompt=${encodeURIComponent(code)}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

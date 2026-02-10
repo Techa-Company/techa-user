@@ -196,7 +196,7 @@ const JavaScriptPreview = ({ code: initialCode }) => {
       console.log("🔍 نوع کد تشخیص داده شد:", type);
 
       const response = await fetch(
-        `https://pool.techa.me/api/Modification/${type}?prompt=${encodeURIComponent(code)}`,
+        `https://pool.techa.ir/api/Modification/${type}?prompt=${encodeURIComponent(code)}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

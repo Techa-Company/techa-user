@@ -28,7 +28,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'pool.techa.me',
+        hostname: 'pool.techa.ir',
         port: '',
         pathname: '/staticfiles/**',
       },
