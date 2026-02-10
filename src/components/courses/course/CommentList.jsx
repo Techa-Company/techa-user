@@ -3,7 +3,7 @@ import CommentItem from './CommentItem';
 import { AnimatePresence } from 'framer-motion';
 
 const CommentList = ({ comments, handleAddReply }) => {
-    if (comments.length === 0) {
+    if (!comments || comments.length === 0) {
         return (
             <div className="text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
                 <p className="text-slate-500">هنوز نظری ثبت نشده است. اولین نفر باشید!</p>

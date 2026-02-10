@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { SP_fetch } from "../../../api/utils/api";
 
 export const fetchExercises = createAsyncThunk(
-    'docs/fetchExercises',
+    'exercises/fetchExercises',
     async (parameters, thunkAPI) => {
         try {
             const res = await SP_fetch('Exercise_List', parameters)
@@ -14,7 +14,7 @@ export const fetchExercises = createAsyncThunk(
     }
 )
 export const fetchContentsWithExercises = createAsyncThunk(
-    'docs/fetchContentsWithExercises',
+    'exercises/fetchContentsWithExercises',
     async (parameters, thunkAPI) => {
         try {
             const res = await SP_fetch('ContentsWithExercises_List', parameters)
@@ -26,7 +26,7 @@ export const fetchContentsWithExercises = createAsyncThunk(
 )
 
 export const fetchExerciseById = createAsyncThunk(
-    'docs/fetchExerciseById',
+    'exercises/fetchExerciseById',
     async (parameters, thunkAPI) => {
         try {
             const res = await SP_fetch('Form_Exercises', parameters)
@@ -38,11 +38,23 @@ export const fetchExerciseById = createAsyncThunk(
 )
 
 export const sendExercise = createAsyncThunk(
-    'docs/sendExercise',
+    'exercises/sendExercise',
     async (parameters, thunkAPI) => {
         try {
             const res = await SP_fetch('Save_UserExerciseProgresses', parameters)
             return res.Data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.message)
+        }
+    }
+)
+
+export const fetchExerciseProgress = createAsyncThunk(
+    'exercises/fetchExerciseProgress',
+    async (parameters, thunkAPI) => {
+        try {
+            const res = await SP_fetch('GetUserExerciseProgress', parameters)
+            return res.Data[0]
         } catch (err) {
             return thunkAPI.rejectWithValue(err.message)
         }

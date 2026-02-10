@@ -23,7 +23,7 @@ export interface SPResponse<T = any> {
 // Axios Instance
 // -----------------------------
 const api = axios.create({
-  baseURL: "https://pool.techa.me/api/ExecuteTSql",
+  baseURL: "https://pool.techa.ir/api/ExecuteTSql",
   headers: { "Content-Type": "application/json" },
 });
 

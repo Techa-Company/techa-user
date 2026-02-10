@@ -13,7 +13,7 @@ import {
     Target
 } from 'lucide-react';
 
-const Exercises = () => {
+const Exercises = ({ data }) => {
     const { docId } = useParams();
 
     return (
@@ -55,14 +55,14 @@ const Exercises = () => {
                                 <ArrowLeft className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" />
                             </Link>
 
-                            <div className="flex items-center gap-4 px-6 py-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-slate-600">
+                            {/* <div className="flex items-center gap-4 px-6 py-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-slate-600">
                                 <div className="flex -space-x-2 space-x-reverse overflow-hidden">
                                     {[1, 2, 3].map((i) => (
                                         <div key={i} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">U{i}</div>
                                     ))}
                                 </div>
                                 <span className="text-sm font-medium">+۵۰۰ دانشجو فعال</span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -83,16 +83,16 @@ const Exercises = () => {
                             {/* Stats Grid inside Card */}
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="p-4 bg-emerald-50 rounded-2xl">
-                                    <div className="text-3xl font-bold text-emerald-700 mb-1">۱۲</div>
+                                    <div className="text-3xl font-bold text-emerald-700 mb-1">{data?.TotalExercises.toLocaleString()}</div>
                                     <div className="text-sm text-emerald-600 font-medium">تمرین چالشی</div>
+                                </div>
+                                <div className="p-4 bg-orange-50 rounded-2xl">
+                                    <div className="text-3xl font-bold text-orange-700 mb-1">{data?.CompletedExercises}</div>
+                                    <div className="text-sm text-orange-600 font-medium">تکمیل شده</div>
                                 </div>
                                 <div className="p-4 bg-blue-50 rounded-2xl">
                                     <div className="text-3xl font-bold text-blue-700 mb-1">۸۵٪</div>
                                     <div className="text-sm text-blue-600 font-medium">نمره قبولی</div>
-                                </div>
-                                <div className="p-4 bg-orange-50 rounded-2xl">
-                                    <div className="text-3xl font-bold text-orange-700 mb-1">۲۴h</div>
-                                    <div className="text-sm text-orange-600 font-medium">مهلت ارسال</div>
                                 </div>
                                 <div className="p-4 bg-purple-50 rounded-2xl">
                                     <div className="text-3xl font-bold text-purple-700 mb-1">۱۰۰٪</div>
@@ -104,10 +104,10 @@ const Exercises = () => {
                             <div className="mt-8">
                                 <div className="flex justify-between text-sm mb-2 text-slate-600">
                                     <span>پیشرفت دوره</span>
-                                    <span className="font-bold">۶۵٪</span>
+                                    <span className="font-bold">{data?.CompletionPercentage}٪</span>
                                 </div>
                                 <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-                                    <div className="h-full w-[65%] bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"></div>
+                                    <div style={{ width: data?.CompletionPercentage && 0 }} className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"></div>
                                 </div>
                             </div>
                         </div>

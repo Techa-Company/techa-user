@@ -8,6 +8,7 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
     const [replyText, setReplyText] = useState("");
 
     const renderStars = (rating) => {
+        if (!rating) return null; // اگر امتیازی نیست (مثل ریپلای‌ها) نمایش نده
         return (
             <div className="flex gap-0.5">
                 {[...Array(5)].map((_, i) => (
@@ -24,10 +25,20 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
 
     const submitReply = () => {
         if (replyText.trim()) {
-            handleAddReply(comment.id, replyText);
+            handleAddReply(comment.id, replyText); // comment.id اینجا همان ParentId برای پاسخ می‌شود
             setReplyText("");
             setIsReplying(false);
         }
+    };
+
+    // تابع فرمت تاریخ
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        return new Date(dateString).toLocaleDateString("fa-IR", {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
     };
 
     return (
@@ -39,9 +50,6 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
         >
             {/* کارت اصلی نظر */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:border-emerald-100 transition-all duration-300 relative overflow-hidden">
-                {/* دکوراسیون پس زمینه */}
-                <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500/0 group-hover:bg-emerald-500 transition-colors duration-300"></div>
-
                 <div className="flex items-start gap-4">
                     {/* آواتار */}
                     <div className="relative shrink-0">
@@ -49,6 +57,7 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
                             src={comment.userAvatar}
                             alt={comment.userName}
                             className="w-14 h-14 rounded-2xl object-cover shadow-sm ring-2 ring-white"
+                            onError={(e) => { e.target.src = "https://i.pravatar.cc/150?u=default" }} // فال‌بک تصویر
                         />
                         <div className="absolute -bottom-2 -right-2 bg-emerald-50 text-emerald-600 rounded-lg p-1 border border-white shadow-sm">
                             <User size={12} />
@@ -63,15 +72,17 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
                                     {comment.userName}
                                 </h4>
                                 <span className="text-xs text-slate-400 mt-1 block font-medium">
-                                    {new Date(comment.date).toLocaleDateString("fa-IR", { year: 'numeric', month: 'long', day: 'numeric' })}
+                                    {formatDate(comment.date)}
                                 </span>
                             </div>
-                            <div className="flex flex-col items-end gap-1">
-                                {renderStars(comment.rating)}
-                                <span className="text-xs font-bold text-slate-300 bg-slate-50 px-2 py-0.5 rounded-full">
-                                    {comment.rating}
-                                </span>
-                            </div>
+                            {comment.rating > 0 && (
+                                <div className="flex flex-col items-end gap-1">
+                                    {renderStars(comment.rating)}
+                                    <span className="text-xs font-bold text-slate-300 bg-slate-50 px-2 py-0.5 rounded-full">
+                                        {comment.rating}
+                                    </span>
+                                </div>
+                            )}
                         </div>
 
                         <p className="text-slate-600 leading-7 text-justify text-sm md:text-base mt-3">
@@ -86,9 +97,6 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
                             >
                                 <Reply size={14} className="scale-x-[-1]" />
                                 {isReplying ? "لغو پاسخ" : "پاسخ دهید"}
-                            </button>
-                            <button className="text-slate-300 hover:text-slate-500 transition-colors">
-                                <MoreHorizontal size={16} />
                             </button>
                         </div>
                     </div>
@@ -105,9 +113,7 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
                         className="overflow-hidden pr-8 md:pr-16 mt-2"
                     >
                         <div className="flex gap-3 items-start relative">
-                            {/* خط اتصال منحنی برای فرم */}
                             <div className="absolute -right-6 top-[-20px] w-6 h-12 border-b-2 border-r-2 border-slate-200 rounded-br-xl -z-10"></div>
-
                             <textarea
                                 value={replyText}
                                 onChange={(e) => setReplyText(e.target.value)}
@@ -130,7 +136,6 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
             {/* لیست پاسخ‌ها (Threaded) */}
             {comment.replies && comment.replies.length > 0 && (
                 <div className="relative mr-8 md:mr-10 mt-4 space-y-4">
-                    {/* خط عمودی اصلی درخت */}
                     <div className="absolute -right-5 top-[-20px] bottom-6 w-0.5 bg-gradient-to-b from-slate-200 to-transparent"></div>
 
                     {comment.replies.map((reply) => (
@@ -140,7 +145,6 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
                             animate={{ opacity: 1, x: 0 }}
                             className="bg-slate-50/80 p-5 rounded-2xl border border-slate-100 relative"
                         >
-                            {/* خط منحنی اتصال به والد */}
                             <div className="absolute -right-5 top-6 w-5 h-0.5 bg-slate-200"></div>
 
                             <div className="flex items-start gap-3">
@@ -148,18 +152,20 @@ const CommentItem = ({ comment, index, handleAddReply }) => {
                                     src={reply.userAvatar}
                                     alt={reply.userName}
                                     className="w-10 h-10 rounded-full object-cover ring-2 ring-white border border-slate-100"
+                                    onError={(e) => { e.target.src = "https://i.pravatar.cc/150?u=default" }}
                                 />
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-1">
                                         <h5 className="font-bold text-slate-700 text-sm">{reply.userName}</h5>
-                                        {reply.role === 'admin' && (
+                                        {/* تشخیص ادمین بودن بر اساس نام یا داده‌های دیگر - چون فیلد Role در جیسون نبود فرضی هندل شد */}
+                                        {reply.userName.includes("پشتیبانی") && (
                                             <span className="bg-blue-100 text-blue-600 text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
                                                 <ShieldCheck size={10} />
                                                 مدیر
                                             </span>
                                         )}
                                         <span className="text-[10px] text-slate-400 mr-auto">
-                                            {new Date(reply.date).toLocaleDateString("fa-IR")}
+                                            {formatDate(reply.date)}
                                         </span>
                                     </div>
                                     <p className="text-slate-600 text-sm leading-6">{reply.comment}</p>

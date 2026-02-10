@@ -16,6 +16,8 @@ import TabButtonsSkeleton from "../../../components/courses/course/TabButtonsSke
 import TabContent from "../../../components/courses/course/TabContent";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDocById } from "../../../features/main/docs/docsActions";
+import { fetchExerciseProgress } from "../../../features/main/exercises/exercisesActions";
+import { fetchReviews } from "../../../features/main/reviews/reviewsActions";
 
 export default function DocDetailsPage() {
   const params = useParams();
@@ -30,12 +32,17 @@ export default function DocDetailsPage() {
 
 
   const { loading, singleDoc: doc } = useSelector(state => state.docs);
+  const { userExerciseProgress } = useSelector(state => state.exercises);
+  const { reviews } = useSelector(state => state.reviews);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchDocById({ "Id": docId }));
+    dispatch(fetchExerciseProgress({ "UserId": 9, CourseId: docId }));
+    dispatch(fetchReviews({ DocId: docId }));
   }, []);
+  console.log(reviews)
 
-
+  console.log(userExerciseProgress)
   // تب‌ها
   const tabContent = [
     {
@@ -46,12 +53,12 @@ export default function DocDetailsPage() {
     {
       id: 1,
       title: "تمرین‌ها",
-      content: <Exercises docId={docId} />,
+      content: <Exercises docId={docId} data={userExerciseProgress} />,
     },
     {
       id: 2,
       title: "نظرات کاربران",
-      content: <Comments docId={docId} />,
+      content: <Comments docId={docId} reviews={reviews} />,
     },
   ];
 

@@ -1,79 +1,158 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
-import { Loader2 } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { AddReview, fetchReviews } from '../../../features/main/reviews/reviewsActions';
 
-const Comments = () => {
-    const [comments, setComments] = useState([]);
-    const [loading, setLoading] = useState(true);
+const Comments = ({ reviews = [], docId, currentUserId = 9 }) => {
 
-    useEffect(() => {
-        // شبیه‌سازی دریافت داده
-        const fetchComments = async () => {
-            await new Promise((resolve) => setTimeout(resolve, 800));
-            const fakeComments = [
-                {
-                    id: 1,
-                    userName: "علی جوشنگ",
-                    userAvatar: "https://i.pravatar.cc/150?img=65",
-                    rating: 4,
-                    date: "2023-10-12",
-                    comment: "این دوره واقعاً دید من رو نسبت به برنامه‌نویسی تغییر داد. ممنون از تیم خوبتون.",
-                    replies: [
-                        {
-                            id: 11,
-                            userName: "پشتیبانی سایت",
-                            userAvatar: "https://i.pravatar.cc/150?img=33",
-                            date: "2023-10-13",
-                            comment: "خوشحالیم که براتون مفید بوده علی جان! موفق باشید.",
-                            role: "admin" // برای استایل دهی خاص به ادمین
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    userName: "مریم احمدی",
-                    userAvatar: "https://i.pravatar.cc/150?img=47",
-                    rating: 5,
-                    date: "2023-10-10",
-                    comment: "کیفیت صدا و تصویر عالی بود. فقط ای کاش بخش پروژه‌ها کمی بیشتر بود.",
-                    replies: [],
-                },
-            ];
-            setComments(fakeComments);
-            setLoading(false);
+    const dispatch = useDispatch()
+
+    const structuredComments = useMemo(() => {
+        if (!reviews || reviews.length === 0) return [];
+        const mappedReviews = reviews.map(review => ({
+            id: review.Id,
+            parentId: review.ParentId,
+            userName: review.UserName || "کاربر ناشناس",
+            userAvatar: review.Avatar || `https://ui-avatars.com/api/?name=${review.UserName}&background=random`,
+            rating: review.Rating || 0,
+            date: review.CreatedAt,
+            comment: review.Content,
+            depth: review.Depth,
+            sortPath: review.SortPath,
+            replies: []
+        }));
+
+        const commentMap = {};
+        const rootComments = [];
+
+        mappedReviews.forEach(review => {
+            commentMap[review.id] = review;
+        });
+
+        mappedReviews.forEach(review => {
+            if (review.parentId) {
+                if (commentMap[review.parentId]) {
+                    commentMap[review.parentId].replies.push(review);
+                }
+            } else {
+                rootComments.push(review);
+            }
+        });
+
+        // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+        return rootComments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }, [reviews]);
+
+    // هندل کردن افزودن نظر جدید (والد)
+    // 1. افزودن نظر اصلی
+    const handleAddComment = async (newCommentData, resetForm) => {
+        if (!currentUserId) {
+            toast.error("لطفاً ابتدا وارد حساب کاربری خود شوید");
+            return;
+        }
+
+        if (!newCommentData.comment.trim()) {
+            toast.warn("متن نظر نمی‌تواند خالی باشد");
+            return;
+        }
+
+        const payload = {
+            DocId: docId,           // ← توجه: در جدول شما DocId است نه CourseId
+            UserId: currentUserId,
+            // ParentId: null,  
+            Rating: newCommentData.rating ? Number(newCommentData.rating) : null,
+            Content: newCommentData.comment.trim(),
         };
-        fetchComments();
-    }, []);
 
-    const handleAddComment = (newComment, resetForm) => {
-        const commentToAdd = {
-            ...newComment,
-            id: Date.now(),
-            date: new Date().toISOString().split("T")[0],
-            userAvatar: `https://i.pravatar.cc/150?u=${Date.now()}`, // آواتار رندوم
-            replies: [],
-        };
-        setComments([commentToAdd, ...comments]);
-        resetForm();
+        console.log("Sending new review:", payload);
+
+        try {
+            // فرض: AddReview یک thunk است که promise برمی‌گرداند
+            const resultAction = await dispatch(AddReview(payload)).unwrap();
+
+            // اگر backend Id جدید رو برگردوند می‌تونی استفاده کنی
+            console.log("Review added successfully:", resultAction);
+
+            toast.success("نظر شما با موفقیت ثبت شد و پس از تأیید نمایش داده خواهد شد");
+
+            resetForm();           // پاک کردن فرم
+
+            // آپدیت لیست نظرات (یکی از این دو روش معمولاً کافی است)
+            dispatch(fetchReviews({ DocId: docId }));
+            // ← پیشنهاد اصلی
+
+        } catch (error) {
+            console.error("Error adding review:", error);
+
+            const errorMessage =
+                error?.message ||
+                error?.data?.message ||
+                "خطایی در ثبت نظر رخ داد. لطفاً دوباره تلاش کنید";
+
+            toast.error(errorMessage);
+        }
     };
 
-    const handleAddReply = (commentId, text) => {
-        const replyToAdd = {
-            id: Date.now(),
-            userName: "کاربر مهمان",
-            userAvatar: "/images/default-avatar.jpg",
-            date: new Date().toISOString().split("T")[0],
-            comment: text,
+    // هندل کردن افزودن پاسخ (فرزند)
+    // 2. افزودن پاسخ به نظر
+    const handleAddReply = async (parentId, text, setReplyText) => {
+        if (!currentUserId) {
+            toast.error("لطفاً ابتدا وارد حساب کاربری خود شوید");
+            return;
+        }
+
+        const trimmedText = text?.trim();
+        if (!trimmedText) {
+            toast.warn("متن پاسخ نمی‌تواند خالی باشد");
+            return;
+        }
+
+        // پیدا کردن والد برای محاسبه Depth (اختیاری اما مفید)
+        const parentComment = reviews.find(r => r.Id === parentId);
+        if (!parentComment) {
+            toast.error("نظر مورد نظر پیدا نشد");
+            return;
+        }
+
+        const payload = {
+            DocId: docId,
+            UserId: currentUserId,
+            ParentId: parentId,
+            // Rating: null,               // پاسخ‌ها امتیاز ندارند
+            Content: trimmedText,
+            // Depth: (parentComment.Depth || 0) + 1,
+            // SortPath: ""                // می‌تونی در backend با trigger یا logic پر کنی
         };
-        setComments((prevComments) =>
-            prevComments.map((comment) =>
-                comment.id === commentId
-                    ? { ...comment, replies: [...comment.replies, replyToAdd] }
-                    : comment
-            )
-        );
+
+        console.log("Sending reply:", payload);
+
+        try {
+            const resultAction = await dispatch(AddReview(payload)).unwrap();
+
+            toast.success("پاسخ شما با موفقیت ثبت شد");
+
+            // پاک کردن فیلد پاسخ
+            if (setReplyText) setReplyText("");
+
+            // آپدیت لیست نظرات
+            dispatch(fetchReviews({ DocId: docId }));
+
+            // اگر می‌خواهی optimistic reply اضافه کنی:
+            // dispatch(addReplyOptimistic({ ...payload, Id: tempId, CreatedAt: new Date() }));
+
+        } catch (error) {
+            console.error("Error adding reply:", error);
+
+            const errorMessage =
+                error?.message ||
+                error?.data?.message ||
+                "خطایی در ثبت پاسخ رخ داد";
+
+            toast.error(errorMessage);
+        }
     };
 
     return (
@@ -84,20 +163,16 @@ const Comments = () => {
                     نظرات <span className="text-emerald-500">دانشجویان</span>
                 </h2>
                 <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full mr-2">
-                    {comments.length} نظر
+                    {reviews.length} دیدگاه
                 </span>
             </div>
 
             <CommentForm handleAddComment={handleAddComment} />
 
-            {loading ? (
-                <div className="flex flex-col items-center justify-center py-12 text-slate-400">
-                    <Loader2 className="w-10 h-10 animate-spin mb-3 text-emerald-500" />
-                    <p>در حال بارگذاری نظرات...</p>
-                </div>
-            ) : (
-                <CommentList comments={comments} handleAddReply={handleAddReply} />
-            )}
+            <CommentList
+                comments={structuredComments}
+                handleAddReply={handleAddReply}
+            />
         </div>
     );
 };

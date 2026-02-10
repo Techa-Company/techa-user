@@ -88,7 +88,7 @@ const HtmlPreview = ({ code: initialCode }) => {
     setIsAILoading(true);
     try {
       const response = await fetch(
-        `https://pool.techa.me/api/Modification/html?prompt=${encodeURIComponent(code)}`,
+        `https://pool.techa.ir/api/Modification/html?prompt=${encodeURIComponent(code)}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

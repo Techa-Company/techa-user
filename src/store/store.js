@@ -6,6 +6,7 @@ import docsReducer from "../features/main/docs/docsSlice"
 import blogsReducer from "../features/main/blog/blogsSlice"
 import contentsReducer from "../features/main/contents/contentsSlice"
 import exercisesReducer from "../features/main/exercises/exercisesSlice"
+import reviewsReducer from "../features/main/reviews/reviewsSlice"
 import userRedcer from "../features/account/user/UserSlice"
 import newsletterReducer from "../features/main/newsletter/newsletterSlice"
 import userCoursesReducer from "../features/account/userCourses/UserCoursesSlice"
@@ -19,6 +20,7 @@ export const store = configureStore({
         blogs: blogsReducer,
         contents: contentsReducer,
         exercises: exercisesReducer,
+        reviews: reviewsReducer,
         newsletter: newsletterReducer,
         userCourses: userCoursesReducer
     },

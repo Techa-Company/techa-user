@@ -2,20 +2,22 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Send } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const CommentForm = ({ handleAddComment }) => {
     const [newComment, setNewComment] = useState({
-        userName: "",
+        userName: "", // نکته: در API واقعی معمولا نام کاربر از توکن گرفته می‌شود نه اینپوت
         rating: 0,
         comment: "",
     });
     const [hoverRating, setHoverRating] = useState(0);
 
     const handleSubmit = () => {
-        if (newComment.userName && newComment.comment && newComment.rating > 0) {
+        // نام کاربری معمولاً اتوماتیک سمت سرور پر می‌شود، اما اگر فرم لاگین ندارید اینجا نگه داشتم
+        if (newComment.comment && newComment.rating > 0) {
             handleAddComment(newComment, () => setNewComment({ userName: "", rating: 0, comment: "" }));
         } else {
-            alert("لطفاً نام، امتیاز و متن نظر را وارد کنید.");
+            toast.warn("لطفاً امتیاز و متن نظر را وارد کنید.");
         }
     };
 
@@ -33,20 +35,17 @@ const CommentForm = ({ handleAddComment }) => {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
-                {/* Input Name */}
+                {/* بخش نام را حذف کردم چون در API فیلد UserId وجود دارد و نام از سمت سرور هندل می‌شود. 
+                    اما اگر کاربر مهمان است، اینپوت زیر را نگه دارید */}
+                {/* 
                 <div className="space-y-2">
                     <label className="text-sm font-medium text-slate-600">نام کامل</label>
-                    <input
-                        type="text"
-                        value={newComment.userName}
-                        onChange={(e) => setNewComment({ ...newComment, userName: e.target.value })}
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-400"
-                        placeholder="مثلاً: علی رضایی"
-                    />
-                </div>
+                    <input ... />
+                </div> 
+                */}
 
                 {/* Interactive Star Rating */}
-                <div className="space-y-2">
+                <div className="space-y-2 col-span-2 md:col-span-1">
                     <label className="text-sm font-medium text-slate-600">امتیاز شما</label>
                     <div className="flex gap-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 h-[50px] items-center" onMouseLeave={() => setHoverRating(0)}>
                         {[1, 2, 3, 4, 5].map((star) => (
@@ -59,8 +58,8 @@ const CommentForm = ({ handleAddComment }) => {
                                 <Star
                                     size={24}
                                     className={`transition-colors duration-200 ${star <= (hoverRating || newComment.rating)
-                                            ? "fill-amber-400 text-amber-400 drop-shadow-sm"
-                                            : "text-slate-300"
+                                        ? "fill-amber-400 text-amber-400 drop-shadow-sm"
+                                        : "text-slate-300"
                                         }`}
                                 />
                             </button>

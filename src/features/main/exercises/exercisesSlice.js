@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchContentsWithExercises, fetchExerciseById, fetchExercises, sendExercise } from './exercisesActions'
+import { fetchContentsWithExercises, fetchExerciseById, fetchExerciseProgress, fetchExercises, sendExercise } from './exercisesActions'
 
 const initialState = {
     exercises: [],
     contents: [],
     singleExercise: null,
+    userExerciseProgress: null,
     loading: false,
     error: null,
 }
@@ -59,6 +60,18 @@ const exercisesSlice = createSlice({
                 state.loading = false
             })
             .addCase(sendExercise.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(fetchExerciseProgress.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchExerciseProgress.fulfilled, (state, action) => {
+                state.loading = false
+                state.userExerciseProgress = action.payload
+            })
+            .addCase(fetchExerciseProgress.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

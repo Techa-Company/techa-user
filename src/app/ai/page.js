@@ -151,7 +151,7 @@ const AIAssistedMultiLanguageEditor = () => {
 
     try {
       const response = await fetch(
-        `https://pool.techa.me/api/Modification/${activeTab}?prompt=${code}`,
+        `https://pool.techa.ir/api/Modification/${activeTab}?prompt=${code}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
