@@ -5,6 +5,7 @@ import {
   ArrowRight,
   CheckCircle,
   Clock,
+  MessageCircle, // 1. اضافه کردن آیکون پیام
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -39,16 +40,14 @@ export default function Lesson() {
   }, [docId, lessonId, dispatch]);
 
 
-  // 2. منطق محاسبه درس قبلی و بعدی (اصلاح شده برای پرش بین فصل‌ها)
+  // 2. منطق محاسبه درس قبلی و بعدی
   useEffect(() => {
     if (!content || contents.length === 0) return;
 
-    // جدا کردن فصل‌ها (آیتم‌هایی که ParentId ندارند)
     const chapters = contents
       .filter((i) => i.ParentId === null)
       .sort((a, b) => a.SortIndex - b.SortIndex);
 
-    // ساخت لیست مسطح (Flat) از تمام دروس به ترتیب فصل
     let allLessonsSorted = [];
 
     chapters.forEach(chapter => {
@@ -59,7 +58,6 @@ export default function Lesson() {
       allLessonsSorted = [...allLessonsSorted, ...chapterLessons];
     });
 
-    // پیدا کردن ایندکس درس فعلی در لیست کل دروس
     const currentIndex = allLessonsSorted.findIndex(
       (l) => Number(l.Id) === Number(content.Id)
     );
@@ -103,11 +101,12 @@ export default function Lesson() {
     }
   };
 
+
   if (!content && !loading) return <div className="text-center py-10">جلسه یافت نشد</div>;
   if (loading) return <LessonSkeleton />;
 
   return (
-    <div className="relative w-full max-w-full"> {/* اطمینان از اینکه کانتینر اصلی عرض صفحه را نمی‌زند */}
+    <div className="relative w-full max-w-full">
 
       {/* هدر */}
       <div className="flex flex-col gap-4 pb-5 border-b-2 border-[#2ECC71]">
@@ -121,8 +120,10 @@ export default function Lesson() {
           )}
         </div>
 
-        {/* متادیتا */}
+        {/* متادیتا و دکمه‌ها */}
         <div className="flex flex-wrap items-center gap-3 text-gray-600">
+
+          {/* دکمه زمان مطالعه */}
           {content.EstimatedReadTime > 0 && (
             <div className="flex items-center gap-2 bg-teal-50 px-3 py-1.5 rounded-lg text-sm md:text-base">
               <Clock className="w-4 h-4 md:w-5 md:h-5 text-teal-700" />
@@ -133,11 +134,23 @@ export default function Lesson() {
             </div>
           )}
 
+          {/* ------------------------------------------- */}
+          {/* دکمه جدید پرسش سوال */}
+          <Link href={`/docs/${docId}/${lessonId}/questions`}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border 
+              bg-amber-100 text-amber-700 border-amber-300 hover:bg-amber-200 transition-colors text-sm md:text-base cursor-pointer"
+          >
+            <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
+            <span>پرسش سوال</span>
+          </Link>
+          {/* ------------------------------------------- */}
+
+          {/* دکمه وضعیت/تمرین */}
           {content.Status === 3 ? (
             <button
               disabled
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg border 
-               bg-green-100 text-green-700 border-green-300 cursor-not-allowed text-sm md:text-base"
+                bg-green-100 text-green-700 border-green-300 cursor-not-allowed text-sm md:text-base"
             >
               <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
               <span>خوانده شده</span>
@@ -146,7 +159,7 @@ export default function Lesson() {
             <Link
               href={`/docs/${docId}/exercises/${content.Id}`}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg border 
-               bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200 transition-colors text-sm md:text-base"
+                bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200 transition-colors text-sm md:text-base"
             >
               <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
               <span>لیست تمرینات</span>
@@ -155,7 +168,7 @@ export default function Lesson() {
             <button
               onClick={toggleCompletionStatus}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg border 
-               bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 transition-colors text-sm md:text-base"
+                bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 transition-colors text-sm md:text-base"
             >
               <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
               <span>خوانده‌ام</span>
@@ -171,13 +184,6 @@ export default function Lesson() {
         className="w-full pb-5 border-b-2 border-[#2ECC71] mt-8"
       >
         <div className="lesson-content w-full max-w-none">
-          {/* 
-                تغییرات استایل برای جلوگیری از اسکرول افقی کل صفحه:
-                1. prose: کلاس‌های تایپوگرافی
-                2. max-w-none: حذف محدودیت عرض پیش‌فرض prose
-                3. prose-pre: مدیریت باکس‌های کد برای اسکرول داخلی
-                4. break-words: شکستن کلمات طولانی
-            */}
           <div
             className="
                 prose 
