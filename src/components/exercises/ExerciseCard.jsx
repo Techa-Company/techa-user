@@ -1,195 +1,206 @@
 import { motion } from "framer-motion";
-import DueDate from "./DueDate";
+import {
+    Clock,
+    CheckCircle,
+    XCircle,
+    AlertCircle,
+    TrendingUp,
+    Zap,
+    Flame,
+    Award,
+    ChevronLeft,
+} from "lucide-react";
 
 export default function ExerciseCard({ exercise, index, onClick }) {
-
-    console.log(exercise)
-    const getStatusColor = () => {
+    // وضعیت تمرین
+    const getStatusConfig = () => {
         switch (exercise.UserStatus) {
-            case 2: return {
-                bg: "bg-gradient-to-r from-amber-50 to-orange-50",
-                text: "text-amber-700",
-                border: "border-amber-200",
-                icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                )
-            };
-            case 3: return {
-                bg: "bg-gradient-to-r from-green-50 to-emerald-50",
-                text: "text-green-700",
-                border: "border-green-200",
-                icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                )
-            };
-            case 4: return {
-                bg: "bg-gradient-to-r from-red-50 to-rose-50",
-                text: "text-red-700",
-                border: "border-red-200",
-                icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                )
-            };
-            default: return {
-                bg: "bg-gradient-to-r from-gray-50 to-slate-50",
-                text: "text-gray-700",
-                border: "border-gray-200",
-                icon: (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                )
-            };
+            case 2: // در انتظار تصحیح
+                return {
+                    bg: "bg-gradient-to-br from-amber-50 to-orange-50/70",
+                    border: "border-amber-200/50",
+                    text: "text-amber-700",
+                    icon: <Clock className="w-4 h-4" />,
+                    label: "در انتظار تصحیح",
+                };
+            case 3: // تکمیل شده
+                return {
+                    bg: "bg-gradient-to-br from-emerald-50 to-green-50/70",
+                    border: "border-emerald-200/50",
+                    text: "text-emerald-700",
+                    icon: <CheckCircle className="w-4 h-4" />,
+                    label: "تکمیل شده",
+                };
+            case 4: // نیاز به اصلاح
+                return {
+                    bg: "bg-gradient-to-br from-red-50 to-rose-50/70",
+                    border: "border-red-200/50",
+                    text: "text-red-700",
+                    icon: <XCircle className="w-4 h-4" />,
+                    label: "نیاز به اصلاح",
+                };
+            default: // تکمیل نشده
+                return {
+                    bg: "bg-gradient-to-br from-gray-50 to-slate-50/70",
+                    border: "border-gray-200/50",
+                    text: "text-gray-600",
+                    icon: <AlertCircle className="w-4 h-4" />,
+                    label: "شروع نشده",
+                };
         }
     };
 
-    const getStatusText = () => {
-        switch (exercise.UserStatus) {
-            case 2: return "در انتظار تصحیح";
-            case 3: return "تکمیل شده";
-            case 4: return "نیاز به اصلاح";
-            default: return "تکمیل نشده";
-        }
-    };
-
-    const getDifficultyColor = () => {
+    // سطح دشواری
+    const getDifficultyConfig = () => {
         switch (exercise.Level) {
-            case 2: return {
-                text: "text-blue-700",
-                bg: "bg-blue-100",
-                icon: (
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                )
-            };
-            case 3: return {
-                text: "text-red-700",
-                bg: "bg-red-100",
-                icon: (
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                )
-            };
-            case 4: return {
-                text: "text-purple-700",
-                bg: "bg-purple-100",
-                icon: (
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                )
-            };
-            default: return {
-                text: "text-green-700",
-                bg: "bg-green-100",
-                icon: (
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905a3.61 3.61 0 01-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                    </svg>
-                )
-            };
+            case 2: // متوسط
+                return {
+                    color: "text-blue-600",
+                    bg: "bg-blue-100/80",
+                    icon: <TrendingUp className="w-4 h-4" />,
+                    label: "متوسط",
+                };
+            case 3: // دشوار
+                return {
+                    color: "text-orange-600",
+                    bg: "bg-orange-100/80",
+                    icon: <Zap className="w-4 h-4" />,
+                    label: "دشوار",
+                };
+            case 4: // چالش برانگیز
+                return {
+                    color: "text-purple-600",
+                    bg: "bg-purple-100/80",
+                    icon: <Flame className="w-4 h-4" />,
+                    label: "چالش برانگیز",
+                };
+            default: // آسان
+                return {
+                    color: "text-green-600",
+                    bg: "bg-green-100/80",
+                    icon: <Award className="w-4 h-4" />,
+                    label: "آسان",
+                };
         }
     };
 
-    const statusStyle = getStatusColor();
-    const difficultyStyle = getDifficultyColor();
+    const status = getStatusConfig();
+    const difficulty = getDifficultyConfig();
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
-                delay: index * 0.1,
+                delay: index * 0.08,
                 type: "spring",
-                stiffness: 100,
-                damping: 12
+                stiffness: 80,
+                damping: 15,
             }}
             whileHover={{
-                y: -5,
-                transition: { duration: 0.2 }
+                y: -6,
+                scale: 1.02,
+                transition: { duration: 0.2 },
             }}
-            className={`relative rounded-2xl p-6 shadow-lg border-2 transition-all duration-300 cursor-pointer overflow-hidden
-            ${statusStyle.bg} ${statusStyle.border}`}
+            className={`group relative rounded-2xl p-5 border-2 backdrop-blur-sm cursor-pointer overflow-hidden
+        ${status.bg} ${status.border}
+        shadow-lg hover:shadow-xl transition-all duration-300`}
             onClick={onClick}
         >
-            {/* Background pattern */}
-            <div className="absolute top-0 right-0 w-32 h-32 opacity-5">
-                <svg viewBox="0 0 100 100" className="text-current">
-                    <path d="M0,0 L100,0 L100,100 Z" fill="currentColor" />
+            {/* گرادینت پس‌زمینه متحرک */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+
+            {/* الگوی نقطه‌چین در گوشه */}
+            <div className="absolute top-0 left-0 w-24 h-24 opacity-5 pointer-events-none">
+                <svg viewBox="0 0 100 100" className="w-full h-full text-gray-800">
+                    <circle cx="20" cy="20" r="4" fill="currentColor" />
+                    <circle cx="40" cy="40" r="4" fill="currentColor" />
+                    <circle cx="60" cy="60" r="4" fill="currentColor" />
+                    <circle cx="80" cy="80" r="4" fill="currentColor" />
                 </svg>
             </div>
 
+            {/* محتوای اصلی */}
             <div className="relative z-10">
-                <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                        <div className="flex items-center justify-between gap-2 mb-3">
-                            <span className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center ${difficultyStyle.bg} ${difficultyStyle.text}`}>
-                                {difficultyStyle.icon}
-                                {exercise.Level === 1 ? "آسان" :
-                                    exercise.Level === 2 ? "متوسط" :
-                                        exercise.Level === 3 ? "دشوار" : "چالش برانگیز"}
-                            </span>
-
-                            {exercise.UserScore != null && (
-                                <div className="relative">
-                                    <div className="bg-gradient-to-r from-green-400 to-emerald-600 text-white font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm shadow-lg">
-                                        {exercise.UserScore}
-                                    </div>
-                                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
-                                        <div className="bg-green-500 rounded-full w-3 h-3"></div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">{exercise.Title}</h3>
-                        <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed">{exercise.Description}</p>
+                {/* ردیف بالا: سطح دشواری و امتیاز */}
+                <div className="flex items-start justify-between mb-3">
+                    {/* برچسب دشواری */}
+                    <div
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium
+              ${difficulty.bg} ${difficulty.color} backdrop-blur-sm border border-white/30 shadow-sm`}
+                    >
+                        {difficulty.icon}
+                        <span>{difficulty.label}</span>
                     </div>
+
+                    {/* امتیاز کاربر (در صورت وجود) */}
+                    {exercise.UserScore != null && (
+                        <div className="relative">
+                            <div className="bg-gradient-to-br from-emerald-400 to-green-500 text-white font-bold rounded-xl px-3 py-1.5 text-sm shadow-md flex items-center gap-1">
+                                <span>{exercise.UserScore}</span>
+                                <span className="text-xs opacity-80">از ۱۰۰</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                <div className="flex justify-between items-center mt-6">
-                    <span className={`px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1 ${statusStyle.text} ${statusStyle.border}`}>
-                        {statusStyle.icon}
-                        {getStatusText()}
-                    </span>
-
-                    {/* <div className="text-left flex items-center gap-1">
-                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <div>
-                            <span className="text-xs text-gray-500 block">مهلت:</span>
-                            <DueDate utcDate={exercise.UserDueDate} />
-                        </div>
-                    </div> */}
+                {/* عنوان و توضیحات */}
+                <div className="mb-4">
+                    <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-1 group-hover:text-gray-900 transition-colors">
+                        {exercise.Title}
+                    </h3>
+                    <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                        {exercise.Description}
+                    </p>
                 </div>
 
-                {exercise.UserScore !== null && (
-                    <div className="mt-4 bg-white/50 backdrop-blur-sm rounded-xl p-3 border border-white/20">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-xs text-gray-600">نمره شما:</span>
-                            <span className="text-xs font-bold text-gray-700">{exercise.UserScore} از 100</span>
+                {/* بخش پایین: وضعیت و دکمه اقدام */}
+                <div className="flex items-center justify-between mt-4">
+                    {/* وضعیت با آیکون */}
+                    <div
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium
+              bg-white/80 backdrop-blur-sm border ${status.border} ${status.text}`}
+                    >
+                        {status.icon}
+                        <span>{status.label}</span>
+                    </div>
+
+                    {/* دکمه ادامه / مشاهده (نمایش در hover) */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -10 }}
+                        whileHover={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700"
+                    >
+                        <span>مشاهده تمرین</span>
+                        <ChevronLeft className="w-4 h-4" />
+                    </motion.div>
+                </div>
+
+                {/* نوار پیشرفت امتیاز (اگر امتیاز داشته باشد) */}
+                {exercise.UserScore != null && (
+                    <div className="mt-4 pt-3 border-t border-white/50">
+                        <div className="flex items-center justify-between text-xs text-gray-500 mb-1.5">
+                            <span>پیشرفت شما</span>
+                            <span className="font-medium">{exercise.UserScore}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                            <div
-                                className="bg-gradient-to-r from-green-400 to-emerald-600 h-2 rounded-full transition-all duration-500"
-                                style={{ width: `${(exercise.UserScore / 100) * 100}%` }}
-                            ></div>
+                        <div className="w-full h-2 bg-gray-200/70 rounded-full overflow-hidden">
+                            <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${exercise.UserScore}%` }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="h-full bg-gradient-to-r from-emerald-400 to-green-500 rounded-full"
+                            />
                         </div>
                     </div>
                 )}
-
-                {/* Hover effect */}
-                <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
             </div>
+
+            {/* افکت hover روی کل کارت (مرز درخشان) */}
+            <div
+                className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-emerald-200/50
+          transition-colors duration-300 pointer-events-none"
+            />
         </motion.div>
     );
 }

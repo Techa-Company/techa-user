@@ -78,7 +78,7 @@ export default function QuestionsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
         {/* ستون اصلی: لیست سوالات (سمت راست در RTL) */}
-        <div className="lg:col-span-8 order-2 lg:order-1 space-y-6">
+        <div className="lg:col-span-8  space-y-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xl font-black text-gray-800 flex items-center gap-2">
               <MessageSquare className="text-green-600" />
@@ -116,7 +116,7 @@ export default function QuestionsPage() {
 
 
                   {/* دکمه‌ها و آمار */}
-                  <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-50">
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
                     <div className="flex items-center gap-2 text-green-600 font-bold bg-green-50/50 px-4 py-2 rounded-xl">
                       <MessageCircle size={20} />
                       <span>{q.AnswersCount} پاسخ ثبت شده</span>
@@ -140,7 +140,7 @@ export default function QuestionsPage() {
         </div>
 
         {/* سایدبار: آخرین سوالات (سمت چپ در RTL) */}
-        <div className="lg:col-span-4 order-1 lg:order-2 space-y-6">
+        <div className="lg:col-span-4  space-y-6">
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm sticky top-6">
             <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
               <TrendingUp className="text-orange-500" size={20} />
@@ -158,9 +158,12 @@ export default function QuestionsPage() {
                     {lq.Title}
                   </h4>
                   <div className="flex justify-between items-center text-[11px]">
-                    <span className="text-gray-400 flex items-center gap-1 italic">
-                      <User size={10} /> {lq.UserName}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-400 flex items-center gap-1">
+                        <User size={10} /> {lq.UserName}
+                      </span>
+                      <span className="flex items-center gap-1 text-gray-400"><Calendar size={12} /> {new Date(lq.CreatedAt).toLocaleDateString('fa-IR')}</span>
+                    </div>
                     <span className="bg-white shadow-sm border border-gray-50 text-green-500 px-2 py-1 rounded-md font-bold">
                       {lq.AnswersCount} پاسخ
                     </span>

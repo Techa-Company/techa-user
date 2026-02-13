@@ -5,7 +5,7 @@ import {
   ArrowRight,
   CheckCircle,
   Clock,
-  MessageCircle, // 1. اضافه کردن آیکون پیام
+  MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -38,7 +38,6 @@ export default function Lesson() {
     dispatch(fetchContentById({ Id: lessonId, UserId: 9 }));
     dispatch(fetchContents({ Take: 1000, CourseId: docId }));
   }, [docId, lessonId, dispatch]);
-
 
   // 2. منطق محاسبه درس قبلی و بعدی
   useEffect(() => {
@@ -74,7 +73,6 @@ export default function Lesson() {
 
   }, [content, contents]);
 
-
   // 3. رندر اسنیپت‌های کد
   useEffect(() => {
     if (!content) return;
@@ -83,7 +81,6 @@ export default function Lesson() {
     }, 50);
     return () => clearTimeout(timer);
   }, [content]);
-
 
   // 4. تغییر وضعیت خواندن
   const toggleCompletionStatus = async () => {
@@ -101,7 +98,6 @@ export default function Lesson() {
     }
   };
 
-
   if (!content && !loading) return <div className="text-center py-10">جلسه یافت نشد</div>;
   if (loading) return <LessonSkeleton />;
 
@@ -109,74 +105,101 @@ export default function Lesson() {
     <div className="relative w-full max-w-full">
 
       {/* هدر */}
-      <div className="flex flex-col gap-4 pb-5 border-b-2 border-[#2ECC71]">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-3">
-          <h1 className="font-black text-2xl md:text-3xl leading-snug">{content.Title}</h1>
+      <div className="pb-6 border-b border-gray-200 space-y-5">
+
+        {/* ================= TITLE + INDEX ================= */}
+        <div className="flex items-center justify-between gap-3">
+
+          <h1 className="font-black text-2xl md:text-3xl leading-snug">
+            {content.Title}
+          </h1>
 
           {lessonIndexInfo.total > 0 && (
-            <span className="text-sm md:text-base font-bold bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg whitespace-nowrap self-start md:self-center">
+            <span className="px-3 py-1.5 rounded-lg w-fit bg-gray-100 text-gray-700 text-sm font-semibold whitespace-nowrap">
               درس {lessonIndexInfo.index} از {lessonIndexInfo.total}
             </span>
           )}
         </div>
 
-        {/* متادیتا و دکمه‌ها */}
-        <div className="flex flex-wrap items-center gap-3 text-gray-600">
 
-          {/* دکمه زمان مطالعه */}
-          {content.EstimatedReadTime > 0 && (
-            <div className="flex items-center gap-2 bg-teal-50 px-3 py-1.5 rounded-lg text-sm md:text-base">
-              <Clock className="w-4 h-4 md:w-5 md:h-5 text-teal-700" />
-              <span className="text-teal-700">مدت:</span>
-              <span className="font-bold text-teal-800">
-                {content.EstimatedReadTime} دقیقه
-              </span>
-            </div>
-          )}
+        {/* ================= TOOLBAR ================= */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-          {/* ------------------------------------------- */}
-          {/* دکمه جدید پرسش سوال */}
-          <Link href={`/docs/${docId}/${lessonId}/questions`}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border 
-              bg-amber-100 text-amber-700 border-amber-300 hover:bg-amber-200 transition-colors text-sm md:text-base cursor-pointer"
-          >
-            <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
-            <span>پرسش سوال</span>
-          </Link>
-          {/* ------------------------------------------- */}
+          {/* ---------- RIGHT : Navigation + Meta ---------- */}
+          <div className="flex flex-wrap items-center gap-3">
 
-          {/* دکمه وضعیت/تمرین */}
-          {content.Status === 3 ? (
-            <button
-              disabled
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border 
-                bg-green-100 text-green-700 border-green-300 cursor-not-allowed text-sm md:text-base"
-            >
-              <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
-              <span>خوانده شده</span>
-            </button>
-          ) : content.HasExercise === 1 ? (
+            {/* بازگشت به دوره */}
             <Link
-              href={`/docs/${docId}/exercises/${content.Id}`}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border 
-                bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200 transition-colors text-sm md:text-base"
+              href={`/docs/${docId}`}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border
+        bg-white text-gray-700 border-gray-300 hover:bg-gray-50 transition text-sm"
             >
-              <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
-              <span>لیست تمرینات</span>
+              <ArrowRight className="w-4 h-4" />
+              بازگشت به دوره
             </Link>
-          ) : (
-            <button
-              onClick={toggleCompletionStatus}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border 
-                bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 transition-colors text-sm md:text-base"
+
+            {/* زمان مطالعه */}
+            {content.EstimatedReadTime > 0 && (
+              <div className="flex items-center gap-2 bg-teal-50 px-3 py-2 rounded-lg text-sm">
+                <Clock className="w-4 h-4 text-teal-700" />
+                <span className="text-teal-700">مدت:</span>
+                <span className="font-bold text-teal-800">
+                  {content.EstimatedReadTime} دقیقه
+                </span>
+              </div>
+            )}
+
+          </div>
+
+
+          {/* ---------- LEFT : Actions ---------- */}
+          <div className="flex flex-wrap items-center gap-3">
+
+            {/* پرسش سوال */}
+            <Link
+              href={`/docs/${docId}/${lessonId}/questions`}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg
+        bg-amber-500 text-white hover:bg-amber-600 transition text-sm font-medium shadow-sm"
             >
-              <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
-              <span>خوانده‌ام</span>
-            </button>
-          )}
+              <MessageCircle className="w-4 h-4" />
+              پرسش سوال
+            </Link>
+
+            {/* وضعیت درس */}
+            {content.Status === 3 ? (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg border
+        bg-green-50 text-green-700 border-green-200 text-sm">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                خوانده شده
+              </div>
+
+            ) : content.HasExercise === 1 ? (
+              <Link
+                href={`/docs/${docId}/exercises/${content.Id}`}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg
+          bg-blue-500 text-white hover:bg-blue-600 transition text-sm font-medium shadow-sm"
+              >
+                <CheckCircle className="w-4 h-4" />
+                تمرینات
+              </Link>
+
+            ) : (
+              <button
+                onClick={toggleCompletionStatus}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg
+          bg-gray-900 text-white hover:bg-black transition text-sm font-medium shadow-sm"
+              >
+                <CheckCircle className="w-4 h-4" />
+                علامت‌گذاری به عنوان خوانده شده
+              </button>
+            )}
+
+          </div>
 
         </div>
+
       </div>
+
 
       {/* محتوای متن */}
       <div

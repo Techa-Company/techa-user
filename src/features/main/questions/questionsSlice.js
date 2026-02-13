@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addAnswer, addQuestion, fetchLatestQuestions, fetchQuestionDetails, fetchQuestions } from './questionsActions'
+import { addAnswer, addQuestion, fetchAllQuestions, fetchLatestQuestions, fetchQuestionDetails, fetchQuestions } from './questionsActions'
 
 const initialState = {
+    allQuestions: [],
     questions: [],
     latestQuestions: [],
     singleQuestion: null,
@@ -24,6 +25,18 @@ const questionsSlice = createSlice({
                 state.questions = action.payload
             })
             .addCase(fetchQuestions.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(fetchAllQuestions.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchAllQuestions.fulfilled, (state, action) => {
+                state.loading = false
+                state.allQuestions = action.payload
+            })
+            .addCase(fetchAllQuestions.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

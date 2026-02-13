@@ -12,6 +12,19 @@ export const fetchQuestions = createAsyncThunk(
         }
     }
 )
+
+export const fetchAllQuestions = createAsyncThunk(
+    'questions/fetchAllQuestions',
+    async (parameters, thunkAPI) => {
+        try {
+            const res = await SP_fetch('GetAllQuestions', parameters)
+            return res.Data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.message)
+        }
+    }
+)
+
 export const fetchLatestQuestions = createAsyncThunk(
     'questions/fetchLatestQuestions',
     async (parameters, thunkAPI) => {

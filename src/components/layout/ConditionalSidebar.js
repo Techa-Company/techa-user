@@ -3,14 +3,30 @@
 
 import { usePathname } from "next/navigation";
 import Sidebar from "./Sidebar";
+import ExerciseSidebar from "../../components/exercises/ExerciseSidebar";
+
+const HIDDEN_PATHS = ["/questions"];
+const EXERCISE_PATHS = ["/exercises", "?tab=1"];
 
 export default function ConditionalSidebar() {
     const pathname = usePathname();
+    if (!pathname) return null;
 
-    // بررسی اینکه مسیر exercises باشه
-    const hideSidebar = pathname?.includes("/exercises");
+    const shouldHide = HIDDEN_PATHS.some((path) =>
+        pathname === path || pathname.includes(path)
+    );
 
-    if (hideSidebar) return null;
+    if (shouldHide) return null;
 
+    const isExercisePage = EXERCISE_PATHS.some((path) =>
+        pathname === path || pathname.includes(path)
+    );
+
+    // ۳. انتخاب کامپوننت مناسب
+    if (isExercisePage) {
+        return <ExerciseSidebar />;
+    }
+
+    // در غیر این صورت → سایدبار معمولی
     return <Sidebar />;
 }

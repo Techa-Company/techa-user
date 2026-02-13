@@ -113,7 +113,7 @@ const Sidebar = () => {
       {/* Backdrop */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[59] lg:hidden transition-opacity duration-300"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
@@ -125,7 +125,7 @@ const Sidebar = () => {
           
           /* --- استایل موبایل (تیره) --- */
           bg-[#042A1B] border-l-0 text-white
-          fixed inset-y-0 right-0 z-[40] shadow-2xl
+          fixed inset-y-0 right-0 z-[60] shadow-2xl
           w-[350px] sm:w-[350px]
           ${isMobileOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"}
 

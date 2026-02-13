@@ -82,11 +82,11 @@ const Header = () => {
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${isMenuOpen ? "block" : "hidden"
+        className={`fixed inset-0 bg-black bg-opacity-50 z-[80] ${isMenuOpen ? "block" : "hidden"
           }`}
       ></div>
       <header
-        className={`fixed w-full z-50 bg-[#042A1B] ${scrolled ? "shadow-2xl py-3" : "py-5"} transition-all duration-200`}
+        className={`fixed w-full z-[80] bg-[#042A1B] ${scrolled ? "shadow-2xl py-3" : "py-5"} transition-all duration-200`}
       >
         <div className="container mx-auto px-5 lg:px-0 xl:px-5 2xl:px-20">
           <nav className="flex justify-between items-center">
