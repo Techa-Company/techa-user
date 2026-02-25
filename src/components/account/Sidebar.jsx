@@ -3,20 +3,81 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { Home, User, Book, Dumbbell, ShoppingCart, Ticket, Mail, Folder, Briefcase, Key, Phone, X, Menu, Clipboard, Target } from 'lucide-react'
+import {
+    LayoutDashboard,      // داشبورد اصلی
+    BarChart3,            // پیشرفت و آمار
+    UserCircle,           // پروفایل (قشنگ‌تر از User ساده)
+    KeyRound,             // لایسنس / کلید
+    BookOpen,             // دوره‌ها (بازتر و جذاب‌تر)
+    PencilRuler,          // تمرین‌ها (به جای Dumbbell که خیلی ورزشی بود)
+    FileCheck,            // آزمون‌ها / کوییزها
+    Target,               // تعیین سطح (هدف‌گذاری)
+    Award,                // مدارک / گواهی‌ها (قشنگ‌تر از Folder)
+    ShoppingBag,          // خریدها (جذاب‌تر از ShoppingCart)
+    MessageSquare,
+    Menu,
+    X,        // تیکت‌ها / پشتیبانی (به جای Ticket که بیشتر بلیط بود)
+} from 'lucide-react';
 
-
-const sidebarItems = [
-    { name: 'داشبورد', href: '/account', icon: Home },
-    { name: 'پروفایل من', href: '/account/profile', icon: User },
-    { name: 'لایسنس‌های من', href: '/account/license', icon: Key },
-    { name: 'دوره‌ های من', href: '/account/courses', icon: Book },
-    { name: 'تمرین ها', href: '/account/exercises', icon: Dumbbell },
-    { name: 'آزمون ها', href: '/account/quiz', icon: Clipboard },
-    { name: 'تعیین سطح هوشمند', href: '/account/level-assessment', icon: Target },
-    { name: 'مدارک من', href: '/account/certificates', icon: Folder },
-    { name: 'خریدها', href: '/account/purchase', icon: ShoppingCart },
-    { name: 'تیکت‌ها', href: '/account/tickets', icon: Ticket },
+export const sidebarItems = [
+    {
+        name: 'داشبورد',
+        href: '/account',
+        icon: LayoutDashboard,
+    },
+    {
+        name: 'پیشرفت من',
+        href: '/account/my-progress',
+        icon: BarChart3,      // آمار و نمودار → حس پیشرفت می‌دهد
+    },
+    {
+        name: 'پروفایل من',
+        href: '/account/profile',
+        icon: UserCircle,
+    },
+    // ────────────── یادگیری ──────────────
+    {
+        name: 'دوره‌های من',
+        href: '/account/courses',
+        icon: BookOpen,
+    },
+    {
+        name: 'تمرین‌ها',
+        href: '/account/exercises',
+        icon: PencilRuler,    // ابزار نوشتن و خط‌کش → مرتبط با تمرین کدنویسی
+    },
+    {
+        name: 'آزمون‌ها',
+        href: '/account/quiz',
+        icon: FileCheck,      // برگه بررسی‌شده → حس آزمون
+    },
+    {
+        name: 'تعیین سطح هوشمند',
+        href: '/account/level-assessment',
+        icon: Target,
+    },
+    // ────────────── خروجی و اعتبار ──────────────
+    {
+        name: 'مدارک من',
+        href: '/account/certificates',
+        icon: Award,          // جایزه / مدال → حس گواهینامه و موفقیت
+    },
+    // ────────────── مالی و پشتیبانی ──────────────
+    {
+        name: 'لایسنس‌های من',
+        href: '/account/license',
+        icon: KeyRound,
+    },
+    {
+        name: 'خریدها',
+        href: '/account/purchase',
+        icon: ShoppingBag,
+    },
+    {
+        name: 'تیکت‌ها',
+        href: '/account/tickets',
+        icon: MessageSquare,  // چت/پیام → مناسب پشتیبانی و تیکت
+    },
 ];
 
 export default function Sidebar() {
