@@ -20,8 +20,8 @@ export default function DocumentationDashboard() {
 
     useEffect(() => {
         // userId را باید داینامیک کنید، فعلا طبق کد شما 9 گذاشتم
-        dispatch(fetchUserCourses({ UserId: 9, FilterType: 0 }));
-        dispatch(fetchUserCoursesDashboard({ UserId: 9 }));
+        dispatch(fetchUserCourses({ FilterType: 0 }));
+        dispatch(fetchUserCoursesDashboard());
     }, [dispatch]);
 
     // --- توابع کمکی برای تبدیل داده‌های بک‌اند به فرمت UI ---

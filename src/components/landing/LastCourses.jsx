@@ -19,7 +19,7 @@ const LastCourses = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await fetch("https://api.techa.me/api/Course");
+                const response = await fetch("https://pool.techa.ir/api/Course");
                 const data = await response.json();
 
                 if (data.IsSuccess) {

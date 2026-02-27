@@ -1,9 +1,9 @@
 "use client";
 import { Provider } from "react-redux";
 import { useEffect } from "react";
-import { store } from "../store/store";
 import { loadFromLocalStorage } from "../features/cart/cartSlice";
 import { loadUserFromCookie } from "../features/auth/authSlice";
+import store from "../store/store";
 
 export function Providers({ children }) {
     useEffect(() => {

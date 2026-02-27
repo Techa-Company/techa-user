@@ -236,8 +236,8 @@ const Footer = () => {
                     fill="#F6DC65"
                   />
                 </svg>
-                <Link className="text-sm" href="mail:Support@Techa.me">
-                  Support@Techa.me
+                <Link className="text-sm" href="mail:Support@techa.ir">
+                  Support@techa.ir
                 </Link>
               </li>
               <li className="flex gap-3">

@@ -83,7 +83,7 @@ export const BlogCard = ({ post, index }) => {
                 {/* Action Buttons */}
                 <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-5">
                     <Link
-                        href={`https://blog.techa.me/blog/${post.Slug}`}
+                        href={`https://blog.techa.ir/blog/${post.Slug}`}
 
                     >
                         <motion.button

@@ -1,22 +1,37 @@
 import { NextResponse } from "next/server";
 
-export function middleware(req) {
-    // const token = req.cookies.get("token")?.value;
-    // const { pathname } = req.nextUrl;
+export function middleware(request) {
+    // امنیت اضافی در برابر bypass vulnerability
+    if (request.headers.has("x-middleware-subrequest")) {
+        return NextResponse.next();
+    }
 
-    // // اگر لاگین نبود و خواست بره به /dashboard → بفرستش لاگین
-    // if (!token && pathname.startsWith("/account")) {
-    //     return NextResponse.redirect(new URL("/auth/login", req.url));
-    // }
+    const token = request.cookies.get("token")?.value;
+    const { pathname } = request.nextUrl;
 
-    // // اگر لاگین بود و خواست بره به /login → بفرستش داشبورد
-    // if (token && pathname.startsWith("/auth/login")) {
-    //     return NextResponse.redirect(new URL("/account/profile", req.url));
-    // }
+    const isAuthRoute = pathname.startsWith("/auth/");
+    const isProtected = pathname.startsWith("/account");
 
-    // return NextResponse.next();
+    if (!token && isProtected) {
+        const loginUrl = new URL("/auth/login", request.url);
+        loginUrl.searchParams.set("redirect", pathname);
+        return NextResponse.redirect(loginUrl);
+    }
+
+    if (token && isAuthRoute) {
+        let redirectTo = request.nextUrl.searchParams.get("redirect") || "/account/profile";
+        if (!redirectTo.startsWith("/")) redirectTo = "/account/profile";
+
+        return NextResponse.redirect(new URL(redirectTo, request.url));
+    }
+
+    return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/account/:path*", "/auth/login"],
+    matcher: [
+        "/account/:path*",
+        "/account",
+        "/auth/:path*",
+    ],
 };

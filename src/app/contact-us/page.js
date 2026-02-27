@@ -77,8 +77,8 @@ export default function ContactUs() {
                     <p className="text-[#042A1B] text-[16px] font-normal">
                       پست الکترونیک
                     </p>
-                    <a href="mail:Support@Techa.me" className="text-[#042A1B] text-xl font-semibold">
-                      Support@Techa.me
+                    <a href="mail:Support@techa.ir" className="text-[#042A1B] text-xl font-semibold">
+                      Support@techa.ir
                     </a>
                   </div>
                 </div>

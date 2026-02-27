@@ -1,17 +1,11 @@
 // utils/api.ts
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 
-// -----------------------------
-// تایپ پارامترهای ورودی برای SP
-// -----------------------------
 interface SPParameters {
-  [key: `@${string}`]: string | number | boolean;
+  [key: `@${string}`]: string | number | boolean | null | undefined;
 }
 
-// -----------------------------
-// تایپ خروجی نهایی
-// -----------------------------
 export interface SPResponse<T = any> {
   IsSuccess: boolean;
   StatusCode: number;
@@ -19,77 +13,107 @@ export interface SPResponse<T = any> {
   Data: T[];
 }
 
-// -----------------------------
-// Axios Instance
-// -----------------------------
 const api = axios.create({
-  baseURL: "https://pool.techa.ir/api/ExecuteTSql",
-  headers: { "Content-Type": "application/json" },
+  baseURL: "https://pool.techa.ir/api/ExecuteTSql/ExecuteStoredProcedure",
+  timeout: 15000,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
-// -----------------------------
-// Interceptor برای اضافه کردن توکن
-// -----------------------------
+// اضافه کردن توکن
 api.interceptors.request.use((config) => {
   const token = Cookies.get("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
-});
+}, (error) => Promise.reject(error));
 
-// -----------------------------
-// تابع اجرای Stored Procedure
-// خروجی: Dataset + وضعیت درخواست
-// -----------------------------
+// حداقل مدیریت 401 (اگر refresh ندارید)
+api.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      // اینجا می‌توانید logout کنید یا redirect
+      Cookies.remove("token");
+      Cookies.remove("user");
+      // اگر از react-router استفاده می‌کنید:
+      // window.location.href = "/login?session=expired";
+      console.warn("Unauthorized → token removed");
+    }
+    return Promise.reject(error);
+  }
+);
+
 export async function SP_fetch<T = any>(
   procedureName: string,
   parameters: SPParameters = {},
   hasDataTable: boolean = true
 ): Promise<SPResponse<T>> {
-  const body: any = {
+  // اطمینان از اینکه کلیدها با @ شروع می‌شوند
+  const formattedParams = Object.fromEntries(
+    Object.entries(parameters).map(([key, value]) => [
+      key.startsWith("@") ? key : `@${key}`,
+      value == null
+        ? null
+        : typeof value === "number" || typeof value === "boolean"
+          ? value
+          : String(value),
+    ])
+  );
+
+  const body = {
     ProcedureName: procedureName,
-    ProjectId: process.env.PROJECT_ID ?? 1016,
+    ProjectId: 1016,
     HasDataTable: hasDataTable,
-    Parameters: Object.fromEntries(
-      Object.entries(parameters).map(([k, v]) => [k.startsWith("@") ? k : `@${k}`, String(v)])
-    ),
+    Parameters: formattedParams,
   };
 
   try {
-    const { data } = await api.post("/ExecuteStoredProcedure", body);
+    const { data } = await api.post("", body); // چون baseURL کامل است
 
     let dataset: T[] = [];
-    if (typeof data.Data === "string") {
-      try { dataset = JSON.parse(data.Data); } catch { }
-    } else if (Array.isArray(data.Data)) {
+
+    if (Array.isArray(data.Data)) {
       dataset = data.Data;
+    } else if (typeof data.Data === "string") {
+      try {
+        const parsed = JSON.parse(data.Data);
+        dataset = Array.isArray(parsed) ? parsed : [];
+      } catch (parseErr) {
+        console.warn("Failed to parse data.Data as JSON array", parseErr);
+      }
     }
 
     return {
-      IsSuccess: data.IsSuccess ?? false,
-      StatusCode: data.StatusCode ?? -1,
-      Message: data.Message ?? "",
-      Data: Array.isArray(dataset) ? dataset : [],
+      IsSuccess: !!data.IsSuccess,
+      StatusCode: Number(data.StatusCode) || -1,
+      Message: String(data.Message || ""),
+      Data: dataset,
     };
-  } catch (error: any) {
-    const errData = error?.response?.data;
+  } catch (error: unknown) {
+    const err = error as AxiosError<any>;
 
-    let msg = error.message;
+    let message = err.message || "خطای ناشناخته در ارتباط با سرور";
 
-    // اگر API پیام SP را ارسال کرده باشد
-    if (errData?.Message) msg = errData.Message;
-    if (typeof errData?.Data === "string") {
+    if (err.response?.data?.Message) {
+      message = err.response.data.Message;
+    } else if (typeof err.response?.data?.Data === "string") {
       try {
-        const parsed = JSON.parse(errData.Data);
-        if (parsed?.Message) msg = parsed.Message;
-      } catch { }
+        const inner = JSON.parse(err.response.data.Data);
+        if (inner?.Message) message = inner.Message;
+      } catch {
+        // ignore
+      }
     }
 
     return {
       IsSuccess: false,
-      StatusCode: errData?.StatusCode ?? -1,
-      Message: msg,
+      StatusCode: err.response?.data?.StatusCode ?? -1,
+      Message: message,
       Data: [],
     };
   }
 }
-

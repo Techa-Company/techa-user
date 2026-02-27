@@ -1,7 +1,7 @@
 import Axios from "axios";
 import https from "https";
 
-export const baseURL = "https://api.techa.me";
+export const baseURL = "https://pool.techa.ir";
 //export const baseURL = "https://localhost:7180";
 
 const httpsAgent = new https.Agent({

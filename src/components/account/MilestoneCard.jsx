@@ -1,19 +1,31 @@
-import { CheckCircle2, Lock, MapPin, Sparkles } from "lucide-react";
-import { MilestoneStatus } from "../../app/account/page";
+"use client"
+import React from 'react';
+import { CheckCircle2, Lock, MapPin, Sparkles, HelpCircle } from "lucide-react";
 
-export default function MilestoneCard({ milestone, status }) {
-    const Icon = milestone.icon;
+// تعریف وضعیت‌ها برای هماهنگی با لاجیک برنامه
+const MilestoneStatus = {
+    COMPLETED: 'COMPLETED',
+    CURRENT: 'CURRENT',
+    LOCKED: 'LOCKED'
+};
+
+export default function MilestoneCard({ milestone, status, onClick }) {
+    // انتخاب آیکون: اولویت با شیء icon، در غیر این صورت نمایش یک آیکون پیش‌فرض
+    const Icon = milestone.icon || HelpCircle;
+
+    // استفاده از Title (دیتابیس) یا title (دیتا استاتیک)
+    const displayTitle = milestone.Title || milestone.title;
 
     const getCardStyles = () => {
         switch (status) {
             case MilestoneStatus.COMPLETED:
-                return 'bg-white/80 border-emerald-200/60 shadow-sm hover:shadow-emerald-100 hover:border-emerald-300 hover:-translate-y-1';
+                return 'bg-white/80 border-emerald-200/60 shadow-sm hover:shadow-emerald-100 hover:border-emerald-300 hover:-translate-y-1 cursor-pointer';
             case MilestoneStatus.CURRENT:
-                return 'bg-white border-teal-500/50 shadow-[0_0_30px_-10px_rgba(20,184,166,0.3)] ring-2 ring-teal-400/20 transform scale-105 z-10';
+                return 'bg-white border-teal-500/50 shadow-[0_0_30px_-10px_rgba(20,184,166,0.3)] ring-2 ring-teal-400/20 transform scale-105 z-10 cursor-pointer';
             case MilestoneStatus.LOCKED:
-                return 'bg-gray-50/50 border-transparent opacity-60 grayscale hover:opacity-80 hover:bg-gray-50';
+                return 'bg-gray-50/50 border-transparent opacity-60 grayscale hover:opacity-80 hover:bg-gray-50 cursor-not-allowed';
             default:
-                return '';
+                return 'border-gray-200';
         }
     };
 
@@ -26,15 +38,18 @@ export default function MilestoneCard({ milestone, status }) {
             case MilestoneStatus.LOCKED:
                 return 'bg-gray-100 text-gray-400';
             default:
-                return '';
+                return 'bg-gray-100 text-gray-500';
         }
     };
 
     return (
-        <div className={`
-      relative flex flex-col items-center justify-center text-center p-5 rounded-3xl border transition-all duration-500 ease-out group min-h-[160px] backdrop-blur-sm
-      ${getCardStyles()}
-    `}>
+        <div
+            onClick={status !== MilestoneStatus.LOCKED ? onClick : undefined}
+            className={`
+                relative flex flex-col items-center justify-center text-center p-5 rounded-3xl border transition-all duration-500 ease-out group min-h-[160px] backdrop-blur-sm
+                ${getCardStyles()}
+            `}
+        >
             {/* "You are here" Indicator */}
             {status === MilestoneStatus.CURRENT && (
                 <>
@@ -42,12 +57,11 @@ export default function MilestoneCard({ milestone, status }) {
                         <MapPin size={10} fill="currentColor" />
                         <span>الان اینجا هستی!</span>
                     </div>
-                    {/* Outer glow ring */}
                     <span className="absolute inset-0 rounded-3xl border-2 border-teal-500/30 animate-pulse-slow pointer-events-none"></span>
                 </>
             )}
 
-            {/* Completion Badge (Top Right Corner) */}
+            {/* Completion Badge (Top Right) */}
             {status === MilestoneStatus.COMPLETED && (
                 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="bg-emerald-100 p-1 rounded-full">
@@ -56,14 +70,14 @@ export default function MilestoneCard({ milestone, status }) {
                 </div>
             )}
 
-            {/* Icon */}
+            {/* Icon Box */}
             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 ${getIconStyles()}`}>
                 <Icon size={26} strokeWidth={2} />
             </div>
 
             {/* Title */}
             <h3 className={`text-sm font-bold leading-relaxed mb-3 transition-colors ${status === MilestoneStatus.LOCKED ? 'text-gray-500' : 'text-gray-800 group-hover:text-teal-700'}`}>
-                {milestone.title}
+                {displayTitle}
             </h3>
 
             {/* Status Footer */}
@@ -83,10 +97,10 @@ export default function MilestoneCard({ milestone, status }) {
                 {status === MilestoneStatus.LOCKED && (
                     <div className="flex items-center gap-1 text-gray-400 text-[10px] font-medium">
                         <Lock size={12} />
-                        <span>قفل</span>
+                        <span>قفل شده</span>
                     </div>
                 )}
             </div>
         </div>
     );
-};
+}

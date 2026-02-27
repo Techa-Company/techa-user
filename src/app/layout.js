@@ -15,11 +15,11 @@ export const metadata = {
   },
   description: "پلتفرم آموزشی تکا",
   keywords: ["آموزش برنامه‌نویسی", "دوره آنلاین", "Techa"],
-  metadataBase: new URL("https://techa.me"),
+  metadataBase: new URL("https://techa.ir"),
   openGraph: {
     title: "پلتفرم آموزشی تکا | Techa",
     description: "پلتفرم آموزشی برای یادگیری برنامه‌نویسی و تکنولوژی",
-    url: "https://techa.me",
+    url: "https://techa.ir",
     siteName: "Techa",
     locale: "fa_IR",
     type: "website",

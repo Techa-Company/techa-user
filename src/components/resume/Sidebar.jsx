@@ -73,7 +73,7 @@ export default function Sidebar() {
     const [isQrVisible, setIsQrVisible] = useState(false);
     const [currentPlatform, setCurrentPlatform] = useState(null);
     const qrSize = 256;
-    const resumeUrl = `https://techa.me/r/${id}`;
+    const resumeUrl = `https://techa.ir/r/${id}`;
 
     const handleCopy = async () => {
         try {

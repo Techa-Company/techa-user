@@ -39,7 +39,8 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const user = useSelector(state => state.auth.user);
+  const { user } = useSelector(state => state.auth);
+  console.log(user)
   const isLoggedIn = !!user;
 
   const items = useSelector(state => state.cart.items);
@@ -167,7 +168,7 @@ const Header = () => {
                       className={`font-normal text-sm ${pathname.startsWith("/blog") ? "text-[#7AE36A]" : "text-white"
                         }`}
                       onClick={() => setIsMenuOpen(false)}
-                      href="https://blog.techa.me"
+                      href="https://blog.techa.ir"
                     >
                       بلاگ
                     </Link>

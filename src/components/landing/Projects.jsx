@@ -19,7 +19,7 @@ const Projects = () => {
     // const [loading, setLoading] = useState(true);
 
     // useEffect(() => {
-    //     fetch("https://api.techa.me/api/Course")
+    //     fetch("https://pool.techa.ir/api/Course")
     //         .then((response) => response.json())
     //         .then((data) => {
     //             if (data.IsSuccess) {

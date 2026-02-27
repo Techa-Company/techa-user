@@ -17,7 +17,7 @@ const ModernCoursesPage = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        //  const response = await fetch("https://api.techa.me/api/Course");
+        //  const response = await fetch("https://pool.techa.ir/api/Course");
         const { Data, IsSuccess, Message, StatusCode } = await SP_fetch(
           "Report_Courses"
         );

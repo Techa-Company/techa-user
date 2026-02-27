@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Lock, Smartphone, Timer, RotateCw, KeyRound } from "lucide-react";
+import { Lock, Smartphone, Timer, RotateCw, KeyRound, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,28 +13,30 @@ import {
 } from "../../../features/auth/authSlice";
 import { requestOTP, verifyOTP } from "../../../features/auth/authActions";
 
-const schema = yup.object().shape({
+// ─── Schema ───────────────────────────────────────────────
+const schema = yup.object({
   phone: yup
     .string()
     .required("شماره موبایل الزامی است")
-    .matches(/^09\d{9}$/, "شماره موبایل معتبر نیست"),
-  otp: yup
-    .string()
-    .when("step", {
-      is: 2,
-      then: (schema) =>
-        schema
-          .required("کد تأیید الزامی است")
-          .matches(/^\d{6}$/, "کد تأیید باید ۶ رقم باشد"),
-    }),
+    .matches(/^09\d{9}$/, "فرمت شماره موبایل صحیح نیست (مثال: ۰۹۱۲۳۴۵۶۷۸۹)"),
+
+  // اعتبارسنجی شرطی بر اساس مرحله فعلی (step)
+  otp: yup.string().when("$step", {
+    is: 2,
+    then: (schema) =>
+      schema
+        .required("وارد کردن کد تایید الزامی است")
+        .length(6, "کد باید دقیقاً ۶ رقم باشد"),
+    otherwise: (schema) => schema.nullable(),
+  }),
 });
 
+// ─── Component ────────────────────────────────────────────
 const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { loading, error, otpSent, timer, user } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, error, user, timer } = useSelector((state) => state.auth);
+
   const [step, setStep] = useState(1);
 
   const {
@@ -43,18 +45,16 @@ const Login = () => {
     formState: { errors },
     getValues,
     watch,
+    resetField,
   } = useForm({
     resolver: yupResolver(schema),
+    context: { step }, // ارسال step به yup به عنوان $step
+    mode: "onChange",  // اعتبارسنجی لحظه‌ای
   });
 
   const watchedPhone = watch("phone");
 
-  // همگام‌سازی step با وضعیت otpSent
-  useEffect(() => {
-    setStep(otpSent ? 2 : 1);
-  }, [otpSent]);
-
-  // مدیریت تایمر
+  // تایمر countdown
   useEffect(() => {
     let interval;
     if (step === 2 && timer > 0) {
@@ -65,223 +65,230 @@ const Login = () => {
     return () => clearInterval(interval);
   }, [step, timer, dispatch]);
 
-  // هدایت پس از ورود موفق
+  // هدایت بعد از لاگین موفق
   useEffect(() => {
-    if (user) router.push("/account");
+    if (user) {
+      router.replace("/account");
+    }
   }, [user, router]);
 
-  // ارسال کد تأیید
+  // ریست فیلدهای غیرضروری هنگام تغییر step
+  useEffect(() => {
+    if (step === 1) resetField("otp");
+  }, [step, resetField]);
+
+  // ارسال درخواست OTP
   const handleSendCode = async (data) => {
     dispatch(clearError());
     const result = await dispatch(requestOTP(data.phone));
-    if (!result.error) setStep(2);
+    // فقط در صورت موفقیت‌آمیز بودن به مرحله ۲ برود
+    if (requestOTP.fulfilled.match(result)) {
+      setStep(2);
+    }
   };
 
   // تأیید کد
   const handleVerifyCode = async (data) => {
     dispatch(clearError());
-    const { phone, otp } = data;
-    await dispatch(verifyOTP({ phone, code: otp }));
+    await dispatch(
+      verifyOTP({
+        phone: data.phone, // استفاده مستقیم از دیتا فرم
+        code: data.otp,
+      })
+    );
   };
 
-  // ارسال مجدد کد
+  // ارسال مجدد
   const handleResendCode = async () => {
     dispatch(clearError());
     const phone = getValues("phone");
-    await dispatch(requestOTP(phone));
+    if (phone && !errors.phone) {
+      await dispatch(requestOTP(phone));
+    }
+  };
+
+  // بازگشت به مرحله وارد کردن شماره
+  const handleChangePhone = () => {
+    setStep(1);
+    dispatch(clearError());
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br">
-      {/* انیمیشن پس‌زمینه */}
-      {[...Array(20)].map((_, i) => (
+    <div
+      dir="rtl" // راست‌چین کردن کل صفحه
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-gray-50 to-white font-sans"
+    >
+      {/* پس‌زمینه انیمیشن (حذف Math.random برای جلوگیری از Hydration Error) */}
+      {[...Array(12)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-2 h-2 bg-[#6ACF5A] rounded-full z-0"
-          initial={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            scale: 0,
-            rotate: Math.random() * 360,
-            opacity: 0,
-          }}
+          className="absolute w-3 h-3 bg-[#6ACF5A]/60 rounded-full z-0"
+          initial={{ scale: 0, opacity: 0 }}
           animate={{
-            scale: [0, Math.random() * 0.5 + 0.5, 0],
-            opacity: [0, Math.random() * 0.5 + 0.3, 0],
-            y: "150vh",
-            x: `${Math.random() * 30 - 15}vw`,
-            rotate: Math.random() * 720 + 360,
+            scale: [0, 1, 0],
+            opacity: [0, 0.4, 0],
+            y: "120vh",
           }}
           transition={{
-            duration: Math.random() * 3 + 7,
+            duration: 8 + (i % 5),
             repeat: Infinity,
-            repeatType: "loop",
-            ease: "linear",
-            delay: Math.random() * 15,
-          }}
-          style={{
-            filter: `blur(${Math.random() * 3}px)`,
-            boxShadow: `0 0 ${Math.random() * 15 + 5}px rgba(106, 207, 90, 0.7)`,
+            delay: (i % 6) * 1.5,
           }}
         />
       ))}
 
       <motion.form
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4 }}
         onSubmit={handleSubmit(step === 1 ? handleSendCode : handleVerifyCode)}
-        className="bg-white/95 p-8 rounded-3xl shadow-2xl border-2 border-[#7AE36A]/30 w-full max-w-md relative z-10 backdrop-blur-sm"
+        className="bg-white/95 backdrop-blur-sm p-8 md:p-10 rounded-3xl shadow-2xl border border-[#7AE36A]/30 w-full max-w-md relative z-10"
       >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="flex justify-center mb-8"
-        >
-          <div className="bg-gradient-to-br from-[#7AE36A] to-[#4CAF50] p-4 rounded-full shadow-lg">
-            <Lock className="text-white h-8 w-8" />
+        <div className="flex justify-center mb-8">
+          <div className="bg-gradient-to-br from-[#7AE36A] to-[#4CAF50] p-5 rounded-full shadow-lg">
+            <Lock className="text-white h-9 w-9" />
           </div>
-        </motion.div>
+        </div>
 
         <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#7AE36A] to-[#4CAF50] bg-clip-text text-transparent">
-          {step === 1 ? "ورود به حساب کاربری" : "تأیید شماره موبایل"}
+          {step === 1 ? "ورود / ثبت‌نام" : "تأیید کد"}
         </h2>
 
-        <div className="space-y-6">
-          {error && (
+        {error && (
+          <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-xl mb-6 text-center text-sm">
+            {error}
+          </div>
+        )}
+
+        <AnimatePresence mode="wait">
+          {step === 1 && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative"
+              key="step1"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.25 }}
+              className="space-y-6"
             >
-              {error}
+              <label htmlFor="phone" className="block text-gray-700 text-center font-medium">
+                شماره موبایل خود را وارد کنید
+              </label>
+              <div className="relative">
+                {/* تغییر left-4 به right-4 برای راست‌چین */}
+                <Smartphone className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7AE36A] h-5 w-5" />
+                <input
+                  id="phone"
+                  type="tel"
+                  inputMode="tel"
+                  placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                  dir="ltr" // شماره موبایل معمولا چپ‌چین تایپ می‌شود
+                  className="w-full pr-12 pl-4 py-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7AE36A]/60 transition text-left"
+                  {...register("phone")}
+                />
+              </div>
+              {errors.phone && (
+                <p className="text-red-500 text-sm text-center">{errors.phone.message}</p>
+              )}
             </motion.div>
           )}
 
-          <AnimatePresence mode="wait">
-            {step === 1 && (
-              <motion.div
-                key="phone-step"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-4"
-              >
-                <p className="text-gray-600 text-center">
-                  لطفاً شماره موبایل خود را وارد کنید
-                </p>
-                <div className="relative">
-                  <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7AE36A]" />
-                  <input
-                    type="tel"
-                    placeholder="0912 345 6789"
-                    className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7AE36A] text-gray-700"
-                    {...register("phone")}
-                  />
-                </div>
-                {errors.phone && (
-                  <span className="text-red-500 text-sm block mt-1">
-                    {errors.phone.message}
-                  </span>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <AnimatePresence mode="wait">
-            {step === 2 && (
-              <motion.div
-                key="otp-step"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-6"
-              >
-                <p className="text-gray-600 text-center">
-                  کد تأیید برای شماره {watchedPhone} ارسال شد
-                </p>
-
-                <div className="relative">
-                  <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7AE36A]" />
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength="6"
-                    placeholder="کد ۶ رقمی را وارد کنید"
-                    className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7AE36A] text-gray-700 tracking-widest text-center font-mono"
-                    {...register("otp")}
-                  />
-
-                </div>
-                {errors.otp && (
-                  <span className="text-red-500 text-sm block mt-1">
-                    {errors.otp.message}
-                  </span>
-                )}
-
-                <div className="flex items-center justify-center gap-2 text-[#7AE36A]">
-                  <Timer className="w-5 h-5" />
-                  <span className="font-medium">
-                    {Math.floor(timer / 60)}:{timer % 60 < 10 ? "0" : ""}
-                    {timer % 60}
-                  </span>
-                  <span className="text-gray-500">ثانیه تا ارسال مجدد کد</span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            disabled={loading}
-            className="w-full py-3.5 bg-gradient-to-r from-[#7AE36A] to-[#4CAF50] rounded-xl text-white font-semibold shadow-md hover:shadow-lg transition-all disabled:opacity-70"
-          >
-            {loading
-              ? step === 1
-                ? "در حال ارسال کد..."
-                : "در حال تأیید..."
-              : step === 1
-                ? "دریافت کد تأیید"
-                : "تأیید و ورود"}
-          </motion.button>
-
           {step === 2 && (
-            <>
-              <div className="text-center">
-                <button
-                  type="button"
-                  onClick={handleResendCode}
-                  disabled={timer > 0 || loading}
-                  className="text-[#7AE36A] hover:text-[#5bbd4e] disabled:opacity-50 transition-all flex items-center justify-center mx-auto"
-                >
-                  <RotateCw className="ml-1 w-4 h-4" />
-                  ارسال مجدد کد
-                </button>
-              </div>
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.25 }}
+              className="space-y-6"
+            >
+              <p className="text-gray-600 text-center text-sm leading-relaxed">
+                کد ۶ رقمی برای شماره <strong className="font-mono text-base">{watchedPhone}</strong> ارسال شد.
+              </p>
 
-              <div className="text-center">
-                <button
-                  type="button"
-                  onClick={() => setStep(1)}
-                  disabled={loading}
-                  className="text-gray-500 hover:text-gray-700 text-sm transition-all"
-                >
-                  تغییر شماره موبایل
-                </button>
+              <label htmlFor="otp" className="block text-gray-700 text-center font-medium">
+                کد تأیید
+              </label>
+              <div className="relative">
+                <KeyRound className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7AE36A] h-5 w-5" />
+                <input
+                  id="otp"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={6}
+                  placeholder="──────"
+                  dir="ltr"
+                  className="w-full pr-12 pl-4 py-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#7AE36A]/60 text-center tracking-[0.5em] font-mono text-xl transition"
+                  {...register("otp")}
+                />
               </div>
-            </>
+              {errors.otp && (
+                <p className="text-red-500 text-sm text-center">{errors.otp.message}</p>
+              )}
+
+              {/* تایمر بهینه و یکپارچه شده */}
+              <div className="min-h-[2rem]">
+                {timer > 0 ? (
+                  <div className="flex items-center justify-center gap-2 text-[#4CAF50] font-medium">
+                    <Timer className="h-5 w-5" />
+                    <span className="font-mono">
+                      {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}
+                    </span>
+                    <span className="text-gray-500 text-sm">تا ارسال مجدد</span>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleResendCode}
+                    disabled={loading}
+                    className="flex items-center justify-center mx-auto gap-2 text-sm font-medium text-[#7AE36A] hover:text-[#5bbd4e] transition"
+                  >
+                    <RotateCw className="h-4 w-4" />
+                    ارسال مجدد کد تأیید
+                  </button>
+                )}
+              </div>
+            </motion.div>
           )}
-        </div>
+        </AnimatePresence>
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          type="submit"
+          disabled={loading}
+          className="w-full mt-8 py-3.5 bg-gradient-to-r from-[#7AE36A] to-[#4CAF50] text-white font-semibold rounded-xl shadow-md hover:shadow-lg disabled:opacity-60 transition-all flex justify-center items-center gap-2"
+        >
+          {loading ? (
+            <RotateCw className="h-5 w-5 animate-spin" />
+          ) : step === 1 ? (
+            "دریافت کد تأیید"
+          ) : (
+            "تأیید و ورود"
+          )}
+        </motion.button>
+
+        {step === 2 && (
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={handleChangePhone}
+              disabled={loading}
+              className="text-gray-500 hover:text-gray-700 text-sm transition flex items-center justify-center gap-1 mx-auto"
+            >
+              تغییر شماره موبایل
+              <ArrowRight className="h-3 w-3" />
+            </button>
+          </div>
+        )}
 
         <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-          <p className="text-sm text-gray-500">
-            با ورود به حساب کاربری، شرایط و قوانین را می‌پذیرید
+          <p className="text-xs text-gray-500">
+            ورود شما به معنای پذیرش{" "}
+            <a href="/terms" className="text-[#7AE36A] hover:underline">
+              شرایط و قوانین
+            </a>{" "}
+            است
           </p>
         </div>
       </motion.form>
