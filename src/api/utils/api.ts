@@ -54,14 +54,7 @@ export async function SP_fetch<T = any>(
 ): Promise<SPResponse<T>> {
   // اطمینان از اینکه کلیدها با @ شروع می‌شوند
   const formattedParams = Object.fromEntries(
-    Object.entries(parameters).map(([key, value]) => [
-      key.startsWith("@") ? key : `@${key}`,
-      value == null
-        ? null
-        : typeof value === "number" || typeof value === "boolean"
-          ? value
-          : String(value),
-    ])
+    Object.entries(parameters).map(([k, v]) => [k.startsWith("@") ? k : `@${k}`, String(v)])
   );
 
   const body = {

@@ -25,7 +25,7 @@ export const metadata = {
     type: "website",
   },
   other: {
-    enamad: "696095",
+    enamad: "5807521",
   },
 };
 

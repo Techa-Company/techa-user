@@ -19,8 +19,8 @@ export default function Exercises() {
 
     useEffect(() => {
         // شناسه کاربر (در آینده داینامیک شود)
-        dispatch(fetchUserCourses({ UserId: 9, FilterType: 0 }));
-        dispatch(fetchUserCoursesDashboard({ UserId: 9 }));
+        dispatch(fetchUserCourses({ FilterType: 0 }));
+        dispatch(fetchUserCoursesDashboard({}));
     }, [dispatch]);
 
     // --- توابع کمکی ---

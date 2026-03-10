@@ -47,10 +47,10 @@ export default function SupportTickets() {
     console.log(user)
 
     useEffect(() => {
-        const userId = user?.Id;
+        const userId = user?.Id || 1002;
         console.log(userId, "l")
         if (userId) {
-            dispatch(fetchUserTickets({ UserId: userId }));
+            dispatch(fetchUserTickets({ "UserId": userId }));
         }
     }, [dispatch, user]);
 
