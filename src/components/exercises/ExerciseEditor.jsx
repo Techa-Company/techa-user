@@ -79,11 +79,6 @@ export default function ExerciseEditor({ exercise, slug, code, setCode, onSubmit
                             initialCode={code}
                             language={getLanguage()}
                             title={`Exercise: ${exercise.Title || "Task"}`}
-                            onChange={(newVal) => {
-                                setCode(newVal);
-                                localStorage.setItem(`exercise-${exercise.Id}-code`, newVal);
-                            }}
-                            readOnly={isDisabled}
                         />
                     )}
 

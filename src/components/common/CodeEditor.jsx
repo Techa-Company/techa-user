@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 
 
-export default function CodeEditor({ initialCode = "", language = "javascript", title = "Untitled Project", onChange, readOnly = false }) {
+export default function CodeEditor({ initialCode = "", language = "javascript", title = "Untitled Project" }) {
     const [code, setCode] = useState(initialCode);
     const [output, setOutput] = useState([]);
     const [activeTab, setActiveTab] = useState("editor"); // برای موبایل
