@@ -22,13 +22,13 @@ const Sidebar = () => {
   const [isDesktopOpen, setIsDesktopOpen] = useState(true);
 
   const params = useParams();
-  const { docId, lessonId } = params;
+  const { slug, lessonId } = params;
 
   const { loading, contents } = useSelector(state => state.contents);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchContents({ "Take": 1000, CourseId: docId }));
+    dispatch(fetchContents({ "Take": 1000, "Slug": slug }));
   }, []);
 
   // قفل اسکرول در موبایل
@@ -197,7 +197,7 @@ const Sidebar = () => {
                           return (
                             <li key={child.Id}>
                               <Link
-                                href={`/docs/${docId}/${child.Id}`}
+                                href={`/docs/${slug}/${child.Id}`}
                                 onClick={() => setIsMobileOpen(false)}
                                 className={`
                                   flex items-center justify-between gap-2 py-3 px-3 rounded-xl transition-all duration-200 text-sm

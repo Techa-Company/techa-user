@@ -13,7 +13,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 100;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Thin.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Thin.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Thin.woff2")
       format("woff2");
@@ -23,7 +24,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 200;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-UltraLight.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-UltraLight.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-UltraLight.woff2")
       format("woff2");
@@ -33,7 +35,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 300;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Light.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Light.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Light.woff2")
       format("woff2");
@@ -43,7 +46,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 500;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Medium.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Medium.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Medium.woff2")
       format("woff2");
@@ -53,7 +57,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 600;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-DemiBold.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-DemiBold.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-DemiBold.woff2")
       format("woff2");
@@ -63,7 +68,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 800;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-ExtraBold.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-ExtraBold.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-ExtraBold.woff2")
       format("woff2");
@@ -73,7 +79,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 900;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Black.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Black.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Black.woff2")
       format("woff2");
@@ -82,7 +89,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 950;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-ExtraBlack.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-ExtraBlack.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-ExtraBlack.woff2")
       format("woff2");
@@ -92,7 +100,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: 1000;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Heavy.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Heavy.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Heavy.woff2")
       format("woff2");
@@ -102,7 +111,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: bold;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Bold.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Bold.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Bold.woff2")
       format("woff2");
@@ -112,7 +122,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
   font-family: IRANYekanXFaNum;
   font-style: normal;
   font-weight: normal;
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Regular.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXFaNum-Regular.woff")
       format("woff"),
     url("../../public/fonts/IranYekanX/woff2/IRANYekanXFaNum-Regular.woff2")
       format("woff2");
@@ -120,7 +131,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 
 @font-face {
   font-family: "IRANYekanXVFaNumVF";
-  src: url("../../public/fonts/IranYekanX/woff/IRANYekanXVFaNumVF.woff")
+  src:
+    url("../../public/fonts/IranYekanX/woff/IRANYekanXVFaNumVF.woff")
       format("woff-variations"),
     /* will be the standard and works in Safari now */
       url("../../public/fonts/IranYekanX/woff/IRANYekanXVFaNumVF.woff")
@@ -133,7 +145,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-Black.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-Black.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-Black.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-Black.woff2") format("woff2"),
     url("../../public/fonts/poppins/woff/Poppins-Black.woff") format("woff"),
@@ -146,7 +159,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-BlackItalic.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-BlackItalic.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-BlackItalic.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-BlackItalic.woff2")
       format("woff2"),
@@ -162,7 +176,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-Bold.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-Bold.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-Bold.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-Bold.woff2") format("woff2"),
     url("../../public/fonts/poppins/woff/Poppins-Bold.woff") format("woff"),
@@ -175,7 +190,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-BoldItalic.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-BoldItalic.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-BoldItalic.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-BoldItalic.woff2")
       format("woff2"),
@@ -191,7 +207,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-ExtraBold.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-ExtraBold.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-ExtraBold.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-ExtraBold.woff2")
       format("woff2"),
@@ -206,7 +223,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-ExtraBoldItalic.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-ExtraBoldItalic.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-ExtraBoldItalic.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-ExtraBoldItalic.woff2")
       format("woff2"),
@@ -222,7 +240,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-ExtraLight.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-ExtraLight.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-ExtraLight.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-ExtraLight.woff2")
       format("woff2"),
@@ -238,7 +257,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-ExtraLightItalic.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-ExtraLightItalic.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-ExtraLightItalic.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-ExtraLightItalic.woff2")
       format("woff2"),
@@ -254,7 +274,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-Italic.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-Italic.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-Italic.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-Italic.woff2") format("woff2"),
     url("../../public/fonts/poppins/woff/Poppins-Italic.woff") format("woff"),
@@ -267,7 +288,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-Light.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-Light.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-Light.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-Light.woff2") format("woff2"),
     url("../../public/fonts/poppins/woff/Poppins-Light.woff") format("woff"),
@@ -280,7 +302,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-LightItalic.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-LightItalic.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-LightItalic.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-LightItalic.woff2")
       format("woff2"),
@@ -296,7 +319,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-Medium.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-Medium.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-Medium.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-Medium.woff2") format("woff2"),
     url("../../public/fonts/poppins/woff/Poppins-Medium.woff") format("woff"),
@@ -309,7 +333,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-MediumItalic.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-MediumItalic.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-MediumItalic.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-MediumItalic.woff2")
       format("woff2"),
@@ -325,7 +350,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-Regular.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-Regular.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-Regular.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-Regular.woff2")
       format("woff2"),
@@ -339,7 +365,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-SemiBold.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-SemiBold.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-SemiBold.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-SemiBold.woff2")
       format("woff2"),
@@ -354,7 +381,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-SemiBoldItalic.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-SemiBoldItalic.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-SemiBoldItalic.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-SemiBoldItalic.woff2")
       format("woff2"),
@@ -370,7 +398,8 @@ This set of fonts are used in this project under the license: (TRJC3OMS)
 @font-face {
   font-family: "Poppins";
   src: url("../../public/fonts/poppins/eot/Poppins-Thin.eot");
-  src: url("../../public/fonts/poppins/eot/Poppins-Thin.eot?#iefix")
+  src:
+    url("../../public/fonts/poppins/eot/Poppins-Thin.eot?#iefix")
       format("embedded-opentype"),
     url("../../public/fonts/poppins/woff2/Poppins-Thin.woff2") format("woff2"),
     url("../../public/fonts/poppins/woff/Poppins-Thin.woff") format("woff"),
@@ -439,7 +468,7 @@ pre {
 
 .loader {
   border: 8px solid #f3f3f3;
-  border-top: 8px solid #3498db;
+  border-top: 8px solid #0a3323;
   border-radius: 50%;
   width: 60px;
   height: 60px;

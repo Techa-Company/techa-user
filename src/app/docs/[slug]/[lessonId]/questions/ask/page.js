@@ -43,7 +43,7 @@ export default function AskQuestion() {
         const payload = {
             DocId: Number(docId),
             SessionId: sessionId ? Number(sessionId) : null,
-            UserId: 9, // طبق درخواست شما ثابت گذاشته شد
+            UserId: 1002, // طبق درخواست شما ثابت گذاشته شد
             Title: title,
             Content: content,
         };

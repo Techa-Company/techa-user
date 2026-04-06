@@ -41,7 +41,7 @@ export default function QuestionDetails() {
         try {
             await dispatch(addAnswer({
                 QuestionId: Number(questionId),
-                UserId: 9, // طبق درخواست شما
+                UserId: 1002, // طبق درخواست شما
                 Content: answerContent
             })).unwrap();
 

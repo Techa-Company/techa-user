@@ -1,76 +1,49 @@
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const DocsSkeleton = () => {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10 mt-10 px-4 lg:px-10">
+        /* کانتینر اصلی گرید هماهنگ با صفحه Docs */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 w-full">
             {[...Array(6)].map((_, index) => (
-                <div key={index} className="bg-white rounded-2xl shadow-lg border border-emerald-100 overflow-hidden flex flex-col h-full">
-
-                    {/* شبیه‌سازی هدر رنگی کارت (Header Section) */}
-                    <div className="p-5 bg-emerald-50/30 border-b border-emerald-50">
-                        {/* آیکون و بج تخفیف */}
-                        <div className="flex justify-between items-start mb-4">
-                            <Skeleton width={56} height={56} borderRadius="0.75rem" /> {/* جایگزین آیکون تکنولوژی */}
-                            <Skeleton width={40} height={40} circle={true} /> {/* جایگزین بج تخفیف */}
-                        </div>
-
-                        {/* عنوان */}
-                        <h3 className="mt-4">
-                            <Skeleton height={24} width="70%" />
-                        </h3>
-
-                        {/* ریتینگ و تعداد دانشجو */}
-                        <div className="flex items-center gap-3 mt-3">
-                            <Skeleton width={40} height={16} />
-                            <span className="text-gray-300">•</span>
-                            <Skeleton width={80} height={16} />
-                        </div>
-                    </div>
-
-                    {/* بدنه کارت (Body Section) */}
-                    <div className="p-5 flex-grow">
-                        {/* توضیحات */}
-                        <div className="space-y-2 mb-5">
-                            <Skeleton count={2} />
-                        </div>
-
-                        {/* تگ‌ها */}
-                        <div className="flex flex-wrap gap-2 mb-5">
-                            <Skeleton width={60} height={24} borderRadius="9999px" />
-                            <Skeleton width={70} height={24} borderRadius="9999px" />
-                            <Skeleton width={50} height={24} borderRadius="9999px" />
-                        </div>
-
-                        {/* گرید ویژگی‌ها (مدت، درس‌ها، سطح، پروژه) */}
-                        <div className="grid grid-cols-2 gap-y-3 gap-x-2 pt-5 border-t border-emerald-100">
-                            {[...Array(4)].map((_, i) => (
-                                <div key={i} className="flex items-center gap-2">
-                                    <Skeleton circle={true} width={16} height={16} />
-                                    <Skeleton width={60} height={14} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* فوتر کارت (Price & Buttons) */}
-                    <div className="p-5 pt-0 mt-auto">
-                        {/* بخش قیمت */}
-                        <div className="flex items-center justify-between mb-4 bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
-                            <div className="flex flex-col gap-1">
-                                <Skeleton width={100} height={20} /> {/* قیمت اصلی */}
-                                <Skeleton width={60} height={12} />  {/* قیمت خط خورده */}
+                <div
+                    key={index}
+                    className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col"
+                >
+                    {/* بخش هدر کارت (آیکون و سطح) */}
+                    <div className="p-6 pb-0">
+                        <div className="flex justify-between items-start">
+                            {/* جایگزین آیکون (IconProvider) */}
+                            <div className="p-3 bg-emerald-50 rounded-2xl">
+                                <Skeleton width={40} height={40} borderRadius="0.75rem" baseColor="#ecfdf5" highlightColor="#d1fae5" />
                             </div>
-                            <Skeleton width={40} height={24} borderRadius="9999px" /> {/* درصد تخفیف */}
+
+                            {/* جایگزین بج سطح (Level Badge) */}
+                            <Skeleton width={70} height={24} borderRadius="999px" baseColor="#f3f4f6" />
                         </div>
 
-                        {/* دکمه‌ها */}
-                        <div className="grid grid-cols-2 gap-3">
-                            {/* دکمه جزئیات */}
-                            <Skeleton height={48} borderRadius="0.75rem" />
-                            {/* دکمه خرید */}
-                            <Skeleton height={48} borderRadius="0.75rem" />
+                        {/* جایگزین عنوان (Title) */}
+                        <div className="mt-6">
+                            <Skeleton height={24} width="80%" />
                         </div>
+                    </div>
+
+                    {/* بخش بدنه (Summary) */}
+                    <div className="p-6 flex-grow">
+                        <div className="space-y-2">
+                            <Skeleton count={2} height={14} width="100%" />
+                            {/* <Skeleton height={14} width="60%" /> */}
+                        </div>
+                    </div>
+
+                    {/* بخش فوتر (Action Button) */}
+                    <div className="p-6 pt-0 mt-auto border-t border-gray-50 flex items-center justify-between">
+                        {/* شبیه‌سازی متن "مشاهده مستندات" */}
+                        <Skeleton width={100} height={16} />
+
+                        {/* دکمه دایره‌ای یا فلش کنار دکمه */}
+                        <Skeleton circle width={32} height={32} />
                     </div>
                 </div>
             ))}

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 const Exercises = ({ data }) => {
-    const { docId } = useParams();
+    const { slug } = useParams();
 
     return (
         <div className="min-h-screen  relative overflow-hidden font-sans">
@@ -47,7 +47,7 @@ const Exercises = ({ data }) => {
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">
                             <Link
-                                href={`/docs/${docId}/exercises`}
+                                href={`/docs/${slug}/exercises`}
                                 className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-emerald-600 rounded-2xl hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-200 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600"
                             >
                                 {/* <Terminal className="w-6 h-6 ml-2" /> */}

@@ -60,3 +60,14 @@ export const fetchExerciseProgress = createAsyncThunk(
         }
     }
 )
+export const fetchQuizExercise = createAsyncThunk(
+    'exercises/fetchQuizExercise',
+    async (parameters, thunkAPI) => {
+        try {
+            const res = await SP_fetch('ExerciseQuestions_List', parameters)
+            return res.Data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.message)
+        }
+    }
+)

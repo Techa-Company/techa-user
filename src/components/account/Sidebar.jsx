@@ -6,12 +6,13 @@ import { useState, useEffect } from 'react'
 import {
     LayoutDashboard, BarChart3, UserCircle, KeyRound,
     BookOpen, PencilRuler, FileCheck, Target,
-    Award, ShoppingBag, MessageSquare, Menu, X, ChevronLeft
+    Award, ShoppingBag, MessageSquare, Menu, X, ChevronLeft,
+    Map
 } from 'lucide-react';
 
 export const sidebarItems = [
     { name: 'داشبورد', href: '/account', icon: LayoutDashboard },
-    { name: 'پیشرفت من', href: '/account/my-progress', icon: BarChart3 },
+    { name: 'نقشه راه من', href: '/account/roadmap', icon: Map },
     { name: 'پروفایل من', href: '/account/profile', icon: UserCircle },
     { name: 'دوره‌های من', href: '/account/courses', icon: BookOpen },
     { name: 'تمرین‌ها', href: '/account/exercises', icon: PencilRuler },

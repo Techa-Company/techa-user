@@ -7,19 +7,22 @@ import Projects from "../components/landing/Projects";
 import Poster from "../components/landing/Poster";
 import SampleEditor from "../components/landing/SampleEditors";
 import Certificate from "../components/landing/Certificate";
-import Roadmap from "../components/landing/Roadmap";
 import LastDocumentation from "../components/landing/LastDocumentation";
+import Packages from "../components/landing/Packages"
 import LevelAssessment from "../components/landing/LevelAssessment";
 import Pricing from "../components/landing/Pricing";
+import Roadmap from "../components/landing/Roadmap";
 
 export default function Home() {
   return (
     <div className="overflow-hidden">
       <Banner />
       <Poster />
+      <Roadmap />
       {/* <LevelAssessment /> */}
       {/* <LastCourses /> */}
-      <Roadmap />
+      <Packages />
+      {/* <Roadmap /> */}
       {/* <Pricing /> */}
       <LastDocumentation />
       <CourseBenefits />

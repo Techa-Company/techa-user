@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function ExercisePage() {
     const [selectedExercise, setSelectedExercise] = useState(null);
-    const { docId, lessonId } = useParams();
+    const { slug, lessonId } = useParams();
+    console.log(slug, lessonId)
     const dispatch = useDispatch();
     const { exercises, loading, error } = useSelector((state) => state.exercises);
 
@@ -52,7 +53,7 @@ export default function ExercisePage() {
                     <ExerciseDetails
                         exercise={selectedExercise}
                         onBack={handleBackToList}
-                        courseId={docId}
+                        slug={slug}
                     />
                 ) : (
                     <ExerciseList

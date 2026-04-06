@@ -2,7 +2,7 @@
 const CourseTitle = ({ title }) => {
     return (
         <h1 className="font-extrabold text-black text-3xl">
-            دوره آموزشی <span className="font-black">{title}</span>
+            <span className="font-black pr-3">{title}</span>
         </h1>
     );
 };

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import DocTitle from "../../../components/courses/course/CourseTitle";
 import DocInfo from "../../../components/docs/doc/DocInfo";
 import DocTitleSkeleton from "../../../components/courses/course/CourseTitleSkeleton";
-import VideoCourseAd from "../../../components/docs/doc/VideoCourseAd";
+// import VideoCourseAd from "../../../components/docs/doc/VideoCourseAd";
 import VideoCourseAdEnd from "../../../components/docs/doc/VideoCourseAdEnd";
 import { SP_fetch } from "../../../api/utils/api";
 
@@ -21,29 +21,42 @@ import { fetchReviews } from "../../../features/main/reviews/reviewsActions";
 
 export default function DocDetailsPage() {
   const params = useParams();
-  const { docId } = params;
+  const { slug } = params;
   const router = useRouter();
   const searchParams = useSearchParams();
-
 
   const tabParam = searchParams.get("tab");
   const initialTabIndex = tabParam ? parseInt(tabParam) : 0;
   const [activeTab, setActiveTab] = useState(initialTabIndex);
 
-
-  const { loading, singleDoc: doc } = useSelector(state => state.docs);
-  const { userExerciseProgress } = useSelector(state => state.exercises);
-  const { reviews } = useSelector(state => state.reviews);
+  const { loading, singleDoc: doc } = useSelector((state) => state.docs);
+  const { userExerciseProgress } = useSelector((state) => state.exercises);
+  const { reviews } = useSelector((state) => state.reviews);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchDocById({ "Id": docId }));
-    dispatch(fetchExerciseProgress({ "UserId": 9, CourseId: docId }));
-    dispatch(fetchReviews({ DocId: docId }));
-  }, []);
-  console.log(reviews)
+  console.log(doc)
+  // گرفتن شناسه مستند (در صورت وجود)
+  const docId = doc?.Id;
 
-  console.log(userExerciseProgress)
-  // تب‌ها
+  // مرحله اول: دریافت اطلاعات مستند بر اساس Slug (هنگام لود شدن کامپوننت)
+  useEffect(() => {
+    if (slug) {
+      dispatch(fetchDocById({ Slug: slug }));
+    }
+  }, [slug, dispatch]);
+
+  // مرحله دوم: دریافت اطلاعات وابسته به Id مستند (صبر میکند تا docId مقدار بگیرد)
+  useEffect(() => {
+    if (docId) {
+      console.log(docId)
+      // دقت کنید: اگر در بک‌اند فیلد برای مستندات DocId است، CourseId را اصلاح کنید 
+      // من بر اساس کد خودتان CourseId نوشتم
+      dispatch(fetchExerciseProgress({ UserId: 9, CourseId: docId }));
+      dispatch(fetchReviews({ DocId: docId }));
+    }
+  }, [docId, dispatch]);
+
+
+  // تب‌ها (استفاده از متغیر docId که از state خوانده شده است)
   const tabContent = [
     {
       id: 0,
@@ -62,7 +75,6 @@ export default function DocDetailsPage() {
     },
   ];
 
-
   // تغییر تب
   const handleTabChange = (index) => {
     setActiveTab(index);
@@ -76,27 +88,24 @@ export default function DocDetailsPage() {
     exit: { opacity: 0, x: -50 },
   };
 
-
-
   return (
     <div className="space-y-10">
       {/* عنوان و تبلیغ اول */}
       <div className="flex flex-col xl:flex-row justify-between items-center gap-5 xl:gap-10">
         {/* عنوان دوره */}
         <div className="flex-1">
-          {loading ? (
+          {loading && !doc ? (
             <DocTitleSkeleton />
           ) : (
             <DocTitle title={doc?.Title} />
           )}
-          {/* {!loading && docDetails && (
-            <VideoCourseAd courseId={docId} title={docDetails?.Title} />
-          )} */}
         </div>
 
         {/* دکمه‌های تب */}
         <div>
-          {loading ? <TabButtonsSkeleton /> : (
+          {loading && !doc ? (
+            <TabButtonsSkeleton />
+          ) : (
             <TabButtons
               tabs={tabContent}
               activeTab={activeTab}
@@ -107,7 +116,7 @@ export default function DocDetailsPage() {
       </div>
 
       {/* محتوای تب‌ها */}
-      {!loading && (
+      {(!loading || doc) && (
         <TabContent
           activeTab={activeTab}
           tabs={tabContent}
@@ -115,10 +124,9 @@ export default function DocDetailsPage() {
         />
       )}
 
-
-      {!loading && doc && (
+      {/* {(!loading || doc) && docId && (
         <VideoCourseAdEnd doc={doc} />
-      )}
+      )} */}
     </div>
   );
 }

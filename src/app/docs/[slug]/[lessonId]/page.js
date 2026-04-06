@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { renderInlineSnippets } from "../../../../components/inline/utils/renderUtils";
 import LessonSkeleton from "../../../../components/docs/doc/lesson/LessonSkeleton";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,17 +27,16 @@ export default function Lesson() {
   const contentRef = useRef(null);
   const { loading, singleContent: content, contents } = useSelector(state => state.contents);
 
-  const params = useParams();
+  const { slug, lessonId } = useParams();
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
-  const docId = params.docId;
-  const lessonId = params.lessonId;
 
   // 1. فچ کردن دیتا
   useEffect(() => {
-    dispatch(fetchContentById({ Id: lessonId, UserId: 9 }));
-    dispatch(fetchContents({ Take: 1000, CourseId: docId }));
-  }, [docId, lessonId, dispatch]);
+    dispatch(fetchContentById({ Id: lessonId }));
+    dispatch(fetchContents({ Take: 1000, Slug: slug }));
+  }, [slug, lessonId, dispatch]);
 
   // 2. منطق محاسبه درس قبلی و بعدی
   useEffect(() => {
@@ -74,25 +73,38 @@ export default function Lesson() {
   }, [content, contents]);
 
   // 3. رندر اسنیپت‌های کد
+
   useEffect(() => {
-    if (!content) return;
-    const timer = setTimeout(() => {
-      renderInlineSnippets();
-    }, 50);
-    return () => clearTimeout(timer);
-  }, [content]);
+    // اگر رفرنسی به DOM نداریم، خارج شو
+    if (!contentRef.current) return;
+
+    // به دنبال تگ‌های کدی بگرد که هنوز به ادیتور تبدیل نشده‌اند
+    // (فرض بر این است که وقتی ادیتور ساخته می‌شود، تگ pre خام از بین می‌رود یا کلاس خاصی می‌گیرد)
+    const rawBlocks = contentRef.current.querySelectorAll('pre code');
+
+    // اگر تگ خامی پیدا شد، یعنی DOM توسط ری‌اکت ری‌ست شده است
+    if (rawBlocks.length > 0) {
+      const timer = setTimeout(() => {
+        renderInlineSnippets();
+      }, 50);
+
+      return () => clearTimeout(timer);
+    }
+  }); // 👈 آرایه وابستگی‌ها (Dependencies) را کاملاً حذف کنید
+
+
 
   // 4. تغییر وضعیت خواندن
   const toggleCompletionStatus = async () => {
     try {
       await dispatch(completeContent({
         Id: lessonId,
-        UserId: 9,
+        UserId: 1002,
       })).unwrap();
       toast.success("جلسه با موفقیت علامت‌گذاری شد");
 
-      dispatch(fetchContentById({ Id: lessonId, UserId: 9 }));
-      dispatch(fetchContents({ Take: 1000, CourseId: docId }));
+      dispatch(fetchContentById({ Id: lessonId }));
+      dispatch(fetchContents({ Take: 1000, Slug: slug }));
     } catch (err) {
       toast.error(err.message || "خطایی رخ داد");
     }
@@ -130,7 +142,7 @@ export default function Lesson() {
 
             {/* بازگشت به دوره */}
             <Link
-              href={`/docs/${docId}`}
+              href={`/docs/${slug}`}
               className="flex items-center gap-2 px-3 py-2 rounded-lg border
         bg-white text-gray-700 border-gray-300 hover:bg-gray-50 transition text-sm"
             >
@@ -157,7 +169,7 @@ export default function Lesson() {
 
             {/* پرسش سوال */}
             <Link
-              href={`/docs/${docId}/${lessonId}/questions`}
+              href={`/docs/${slug}/${lessonId}/questions`}
               className="flex items-center gap-2 px-4 py-2 rounded-lg
         bg-amber-500 text-white hover:bg-amber-600 transition text-sm font-medium shadow-sm"
             >
@@ -175,7 +187,7 @@ export default function Lesson() {
 
             ) : content.HasExercise === 1 ? (
               <Link
-                href={`/docs/${docId}/exercises/${content.Id}`}
+                href={`/docs/${slug}/exercises/${content.Id}`}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg
           bg-blue-500 text-white hover:bg-blue-600 transition text-sm font-medium shadow-sm"
               >
@@ -232,7 +244,7 @@ export default function Lesson() {
       {/* دکمه‌های قبل/بعد */}
       <div className="flex justify-between items-center mt-8 pb-10">
         <Link
-          href={prevLesson ? `/docs/${docId}/${prevLesson.Id}` : "#"}
+          href={prevLesson ? `/docs/${slug}/${prevLesson.Id}` : "#"}
           className={`flex items-center gap-2 px-4 py-3 bg-[#2ECC71] text-white rounded-lg hover:bg-[#27ae60] transition-colors shadow-md ${!prevLesson ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
             }`}
           aria-disabled={!prevLesson}
@@ -242,7 +254,7 @@ export default function Lesson() {
         </Link>
 
         <Link
-          href={nextLesson ? `/docs/${docId}/${nextLesson.Id}` : "#"}
+          href={nextLesson ? `/docs/${slug}/${nextLesson.Id}` : "#"}
           className={`flex items-center gap-2 px-4 py-3 bg-[#2ECC71] text-white rounded-lg hover:bg-[#27ae60] transition-colors shadow-md ${!nextLesson ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
             }`}
           aria-disabled={!nextLesson}
