@@ -289,11 +289,9 @@ export default function CodeEditor({ initialCode = "", language = "javascript", 
                             value={code}
                             height="100%"
                             theme={oneDark}
-                            readOnly={readOnly}
                             extensions={getExtension()}
                             onChange={(value) => {
                                 setCode(value);
-                                if (onChange) onChange(value); // 👈 اضافه شد
                             }} className="text-[14px] h-full"
                             style={{ fontFamily: "Operator Mono Lig,Vazir" }}
                             basicSetup={{

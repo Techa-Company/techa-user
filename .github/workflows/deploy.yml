@@ -1,0 +1,24 @@
+name: Deploy Techa
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy on Windows Server
+        shell: powershell
+        run: |
+          Set-Location C:\inetpub\techa
+
+          git fetch origin
+          git reset --hard origin/main
+
+          npm install
+          npm run build
+
+          pm2 restart techa

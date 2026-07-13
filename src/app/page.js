@@ -12,12 +12,13 @@ import Packages from "../components/landing/Packages"
 import LevelAssessment from "../components/landing/LevelAssessment";
 import Pricing from "../components/landing/Pricing";
 import Roadmap from "../components/landing/Roadmap";
-
+import MarketPreview from "../components/landing/MarketPreview";
 export default function Home() {
   return (
     <div className="overflow-hidden">
       <Banner />
       <Poster />
+      <MarketPreview />
       <Roadmap />
       {/* <LevelAssessment /> */}
       {/* <LastCourses /> */}

@@ -1,5 +1,8 @@
+"use client"
 import Link from 'next/link';
 import React from 'react';
+import { motion } from "framer-motion";
+import { Sparkles } from 'lucide-react'; // آیکون برای بج تزئینی
 
 const Roadmap = () => {
     const steps = [
@@ -45,24 +48,63 @@ const Roadmap = () => {
     ];
 
     return (
-        <div className="relative py-20 bg-slate-50 overflow-hidden text-slate-800" dir="rtl">
+        <div className="relative py-20  overflow-hidden text-slate-800" dir="rtl">
             {/* افکت‌های نوری پس‌زمینه (روشن و سبز) */}
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-200/50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-200/50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
 
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
 
-                {/* تیتر اصلی */}
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 mb-6 tracking-tight">
-                        نقشه راه قطعی شما تا استخدام
+                {/* تیتر اصلی - بخش ارتقا یافته */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center max-w-3xl mx-auto mb-20"
+                >
+                    {/* بج تزئینی */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2, type: "spring" }}
+                        className="inline-flex items-center gap-2 rounded-full border border-green-300 bg-green-50 px-4 py-2 text-sm font-medium text-green-700 mb-6 dark:border-green-700 dark:bg-green-900/30 dark:text-green-300"
+                    >
+                        <Sparkles size={16} />
+                        مسیر شغلی شما
+                    </motion.div>
+
+                    {/* تیتر اصلی با افکت زیرخط برای کلمه استخدام */}
+                    <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
+                        نقشه راه قطعی شما تا
+                        <span className="relative inline-block mx-2 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                            استخدام
+                            {/* SVG برای خط زیرین */}
+                            <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 100 8" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="title-underline-green" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#4ade80" />
+                                        <stop offset="100%" stopColor="#10b981" />
+                                    </linearGradient>
+                                </defs>
+                                <path
+                                    d="M0,5 Q50,0 100,5"
+                                    fill="none"
+                                    stroke="url(#title-underline-green)"
+                                    strokeWidth="2.5"
+                                    strokeLinecap="round"
+                                />
+                            </svg>
+                        </span>
                     </h2>
-                    <p className="text-lg text-slate-600 font-medium">
+
+                    {/* متن توضیحی */}
+                    <p className="text-lg text-muted-foreground">
                         مسیر موفقیت شما در ۳ فاز اصلی طراحی شده است. با
-                        <span className="text-emerald-600 font-bold mx-1">مگا پکیج الماس </span>
+                        <span className="text-green-600 font-bold mx-1">مگا پکیج الماس</span>{" "}
                         هر سه فاز را یکجا و با بیشترین تخفیف طی کنید.
                     </p>
-                </div>
+                </motion.div>
 
                 {/* کانتینر اصلی کارت‌ها (۳ ستونه) */}
                 <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-10">
@@ -112,15 +154,6 @@ const Roadmap = () => {
 
                 {/* بخش نمایش دربرگیری پکیج‌ها (آکاردئون بصری زیر کارت‌ها) */}
                 <div className="mt-10 hidden md:flex flex-col space-y-4 max-w-7xl mx-auto">
-
-                    {/* نشانگر متخصص فرانت‌اند (فقط فاز ۱) */}
-                    {/* <div className="relative flex w-full">
-                        <div className="w-[31.33%] border-b-2 border-r-2 border-l-2 border-emerald-300 rounded-b-xl h-4 mt-2"></div>
-                        <div className="absolute top-0 w-[31.33%] text-center text-sm font-bold text-emerald-600 -mt-1">
-                            پکیج متخصص فرانت‌اند
-                        </div>
-                    </div> */}
-
                     {/* نشانگر مگاپکیج الماس (کل فازها) */}
                     <div className="relative flex w-full">
                         <div className="w-full border-b-2 border-r-2 border-l-2 border-teal-400 rounded-b-xl h-4 mt-2"></div>
@@ -130,9 +163,7 @@ const Roadmap = () => {
                             </Link>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     );
