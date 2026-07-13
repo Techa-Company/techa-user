@@ -10,15 +10,19 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Deploy on Windows Server
+      - name: Deploy
         shell: powershell
         run: |
+          $ErrorActionPreference = "Stop"
+
           Set-Location C:\inetpub\techa
 
-          git fetch origin
-          git reset --hard origin/main
+          git config --global --add safe.directory C:/inetpub/techa
+
+          git pull origin main
 
           npm install
+
           npm run build
 
-          pm2 restart techa
+          & "C:\Users\Administrator\AppData\Roaming\npm\pm2.cmd" restart techa
