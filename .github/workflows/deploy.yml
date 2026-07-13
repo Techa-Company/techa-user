@@ -4,25 +4,35 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
+    name: Deploy to Windows Server
     runs-on: self-hosted
 
     steps:
-      - name: Deploy
+      - name: Deploy Application
         shell: powershell
         run: |
           $ErrorActionPreference = "Stop"
 
-          Set-Location C:\inetpub\techa
+          Write-Host "===== DEPLOY STARTED ====="
+
+          Set-Location "C:\inetpub\techa"
 
           git config --global --add safe.directory C:/inetpub/techa
 
+          Write-Host "Pulling latest code..."
           git pull origin main
 
+          Write-Host "Installing dependencies..."
           npm install
 
+          Write-Host "Building Next.js..."
           npm run build
 
+          Write-Host "Restarting PM2..."
           & "C:\Users\Administrator\AppData\Roaming\npm\pm2.cmd" restart techa
+
+          Write-Host "===== DEPLOY FINISHED SUCCESSFULLY ====="
