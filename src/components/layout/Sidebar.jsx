@@ -217,7 +217,7 @@ const Sidebar = () => {
                                     ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 lg:bg-white lg:text-emerald-600 lg:border-emerald-100"
                                     : "bg-white/5 text-gray-400 border-white/10 lg:bg-white lg:text-gray-400 lg:border-gray-100"
                                   }`}>
-                                  {child.EstimatedReadTime} م
+                                  {child.EstimatedReadTime} دقیقه
                                 </span>
                               </Link>
                             </li>

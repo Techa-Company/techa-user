@@ -25,6 +25,7 @@
     "axios": "^1.7.9",
     "chart.js": "^4.4.9",
     "clsx": "^2.1.1",
+    "dompurify": "^3.4.14",
     "framer-motion": "^12.6.5",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.474.0",

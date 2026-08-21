@@ -1,24 +1,37 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import MonacoEditor from "@monaco-editor/react";
-import { Play, Terminal, RefreshCw, Sparkles, Eye, EyeOff, Lock, Unlock } from "lucide-react";
+import {
+  Play,
+  Terminal,
+  RefreshCw,
+  Sparkles,
+  Eye,
+  EyeOff,
+  Lock,
+  Unlock,
+  RotateCcw,
+} from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 
 const HtmlPreview = ({ code: initialCode }) => {
-  const [code, setCode] = useState("<div>Loading...</div>");
+  const [code, setCode] = useState(initialCode || "<div>Loading...</div>");
   const [isEditable, setEditable] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   const [isAILoading, setIsAILoading] = useState(false);
   const iframeRef = useRef(null);
+
+  // به‌روزرسانی کد از پراپ
   useEffect(() => {
     if (initialCode) {
       setCode(initialCode);
     }
   }, [initialCode]);
 
-  const runCodeInIframe = async () => {
+  // تابع اجرای دستی کد
+  const runCodeInIframe = useCallback(async () => {
     if (!code.trim()) {
       toast.warning("کدی برای اجرا وجود ندارد");
       return;
@@ -28,7 +41,7 @@ const HtmlPreview = ({ code: initialCode }) => {
     setIframeKey((prev) => prev + 1);
     setIsPreviewVisible(true);
 
-    // Use requestAnimationFrame for better timing
+    // صبر کوتاه برای remount شدن iframe
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
 
     const iframe = iframeRef.current;
@@ -53,32 +66,29 @@ const HtmlPreview = ({ code: initialCode }) => {
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <style>
               * { margin: 0; padding: 0; box-sizing: border-box; }
-              body { 
-                margin: 0; 
-                padding: 1rem; 
-                background: white; 
+              body {
+                margin: 0;
+                padding: 1rem;
+                background: white;
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 min-height: 100vh;
               }
               .error { color: #dc2626; padding: 1rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.5rem; margin: 0.5rem 0; }
             </style>
           </head>
-          <body>
-            ${code}
-          </body>
+          <body>${code}</body>
         </html>
       `);
       iframeDoc.close();
-
-      // Fallback timeout for loading
-      setTimeout(() => setIsRunning(false), 1000);
     } catch (error) {
       console.error("Error running code:", error);
-      setIsRunning(false);
       toast.error("خطا در اجرای کد");
+    } finally {
+      // وضعیت اجرا با رویداد onLoad در JSX پاک می‌شود
     }
-  };
+  }, [code]);
 
+  // درخواست بهبود با AI
   const handleAIModification = async () => {
     if (!code.trim()) {
       toast.warning("کدی برای بهبود وجود ندارد");
@@ -115,6 +125,7 @@ const HtmlPreview = ({ code: initialCode }) => {
     }
   };
 
+  // بازنشانی کد
   const resetCode = () => {
     setCode(initialCode || "<div>Loading...</div>");
     toast.info("کد بازنشانی شد");
@@ -122,7 +133,7 @@ const HtmlPreview = ({ code: initialCode }) => {
 
   return (
     <div
-      className="bg-white rounded-lg overflow-hidden border border-gray-200"
+      className="bg-white rounded-lg overflow-hidden border border-gray-200 shadow-sm"
       dir="ltr"
     >
       <ToastContainer
@@ -132,38 +143,49 @@ const HtmlPreview = ({ code: initialCode }) => {
         toastClassName="font-sans"
       />
 
-      {/* Header - Light Theme */}
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-between bg-white px-4 py-4 border-b border-gray-200">
-        <div className="flex items-center gap-5 flex-wrap justify-center lg:justify-start">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row items-center justify-between bg-white px-4 py-4 border-b border-gray-200 gap-4">
+        {/* Title */}
+        <div className="flex items-center gap-3 order-1 lg:order-none">
+          <span className="text-gray-800 font-bold text-xl md:text-2xl" dir="rtl">
+            اجرای برخط HTML
+          </span>
+          <Terminal className="w-6 h-6 md:w-7 md:h-7 text-gray-600" />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2 md:gap-3 flex-wrap justify-center order-2 lg:order-none">
+          {/* Edit Toggle */}
           <button
             onClick={() => setEditable(!isEditable)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer ${isEditable
-              ? 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 cursor-pointer text-sm ${isEditable
+                ? "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200"
+                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
               }`}
           >
             {isEditable ? (
               <>
-                <span className="text-sm font-medium">قفل ویرایش</span>
+                <span className="font-medium">قفل ویرایش</span>
                 <Lock className="w-4 h-4" />
               </>
             ) : (
               <>
-                <span className="text-sm font-medium">ویرایش</span>
+                <span className="font-medium">ویرایش</span>
                 <Unlock className="w-4 h-4" />
               </>
             )}
           </button>
 
+          {/* AI Modify */}
           <button
             onClick={handleAIModification}
             disabled={isAILoading}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer ${isAILoading
-              ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 cursor-pointer text-sm ${isAILoading
+                ? "bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
               }`}
           >
-            <span className="text-sm font-medium">
+            <span className="font-medium">
               {isAILoading ? "در حال پردازش..." : "بهبود با AI"}
             </span>
             {isAILoading ? (
@@ -173,15 +195,17 @@ const HtmlPreview = ({ code: initialCode }) => {
             )}
           </button>
 
+          {/* Manual Run */}
           <button
             onClick={runCodeInIframe}
             disabled={isRunning}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer ${isRunning
-              ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100'
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 cursor-pointer text-sm ${isRunning
+                ? "bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
               }`}
+            title="اجرای کد"
           >
-            <span className="text-sm font-medium">اجرا</span>
+            <span className="font-medium">اجرا</span>
             {isRunning ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
             ) : (
@@ -189,30 +213,34 @@ const HtmlPreview = ({ code: initialCode }) => {
             )}
           </button>
 
+          {/* Reset */}
+          <button
+            onClick={resetCode}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-200 cursor-pointer text-sm"
+            title="بازنشانی کد"
+          >
+            <span className="font-medium">بازنشانی</span>
+            <RotateCcw className="w-4 h-4" />
+          </button>
+
+          {/* Preview Toggle */}
           <button
             onClick={() => setIsPreviewVisible(!isPreviewVisible)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 cursor-pointer ${isPreviewVisible
-              ? 'bg-gray-100 border-gray-300 text-gray-700'
-              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 cursor-pointer text-sm ${isPreviewVisible
+                ? "bg-gray-100 border-gray-300 text-gray-700"
+                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
               }`}
           >
-            <span className="text-sm font-medium">
+            <span className="font-medium">
               {isPreviewVisible ? "مخفی کردن" : "نمایش"} پیش‌نمایش
             </span>
             {isPreviewVisible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
-
-        <div className="flex items-center gap-3 mb-3 lg:mb-0">
-          <span className="text-gray-800 font-bold text-2xl" dir="rtl">
-            اجرای برخط HTML
-          </span>
-          <Terminal className="w-7 h-7 text-gray-600" />
-        </div>
       </div>
 
       {/* Editor Section */}
-      <div className="p-5">
+      <div className="p-4 md:p-5">
         <div className="bg-gray-50 rounded-lg border border-gray-300 overflow-hidden">
           <MonacoEditor
             height="300px"
@@ -234,16 +262,20 @@ const HtmlPreview = ({ code: initialCode }) => {
               lineHeight: 1.5,
               padding: { top: 10, bottom: 10 },
               scrollbar: {
-                vertical: 'visible',
-                horizontal: 'visible'
-              }
+                vertical: "visible",
+                horizontal: "visible",
+              },
             }}
             theme="vs-light"
-            loading={<div className="flex items-center justify-center h-full text-gray-600">در حال بارگذاری ویرایشگر...</div>}
+            loading={
+              <div className="flex items-center justify-center h-full text-gray-600">
+                در حال بارگذاری ویرایشگر...
+              </div>
+            }
           />
         </div>
 
-        {/* Editor Status Bar */}
+        {/* Status Bar */}
         <div className="flex justify-between items-center mt-2 px-2 text-xs text-gray-500">
           <span>HTML</span>
           <span>{isEditable ? "حالت ویرایش" : "حالت مشاهده"}</span>
@@ -252,9 +284,12 @@ const HtmlPreview = ({ code: initialCode }) => {
 
       {/* Preview Section */}
       {isPreviewVisible && (
-        <div className="bg-white mx-4 mb-4 rounded-lg overflow-hidden border border-gray-300 shadow-sm">
-          <div dir="rtl" className="p-5 bg-gray-50 border-b border-gray-300 flex justify-between items-center">
-            <span className="text-2xl font-medium text-gray-700">
+        <div className="bg-white mx-3 md:mx-4 mb-4 rounded-lg overflow-hidden border border-gray-300 shadow-sm">
+          <div
+            dir="rtl"
+            className="p-4 bg-gray-50 border-b border-gray-300 flex flex-col sm:flex-row justify-between items-center gap-2"
+          >
+            <span className="text-xl md:text-2xl font-medium text-gray-700">
               پیش‌نمایش زنده
             </span>
             {isRunning && (
@@ -264,13 +299,14 @@ const HtmlPreview = ({ code: initialCode }) => {
               </div>
             )}
           </div>
-          <div className="h-96 relative bg-white">
+          <div className="h-72 md:h-96 relative bg-white">
             <iframe
               key={iframeKey}
               ref={iframeRef}
               title="HTML Preview Output"
               className="w-full h-full border-0"
               sandbox="allow-scripts allow-same-origin"
+              onLoad={() => setIsRunning(false)}
             />
           </div>
         </div>

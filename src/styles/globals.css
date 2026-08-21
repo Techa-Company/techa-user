@@ -566,12 +566,27 @@ code::before,
 code::after {
   content: "" !important;
 }
+.lesson-content {
+  direction: rtl;
+  font-family: inherit;
+}
+
 .lesson-content *:not(.no-reset):not(.no-reset *) {
   all: revert;
   direction: rtl;
 }
 
-.lesson-content {
-  direction: rtl;
-  font-family: inherit;
+/* کدها */
+.lesson-content code,
+.lesson-content pre {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+/* عبارت‌های انگلیسی داخل متن فارسی */
+.lesson-content .bidi-ltr {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  display: inline !important;
 }

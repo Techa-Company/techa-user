@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { autocompletion, closeBrackets } from '@codemirror/autocomplete';
 import { javascript } from "@codemirror/lang-javascript";
 import { html } from "@codemirror/lang-html";
+import { css } from "@codemirror/lang-css";
 import { sql } from "@codemirror/lang-sql";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorView } from "@codemirror/view";
@@ -17,7 +18,6 @@ import {
     Maximize, Minimize, AlignLeft, Download, Copy,
     Check, Zap, WrapText
 } from "lucide-react";
-
 
 export default function CodeEditor({ initialCode = "", language = "javascript", title = "Untitled Project" }) {
     const [code, setCode] = useState(initialCode);
@@ -35,30 +35,30 @@ export default function CodeEditor({ initialCode = "", language = "javascript", 
     const iframeRef = useRef(null);
     const editorContainerRef = useRef(null);
 
-    // تنظیمات زبان CodeMirror
-    const getExtension = () => {
-        // 👈 اکستنشن‌های پایه که برای همه زبان‌ها اعمال می‌شود
+    // ❌ حذف useEffect برای setCode(initialCode) – چون useState مقدار اولیه را می‌گیرد
+    // (قبلاً این effect باعث رندر اضافی می‌شد)
+
+    // ✅ Memoize کردن extensions برای جلوگیری از recreate شدن در هر رندر
+    const extensions = useMemo(() => {
         const baseExtensions = [
-            autocompletion(), // فعال‌سازی پیشنهاد دهنده کد
-            closeBrackets(),  // بستن خودکار پرانتزها، کروشه‌ها و کوتیشن‌ها (اختیاری اما به شدت کاربردی)
+            autocompletion(),
+            closeBrackets(),
         ];
 
         switch (language) {
             case "javascript":
             case "jsx":
-                // پکیج javascript خودش کلمات کلیدی JS را پیشنهاد می‌دهد
                 return [...baseExtensions, javascript({ jsx: true })];
             case "html":
-                // پکیج html خودش تگ‌ها و اتریبیوت‌های HTML را پیشنهاد می‌دهد
                 return [...baseExtensions, html()];
             case "css":
-                // پکیج css خودش ویژگی‌های CSS را پیشنهاد می‌دهد
                 return [...baseExtensions, css()];
+            case "sql":
+                return [...baseExtensions, sql()];
             default:
                 return [...baseExtensions, javascript()];
         }
-    };
-
+    }, [language]);
 
     // فرمت کردن کد با Prettier
     const formatCode = async () => {
@@ -69,7 +69,7 @@ export default function CodeEditor({ initialCode = "", language = "javascript", 
                 plugins: [babelPlugin, estreePlugin, htmlPlugin],
                 semi: true,
                 singleQuote: false,
-                tabWidth: 4, // تورفتگی استاندارد
+                tabWidth: 4,
             });
             setCode(formatted);
         } catch (error) {
@@ -98,9 +98,7 @@ export default function CodeEditor({ initialCode = "", language = "javascript", 
             return () => clearTimeout(timeout);
         }
     }, [code, isAutoRun, handleRun]);
-    useEffect(() => {
-        setCode(initialCode);
-    }, [initialCode]);
+
     // منطق اجرای JS و رهگیری کنسول
     const runJavaScript = (jsCode) => {
         const originalLog = console.log;
@@ -289,7 +287,7 @@ export default function CodeEditor({ initialCode = "", language = "javascript", 
                             value={code}
                             height="100%"
                             theme={oneDark}
-                            extensions={getExtension()}
+                            extensions={extensions}  // ✅ استفاده از extensions memoized
                             onChange={(value) => {
                                 setCode(value);
                             }} className="text-[14px] h-full"
@@ -363,7 +361,6 @@ export default function CodeEditor({ initialCode = "", language = "javascript", 
                                         </div>
                                     ))
                                 )}
-                                {/* Terminal Cursor Blinker */}
                                 {output.length > 0 && <div className="w-2 h-4 bg-gray-500/50 mt-2 animate-pulse ml-5"></div>}
                             </div>
                         ) : viewMode === "preview" ? (
